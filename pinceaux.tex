@@ -1,0 +1,217 @@
+\documentclass{article}
+\usepackage{amsmath,amsfonts,amssymb}
+% \usepackage{math}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[margin=30mm]{geometry}
+\usepackage{algpseudocode}
+\usepackage{algorithm}
+
+\newtheorem{df}{Definition}
+\newtheorem{thm}{Theorem}
+\newtheorem{prop}{Proposition}
+\newenvironment{proof}{\textit{Proof.}~}{~$\lhd$}
+\def\transpose#1{{}^{\mathrm{t}}\!#1}
+\def\End{\mathrm{End}}
+\def\Otilde#1{\ensuremath{\widetilde O\left(#1\right)}}
+\def\labelenumi{(\roman{enumi})}
+
+\begin{document}
+Throughout this document, we fix a finite field~$k$ of characteristic~$p
+\neq 2$. Let~$V$ be an $n$-dimensional $k$-vector space.
+
+\begin{df}
+Let~$Q(V)$ be the $k$-vector space of all quadratic forms on~$V$.
+A \emph{projective pencil of quadratic forms} on~$V$ is the datum of a
+projective line in~$\mathbb{P}Q(V)$, \emph{i.e.} a two-dimensional vector subspace
+of~$Q(V)$. An \emph{affine pencil of quadratic forms} is
+the datum of an affine line in~$Q(V)$, or equivalently a pair of elements
+of~$Q(V)$.
+\end{df}
+
+The affine pencil with basis~$(A_{0}, A_{\infty})$ is written~$A_{0} + \lambda
+A_{\infty}$. Given a projective pencil~$A$ of~$Q(V)$, the choice of any
+basis~$(A_0, A_{\infty})$ of~$A$ determines the affine pencil~$A_{0} + \lambda
+A_{\infty}$. (The terminology~$(A_{0}, A_{\infty})$ emerges when one considers the
+pencil as a projective morphism from the projective line~$\mathbb{P}^1$ into the
+space of quadrics: then $A_{0}$ and~$A_{\infty}$ are the respective images
+of~$0$ and~$\infty$).
+
+\begin{df}
+A projective pencil is \emph{regular} if it contains at least one regular
+quadratic form. An affine pencil~$(A_{0}, A_{\infty})$ is \emph{regular} if
+the quadratic form~$A_{\infty}$ is regular; it is \emph{degenerate} if the
+intersection of the kernels of all quadratic forms~$A_{\lambda} = A_0 + \lambda
+A_{\infty}$ is not zero.
+\end{df}
+
+If $A$~is a regular projective pencil, then there exists a basis~$(A_{0},
+A_{\infty})$ such that the corresponding affine pencil is regular. Conversely,
+if~$A_{0} + \lambda A_{\infty}$ is a non-degenerate, but maybe non-regular, affine
+pencil, then the corresponding projective pencil is regular and therefore
+has a regular affine pencil as a representative. Concretely, this means
+that there exists a scalar~$\mu$ such that the affine pencil~$A_0 + \lambda
+(A_{\infty} + \mu A_0)$ is regular.
+
+\begin{df}
+Two affine pencils~$A_\lambda = A_0 + \lambda A_{\infty}$ and~$B_\lambda = B_0 + \lambda B_{\infty}$ are
+\emph{congruent} if there exist an invertible endomorphism~$P \in
+\End(V)$ such that, for all~$\lambda \in k$, $\transpose{P} A_{\lambda} P = B_{\lambda}$.
+\end{df}
+
+We are concerned with the following problem (Pencil congruence problem):
+\emph{given two affine pencils~$A_{\lambda}$ and~$B_{\lambda}$ that we know to be
+congruent, find any invertible endomorphism~$X \in \End(V)$ such
+that~$\transpose{X} A_{\lambda} X = B$.} We first note that we may assume both
+pencils to be regular. Namely, if both are degenerate then we may
+quotient out their (common) kernel and assume that both pencils are
+non-degenerate; in this case, a suitable change of basis in the projective
+pencils brings us back to the case of two regular affine pencils.
+
+\begin{prop}
+Let~$A_{\lambda} = A_0 + \lambda A_{\infty}$, $B_{\lambda} = B_{0} + \lambda B_{\infty}$ be two
+regular affine pencils.
+\begin{enumerate}
+\item If $A_{\lambda}$~is congruent to~$B_{\lambda}$, then the matrices
+\[ \Omega_{A} = A_{\infty}^{-1} A_0 \quad\text{and}\quad \Omega_{B} = B_{\infty}^{-1} B_0 \]
+are similar.
+\item Assume that~$\Omega_{A}$ and~$\Omega_{B}$ are similar and
+choose~$P$ such that~$P^{-1} \Omega_{A} P = \Omega_{B}$. Then
+$\transpose{P} A_{\lambda} P =
+\transpose{P} A_{\infty} P (\lambda - \Omega_{B})$.
+\item Assume that~$A_{\lambda} = A_{\infty} (\lambda - \Omega)$ and $B_{\lambda} = B_{\infty} (\lambda - \Omega)$.
+Then the solutions of the pencil congruence problem are exactly the
+invertible~$X$ commuting with~$\Omega$ and such that~$\transpose{X} A_{\infty} X =
+B_{\infty}$.
+\end{enumerate}
+\end{prop}
+
+\begin{proof}
+(i)
+Since $A_{\lambda}$~is regular, $A_{\infty}$~is invertible and we may write $A_{\lambda} =
+A_{\infty} (\lambda + A_{\infty}^{-1} A_0)$; likewise, $B_{\lambda} = B_{\infty} (\lambda + B_{\infty}^{-1}
+B_0)$. Choose~$P$ such that~$\transpose{P} A_{\lambda} P = B_{\lambda}$: then
+\begin{equation}
+B_{\infty} (\lambda + \Omega_B) \;=\; \transpose{P} A_{\lambda} P \;=\;
+\transpose{P} A_{\infty} P (\lambda + P^{-1} \Omega_A P),
+\end{equation}
+which implies~$P^{-1} \Omega_A P = \Omega_B$ as required. The same
+computations also prove~(ii).
+
+(iii) follows directly from the equality
+$\transpose{X} A_{\infty} (\lambda - \Omega) X \;=\;
+\transpose{X} A_{\infty} X (\lambda - X^{-1} \Omega X)$.
+\end{proof}
+
+
+\begin{prop}
+Assume that~$A_{\lambda} = A_{\infty} (\lambda - \Omega)$ and~$B_{\lambda} (\lambda - \Omega)$ are both regular
+and symmetric and that the matrix~$\Omega$ is cyclic, that is, its minimal and
+characteristic polynomials are equal.
+
+Then the solutions~$X$ of the pencil congruence problem are the square
+roots of~$A_{\infty}^{-1} B_{\infty}$ in the algebra~$k[\Omega]$.
+\end{prop}
+
+\begin{proof}
+Since $\Omega$~is cyclic, its commutant is reduced to the algebra~$k[\Omega]$;
+therefore, all solutions of the congruence problem are polynomials
+in~$\Omega$.
+
+Since $A_{\lambda}$~is symmetric, both matrices~$A_{\infty}$ and~$A_{0} = A_{\infty} \Omega$
+are symmetric; therefore, $\transpose{\Omega} A_{\infty} = A_{\infty} \Omega$. Since $X$~is a
+polynomial in~$\Omega$, we deduce that also~$\transpose{X} A_{\infty} = A_{\infty} X$.
+
+The relation~$\transpose{X} A_{\infty} X = B_{\infty}$ may therefore be rewritten
+as~$A_{\infty} X^2 = B_{\infty}$, or~$X^2 = A_{\infty}^{-1} B_{\infty}$.
+\end{proof}
+
+We call a pencil~$A_0 + \lambda A_{\infty}$ \emph{cyclic} when the
+endomorphism~$A_{\infty}^{-1} A_0$ is cyclic, and note in passing that
+this is actually a property of the projective pencil.
+
+\begin{prop}
+Let~$A_{\lambda}$, $B_{\lambda}$ be two regular pencils of quadrics
+over~$k^n$, congruent to each other, such that at least one is cyclic
+(and therefore both are). Then the pencil congruence problem may be
+solved using no more than~\Otilde{n^3} scalar operations.
+\end{prop}
+
+\begin{algorithm}
+\caption{Solve the pencil congruence problem (odd characteristic, generic
+case) for pencils~$A_{\lambda}$ and~$B_{\lambda}$}
+\begin{algorithmic}[1]
+\State\label{step:jordan}%
+  Find $P$ such that~$P^{-1} A_{\infty}^{-1} A_0 P =
+	B_{\infty}^{-1} B_0$.
+\State\label{step:define}%
+  Define $A'_{\infty} \leftarrow \transpose{P} A_{\infty} P;
+	\quad \Omega \leftarrow B_{\infty}^{-1} B_0;
+	\quad C \leftarrow A'_{\infty}{}^{-1} B_{\infty}.$
+\State\label{step:min}%
+  Compute~$f = $ minimal polynomial of~$\Omega$ and abort if $\deg f < n$.
+\State\label{step:factor}%
+  Factor~$f = \prod p_i^{e_i}$ over~$k$.
+\State \label{step:polynomial}%
+  Write~$C$ as a polynomial~$g(\Omega)$.
+\ForAll{$i$}
+  \State\label{step:crt1}%
+	Compute~$y_i = $ image of~$C$ in~$k[t]/p_i(t)^{e_i}$.
+	\State\label{step:root}%
+	Compute~$\overline{x}_i = $ a square root of~$y$ in the residual
+	field~$k[t]/p_i(t)$.
+	\State\label{step:hensel}%
+	Lift~$\overline{x}_i$ to a square root~$x_i$ of~$y$
+	in~$k[t]/p_i(t)^{e_i}$.
+\EndFor
+\State\label{step:crt2}%
+Using all~$x_i$, compute the square root~$X$ of~$C$ in~$k[\Omega]$.
+\State\textbf{Return} $PX$.
+\end{algorithmic}
+\end{algorithm}
+
+
+\begin{proof}
+\textbf{Step~\ref{step:jordan}}
+may be done using for example Jordan reduction of both
+matrices~$A_{\infty}^{-1} A_0$ and~$B_{\infty}^{-1} B_0$, which has a complexity
+of~\Otilde{n^3} scalar operations.
+\textbf{Step~\ref{step:min}} requires no more than~\Otilde{n^3} scalar
+operations using the Berlekamp-Massey algorithm.
+\textbf{Step~\ref{step:factor}} requires at most~\Otilde{n^2} scalar
+operations using Cantor-Zassenhaus.
+\textbf{Step~\ref{step:polynomial}} may be done by computing the minimal
+polynomial~$\mu$ of~$C$ and then finding an appropriate root~$c = g(\Omega)$
+of~$\mu$ in the algebra~$k[\Omega]$; as previously, this needs at
+most~\Otilde{n^3} scalar operations.
+\textbf{Step~\ref{step:crt1}} is a simple Chinese remainder computation
+and \textbf{Step~\ref{step:root}} is a square root computation, with
+complexity~\Otilde{(\deg p_i)^3} using Cipolla's algorithm.
+\textbf{Step~\ref{step:hensel}} is a Hensel lift, with
+complexity~\Otilde{1} operations in~$k[t]/p_i(t)^{e_i}$.
+Finally, \textbf{Step~\ref{step:crt2}} is again a Chinese remainder
+computation, and the final step is a matrix multiplication.
+\end{proof}
+
+% Since we know in advance that the pencil congruence problem has a
+% solution, in the cyclic case we know that the matrix~$C = A_{\infty}^{-1}
+% B_{\infty}$ belongs to~$k[\Omega]$ and has a square root in this algebra. Here we
+% recall how to compute this square root.
+% 
+% Let~$f$ be the minimal polynomial of~$\Omega$ over~$k$ and~$f = \prod p_i^{e_i}$
+% be its factorization. Then~$k[\Omega] = k[\Omega]/f(\Omega)$ is isomorphic to~$\prod k[t_i]
+% / p_i(t_i)^{e_i}$, the isomorphism being computable via Chinese
+% remainders; thus we only need to compute the square root of the image~$y$
+% of~$C$ in the local algebra~$R = k[t]/p(t)^{e}$.
+% 
+% Write~$\pi = p(t) \in R$: then~$\pi^e = 0$ and $\pi$~generates the maximal ideal
+% of~$R$; moreover, $R/\piR$~is the finite extension~$ℓ = k[t]/p(t)$ of~$k$,
+% and~$R = ℓ[\pi]/\pi^e$. Let~$v$ be the $\pi$-adic valuation of~$y$; since the
+% pencil congruence problem has a solution, we know that~$v$~is even, and
+% we have~$√y = \pi^{v} √{\pi^{-2v} y}$; we may therefore assume that~$v = 0$.
+% Let~$x_0$ be a square root of the image of~$y$ in~$ℓ$. Using Hensel's
+% lemma, we define a sequence~$(x_i)$ in the following way: $x_{i+1} =
+% \frac 12 x_i + \frac{y}{2 x_i}$ and deduce that~$x_i^2 ≡ y
+% \pmod{\pi^{2^i}}$.
+% 
+\end{document}
