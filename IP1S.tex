@@ -49,8 +49,9 @@
 \newcommand{\F}{{\mathbb F}} 
 \newcommand{\KX}{{\K}[x_1,\dots,x_n]} 
 \newcommand{\Pol}{{\mathcal P}} 
-\def\Polm#1{\dot{#1}}
+\def\Polm#1{\mathcal P(#1)}
 \def\Diagm#1{\Delta(#1)}
+\newcommand\numberthis{\addtocounter{equation}{1}\tag{\theequation}}
 \newcommand{\J}{{\mathcal J}} 
 \newcommand{\Symp}{{\mathcal S}} 
 \newcommand{\Diag}{{\mathcal D}}
@@ -96,6 +97,15 @@
 %\newtheorem{proof}{Proof}
 %\newtheorem{corollary}{Corollary}
 %\newtheorem{lemma}{Lemma}
+
+% Macros Jérôme ---
+\let\s\scriptstyle
+\def\smat#1#2#3#4{\def\arraystretch{.6} \mat{\s#1&\s#2\\\s#3&\s#4}}
+\def\acco#1{\left\{#1\right\}}
+\def\labelenumi{(\roman{enumi})}
+\def\mkenumi#1{\begingroup\setcounter{enumi}{#1}\labelenumi\endgroup}
+\long\def\commentgilles#1{}
+% ---
 
 \newenvironment{keywords}{
        \list{}{\advance\topsep by0.35cm\relax\small
@@ -179,7 +189,7 @@ A limited number of multivariate problems have emerged that can be reasonably co
 for $m \approx n$~%end
 \cite{gareyjohnson1979}- and the broad family of the so-called isomorphism of polynomials (IP) problems.  
 
-Isomorphism of Polynomial problems can be roughly described as the equivalence of multivariate polynomial systems of equations up to linear (or affine) bijective changes of variables.  Two separate subfamilies of IP problems can be distinguished: isomorphism of polynomials with two secrets (IP2S for short) and isomorphism of polynomials with one secret (IP1S for short). A little more in detail, given two $m$-tuples $a = (a_1,\ldots, a_m)$ and $b = (b_1,\ldots, b_m)$ of polynomials in $n$ variables over $\K = \F_q$, IP2S consists of  finding two linear bijective transformations $S$ of $\K^n$ and $T$ of $\K^m$, such that $b = T \circ a \circ S$. Respectively, IP1S consists of finding one linear bijective transformations $S$ of $\K^n$, such that $b = a \circ S$. Many variants of both problems can be defined depending on the value of the triplet $(n,m,q)$, the degree $d$ of the polynomial equations of $a$ and $b$, whether these polynomials are homogeneous or not, whether $S$ and $T$ are affine or linear, etc. It turns out that there are considerable security and simplicity advantages in restricting oneself, for cryptographic applications, to instances involving only homogeneous polynomials of degree $d$ and linear transformations $S$ and $T$. For performance reasons, the quadratic case $d=2$ is most frequently encountered in cryptography. Due to the existence of an efficient canonical reduction algorithm for quadratic forms, instances  such that $m \geq 2$ must then be considered. The cubic case $d = 3$ is also sometimes considered, then instances such that $m = 1$ are generally encountered.  
+Isomorphism of Polynomial problems can be roughly described as the equivalence of multivariate polynomial systems of equations up to linear (or affine) bijective changes of variables.  Two separate subfamilies of IP problems can be distinguished: isomorphism of polynomials with two secrets (IP2S for short) and isomorphism of polynomials with one secret (IP1S for short). A little more in detail, given two $m$-tuples $a = (a_1,\ldots, a_m)$ and $b = (b_1,\ldots, b_m)$ of polynomials in $n$ variables over $\K = \F_q$, IP2S consists of  finding two linear bijective transformations $S$ of $\K^n$ and $T$ of $\K^m$, such that $b = T \circ a \circ S$. Respectively, (computational) IP1S consists of finding one linear bijective transformations $S$ of $\K^n$, such that $b = a \circ S$. Many variants of both problems can be defined depending on the value of the triplet $(n,m,q)$, the degree $d$ of the polynomial equations of $a$ and $b$, whether these polynomials are homogeneous or not, whether $S$ and $T$ are affine or linear, etc. It turns out that there are considerable security and simplicity advantages in restricting oneself, for cryptographic applications, to instances involving only homogeneous polynomials of degree $d$ and linear transformations $S$ and $T$. For performance reasons, the quadratic case $d=2$ is most frequently encountered in cryptography. Due to the existence of an efficient canonical reduction algorithm for quadratic forms, instances  such that $m \geq 2$ must then be considered. The cubic case $d = 3$ is also sometimes considered, then instances such that $m = 1$ are generally encountered.  
 
 Many asymmetric cryptosystems whose security is related to the %hg2the 
 hardness of special trapdoor instances of IP2S were proposed in which all or part of the $m$-tuple of polynomials $b$ plays the role of the public key and is related by secret linear bijections $S$ and $T$ to a specially crafted, easy to invert multivariate polynomial mapping $a$. Most of these systems, e.g. Matsumoto and Imai's seminal multivariate scheme C* \cite{DBLP:conf/eurocrypt/MatsumotoI88}, but also  reinforced variants such as SFLASH and  HFE \cite{DBLP:conf/asiacrypt/PatarinGC98,HFE} were shown to be weak because the use of trapdoor instances of IP2S with specific algebraic properties considerably weakens the general IP2S problem. A survey of the status of the IP2S problems and improved techniques for solving homogeneous instances are presented in \cite{bouillaguet2011thesis} and \cite{DBLP:journals/iacr/BouillaguetFV12}.  
@@ -221,7 +231,9 @@ The lack of explanation for the success of the attack -- more precisely the puzz
 The rest of this paper is organized as follows. In Section~\ref{IP}, we present the problem IP1S, its background and some major mathematical results used in the following sections. We then discuss in Section~\ref{IPodd} and~\ref{IPeven} the resolution of the problem over finite fieds of odd, resp. even characteristic. 
 %%GM-1
 %We finally present in Section~\ref{IPstrong} the construction of ``strenghtened'' instances of the problem and a consolidated variant of Patarin's authentication scheme IP1S that uses such instances. 
+\commentgilles{%
 Non-essential proofs are given in Appendix~\ref{app:proofs}.
+}
 
 
 
@@ -247,7 +259,7 @@ a quadratic form is not unique: two matrices represent the same linear
 form if, and only if, their difference is antisymmetric.
 
 The \emph{polar form} associated to a quadratic form~$q$ is the bilinear
-form~$b = \Pol(q)$ defined by $b(x, y) = q(x+y) - q(x) - q(y)$. This is a
+form~$b = \Polm{q}$ defined by $b(x, y) = q(x+y) - q(x) - q(y)$. This is a
 symmetric bilinear form. This can be used to give an intrinsic definition
 of bilinear forms (which is useful to abstract changes of bases from some
 proofs belows): given a vector space~$V$, a quadratic form over~$V$ is a
@@ -255,7 +267,7 @@ function~$q: V \rightarrow \K$ such that
 \begin{enumerate}
 \item for all $x \in V$ and~$\lambda \in \K$, $q(\lambda x) = \lambda^2
 q(x)$;
-\item the polar form~$\Pol(q)$ is bilinear.
+\item the polar form~$\Polm{q}$ is bilinear.
 \end{enumerate}
 For any matrix~$A$, let~$\transpose{A}$ be the transpose matrix of~$A$
 and $\Polm{A}$ be the symmetric matrix~$\transpose{A} + A$. Then if $q$~is
@@ -265,7 +277,7 @@ i.e. if it defines a bijection from~$V$ to its dual. In general, we
 define the \emph{kernel} of a quadratic form to be the kernel of its
 polar form.
 
-From the definition of~$b = \Pol(q)$ we derive the \emph{polarity
+From the definition of~$b = \Polm{q}$ we derive the \emph{polarity
 identity}
 \begin{equation}\label{eq:polarity}
 2 q(x) = b(x, x).
@@ -359,10 +371,12 @@ $A_{\infty}$~is regular; it is \emph{degenerate} if the intersection of
 the kernels of the quadratic forms~$A_{\lambda}$ is nontrivial.
 
 If an affine pencil is non-degenerate, then the polynomial~$\det
-A_{\lambda}$~is non-zero and the associated projective pencil is regular.
-Therefore, it has a basis that provides a regular affine pencil; this
-basis is defined over an extension of the field~$\K$, and over~$\K$
-itself if it is infinite.
+A_{\lambda}$~is non-zero; choosing any~$\lambda$ which is not a root of this
+polynomial proves that the associated projective pencil is regular (over
+$\K$~itself if it is infinite, and over a finite extension of~$\K$ if it
+is finite). This gives a basis of the projective pencil
+which turns the affine pencil into a regular one. We shall therefore
+assume all affine pencils to be regular.
 
 Two pencils~$A, B$ of quadratic forms are \emph{congruent} if there
 exists an invertible matrix~$X$ such that~$\transpose{X} A_{\lambda} X =
@@ -379,74 +393,121 @@ pencils are regular, a change of basis in the pencils (and maybe an
 extension of scalars) brings us to the case of two regular affine
 pencils.
 
+
+\medskip
+
 We define pencils of bilinear forms in the same way as pencils of
 quadratic forms. The pencil $b_{\lambda} = b_0 + \lambda b_{\infty}$
 \emph{regular} if $b_{\infty}$~is; in this case, the \emph{characteristic
 endomorphism} of the pencil is the endomorphism~$f = b_{\infty}^{-1}
 \circ b_0$.
 
+The following lemma allows to decompose pencils as direct sums, with each
+factor having a power of an irreducible polynomial as its characteristic
+endomorphism.
+
+\begin{lemma}\label{lem:bezout}
+Let~$b$ be a regular pencil of symmetric bilinear forms.
+Then all primary subspaces of the characteristic endomorphism~$f$ are
+orthogonal with respect to all forms of~$b$.
+\end{lemma}
+
+
+\begin{proof}
+We have to prove the following: given any two mutually prime factors~$p, q$
+of~$f$ and any~$x, y \in V$ such that~$p(f)(x) = 0$ and~$q(f)(y) = 0$, then
+for all~$\lambda$, we have~$b_{\lambda} (x, y) =0$. For this it is enough
+to show that~$b_{\infty} (x, y) = 0$.
+
+Since $p$, $q$~are mutually prime, there exist~$u, v$ such that $u p + v
+q = 1$. Note that, for all~$x, y \in V$, we have~$b_{\infty} (x, fy) =
+b_0 (x, y) = b_0(y,x) = b_{\infty} (fx, y)$; therefore, all
+elements of~$\K[f]$ are self-adjoint with respect to~$b_{\infty}$. From
+this we derive the following:
+\begin{equation}
+\begin{split}
+b_{\infty} (x, y) & = b_{\infty} (x,\: u(f) p(f) y + v(f) q(f) y ) \\
+&= b_{\infty} (u(f) p(f) x, y) \,+\, b_{\infty} (x, v(f) q(f) y) \\
+&= 0.\qed
+\end{split}
+\end{equation}
+\end{proof}
 
 %
 %\subsection{Other useful results}
 %\label{OUR}
 %
-\subsubsection{Similarity of a matrix and its transposed.}
+\subsubsection{Explicit similarity of a matrix and its transposed.}
 
-The next result is intensively used in the sequel to deal with symmetric  pencils.
+The next result is intensively used in the sequel to deal with symmetric
+pencils. Although this result is classic~\cite{MR0108500}, we are
+interested with the explicit form given below.
 \begin{theorem}
 \label{transpose-symmetric}
-For any matrix $M$, 
-there exists a non-singular symmetric matrix $T$ such that $\transpose{M}T = TM$.
+For any matrix $M$, there exists a non-singular symmetric matrix $T$ such
+that $\transpose{M}T = TM$.
 \end{theorem}
 
 \begin{proof}%[of Th.~\ref{transpose-symmetric}]
-Given $p=\lambda^n+\sum_{i=0}^{n-1}{p_i\lambda^i}$ a polynomial of degree $n$ over $\K$, we define the two 
-$n\times n$ matrices $\Gamma(p)$ (also known as the companion matrix of the polynomial $p$) and $\Theta(p)$ as:
+Using primary decomposition for~$M$, we may assume that it is of the form
+\begin{equation}\label{eq:frobenius-form}
+\def\arraystretch{.5}
+M = \small \mat{M_0 & 1 & & 0 \\ & \ddots\; & \ddots & \\
+  & & \ddots & 1\\ 0 & & & M_0},
+\end{equation}
+where $M_0$~is the companion matrix of a polynomial~$p(\lambda) =
+\lambda^n+\sum_{i=0}^{n-1}{p_i\lambda^i}$. We then define matrices
+$T_0$~and~$T$ by
 \begin{equation}
-\label{eq:companion}
-\Gamma(p) = \begin{pmatrix}
-0 & 1 & & 0\\
-\vdots & \ddots & \ddots & \\
-0 & \cdots & 0 & 1 \\
--p_0 & \cdots & -p_{n-2} & -p_{n-1}\\
-%
-%	0 & \cdots & 0 & -p_0\\
-%	1 &\ddots &\vdots & \vdots \\
-%	  & \ddots & 0 & -p_{n-2}\\
-%	  & & 1 & -p_{n-1}
-\end{pmatrix}
-, \quad \Theta(p) = \begin{pmatrix}
+% \label{eq:companion}
+% M_0 = \begin{pmatrix}
+% 0 & 1 & & 0\\
+% \vdots & \ddots & \ddots & \\
+% 0 & \cdots & 0 & 1 \\
+% -p_0 & \cdots & -p_{n-2} & -p_{n-1}\\
+% %
+% %	0 & \cdots & 0 & -p_0\\
+% %	1 &\ddots &\vdots & \vdots \\
+% %	  & \ddots & 0 & -p_{n-2}\\
+% %	  & & 1 & -p_{n-1}
+% \end{pmatrix}
+% , \quad
+T_0 = \begin{pmatrix}
 	p_1 & \cdots & p_{n-1} & 1 \\
 	\vdots	& \iddots & \iddots & \\
 	p_{n-1} & \iddots & & \\
 	1 & & & 0
-\end{pmatrix}
+\end{pmatrix},
+\quad
+T = \mat{0 & & T_0\\& \iddots &\\T_0 & & 0}.
 \end{equation}
-One can easily verify that for any polynomial $p$, $M=\Gamma(p)$ and $T=\Theta(p)$
-satisfy the relation $\transpose{M}T = TM$ and $T$ is obviously non-singular and symmetric. Therefore the theorem is proven for any companion matrix. The result can easily be generalized when $A$ is in normal form: since $M$ is block-diagonal and each block is the companion matrix of some elementary divisor, $T$ can also be built up as block-diagonal, each block being non-singular symmetric. Then the result can be generalized to all matrices: for any matrix $N$ there exist a matrix $M$ in normal form and a non-singular matrix $P$ such as $N=P^{-1}MP$.  Since we have from previous step: $\transpose{M} = TMT^{-1}$ for some symmetric non-singular matrix $T$, we easily get $\transpose{N}=(\transpose{P}TP)N(\transpose{P}TP)^{-1}$ and $\transpose{P}TP$ is obviously non-singular symmetric.
-\qed
+One can easily verify that $T_0$~is invertible, symmetric
+and~$\transpose{M_0} T_0 = T_0 M_0$, and that the same is true for~$T$
+and~$M$.\qed
+% satisfy the relation $\transpose{M}T = TM$ and $T$ is obviously non-singular and symmetric. Therefore the theorem is proven for any companion matrix. The result can easily be generalized when $A$ is in normal form: since $M$ is block-diagonal and each block is the companion matrix of some elementary divisor, $T$ can also be built up as block-diagonal, each block being non-singular symmetric. Then the result can be generalized to all matrices: for any matrix $N$ there exist a matrix $M$ in normal form and a non-singular matrix $P$ such as $N=P^{-1}MP$.  Since we have from previous step: $\transpose{M} = TMT^{-1}$ for some symmetric non-singular matrix $T$, we easily get $\transpose{N}=(\transpose{P}TP)N(\transpose{P}TP)^{-1}$ and $\transpose{P}TP$ is obviously non-singular symmetric.
+% \qed
 \end{proof}
 
-We easily get the two following results.
-
-\begin{corollary}
-\label{cor:symmetric-similar-pencil}
-Let $M$ and $T$ be matrices as in Theorem~\ref{transpose-symmetric}. Then $T(\lambda I-M)$ is obviously a symmetric pencil with the same invariant polynomials as $M$.
-\end{corollary}
-
-\begin{corollary}
-\label{cor:symmetric-polynomial-pencil}
-Let $M$ and $T$ be matrices as in Theorem~\ref{transpose-symmetric}. Then for any matrix $M'$ that is a polynomial of $M$, the matrices $\transpose{M'}T$ and $TM'$ are equal and symmetric.
-\end{corollary}
-
-\subsubsection{Equivalent IP1S problems.} 
-The next simple result will also be useful for the following discussion.
-%We introduce the following straightforward result.
-\begin{lemma}
-\label{lemma:equivIP1S} 
-Given four $m$-tuples $a,b,a',b'$  of quadratic forms in $n$ variables and two non-singular linear mappings $Q_a$, $Q_b$ such that $a' = a \circ Q_a$, $b' = b \circ Q_b$. Let $S$ be any non-singular linear mapping and let $S'=Q_a^{-1}\circ S\circ Q_b$. Then $S$ satisfies $b=a\circ S$ if and only if $S'$ satisfies $b'=a'\circ S'$.
-\end{lemma}
-
+% We easily get the two following results.
+% 
+% \begin{corollary}
+% \label{cor:symmetric-similar-pencil}
+% Let $M$ and $T$ be matrices as in Theorem~\ref{transpose-symmetric}. Then $T(\lambda I-M)$ is obviously a symmetric pencil with the same invariant polynomials as $M$.
+% \end{corollary}
+% 
+% \begin{corollary}
+% \label{cor:symmetric-polynomial-pencil}
+% Let $M$ and $T$ be matrices as in Theorem~\ref{transpose-symmetric}. Then for any matrix $M'$ that is a polynomial of $M$, the matrices $\transpose{M'}T$ and $TM'$ are equal and symmetric.
+% \end{corollary}
+% 
+% \subsubsection{Equivalent IP1S problems.} 
+% The next simple result will also be useful for the following discussion.
+% %We introduce the following straightforward result.
+% \begin{lemma}
+% \label{lemma:equivIP1S} 
+% Given four $m$-tuples $a,b,a',b'$  of quadratic forms in $n$ variables and two non-singular linear mappings $Q_a$, $Q_b$ such that $a' = a \circ Q_a$, $b' = b \circ Q_b$. Let $S$ be any non-singular linear mapping and let $S'=Q_a^{-1}\circ S\circ Q_b$. Then $S$ satisfies $b=a\circ S$ if and only if $S'$ satisfies $b'=a'\circ S'$.
+% \end{lemma}
+% 
 
 \section{IP1S in characteristic different from two}
 \label{IPodd}
@@ -454,11 +515,11 @@ Given four $m$-tuples $a,b,a',b'$  of quadratic forms in $n$ variables and two n
 Let~$\K$ be a field of characteristic different from
 two\footnote{Although this is not used in cryptography, we mention that
 this section also applies verbatim to the case of characteristic zero.}.
-In this case,
-the polarity identity~\eqref{eq:polarity} identifies quadratic forms with symmetric
-bilinear forms, or again with symmetric matrices with entries in~$\K$.
-We shall therefore write a quadratic pencil~$A$ as~$A_{\lambda} = A_0 +
-\lambda A_{\infty}$, where $A_0$~and~$A_{\infty}$ are symmetric matrices.
+In this case, the polarity identity~\eqref{eq:polarity} identifies
+quadratic forms with symmetric bilinear forms, or again with symmetric
+matrices with entries in~$\K$. We shall therefore write a quadratic
+pencil~$A$ as~$A_{\lambda} = A_0 + \lambda A_{\infty}$, where
+$A_0$~and~$A_{\infty}$ are symmetric matrices.
 
 \begin{proposition}\label{prop:congruent-commute}
 Let~$A_{\lambda} = A_0 + \lambda A_{\infty}$, $B_{\lambda} = B_{0} +
@@ -475,14 +536,16 @@ $\transpose{P} A_{\lambda} P = \transpose{P} A_{\infty} P (\lambda +
 M _{B})$.
 \item Assume that~$A_{\lambda} = A_{\infty} (\lambda + M )$ and
 $B_{\lambda} = B_{\infty} (\lambda + M )$. Then the solutions of the
-pencil congruence problem are exactly the invertible~$X$ commuting
-with~$M $ and such that~$\transpose{X} A_{\infty} X = B_{\infty}$.
+pencil congruence problem are exactly the invertible~$X$ such that
+\begin{equation}\label{eq:congruent-commute}
+XM = MX \quad\text{and}\quad \transpose{X} A_{\infty} X = B_{\infty}.
+\end{equation}
 \end{enumerate}
 \end{proposition}
 
 
 \begin{proof}
-(i)
+1.
 Since $A_{\lambda}$~is regular, $A_{\infty}$~is invertible and we may
 write $A_{\lambda} = A_{\infty} (\lambda + A_{\infty}^{-1} A_0)$;
 likewise, $B_{\lambda} = B_{\infty} (\lambda + B_{\infty}^{-1} B_0)$.
@@ -492,12 +555,15 @@ B_{\infty} (\lambda + M _B) \;=\; \transpose{P} A_{\lambda} P \;=\;
 \transpose{P} A_{\infty} P (\lambda + P^{-1} M _A P),
 \end{equation}
 which implies~$P^{-1} M _A P = M _B$ as required. The same
-computations also prove~(ii).
+computations also prove~2.
 
-(iii) follows directly from the equality
-$\transpose{X} A_{\infty} (\lambda + M ) X \;=\;
-\transpose{X} A_{\infty} X (\lambda + X^{-1} M  X)$.
+The equations~\eqref{eq:congruent-commute} follows directly from the
+equality $\transpose{X} A_{\infty} (\lambda + M ) X \;=\;
+\transpose{X} A_{\infty} X (\lambda + X^{-1} M  X)$.\qed
 \end{proof}
+
+We now restrict ourselves to the case where the characteristic
+endomorphism is cyclic.
 
 \begin{proposition}\label{prop:cyclic-sqrt}
 Let~$A_{\lambda} = A_{\infty} (\lambda + M )$ and~$B_{\lambda}
@@ -521,54 +587,41 @@ we deduce that also~$\transpose{X} A_{\infty} = A_{\infty} X$.
 
 The relation~$\transpose{X} A_{\infty} X = B_{\infty}$ may therefore be
 rewritten as~$A_{\infty} X^2 = B_{\infty}$, or~$X^2 = A_{\infty}^{-1}
-B_{\infty}$.
+B_{\infty}$.\qed
 \end{proof}
 
-\begin{proposition}
+\begin{theorem}\label{thm:IP1S-odd}
 Let~$\K$ be a finite field of odd characteristic and $A_{\lambda}$,
 $B_{\lambda}$ be two regular pencils of quadrics over~$\K^n$, congruent
 to each other, such that at least one is cyclic (and therefore both are).
 Then the pencil congruence problem may be solved using no more
 than~$\Otilde{n^3}$ operations in the field~$\K$.
-\end{proposition}
-
+\end{theorem}
 
 \begin{proof}
 The first step is to reduce to the case of primary components of the
 characteristic endomorphism. This may be done, using for example Frobenius
 reduction of both matrices $A_{\infty}^{-1} A_0$ and~$B_{\infty}^{-1}
-B_0$, with a complexity of~$\Otilde{n^3}$ operations. Expressing
-$C = A_{\infty}^{-1} B_{\infty}$ as a polynomial in~$M$ can be done by
-computing the minimal polynomial~$f$ of~$C$ and then finding the correct
-root~$c = g(M)$ of~$f$ in~$\K[M ]$, again in $\Otilde{n^3}$.
+B_0$, with a complexity of~$\Otilde{n^3}$ operations. This also provides
+the change of basis making the characteristic endomorphism of both
+pencils to have the same matrix.
 
-The minimal polynomial of~$M$ is~$p^e$, where $p$~is irreducible. A
-square root~$r$ of~$g(M)$ in~$\K[M ]$ is a Hensel lift of a square root
-of~$g$ modulo~$p$, which in turn is a square root of~$g(x)$ in the
-extension field~$\K[x] / p(x)$ and hence computable with Cipolla's
-algorithm in $\Otilde{n^3}$. \end{proof}
+There remains to compute a square root of~$C = A_{\infty}^{-1}
+B_{\infty}$ in~$\K[M]$, where now the minimal polynomial of~$M$
+is~$p^e$, with $p$~irreducible. For this we first write~$C$ as a
+polynomial $g(M)$; this again requires~$\Otilde{n^3}$ operations.
+To solve the equation~$y^2 = g(M)$ in the ring~$\K[M] = \K[x]/p(M)^e$, we
+first solve it in the (finite) residual field~$\K[x]/p(x)$, with
+complexity~$\Otilde{n^3}$ again; lifting the solution to the ring~$\K[M]$
+requires only~$\Otilde{n^2}$ with Hensel lifting.\qed
+\end{proof}
 
 Solutions of the IP1S problem are square roots of an element~$C$ of the
 algebra~$\K[M]$; therefore, the number of solutions is $2^s$, where
 $s$~is the number of connected components of~$\K[M]$, that is, the number
 of prime divisors of the minimal polynomial of~$M$.
 
-\XXX{Conflit sur 2 prochains paragraphes}
-
-We note that cyclic pencils are generic both in an algebraic-geometric
-and in a numeric sense. Therefore, random instances of the IP1S problem
-in odd characteristic are easily solvable. Moreover, in the non-cyclic
-case, since the commutant~$\commute{M}$ is strictly larger than~$\K[M]$,
-the number of solutions of the IP1S instance can be large. For example,
-in the extreme non-cyclic case where~$M = 1$, the commutant is the whole
-space of matrices and hence solutions of IP1S correspond bijectively to
-elements of the orthogonal group~$O(A_{\infty})$, therefore the number of
-solutions is~$O(q^{2n^2-n})$ where $q$~is the number of elements of~$\K$
-and $n$~is the dimension of the problem.
-
-Finally, we may conclude that in this first case, the considered sub-system has exactly two solutions that can be computed in polynomial time. 
-
-
+\commentgilles{%
 \subsubsection{Homothetic case.}
 In the second case, the condition on $M$ can be expressed as $\tilde{M}=\alpha I$ for some $\alpha$ in $\K^e$ -- hence the word ``homothetic'' -- and equivalently $\commute{\tilde{M}}$ is the whole space of matrices of order $d$ over $\K^e$. 
 The pencil congruence problem turns then into a single matrix congruence problem since both parts of the pencil are colinear. 
@@ -585,7 +638,7 @@ the elementary divisors of $M$ are $p^{d_1},\ldots,p^{d_i},\ldots$ where  $d_1,\
 The problem can however always be expressed as $\transpose{\tilde{X}}\tilde{M_a}\tilde{X}=\tilde{M_b}$ where solutions have to be searched within $\commute{\tilde{M}}$, which is some structure depending on the values of $(d_i)$. 
 In order to discuss the complexity of the problem, we introduce the two following parameters: $n=\sum{d_i}$ and $c=\sum_{j\lt k}{\min(d_j,d_k)}$ which represent respectively the dimension of the problem and the dimension of $\commute{M}$, over $\K^e$. The cases $c=n$ and $c=n^2$ correspond to the two first cases exposed previously and where solutions could be computed efficiently in polynomial time.
 Intuitively, when $c$ grows from $n$ to $n^2$, the number of solutions grows accordingly, being minimal for $c=n$ and maximal for $c=n^2$. However it is not clear whether the solutions can also be efficiently computed for those intermediate cases. We believe that ``regular'' cases such as $d_1=d_2=\ldots=d_i$ have also polynomial or at most sub-exponential solving time. For generic cases, the question of the complexity is still open. 
-
+}
 
 
 \subsubsection{Summary and Computer experiments.}
@@ -596,7 +649,7 @@ as shown above, %end
 the number of solutions is exactly %hg2 $2^d$ where $d$ 
 $2^s$ where $s$ 
 is the numbers of elementary divisors and solutions can be efficiently computed (in polynomial time $\mathcal{O}(n^3)$) by our method. 
-An overview of our solving approach is given in Fig.~1 in Appendix~\ref{app:figs}.
+\commentgilles{An overview of our solving approach is given in Fig.~1 in Appendix~\ref{app:figs}.}
 The highlighted structure of the equations also %hg2provide 
 provides %end
 some likely explanations of why Gr{\"o}bner basis computation methods such as those presented in~\cite{DBLP:conf/pkc/BouillaguetFFP11} were successful %hg2 successful.
@@ -651,20 +704,19 @@ $7^6$ & 32 & 11.s. & 100.\\
 \section{IP1S in Characteristic Two}
 \label{IPeven}
 
-\XXX{Conflit: version de Jérôme}
+\XXX{version de Jérôme}
 %\iffalse
-This section deals with the IP1S problem for pencils of quadratic forms
-in characteristic~two.
-
-\subsubsection{Basic facts about quadratic forms in characteristic two}
-
-This paragraph is a reminder of classical results. We refer the reader to
-\cite{milnor1973symmetric} for the proofs.
 
 Let~$\K$ be a perfect field of characteristic two. In this case, the
 polarity identity~\eqref{eq:polarity} shows that the polar form~$b =
-\Pol(q)$ attached to a quadratic form~$q$ is an alternating bilinear
+\Polm{q}$ attached to a quadratic form~$q$ is an alternating bilinear
 form.
+
+\subsection{Pencils of alternating bilinear forms}
+\label{ss:alternating}
+
+This paragraph is a reminder of classical results. We refer the reader to
+\cite{milnor1973symmetric} for the proofs.
 
 If $b$~is alternating and nondegenerate, then the vector space~$V$ has a
 \emph{symplectic basis}, i.e. a basis~$(e_1, \dots, e_n, f_1, \dots,
@@ -677,34 +729,16 @@ for~$b$.
 We recall that two matrices~$A$ and~$B$ define the same quadratic
 form if and only if $\Polm{A} = \Polm{B}$ and $\Diagm{A} = \Diagm{B}$.
 
-\subsubsection{Pencils of alternating bilinear forms}
-
 Although quadratic forms only produce alternating bilinear forms in
-characteristic two, the following two lemmas about alternating forms are
-true in all characteristics.
-
-\begin{lemma}\label{lem:alt-bezout}
-Let~$b$ be a pencil of alternating bilinear forms on~$V$ with
-characteristic endomorphism~$f$.
-Let~$p, q \in \K[t]$ be two mutually prime polynomials. Assume that~$x, y \in
-V$ satisfy~$p(f) (x) = 0$ and~$q(f)(y) = 0$. Then, for all~$b_{\lambda}$ in the
-pencil~$b$,
-\[ b_{\lambda} (x, y) = 0. \]
-\end{lemma}
-
-\begin{proof}
-Let~$u, v$ be such that $u p + v q = 1$. Note that, for all~$x, y \in V$,
-we have~$b_{\infty} (x, fy) = b_0 (x, y) = b_{\infty} (fx, y)$;
-therefore, all elements of~$\K[f]$ are self-adjoint with respect
-to~$b_{\infty}$. From this we derive the following:
-\begin{equation}
-\begin{split}
-b_{\infty} (x, y) & = b_{\infty} (x,\: u(f) p(f) y + v(f) q(f) y ) \\
-&= b_{\infty} (u(f) p(f) x, y) \,+\, b_{\infty} (x, v(f) q(f) y) \\
-&= 0.
-\end{split}
+characteristic two, the following lemma about alternating forms is
+true in all characteristics. It proves that there exists a basis of~$V$
+in which the pencil has the block-matrix decomposition
+\begin{equation}\label{eq:pfaffian}
+A_\infty = \smat{0}{1}{1}{0}, \quad
+A_0 = \smat{0}{\transpose{F}}{F}{0}; \qquad
+A_{\infty}^{-1} b_0 = \smat{F}{0}{0}{\transpose{F}}.
 \end{equation}
-\end{proof}
+The matrix~$F$ is called the \emph{Pfaffian} endomorphism of~$A$.
 
 \begin{lemma}\label{lem:alt-symplectic}
 Let~$b = (b_\infty, b_0)$ be a regular pencil of alternating bilinear
@@ -714,7 +748,7 @@ Lagrangian is stable by the characteristic endomorphism of~$b$.
 
 \begin{proof}
 Let~$f$ be the characteristic endomorphism of~$b$. By
-Lemma~\ref{lem:alt-bezout}, we may replace~$V$ by one of the primary
+Lemma~\ref{lem:bezout}, we may replace~$V$ by one of the primary
 components of~$f$ and therefore assume that the minimal polynomial of~$f$
 is~$p^n$ where $p$~is a prime polynomial. By extending scalars
 to~$\K[\lambda]/p(\lambda)$ and replacing~$b_0$ by~$\lambda b_{\infty} +
@@ -729,62 +763,347 @@ $b_{\infty}$-orthogonal~$W^\perp$ are stable by~$f$; since $W^{\perp}$
 satisfies the lemma by the induction hypothesis, we only need to prove it
 for~$W$.
 
-Let~$a(t) = 1 + a_1 t + \dots + a_{n-1} t^{n-1}$ be a polynomial
-and~$x' = a(f) x$. Then we still have~$b_{\infty}(x', f^{n-1} y) = 1$, and
-moreover we can choose~$a$ so that~$b_{\infty}(x', f^i y) = 0$ for all~$i = 0,
-\dots, n-2$. Then $(x', f x', \dots, f^{n-1} x', \allowbreak
-f^{n-1} y, f^{n-2} y, \dots, fy, y)$ is a symplectic basis for~$b_\infty$
-on~$W$ and its Lagrangian is~$\K[f] x$, which is obviously stable by the
-characteristic endomorphism.
+Let~$a(t) = 1 + a_1 t + \dots + a_{n-1} t^{n-1}$ be a polynomial and~$x'
+= a(f) x$. Then we still have~$b_{\infty}(x', f^{n-1} y) = 1$, and
+moreover we can choose~$a$ so that~$b_{\infty}(x', f^i y) = 0$ for all~$i
+= 0, \dots, n-2$. In other words, $(x', f x', \dots, f^{n-1} x',
+\allowbreak f^{n-1} y, f^{n-2} y, \dots, fy, y)$ is a symplectic basis
+for~$b_\infty$ on~$W$. By construction, its Lagrangian is~$\K[f] x$,
+which is obviously stable by the characteristic endomorphism~$f$.
+\qed
 \end{proof}
 
-In the basis constructed by Lemma~\ref{lem:alt-symplectic}, the
-pencil~$b$ has a block-matrix decomposition of the form
+\begin{proposition}\label{prop:bil-can}
+Let~$\K$ be a binary field. Any regular pencil of alternating bilinear
+forms is congruent to a pencil of the form
+\begin{equation}\label{eq:bil-can}
+A_\infty = \smat{0}{T}{T}{0},\quad
+A_0 = \smat{0}{TM}{TM}{0},
+\end{equation}
+where~$M$ is in rational (Frobenius) normal form and $T$~is the
+symmetric matrix defined in Theorem~\ref{transpose-symmetric}.
+\end{proposition}
+
+\begin{proof}
+From the equation~\ref{eq:pfaffian}, choose a matrix~$P$ such
+that $M = P^{-1} F P$~is in rational normal form and define~$T$ as in
+Theorem~\ref{transpose-symmetric}. Then the coordinate
+change~$\smat{P}{0}{0}{\transpose{P}^{-1}\,T}$ produces the required
+form.\qed
+\end{proof}
+
+Let~$A$ be a pencil as in~\eqref{eq:bil-can}. The
+automorphism group~$O(A)$ of~$A$ is the set of matrices $X =
+\smat{X_1}{X_2}{X_3}{X_4}$ such that all~$X_i$ commute with~$M$
+and~$\transpose{X_1} T X_4 + \transpose{X_3} T X_2 = T$.
+
+In the case where $M$~is cyclic, all~$X_i$ belong to~$\K[M]$.
+The group~$O(A)$ is generated by the elementary transformations
+\begin{equation}\label{eq:orthogonal-gen}
+G_1(X) = \smat{1}{X}{0}{1},\quad
+G_2(X) = \smat{1}{0}{X}{1},\quad
+G_3(X) = \smat{X}{0}{0}{X^{-1}},\quad
+G_4 = \smat{0}{1}{1}{0},
+\end{equation}
+where~$X \in \K[M]$, $X$~invertible for~$G_3(X)$.
+The first three transformations generate the subgroup of \emph{positive}
+automorphisms of~$A$. This is a subgroup of order two of the orthogonal
+group~\cite{dieudonne-dickson}. These considerations of sign are used
+only for counting the solutions to the IP1S problem.
+
+\subsection{Pencils of quadratic forms}
+
+The following proposition deals with the diagonal terms of a quadratic
+form in the cyclic case. We recall that, using the notations of
+Theorem~\ref{transpose-symmetric}, $\K[M_0]$~is an extension field
+of~$\K$, and $\K[M]$~is the (local) $\K[M_0]$-algebra generated by
+\begin{equation}\label{eq:H}
+\def\arraystretch{.5}
+H = \fontsize{8pt}{9pt}\selectfont
+\mat{ 0 & 1 & & 0 \\ & \ddots\; & \ddots & \\ & & \ddots & 1 \\ 0 & & & 0 }.
+\end{equation}
+We write~$\varphi(X) = X^2$ for the Frobenius map of~$\K[M_0]$.
+Since this is a finite field, the Frobenius map is bijective. It
+extends to~$\K[M]$ as~$\varphi(\sum x_i H^i) = \sum x_i^2 H^i_{}$.
+
+\begin{proposition}\label{prop:diagonal-isomorphism}
+Define matrices~$M$ of size~$n$, $M_0$, $T_0$ of size~$e = n/d$ as in
+Theorem~\ref{transpose-symmetric}.
+\begin{enumerate}
+\item The $\K$-linear map $\K[M_0] \mapsto \K^{e}$, $X \mapsto
+\Diagm{T_0 X}$ is an isomorphism.
+\item For any diagonal matrix~$D$ of size~$e$, there exists a (unique)
+matrix~$C = \psi_0(D) \in \K[M_0]$ such that, for all~$X \in \K[M_0]$:
 \begin{equation}
-b_\infty = \mat{0 & 1 \\ 1 & 0}, \quad
-b_0 = \mat{0 & \transpose{g} \\ g & 0}; \qquad
-f = b_{\infty}^{-1} b_0 = \mat{g & 0 \\ 0 & \transpose{g}}.
+\Diagm{\transpose X D X} \;=\; \Diagm{T_0 C X^2}.
 \end{equation}
-The matrix~$g$ is called the \emph{Pfaffian matrix} of~$b$.
-The proof of the lemma actually builds a symplectic basis in which the
-Pfaffian matrix is in rational (Frobenius) normal form.
+\item Let~$D$ be a diagonal matrix of size~$n$, written as blocks~$D_0,
+\dots, D_{d-1}$, and write~$X \in \K[M]$ as~$X = \sum x_i H^i$
+with~$x_i \in \K[M_0]$.
+Also define~$\psi(D) = \sum \psi_0(D_i) H^i \in \K[M]$. Then we have the
+relation in~$\K[M]$
+\begin{equation}\label{eq:psi}
+\psi(\transpose{X} D X) = \varphi(X) \cdot \psi(D).
+\end{equation}
+\end{enumerate}
+\end{proposition}
 
-\subsubsection{Pencils of quadratic forms}
+\begin{proof}
+\mkenumi{1}
+Since $2 = 0$ in~$\K$, for any symmetric matrix~$A$ and any~$X$, we have
+\begin{equation}\label{eq:diag-invariant}
+\Diagm{\transpose{X} \Diagm{A} X} = \Diagm{\transpose{X} A X}.
+\end{equation}
+Since the space~$\K[M_0]$ has dimension~$e$ over~$\K$, we only have to
+check injectivity. Assume~$\Diagm{T_0 X} = 0$ with~$X \neq 0$; since
+$\K[M_0]$~is a field, $X$~is invertible. Let~$Y = \varphi^{-1}(X^{-1})$.
+We then have
+\begin{equation}
+\Diagm{T_0} = \Diagm{T_0 X Y^2} = \Diagm{\transpose{Y} (T_0 X) Y}
+= \Diagm{\transpose{Y} \Diagm{T_0 X} Y} = 0.
+\end{equation}
+Let~$p(x) = p_0 + \dots + p_{e-1} x^{e-1} + x^e$ be the minimal
+polynomial of~$M_0$. From~$\Diagm{T_0} = 0$ we deduce that~$p_{e-1} =
+p_{e-3} = \dots = 0$, which contradicts the irreducibility of~$p$.
 
-The following theorem is a direct consequence of
-Lemma~\ref{lem:alt-symplectic}.
+\mkenumi{2}
+Let~$C \in \K[M_0]$ such that~$\Diagm{C} = D$;
+applying~\eqref{eq:diag-invariant} to the symmetric matrix~$T_0 C$ and
+using the symmetry of~$T_0 M_0$ yields
+\begin{equation}
+\Diagm{T_0 C X^2} = \Diagm{\transpose{X} T_0 C X}
+= \Diagm{ \transpose{X} \Diagm{T_0 C} X} = \Diagm{\transpose{X} D X}.
+\end{equation}
 
-\begin{theorem}\label{thm:quad-can}
-Let~$q = (q_{\infty}, q_0)$ be a regular pencil of quadratic forms and
-$M$~be a matrix similar to the Pfaffian of~$q$.
-There exists a basis of~$V$ in which the pencil~$q$ has the
-block-matrix decomposition
+\mkenumi{3} From direct computation we find that the diagonal blocks
+of~$\transpose{X} D X$ are $B_m = \sum_{i+j=m} \transpose{X_i} D_j X_i$;
+hence~$\Diagm{B_m} = \sum \Diagm{T_0 \psi_0(D_j) X_i^2}$ and~$\psi_0(B_m)
+= \sum \psi_0(D_j)\, \varphi(X_i)$.\qed
+\end{proof}
+
+For any binary field~$\K$, we write~$\wp(\K)$ for the set of elements~$x^2
++ x \in \K$. This is an additive subgroup of~$\K$, and the
+characteristic-two analogue of the set of squares.
+
+\begin{proposition}\label{prop:quad-can}
+Any regular pencil of quadratic forms is congruent to a pencil of the
+form
 \begin{equation}\label{eq:quad-can}
-Q_{\infty} = \mat{A_1 & T \\ 0 & A_2}, \quad
-Q_0 = \mat {A_3 & TM \\ 0 & A_4},
+\def\arraystretch{.7}
+A_\infty = \mat{A_1 & T \\ T & A_2}, \quad
+A_0 = \mat{A_3 & TM \\ TM & A_4 },
 \end{equation}
-where $T$, $TM$~are symmetric and $A_1, A_2, A_3, A_4$~are diagonal
-matrices.
+where $M$, $T$~are as in Prop.~\ref{prop:bil-can} and $A_i$~are diagonal
+matrices such that the values~$\alpha_{i} = \psi(A_i)$ satisfy
+\begin{enumerate}
+\item $\alpha_1 = \alpha_2 \in \acco{0, \delta H^{d-1}}$, where
+$\delta$~is a fixed element of $\K[M_0] \smallsetminus \wp(\K[M_0])$;
+\item $\alpha_3 = H^m$ for an integer~$m \in \acco {0, \dots, d}$.
+\end{enumerate}
+% Moreover, two such pencils~$a$, $a'$ are (positively) congruent if and
+% only if they share the same values~$(m, \alpha_1 = \alpha_2, \alpha_3 =
+% h^m)$ and~$\alpha'_4$ and~$\alpha_4$ differ by multiplication by an
+% element of~$1 + h^{d-m} \K[m]$.
+\end{proposition}
+
+The value~$\alpha_1 = \in \K / \wp(\K)$ is also known as the Arf
+invariant of~$A_\infty$~\cite{milnor1973symmetric}.
+
+\begin{proof}
+By Prop.~\ref{prop:bil-can}, we may compute bases in which the
+pencils have the form~\eqref{eq:quad-can} with~$M$, $T$, $M_0$, $T_0$
+as in Theorem~\ref{transpose-symmetric} and~$A_i$ are some symmetric
+matrices. We now perform elementary transformations of the orthogonal
+group of~$\Polm{A}$ to simplify the diagonal part of the quadratic
+pencil. We use the (positive) transformations~$G_1(X)$ and~$G_2(X)$
+from~\eqref{eq:orthogonal-gen} for a matrix~$X = x_0 + \dots + x_{d-1}
+H^{d-1} \in \K[M]$.
+
+As in Prop.~\ref{prop:diagonal-isomorphism}, we write~$A_i$ as
+$d$~blocks~$A_{i,j}$ and define~$\alpha_{i,j} = \psi_0{A_{i,j}}$.
+The effect of the elementary transformation~$G_1(X)$ on the
+coefficients~$\alpha_{i,j}$ is:
+\begin{equation}\label{eq:alpha12}
+\alpha_{1,m} \leftarrow \alpha_{1,m}
++ \sum_{i+j=m} \alpha_{2,j}^{} x_j^2 + x_{2m-(d-1)};
+\end{equation}
+The first $(d-1)$~equations of this system are triangular with pivot
+equal to the first non-zero of the coefficients~$\alpha_{2,j}$,
+say~$\alpha_{2,m}$. Using formulas~\eqref{eq:alpha12}, we may assume
+that all~$\alpha_{1,j}$ are zero for~$j = m, \dots, d-2$. Likewise, the
+elementary transformations~$G_2(X)$ allows us to cancel the first~$(d-1)$
+entries of~$A_2$. The last equation of~\eqref{eq:alpha12} then reads as
+$\alpha_{1,d} \leftarrow \alpha_{1,d}^{} + \alpha_{2,d}^{} x_{d}^2 +
+x_{d}$; this allows to change both~$\alpha_{1,d}$ and~$\alpha_{2,d}$ by
+elements of~$\wp(\K)$, hence the result.
+
+\medskip
+
+The only remaining automorphisms of a pencil in this form are the
+elementary transformations~$G_3(X) = \smat{X}{0}{0}{X^{-1}}$, with~$X \in
+\K[M]$ invertible. Write~$\alpha_i = \psi(A_i) \in \K[M]$.
+By~\eqref{eq:psi}, the effect of~$G_3(X)$ on~$\alpha_3$ and~$\alpha_4$ is
+\begin{equation}\label{eq:alpha34}
+\alpha_3 \leftarrow \alpha_3 \;\varphi(X), \quad
+\alpha_4 \leftarrow \alpha_4 \;\varphi(X)^{-1}.
+\end{equation}
+By choosing an appropriate unit~$X \in \K[M]$, we may assume
+that~$\alpha_3 = H^m$ for some~$m$ (with~$m = d$ when~$\alpha_3 = 0$).
+% The last degree of freedom is then choosing~$X$ such that~$\varphi(X)
+% \alpha_3 = \alpha_3 = H^m$, which means that~$X \in 1 + H^{d-m}
+% \K[M]$.\qed
+\end{proof}
+
+
+\begin{theorem}\label{thm:IP1S-2}
+Let~$\K$ be a finite field with characteristic two. The cyclic case of
+the IP1S problem is solvable using~$\Otilde{n^3}$ operations in the
+field~$\K$. Moreover, in the generic case, the IP1S problem has exactly
+two solutions.
 \end{theorem}
 
 \begin{proof}
-\begingroup \let\s\scriptstyle
-\def\sm#1#2#3#4{\mat{\s#1&\s#2\\\s#3&\s#4}}
-\def\arraystretch{.6}
-By Lemma~\ref{lem:alt-symplectic}, we may assume that the polar pencil
-of~$q$ has matrices $B_{\infty} = \sm{0}{1}{1}{0}, 
-B_0 = \sm{0}{\transpose{M}}{M}{0}$. By
-Theorem~\ref{transpose-symmetric}, there exists a symmetric matrix~$T$
-such that~$TM$~is again symmetric. Let~$P = \sm{1}{0}{0}{T}$.
-Then we have~$\transpose{P} B_{\infty} P = \sm{0}{T}{T}{0}$ 
-and $\transpose{P} B_{0} P = \sm{0}{TM}{TM}{0}$. When also taking account
-of the diagonal coefficients of the pencil, the theorem immediately
-follows.
-\endgroup
+To solve the IP1S problem for two pencils~$A$ and~$B$, we may reduce them
+to the same canonical form using~Prop.~\ref{prop:quad-can}. Following
+along the proof of the proposition, we see that it is constructive and
+that all linear algebra algorithms used require at most~$\Otilde{n^3}$
+field operations.
+
+Solutions of the IP1S problem correspond bijectively to automorphisms of
+the canonical pencil. In general, half the automorphisms are positive; in
+addition to the computations of Prop.~\ref{prop:quad-can}, we note that
+the negative automorphism~$G_4$ swaps the values of~$\alpha_3$
+and~$\alpha_4$.
+
+In the generic case, the canonical pencil is such that~$\alpha_3$
+and~$\alpha_4$ are both invertible in~$\K[M]$. This pencil has therefore
+only two automorphisms: the identity and the (negative) automorphism~$G_4
+\circ G_3(\varphi^{-1}(\alpha_4))$. The IP1S problem for pencils
+congruent to this canonical pencil has therefore exactly two solutions.
 \end{proof}
 
-\XXX{Conflit: version de Gilles}
 
+% From this result we deduce the following about pencils of quadratic
+% forms.
+% \begin{proposition}\label{prop:quad-can}
+% Let~$q = (q_{\infty}, q_0)$ be a regular pencil of quadratic forms and
+% $M$~be a matrix similar to the Pfaffian of~$q$.
+% There exists a basis of~$V$ in which the pencil~$q$ has the
+% block-matrix decomposition
+% \begin{equation}\label{eq:quad-can}
+% Q_{\infty} = \mat{A_1 & S \\ 0 & A_2}, \quad
+% Q_0 = \mat {A_3 & S M \\ 0 & A_4},
+% \end{equation}
+% where $S$, $S M$~are symmetric and $A_1, A_2, A_3, A_4$~are diagonal
+% matrices.
+% \end{proposition}
+% \begin{proof}
+% \def\arraystretch{.6}
+% By Lemma~\ref{lem:alt-symplectic}, we may assume that the polar pencil
+% of~$q$ has matrices $B_{\infty} = \smat{0}{1}{1}{0}, 
+% B_0 = \smat{0}{\transpose{M}}{M}{0}$. By
+% Theorem~\ref{transpose-symmetric}, there exists a symmetric matrix~$S$
+% such that~$S M$~is again symmetric. Let~$P = \smat{1}{0}{0}{S}$.
+% Then we have~$\transpose{P} B_{\infty} P = \smat{0}{S}{S}{0}$ 
+% and $\transpose{P} B_{0} P = \smat{0}{S M}{S M}{0}$. When also taking account
+% of the diagonal coefficients of the pencil, the theorem immediately
+% follows.
+% \end{proof}
+% 
+% \subsection{Solving the cyclic IP1S problem}
+% 
+% The following proposition is the binary analogue of
+% Prop.~\ref{prop:congruent-commute}.
+% 
+% \begin{proposition}\label{prop:IP1S-commute2}
+% \def\arraystretch{.7}
+% Let~$A_{\lambda}$, $B_{\lambda}$ be regular quadratic pencils with block
+% matrices as in Prop.~\ref{prop:bil-can}:
+% \begin{equation}\label{eq:quad-block2}
+% A_{\infty} = \mat{A_1 & T \\ 0 & A_2},
+% A_0 = \mat{A_3 & T M  \\ 0 & A_4}, \quad
+% B_{\infty} = \mat{B_1 & T \\ 0 & B_2},
+% B_0 = \mat{B_3 & T M \\ 0 & B_4}.
+% \end{equation}
+% Then the solutions of the IP1S problem are the matrices~$X =
+% \smat{X_1}{X_2}{X_3}{X_4}$ such that
+% \begin{gather*}
+% X_i M = M X_i, \quad i = 1,\dots,4;\\
+% X_1 X_4 + X_2 X_3 = 1;\\
+% \Diagm {\transpose{X_1} A_1 X_1 + \transpose{X_3} A_2 X_3
+%   +  T X_1 X_3} = B_1;\\
+% \numberthis \label{eq:commute2}
+% \Diagm {\transpose{X_2} A_1 X_2 + \transpose{X_4} A_2 X_4
+%   +  T X_2 X_4} = B_2;\\
+% \Diagm {\transpose{X_1} A_3 X_1 + \transpose{X_3} A_4 X_3
+%   +  T X_1 X_3} = B_3;\\
+% \Diagm {\transpose{X_2} A_3 X_2 + \transpose{X_4} A_4 X_4
+%   +  T X_2 X_4} = B_4.
+% \end{gather*}
+% \end{proposition}
+% 
+% As in the odd characteristic case, the equations~\eqref{eq:commute2}
+% simplify when the Pfaffian $M$~is cyclic.
+% 
+% 
+% \begin{theorem}\label{thm:ip1s-char2}
+% Let~$\K$ be a finite field with characteristic~two and let~$A_{\lambda}$,
+% $B_{\lambda}$ be two regular, cyclic pencils of quadrics over~$\K^n$. Then the
+% pencil congruence problem for~$A$ and~$B$ may be solved using a
+% polynomial number of operations in~$\K$.
+% \end{theorem}
+% 
+% \begin{proof}
+% Using Prop.~\ref{prop:IP1S-commute2}, we may compute bases in which the
+% pencils have the form~\eqref{eq:quad-block2} with
+% \begin{equation}
+% \def\arraystretch{.5}
+% M = M_A = M_B = \small \mat{M_0 & 1 & & 0 \\ & \ddots\; & \ddots & \\
+%   & & \ddots & 1\\ 0 & & & M_0} \quad\text{{\normalsize and}}\quad
+% T = \mat{ & & T_0 \\ & \iddots & \\ T_0 & & },
+% \end{equation}
+% where the minimal polynomial of~$M$ is~$p^d$ with $p$~irreducible,
+% $M_0$~is the companion matrix for~$p$, and $T_0$~is the symmetric matrix
+% defined in Theorem~\ref{transpose-symmetric} such that $T_0 M_0$~is again
+% symmetric. Then $\K[M_0]$~is an extension field~$\K^e$ of~$\K$ of degree
+% $e = n/(2d)$, and $\K[M]$~is isomorphic to the $\K[M_0]$-algebra
+% generated by the matrix~$H$, written as~$d \times d$ square blocks of
+% size~$e$:
+% \begin{equation}
+% \def\arraystretch{.5}
+% H = \fontsize{8pt}{9pt}\selectfont
+% \mat{ 0 & 1 & & 0 \\ & \ddots\; & \ddots & \\ & & \ddots & 1 \\ 0 & & & 0 }.
+% \end{equation}
+% The solutions of the IP1S problems are matrices~$X_1, \dots, X_4$ as
+% in~\eqref{eq:commute2}. We may write~$X_i = x_{i,0} + x_{i,1} H + \dots +
+% x_{i,d-1} H^{d-1}$ with~$x_{i,j} \in \K[M_0]$. Moreover, write the diagonal matrix~$A_{i}$ as
+% $d$~diagonal blocks~$A_{i,j}$. Then, by
+% Prop.~\ref{prop:diagonal-isomorphism}, there exist unique
+% elements~$\alpha_{i,0}, \dots, \alpha_{i,d-1}$ of~$\K[M_0]$ such
+% that~$A_{i,j} = \Diagm{T_0 \alpha_{i,j}}$. We likewise define
+% elements~$\beta_{i,j}$ corresponding to the diagonal matrices~$B_1,
+% \dots, B_4$.
+% 
+% The equations in~\eqref{eq:commute2} are then equivalent to a system of
+% equations in~$\K^e$: for example, the third equation may be rewritten as
+% \begin{equation}\label{eq:commute2-petit}
+% \sum_{i+j = m} \alpha_{1,i}^{}\, x_{1,j}^2 \;+\; \alpha_{2,i}^{}\, x_{3,j}^2
+% \;+\; \sum_{i+j = 2m-(d-1)} x_{1,i} x_{3,j} \;=\;
+%   \beta_{1,m}, \quad m = 0, \dots, d-1,\\
+% \end{equation}
+% Now define~$\alpha_i = \sum \alpha_{i,j} H^j \in \K[M]$ and~$\beta_i$ in
+% the same way. Then the system~\eqref{eq:commute2-petit} is equivalent to
+% the single equation in~$\K[M]$
+% \begin{equation}\label{eq:commute2-gros}
+% \alpha_1 \varphi(x_1) + \alpha_2 \varphi(x_3) + x_1 x_3 = \beta_1,
+% \end{equation}
+% where~$\varphi$ is the Frobenius map defined by~$\varphi(\sum a_j H^j) = \sum
+% a_j^2 H^j)$.
+% 
+% \end{proof}
+% 
+
+\commentgilles{
 %\iffalse
 As in the previous section, we would like to solve the IP1S problem for the pairs of homogeneous quadratic forms $a$ and $b$, \textit{i.e.} we assume that there exists some linear isomorphism $S$ such that: 
 $b=a\circ S$.
@@ -984,10 +1303,15 @@ It is most likely that the polar equations behave as in the odd characteristic c
 
 %\subsubsection{Multiple elementary divisors and generic problem.} We have learned from previous sections that the irreducible polynomial $p$ of degree $e$ leads to an isomorphism with $\K^e$. So without loss of generality, we suppose here that $e=1$ or more simply that $p=\lambda+\alpha$ where $\alpha$ is a constant in $\K$. We suppose also that the elementary divisors of $M$ are $p$ repeated $d=n/2$ times. In other words, that means $M=\alpha I$ or $L=[(\lambda+\alpha)I]^-$. Therefore our simpler forms verify $\Polm{L_a}=(\lambda + \alpha)M_a$, $\Polm{L_b}=(\lambda + \alpha)M_b$, which means that the two components of each polar pencils ($\Polm{L_a}$ and $\Polm{L_b}$) are co-linear. However, this does not mean that the components of the form pencils ($L_a$ and $L_b$) are also co-linear. On the contrary, the diagonal parts of the forms 
 %hg5 \subsubsection{Generic problem.}
+}
+
 \subsubsection{IP1S problem for $a$ and $b$: Summary and Computer Experiments.}%end
+
+\commentgilles{
 Finally, as for the odd case, %hg5 the solution of a generic problem can be easily derived from all its sub-problems,
 if an efficient solving method is available for each sub-system -- as was shown to be the case if each sub-system is associated with one single elementary divisor, i.e. $M$ is cyclic (see Fig.~\ref{fig:solutionIP1Seven} in Appendix~\ref{app:figs})-- then solutions of IP1S problem for $a$ and $b$ can be easily derived  thanks to the congruence matrices $Q_a$ and $Q_b$ and Lemma~\ref{lemma:equivIP1S}. We give in Appendix~\ref{app:scripts} the description of the complete algorithm enabling to reconstruct a complete solution from the set of solutions of each sub-system, agreed of course % hg5 they are all cyclic. 
 $M$ is cyclic. %end
+}
 Next table gives timings of our \Magma{} script "SolveCyclicEvenIP1S", %hg5
 with %end
  the same convention as for the odd case %hg5.
@@ -1073,6 +1397,7 @@ software, version 2.13-15.
 %In finite fields, results of~\cite{Gantmacher1960} (Theorem 9. Ch. VI., p.158) need to be adapted.
 %(See function "HasSquareRootMatrix" in Appendix~\ref{app:scripts}.)
 
+\commentgilles{
 \subsection{Regular and singular pencils}
 In this paper we were interested by pencils $\lambda\dot{A_0}+\dot{A_1}$ for which at least one of the two matrices $\dot{A_0}$ and $\dot{A_1}$ is non-singular. Therefore we wonder what to do if it is not the case.
 Pencils may be of the kind ``regular'' or ``singular'' (see~\cite{Gantmacher1960} Ch. XII).
@@ -1081,6 +1406,7 @@ When the pencil is regular, in most cases, it is possible
 to find a scalar $\mu$ such $\dot{A_0}+\mu \dot{A_1}$ is non-singular. Then the pencil can be replaced by $\lambda(\dot{A_0}+\mu \dot{A_1}) + \dot{A_1}$ and we are back to the normal conditions.
 There is a rare last case where the pencil is regular, but all the forms belonging to it are singular (this is possible only in finite characteristic).
 In this case, it is however possible to use the notion of ``finite'' and ``infinite'' elementary divisors and use accordingly the adapted notion of  canonical form.
+}
 % of Smith instead of Jordan. If the two pencils $\lambda\dot{A_0}+\dot{A_1}$ and $\lambda\dot{B_0}+\dot{B_1}$ have the same finite and infinite elementary divisors, then they are equivalent so we can find two non-singular matrices $P$ and $Q$ such that $\lambda\dot{B_0}+\dot{B_1} = P\lambda\dot{A_0}+\dot{A_1}Q$. 
 
 %According to~\cite{Gantmacher1960} (Th. 6 Ch. XII \S6., then if $\transpose{P}Q^{-1}$ has a square root matrix, then $S=\sqrt{\transpose{P}Q^{-1}}Q$ satisfies $\dot{B_0}+\dot{B_1} = \transpose{S}(\lambda\dot{A_0}+\dot{A_1})S$.
@@ -1093,6 +1419,7 @@ In this case, it is however possible to use the notion of ``finite'' and ``infin
 %In this case, we try first 
 
 
+\commentgilles{
 \section{Proofs}
 \label{app:proofs}
 
@@ -1144,7 +1471,7 @@ Therefore for any matrix $Y$ in $\commute{N}$, we have $\Diagm{RCY^2}=\Diagm{\tr
 column sep=4em, text height=1.5ex, text depth=0.25ex]
 { a & \dot{A} & & \dot{B} & b \\
 & LM_a & L & LM_b & \\ };
-%\draw[double,double distance=5pt] (m-1-1) ï¿½ (m-1-3);
+%\draw[double,double distance=5pt] (m-1-1) ï\textquestiondown\ensuremath{\sfrac{1}{2}} (m-1-3);
 \path[-,font=\scriptsize]
 (m-1-1) edge[double,double distance=2pt] node[above] {$\Pol$} (m-1-2)
 (m-1-4) edge[double,double distance=2pt] node[above] {$\Pol$} (m-1-5);
@@ -1175,7 +1502,7 @@ column sep=4em, text height=1.5ex, text depth=0.25ex]
 column sep=4em, text height=1.5ex, text depth=0.25ex]
 { a & \dot{A} & & \dot{B} & b \\
  l_a & {[LM_{a}]^-} & {[L]^-} & {[LM_{b}]^-} & l_b\\ };
-%\draw[double,double distance=5pt] (m-1-1) ï¿½ (m-1-3);
+%\draw[double,double distance=5pt] (m-1-1) ï\textquestiondown\ensuremath{\sfrac{1}{2}} (m-1-3);
 \path[>=stealth',arrows=-stealth,font=\scriptsize]
 (m-1-1) edge[double,double distance=2pt] node[above] {$\Pol$} (m-1-2)
 (m-2-1) edge[double,double distance=2pt] node[above] {$\Pol$} (m-2-2)
@@ -1198,6 +1525,7 @@ column sep=4em, text height=1.5ex, text depth=0.25ex]
 \caption{Solutions of cyclic IP1S problem for $a$ and $b$ in even characteristic\label{fig:solutionIP1Seven}%
 }%
 \end{figure}
+}
 
 
 \MagmaTexOn
@@ -1933,7 +2261,7 @@ column sep=4em, text height=1.5ex, text depth=0.25ex]
 %%	Z & M'
 %%\end{pmatrix}.
 %%$
-%%[dire un mot peut-ï¿½tre sur $\lambda I + M'$ et $\lambda T + TM'$ comme en caracï¿½ristique impaire ?]
+%%[dire un mot peut-ï\textquestiondown\ensuremath{\sfrac{1}{2}}tre sur $\lambda I + M'$ et $\lambda T + TM'$ comme en caracï\textquestiondown\ensuremath{\sfrac{1}{2}}ristique impaire ?]
 %% We then choose $\Polm{L}=J(\lambda I + M)$ which is also symmetric, but moreover its diagonal coefficients are zeros whereas diagonal coefficients of $\lambda I + M$ are not.
 %%By construction $\Polm{L}$ is symmetric, is equivalent to $\Polm{A}$, and also its diagonal coefficients are zeros, so it seems to be the good candidate for even characteristic. Implicitly we need to define some pencil $L$ that we arbitrarily chose upper triangular, so we may write:
 %%$L=
@@ -2304,7 +2632,7 @@ column sep=4em, text height=1.5ex, text depth=0.25ex]
 %Thus the most efficient attack we are aware of has an exponential complexity.\footnote{While we investigated alternative methods for solving the strong IP1S problem such as reducing the number of variables thanks to linear equations and applying the hybrid method proposed in \cite{bettale2009hybrid}, these turned out to lead to higher complexities estimates than the solving approach described here.} 
 %%end
 %%
-%%[A prï¿½ciser...]
+%%[A prï\textquestiondown\ensuremath{\sfrac{1}{2}}ciser...]
 %%We notice that equation~\eqref{eq:strong1} is ``rectangular'' that is for instance if $Y_1$ is known, then it becomes linear in $Y_2$. Equations~\eqref{eq:strong2} and~\eqref{eq:strong3} are quadratic and independent since they involve each only one out of the two variables. Therefore we think that the optimum strategy for solving the complete system is enumerate the solutions $Y_1$ of~\eqref{eq:strong2}, inject them into~\eqref{eq:strong1} to find $Y_2$ and check  against~\eqref{eq:strong3}.
 %%% Let's suppose that $\Polm{U}$ is non-singular (we may enforce it by choosing properly the coefficients of the forms of $a$). By performing the change of variable $Y=X_1+\Polm{U}^{-1}V$, we get: $\transpose{Y}\Polm{U}Y=\transpose{V}\Polm{U}^{-1}V$ which is precisely a congruence problem for only one equation. 
 %%We know
