@@ -808,8 +808,7 @@ G_4 = \smat{0}{1}{1}{0},
 where~$X \in \K[M]$, $X$~invertible for~$G_3(X)$.
 The first three transformations generate the subgroup of \emph{positive}
 automorphisms of~$A$. This is a subgroup of order two of the orthogonal
-group~\cite{dieudonne-dickson}. These considerations of sign are used
-only for counting the solutions to the IP1S problem.
+group~\cite{dieudonne-dickson}.
 
 \subsection{Pencils of quadratic forms}
 
@@ -894,66 +893,72 @@ A_\infty = \mat{A_1 & T \\ T & A_2}, \quad
 A_0 = \mat{A_3 & TM \\ TM & A_4 },
 \end{equation}
 where $M$, $T$~are as in Prop.~\ref{prop:bil-can} and $A_i$~are diagonal
-matrices such that the values~$\alpha_{i} = \psi(A_i)$ satisfy
-\begin{enumerate}
-\item $\alpha_1 = \alpha_2 \in \acco{0, \delta H^{d-1}}$, where
-$\delta$~is a fixed element of $\K[M_0] \smallsetminus \wp(\K[M_0])$;
-\item $\alpha_3 = H^m$ for an integer~$m \in \acco {0, \dots, d}$.
-\end{enumerate}
+matrices whose values~$\alpha_{i} = \psi(A_i)$ satisfy:
+$(\alpha_1, \alpha_2)$ is either of the form~$(H^m, 0)$ for~$m \in
+\acco {0, \dots, d}$, or~$(1, \delta H^{d-1})$ for some fixed
+$\delta \in \K[M_0] \smallsetminus \wp(\K[M_0])$;
 % Moreover, two such pencils~$a$, $a'$ are (positively) congruent if and
 % only if they share the same values~$(m, \alpha_1 = \alpha_2, \alpha_3 =
 % h^m)$ and~$\alpha'_4$ and~$\alpha_4$ differ by multiplication by an
 % element of~$1 + h^{d-m} \K[m]$.
 \end{proposition}
 
-The value~$\alpha_1 = \in \K / \wp(\K)$ is also known as the Arf
-invariant of~$A_\infty$~\cite{milnor1973symmetric}.
+In the case where~$m = 0$, the image of~$\alpha_{2,d-1}$ in $\K[M_0] /
+\wp(\K[M_0])$ is also known as the Arf invariant
+of~$A_\infty$~\cite{milnor1973symmetric}.
 
 \begin{proof}
-By Prop.~\ref{prop:bil-can}, we may compute bases in which the
-pencils have the form~\eqref{eq:quad-can} with~$M$, $T$, $M_0$, $T_0$
-as in Theorem~\ref{transpose-symmetric} and~$A_i$ are some symmetric
-matrices. We now perform elementary transformations of the orthogonal
-group of~$\Polm{A}$ to simplify the diagonal part of the quadratic
-pencil. We use the (positive) transformations~$G_1(X)$ and~$G_2(X)$
-from~\eqref{eq:orthogonal-gen} for a matrix~$X = x_0 + \dots + x_{d-1}
-H^{d-1} \in \K[M]$.
+By Prop.~\ref{prop:bil-can}, we may compute bases in which the pencils
+have the form~\eqref{eq:quad-can} with~$M$, $T$, $M_0$, $T_0$ as in
+Theorem~\ref{transpose-symmetric} and~$A_i$ are some symmetric matrices.
+We now perform elementary transformations of the orthogonal group
+of~$\Polm{A}$ to simplify the diagonal part of the quadratic pencil. We
+use the transformations~$G_i(X)$ from~\eqref{eq:orthogonal-gen} for a
+matrix~$X = x_0 + \dots + x_{d-1} H^{d-1} \in \K[M]$.
 
 As in Prop.~\ref{prop:diagonal-isomorphism}, we write~$A_i$ as
 $d$~blocks~$A_{i,j}$ and define~$\alpha_{i,j} = \psi_0{A_{i,j}}$.
-The effect of the elementary transformation~$G_1(X)$ on the
-coefficients~$\alpha_{i,j}$ is:
-\begin{equation}\label{eq:alpha12}
-\alpha_{1,m} \leftarrow \alpha_{1,m}
-+ \sum_{i+j=m} \alpha_{2,j}^{} x_j^2 + x_{2m-(d-1)};
+The effects of the elementary transformations~$G_i(X)$ on the
+coefficients~$\alpha_{i,j}$ are:
+\begin{align*}\label{eq:Gi-alpha}
+G_1(X):&\quad\alpha_{1,m} \leftarrow \alpha_{1,m}
+  + \sum_{i+j=m} \alpha_{2,j}^{} x_j^2 + x_{2m-(d-1)};\\
+\numberthis
+G_2(X):&\quad\alpha_{2,m} \leftarrow \alpha_{2,m}
+  + \sum_{i+j=m} \alpha_{1,j}^{} x_j^2 + x_{2m-(d-1)};\\
+G_3(X):&\quad\alpha_{1} \leftarrow \varphi(X)\, \alpha_1, \quad
+  \alpha_2 \leftarrow \varphi(X^{-1})\, \alpha_2;\\
+G_4:&\quad\alpha_1 \leftrightarrow \alpha_2.
+\end{align*}
+We note that the system for~$G_1$ is triangular in the variables~$x_i$,
+except for the last equation of each, which reads (as an equation
+in~$x_{d-1}$) as
+\begin{equation}\label{eq:G1-last}
+\alpha_{1,d-1} \leftarrow \alpha_{1,d-1}
+  + \alpha_{2,0} x_{d-1}^2 + x_{d-1} + C,
 \end{equation}
-The first $(d-1)$~equations of this system are triangular with pivot
-equal to the first non-zero of the coefficients~$\alpha_{2,j}$,
-say~$\alpha_{2,m}$. Using formulas~\eqref{eq:alpha12}, we may assume
-that all~$\alpha_{1,j}$ are zero for~$j = m, \dots, d-2$. Likewise, the
-elementary transformations~$G_2(X)$ allows us to cancel the first~$(d-1)$
-entries of~$A_2$. The last equation of~\eqref{eq:alpha12} then reads as
-$\alpha_{1,d} \leftarrow \alpha_{1,d}^{} + \alpha_{2,d}^{} x_{d}^2 +
-x_{d}$; this allows to change both~$\alpha_{1,d}$ and~$\alpha_{2,d}$ by
-elements of~$\wp(\K)$, hence the result.
+Hence the $(d-1)$~first terms of the equation
+for~$G_1(X)$ can be solved in the same way as~$\alpha_1 \leftarrow
+\alpha_1 + \varphi(X) \alpha_2$. The same considerations apply to~$G_2$.
 
-\medskip
-
-The only remaining automorphisms of a pencil in this form are the
-elementary transformations~$G_3(X) = \smat{X}{0}{0}{X^{-1}}$, with~$X \in
-\K[M]$ invertible. Write~$\alpha_i = \psi(A_i) \in \K[M]$.
-By~\eqref{eq:psi}, the effect of~$G_3(X)$ on~$\alpha_3$ and~$\alpha_4$ is
-\begin{equation}\label{eq:alpha34}
-\alpha_3 \leftarrow \alpha_3 \;\varphi(X), \quad
-\alpha_4 \leftarrow \alpha_4 \;\varphi(X)^{-1}.
+This shows that (modulo~$H^{d-1}$) the matrices~$G_i$ act on the
+pair~$(\alpha_1, \alpha_2)$ as the elementary operations of~$SL_2(\K[M])$
+acting on~$\K[M]^2$. Therefore, after applying such transformations, we
+may assume that
+\begin{equation}\label{eq:alpha-can}
+\alpha_1 = H^m + \alpha_{1,d-1} H^{d-1},\, m \in \acco {0, \dots, d-1};
+\qquad \alpha_2 = \alpha_{2,d-1} H^{d-1}.
 \end{equation}
-By choosing an appropriate unit~$X \in \K[M]$, we may assume
-that~$\alpha_3 = H^m$ for some~$m$ (with~$m = d$ when~$\alpha_3 = 0$).
-% The last degree of freedom is then choosing~$X$ such that~$\varphi(X)
-% \alpha_3 = \alpha_3 = H^m$, which means that~$X \in 1 + H^{d-m}
-% \K[M]$.\qed
+Since~$\alpha_{2,0} = 0$, the equation~\eqref{eq:G1-last} is
+then~$\alpha_{1,d-1} \leftarrow \alpha_{1,d-1} + x_{d-1} + C$;
+taking~$x_{d-1} = \alpha_{1,d-1} + C$, we may assume that~$\alpha_{1,d-1}
+= 0$. Likewise, if~$m \geq 1$ the equation for~$G_2(X)$ allows us to
+assume that~$\alpha_{2,d-1} = 0$. In the case where~$m = 0$, this
+equation reads instead~$\alpha_{2,d-1} \leftarrow \alpha_{2,d-1} +
+x_{d-1}^2 + x_{d-1} + C$; if~$\alpha_{2,d-1} + C\in \wp(\K)$, then this
+has a solution, otherwise we may assume that~$\alpha_{2,d-1} =
+\delta$.\qed
 \end{proof}
-
 
 \begin{theorem}\label{thm:IP1S-2}
 Let~$\K$ be a finite field with characteristic two. The cyclic case of
@@ -970,16 +975,15 @@ that all linear algebra algorithms used require at most~$\Otilde{n^3}$
 field operations.
 
 Solutions of the IP1S problem correspond bijectively to automorphisms of
-the canonical pencil. In general, half the automorphisms are positive; in
-addition to the computations of Prop.~\ref{prop:quad-can}, we note that
-the negative automorphism~$G_4$ swaps the values of~$\alpha_3$
-and~$\alpha_4$.
+the canonical pencil. In the generic case, the ideal generated by the
+values~$(\alpha_1, \alpha_2)$ is the full algebra~$\K[M]$; the canonical
+pencil is then such that that~$\alpha_1 = 1$ and~$\alpha_2 \in \acco {0,
+\delta H^{d-1}}$.
 
-In the generic case, the canonical pencil is such that~$\alpha_3$
-and~$\alpha_4$ are both invertible in~$\K[M]$. This pencil has therefore
-only two automorphisms: the identity and the (negative) automorphism~$G_4
-\circ G_3(\varphi^{-1}(\alpha_4))$. The IP1S problem for pencils
-congruent to this canonical pencil has therefore exactly two solutions.
+For both values of~$\alpha_2$, since the equation~$x_{d-1}^2 + x^{}_{d-1}
+= 0$ has only the solutions~$0$ and~$1$ in~$\K[M_0]$, this pencil
+has~$G_2(H^{d-1})$ as its only non-trivial automorphism. Therefore, the
+IP1S problem has in this case exactly two solutions.\qed
 \end{proof}
 
 
@@ -1192,6 +1196,7 @@ So from now, we replace $a$ and likewise $b$ of our IP1S problem by the two simp
 $p$
 is an irreducible polynomial of degree $e$. From now, $L=\lambda T+TM$ denotes the canonical pencil associated with $p^d$ as defined in~\eqref{eq:canonical}. Likewise $M_a$ and $M_b$ denote here the corresponding blocks. 
 We recall that in this case $M$ is cyclic.
+
 We first need some auxiliary results %hg4
 (proven in Appendix~\ref{app:proofs}) %end
 involving $T$, $M$, $N=\Gamma(p)$, and $R=\Theta(p)$, 
