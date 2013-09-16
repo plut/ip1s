@@ -1,9 +1,9 @@
 \documentclass{llncs}%[11pt] 
-\addtolength{\oddsidemargin}{-0.5cm} 
-\addtolength{\evensidemargin}{-0.5cm} 
-\addtolength{\textwidth}{1.cm} 
-\addtolength{\topmargin}{-0.5cm}
-\addtolength{\textheight}{1.cm}
+%\addtolength{\oddsidemargin}{-0.5cm} 
+%\addtolength{\evensidemargin}{-0.5cm} 
+%\addtolength{\textwidth}{1.cm} 
+%\addtolength{\topmargin}{-0.5cm}
+%\addtolength{\textheight}{1.cm}
 %   \documentclass[11pt]{article}
 %   \usepackage[letterpaper,hmargin=1in,vmargin=1.25in]{geometry}
 
@@ -130,14 +130,15 @@
   
 \begin{document} 
 
+
 \title{New Insight into the Isomorphism of Polynomial Problem IP1S
  and its Use in Cryptography
 }
 %Study of the Problem "Isomorphism of Polynomials with One Secret"} 
 \author{}
 \institute{}
-%\iftrue
-\iffalse
+\iftrue
+%\iffalse
 \author{
 Gilles Macario-Rat \inst{1} 
 \and J\'er\^o{}me Plut \inst{2}
@@ -170,9 +171,9 @@ We show that the difficulty of the problem is directly linked to the so-called e
 %We also introduce an efficient construction of a class of IP1S instances that appear to resist known attacks. These can be conjectured  to represent strong instances and to be suitable for cryptographic applications. We propose challenge parameter values of relatively small size for the restriction of the IP1S authentication scheme proposed by Patarin to this class of instances and encourage cryptanalysts to scrutinize their security.
 \end{abstract}
 
-\begin{keywords}
-cryptanalysis, authentication schemes, multivariate cryptography, matrix algebra.
-\end{keywords}
+%\begin{keywords}
+%cryptanalysis, authentication schemes, multivariate cryptography, matrix algebra.
+%\end{keywords}
 
 \section{Introduction} 
 %%================================================%
@@ -198,7 +199,7 @@ The IP1S problem was introduced in \cite{HFE} by Patarin, who proposed in the sa
 zero-knowledge %end
 proof for Graph Isomorphism by Goldreich et al. \cite{Goldreich2001}. It can be converted into a (less practical) asymmetric signature scheme using the Fiat-Shamir transformation. The IP1S problem and the related identification scheme possess several attractive features: 
 \begin{itemize}
-\item{the IP1S problem can be reasonably conjectured not to be solvable in polynomial time: it has been shown in \cite{DBLP:conf/eurocrypt/PatarinGC98} that the quadratic version of IP1S (QIP1S for short) is at least as hard as the Graph Isomorphism problem (GI), one of the most extensively studied problems in complexity theory. While the GI problem is not believed to be NP-complete since it is NP and co-NP and hard instances of GI are difficult to construct for small parameter values, GI is generally believed not to be solvable in polynomial time. }
+\item{the IP1S problem can be reasonably conjectured not to be solvable in polynomial time: it has been shown  in \cite{DBLP:conf/eurocrypt/PatarinGC98} that the quadratic version of IP1S (QIP1S for short) is at least as hard as the Graph Isomorphism problem (GI)\footnote{However we recently discovered a mistake in the corresponding proof in  \cite{DBLP:conf/eurocrypt/PatarinGC98}, that let us think that quadratic IP1S is not indeed as hard as GI. More precisely quadratic IP1S should be solvable in polynomial time.}, one of the most extensively studied problems in complexity theory. While the GI problem is not believed to be NP-complete since it is NP and co-NP and hard instances of GI are difficult to construct for small parameter values, GI is generally believed not to be solvable in polynomial time. }
 \item{unlike the encryption or signature schemes based on IP2S mentioned above, the IP1S scheme does not use special trapdoor instances of the IP1S problem and therefore its security is directly related to the intractability of general IP1S instances.} 
 \end{itemize}
 The IP1S problem also has some loose connections with the multivariate signature scheme UOV~\cite{DBLP:conf/eurocrypt/KipnisPG99}, that has until now remarkably well survived all advances in the cryptanalysis of multivariate schemes. While in UOV the public quadratic function $b$ is related to the secret quadratic function by the equation $b = a \circ S$, both $a$ and $S$ are unknown whereas only $S$ is unknown in the IP1S problem.  % \\
@@ -272,7 +273,7 @@ q(x)$;
 For any matrix~$A$, let~$\transpose{A}$ be the transpose matrix of~$A$
 and $\Polm{A}$ be the symmetric matrix~$\transpose{A} + A$. Then if $q$~is
 a quadratic form with matrix~$A$, its polar form has matrix~$\Polm{A}$.
-The quadratic form~$q$ is \emph{regular} if its polar form is bilinear,
+The quadratic form~$q$ is \emph{regular} if its polar form is not singular,
 i.e. if it defines a bijection from~$V$ to its dual. In general, we
 define the \emph{kernel} of a quadratic form to be the kernel of its
 polar form.
@@ -304,7 +305,7 @@ Then quadratic forms~$A$ and~$B$ are equal if, and only if, $\Polm{A} =
 We now  state the quadratic IP1S problem and give an account of its current status after the recent work of \cite{DBLP:conf/pkc/BouillaguetFFP11} and \cite {bouillaguet2011thesis}. 
 
 \begin{problem}[Quadratic IP1S]% \\
-Given two $m$-tuples $a = (a_1, \ldots, a_{m})$ and {$b = (b_1, \ldots, b_{m})$}  of quadratic homogeneous forms in $n$ variables over $\K = \F_q$, find a non-singular linear mapping $S \in \GLn$ (if any) such that $b = a \circ S$, i.e. $a_i = b_i \circ S$ for $i= 1, \ldots, m$.  
+Given two $m$-tuples $a = (a_1, \ldots, a_{m})$ and {$b = (b_1, \ldots, b_{m})$}  of quadratic homogeneous forms in $n$ variables over $\K = \F_q$, find a non-singular linear mapping $S \in \GLn$ (if any) such that $b = a \circ S$, i.e. $b_i = a_i \circ S$ for $i= 1, \ldots, m$.  
 \end{problem}
 
 \begin{remark} In order not to unnecessarily complicate the presentation, our definition of the IP1S problem slightly differs\footnote{While in \cite{HFE}  the isomorphism of two $m$-tuples quadratic polynomials comprising also linear and constant terms through a non-singular affine transformation was considered, we consider here the isomorphism of two $m$-tuples of quadratic forms through a non-singular linear transformation. This replacement of the original definition by a simplified definition is justified by the fact that all instances of the initial problem can be shown to be either easily solvable due to the lower degree homogeneous equations they induce or efficiently reducible to an homogeneous quadratic instance.}   from the initial statement of the problem introduced in \cite{HFE}. Though the  name ``quadratic homogeneous IP1S''  might be more accurate to refer to the exact class of instances we consider, we will name it quadratic IP1S or  IP1S in the sequel.
@@ -344,9 +345,9 @@ $A$~is cyclic.
 
 For any matrix~$A$, let~$\prod p_i^{e_i}$ be the prime
 factorization of its minimal polynomial. Then $\K[A]$~is the direct
-product of the algebras~$\K[x_i] / p(x_i)^{e_i}$; each of these factors
+product of the algebras~$\K[x] / p_i(x)^{e_i}$; each of these factors
 is a local algebra with residual field equal to the extension
-field~$\K[x] / p$.
+field~$\K[x] / p_i$.
 
 \subsubsection{Pencils of bilinear and quadratic forms}
 
@@ -355,7 +356,7 @@ quadratic forms on~$V$. A \emph{projective pencil of quadratic forms}
 on~$V$ is a projective line in~$\mathbb{P} Q(V)$, \emph{i.e.} a
 two-dimensional subspace of~$Q(V)$. As a projective pencil is the image
 of the projective line~$\mathbb{P}^1$ in~$Q(V)$, it is determined by the
-images of the ponts~$\infty$ and~$0$ in~$\mathbb{P}^1$, which we
+images of the points~$\infty$ and~$0$ in~$\mathbb{P}^1$, which we
 write~$A_0$ and~$A_{\infty}$.
 
 An \emph{affine pencil of quadratic forms} is an affine line in~$Q(V)$,
@@ -452,7 +453,8 @@ that $\transpose{M}T = TM$.
 Using primary decomposition for~$M$, we may assume that it is of the form
 \begin{equation}\label{eq:frobenius-form}
 \def\arraystretch{.5}
-M = \small \mat{M_0 & 1 & & 0 \\ & \ddots\; & \ddots & \\
+M = %\small 
+\mat{M_0 & 1 & & 0 \\ & \ddots\; & \ddots & \\
   & & \ddots & 1\\ 0 & & & M_0},
 \end{equation}
 where $M_0$~is the companion matrix of a polynomial~$p(\lambda) =
@@ -545,17 +547,17 @@ XM = MX \quad\text{and}\quad \transpose{X} A_{\infty} X = B_{\infty}.
 
 
 \begin{proof}
-1.
+\mkenumi{1}.
 Since $A_{\lambda}$~is regular, $A_{\infty}$~is invertible and we may
 write $A_{\lambda} = A_{\infty} (\lambda + A_{\infty}^{-1} A_0)$;
 likewise, $B_{\lambda} = B_{\infty} (\lambda + B_{\infty}^{-1} B_0)$.
-Choose~$P$ such that~$\transpose{P} A_{\lambda} P = B_{\lambda}$: then
+Choose~$P$ such that~$\transpose{P} A_{\lambda} P = B_{\lambda}$, then
 \begin{equation}
 B_{\infty} (\lambda + M _B) \;=\; \transpose{P} A_{\lambda} P \;=\;
 \transpose{P} A_{\infty} P (\lambda + P^{-1} M _A P),
 \end{equation}
 which implies~$P^{-1} M _A P = M _B$ as required. The same
-computations also prove~2.
+computations prove~\mkenumi{2}.
 
 The equations~\eqref{eq:congruent-commute} follows directly from the
 equality $\transpose{X} A_{\infty} (\lambda + M ) X \;=\;
@@ -610,7 +612,7 @@ There remains to compute a square root of~$C = A_{\infty}^{-1}
 B_{\infty}$ in~$\K[M]$, where now the minimal polynomial of~$M$
 is~$p^e$, with $p$~irreducible. For this we first write~$C$ as a
 polynomial $g(M)$; this again requires~$\Otilde{n^3}$ operations.
-To solve the equation~$y^2 = g(M)$ in the ring~$\K[M] = \K[x]/p(M)^e$, we
+To solve the equation~$y^2 = g(M)$ in the ring~$\K[M] = \K[x]/p(x)^e$, we
 first solve it in the (finite) residual field~$\K[x]/p(x)$, with
 complexity~$\Otilde{n^3}$ again; lifting the solution to the ring~$\K[M]$
 requires only~$\Otilde{n^2}$ with Hensel lifting.\qed
@@ -642,9 +644,9 @@ Intuitively, when $c$ grows from $n$ to $n^2$, the number of solutions grows acc
 
 
 \subsubsection{Summary and Computer experiments.}
-The case where all the elementary divisors of $\Polm{A}$ are pairwise co-prime -- or equivalently where $M$ is cyclic -- represents %hg2 indeed a large 
-in practice a quite large %end
-fraction of random cases. In this case, %hg2
+The case where all the elementary divisors of $\Polm{A}$ are pairwise co-prime -- or equivalently where $M$ is cyclic -- represents 
+in practice a quite large
+fraction of random cases (see for instance~\cite{MR1356142}). In this case, %hg2
 as shown above, %end
 the number of solutions is exactly %hg2 $2^d$ where $d$ 
 $2^s$ where $s$ 
@@ -704,7 +706,7 @@ $7^6$ & 32 & 11.s. & 100.\\
 \section{IP1S in Characteristic Two}
 \label{IPeven}
 
-\XXX{version de Jérôme}
+%\XXX{version de Jérôme}
 %\iffalse
 
 Let~$\K$ be a perfect field of characteristic two. In this case, the
@@ -736,7 +738,7 @@ in which the pencil has the block-matrix decomposition
 \begin{equation}\label{eq:pfaffian}
 A_\infty = \smat{0}{1}{1}{0}, \quad
 A_0 = \smat{0}{\transpose{F}}{F}{0}; \qquad
-A_{\infty}^{-1} b_0 = \smat{F}{0}{0}{\transpose{F}}.
+A_{\infty}^{-1} A_0 = \smat{F}{0}{0}{\transpose{F}}.
 \end{equation}
 The matrix~$F$ is called the \emph{Pfaffian} endomorphism of~$A$.
 
@@ -767,7 +769,7 @@ Let~$a(t) = 1 + a_1 t + \dots + a_{n-1} t^{n-1}$ be a polynomial and~$x'
 = a(f) x$. Then we still have~$b_{\infty}(x', f^{n-1} y) = 1$, and
 moreover we can choose~$a$ so that~$b_{\infty}(x', f^i y) = 0$ for all~$i
 = 0, \dots, n-2$. In other words, $(x', f x', \dots, f^{n-1} x',
-\allowbreak f^{n-1} y, f^{n-2} y, \dots, fy, y)$ is a symplectic basis
+\allowbreak f^{n-1} y, f^{n-2} y, \dots, \allowbreak fy, y)$ is a symplectic basis
 for~$b_\infty$ on~$W$. By construction, its Lagrangian is~$\K[f] x$,
 which is obviously stable by the characteristic endomorphism~$f$.
 \qed
@@ -794,7 +796,9 @@ form.\qed
 
 Let~$A$ be a pencil as in~\eqref{eq:bil-can}. The
 automorphism group~$O(A)$ of~$A$ is the set of matrices $X =
-\smat{X_1}{X_2}{X_3}{X_4}$ such that all~$X_i$ commute with~$M$
+\smat{X_1}{X_2}{X_3}{X_4}$ such that 
+%$\transpose{X}AX=A$. Therefore
+all~$X_i$ commute with~$M$
 and~$\transpose{X_1} T X_4 + \transpose{X_3} T X_2 = T$.
 
 In the case where $M$~is cyclic, all~$X_i$ belong to~$\K[M]$.
@@ -818,8 +822,10 @@ Theorem~\ref{transpose-symmetric}, $\K[M_0]$~is an extension field
 of~$\K$, and $\K[M]$~is the (local) $\K[M_0]$-algebra generated by
 \begin{equation}\label{eq:H}
 \def\arraystretch{.5}
-H = \fontsize{8pt}{9pt}\selectfont
-\mat{ 0 & 1 & & 0 \\ & \ddots\; & \ddots & \\ & & \ddots & 1 \\ 0 & & & 0 }.
+H = 
+%\fontsize{8pt}{9pt}\selectfont
+%\scriptsize
+\mat{0 & 1 & & 0 \\ &  \ddots\; & \ddots & \\ & & \ddots & 1 \\ 0 & & & 0 }.
 \end{equation}
 We write~$\varphi(X) = X^2$ for the Frobenius map of~$\K[M_0]$.
 Since this is a finite field, the Frobenius map is bijective. It
@@ -842,7 +848,7 @@ with~$x_i \in \K[M_0]$.
 Also define~$\psi(D) = \sum \psi_0(D_i) H^i \in \K[M]$. Then we have the
 relation in~$\K[M]$
 \begin{equation}\label{eq:psi}
-\psi(\transpose{X} D X) = \varphi(X) \cdot \psi(D).
+\psi(\Diagm(\transpose{X} D X)) = \varphi(X) \cdot \psi(D).
 \end{equation}
 \end{enumerate}
 \end{proposition}
@@ -862,7 +868,7 @@ We then have
 = \Diagm{\transpose{Y} \Diagm{T_0 X} Y} = 0.
 \end{equation}
 Let~$p(x) = p_0 + \dots + p_{e-1} x^{e-1} + x^e$ be the minimal
-polynomial of~$M_0$. From~$\Diagm{T_0} = 0$ we deduce that~$p_{e-1} =
+polynomial of~$M_0$. From~$\Diagm{T_0} \allowbreak = 0$ we deduce that~$p_{e-1} =
 p_{e-3} = \dots = 0$, which contradicts the irreducibility of~$p$.
 
 \mkenumi{2}
@@ -882,82 +888,137 @@ hence~$\Diagm{B_m} = \sum \Diagm{T_0 \psi_0(D_j) X_i^2}$ and~$\psi_0(B_m)
 
 For any binary field~$\K$, we write~$\wp(\K)$ for the set of elements~$x^2
 + x \in \K$. This is an additive subgroup of~$\K$, and the
-characteristic-two analogue of the set of squares.
+characteristic-two analogue of the set of squares. For any element
+$\alpha$ of $\K[M]$, we call {\em degree} of $\alpha$ that we note
+$\deg(\alpha)$ the smallest integer $m$ such that there exist an
+invertible $\alpha'$ of $\K[M]$ such that $\alpha=H^m\alpha'$.
 
 \begin{proposition}\label{prop:quad-can}
 Any regular pencil of quadratic forms is congruent to a pencil of the
 form
 \begin{equation}\label{eq:quad-can}
 \def\arraystretch{.7}
-A_\infty = \mat{A_1 & T \\ T & A_2}, \quad
-A_0 = \mat{A_3 & TM \\ TM & A_4 },
+A_\infty = \mat{A_1 & T \\ 0 & A_2}, \quad
+A_0 = \mat{A_3 & TM \\ 0 & A_4 },
 \end{equation}
 where $M$, $T$~are as in Prop.~\ref{prop:bil-can} and $A_i$~are diagonal
 matrices whose values~$\alpha_{i} = \psi(A_i)$ satisfy:
-$(\alpha_1, \alpha_2)$ is either of the form~$(H^m, 0)$ for~$m \in
-\acco {0, \dots, d}$, or~$(1, \delta H^{d-1})$ for some fixed
+
+$\alpha_1=H^m$, $\deg(\alpha_1+\alpha_3)\gt m$, $\alpha_2=0$ or $\alpha_2=\delta H^{d-1-m}$, $\deg(\alpha_4)\geq m$,
+for some $m \in
+\acco {0, \dots, d}$,
+and 
+some fixed
 $\delta \in \K[M_0] \smallsetminus \wp(\K[M_0])$;
+either
+$\alpha_1=H^m$ or $\alpha_3=H^m$, $\deg(\alpha_1+\alpha_3)= m$, $\alpha_2=\alpha_4$, $\deg(\alpha_2)\gt m$ 
+for some $m \in
+\acco {0, \dots, d}$,
+and 
+some fixed
+$\delta \in \K[M_0] \smallsetminus \wp(\K[M_0])$;
+
+
+%
+%$(\alpha_1, \alpha_2)$ is either of the form~$(H^m, 0)$ for~$m \in
+%\acco {0, \dots, d}$, or~$(1, \delta H^{d-1})$ for some fixed
+%$\delta \in \K[M_0] \smallsetminus \wp(\K[M_0])$;
 % Moreover, two such pencils~$a$, $a'$ are (positively) congruent if and
 % only if they share the same values~$(m, \alpha_1 = \alpha_2, \alpha_3 =
 % h^m)$ and~$\alpha'_4$ and~$\alpha_4$ differ by multiplication by an
 % element of~$1 + h^{d-m} \K[m]$.
 \end{proposition}
 
-In the case where~$m = 0$, the image of~$\alpha_{2,d-1}$ in $\K[M_0] /
-\wp(\K[M_0])$ is also known as the Arf invariant
-of~$A_\infty$~\cite{milnor1973symmetric}.
+%In the case where~$m = 0$, the image of~$\alpha_{2,d-1}$ in $\K[M_0] /
+%\wp(\K[M_0])$ is also known as the Arf invariant
+%of~$A_\infty$~\cite{milnor1973symmetric}.
 
 \begin{proof}
-By Prop.~\ref{prop:bil-can}, we may compute bases in which the pencils
-have the form~\eqref{eq:quad-can} with~$M$, $T$, $M_0$, $T_0$ as in
+By Prop.~\ref{prop:bil-can}, we may compute bases in which the pencils of polar forms
+have the form~\eqref{eq:bil-can}. In the same bases the pencils have the form~\eqref{eq:quad-can} with~$M$, $T$, $M_0$, $T_0$ as in
 Theorem~\ref{transpose-symmetric} and~$A_i$ are some symmetric matrices.
 We now perform elementary transformations of the orthogonal group
 of~$\Polm{A}$ to simplify the diagonal part of the quadratic pencil. We
 use the transformations~$G_i(X)$ from~\eqref{eq:orthogonal-gen} for a
 matrix~$X = x_0 + \dots + x_{d-1} H^{d-1} \in \K[M]$.
+The effects of the elementary transformations~$G_i(X)$ on the
+coefficients~$\alpha_{i}$ are:
+\begin{align*}
+%\label{eq:Gi-alpha}
+G_1(X):&\quad\alpha_{1} \leftarrow \alpha_1 + \varphi(X)\, \alpha_2\,  + \psi(\Delta(TX)),\\
+&\quad  \alpha_3 \leftarrow \alpha_3 + \varphi(X)\, \alpha_4\,  + \psi(\Delta(TX)),\\
+& \quad\alpha_2 \leftarrow \alpha_2, \quad\alpha_4 \leftarrow \alpha_4;\\
+G_2(X):&\quad\alpha_{2} \leftarrow \alpha_2 + \varphi(X)\, \alpha_1\,  + \psi(\Delta(TX)),\\
+&\quad  \alpha_4 \leftarrow \alpha_4 + \varphi(X)\, \alpha_3\,  + \psi(\Delta(TX)),\\
+& \quad\alpha_1 \leftarrow \alpha_1, \quad\alpha_3 \leftarrow \alpha_3;\\
+G_3(X):&\quad\alpha_{1} \leftarrow \varphi(X)\, \alpha_1, \quad
+  \alpha_2 \leftarrow \varphi(X^{-1})\, \alpha_2,\\
+&\quad\alpha_{3} \leftarrow \varphi(X)\, \alpha_3, \quad
+  \alpha_4 \leftarrow \varphi(X^{-1})\, \alpha_4;\\
+G_4:&\quad\alpha_1 \leftrightarrow \alpha_2, \quad\alpha_3 \leftrightarrow \alpha_4.
+\end{align*}
+
+A direct computation gives \[\psi(\Delta(TX))= \sum_{i\geq \frac{d-1}{2}}{x_{2i-(d-1)}H^i}.\].
 
 As in Prop.~\ref{prop:diagonal-isomorphism}, we write~$A_i$ as
 $d$~blocks~$A_{i,j}$ and define~$\alpha_{i,j} = \psi_0{A_{i,j}}$.
-The effects of the elementary transformations~$G_i(X)$ on the
-coefficients~$\alpha_{i,j}$ are:
-\begin{align*}\label{eq:Gi-alpha}
+From what we get above we explicit the effects of the elementary transformation~$G_1(X)$ on the
+coefficients~$\alpha_{i,j}$:
+\begin{align*}
+%\label{eq:Gi-alphai}
 G_1(X):&\quad\alpha_{1,m} \leftarrow \alpha_{1,m}
-  + \sum_{i+j=m} \alpha_{2,j}^{} x_j^2 + x_{2m-(d-1)};\\
-\numberthis
-G_2(X):&\quad\alpha_{2,m} \leftarrow \alpha_{2,m}
-  + \sum_{i+j=m} \alpha_{1,j}^{} x_j^2 + x_{2m-(d-1)};\\
-G_3(X):&\quad\alpha_{1} \leftarrow \varphi(X)\, \alpha_1, \quad
-  \alpha_2 \leftarrow \varphi(X^{-1})\, \alpha_2;\\
-G_4:&\quad\alpha_1 \leftrightarrow \alpha_2.
-\end{align*}
-We note that the system for~$G_1$ is triangular in the variables~$x_i$,
-except for the last equation of each, which reads (as an equation
-in~$x_{d-1}$) as
-\begin{equation}\label{eq:G1-last}
-\alpha_{1,d-1} \leftarrow \alpha_{1,d-1}
-  + \alpha_{2,0} x_{d-1}^2 + x_{d-1} + C,
-\end{equation}
-Hence the $(d-1)$~first terms of the equation
-for~$G_1(X)$ can be solved in the same way as~$\alpha_1 \leftarrow
-\alpha_1 + \varphi(X) \alpha_2$. The same considerations apply to~$G_2$.
+  + \sum_{i+j=m} \alpha_{2,i}^{} x_j^2 \quad \text {for}\, m\lt \frac{d-1}{2},\\
+&\quad\alpha_{1,m} \leftarrow \alpha_{1,m}
+  + \sum_{i+j=m} \alpha_{2,i}^{} x_j^2 + x_{2m-(d-1)} \quad \text {for}\, m\geq \frac{d-1}{2};\\
+	\end{align*}
 
-This shows that (modulo~$H^{d-1}$) the matrices~$G_i$ act on the
-pair~$(\alpha_1, \alpha_2)$ as the elementary operations of~$SL_2(\K[M])$
-acting on~$\K[M]^2$. Therefore, after applying such transformations, we
-may assume that
-\begin{equation}\label{eq:alpha-can}
-\alpha_1 = H^m + \alpha_{1,d-1} H^{d-1},\, m \in \acco {0, \dots, d-1};
-\qquad \alpha_2 = \alpha_{2,d-1} H^{d-1}.
-\end{equation}
-Since~$\alpha_{2,0} = 0$, the equation~\eqref{eq:G1-last} is
-then~$\alpha_{1,d-1} \leftarrow \alpha_{1,d-1} + x_{d-1} + C$;
-taking~$x_{d-1} = \alpha_{1,d-1} + C$, we may assume that~$\alpha_{1,d-1}
-= 0$. Likewise, if~$m \geq 1$ the equation for~$G_2(X)$ allows us to
-assume that~$\alpha_{2,d-1} = 0$. In the case where~$m = 0$, this
-equation reads instead~$\alpha_{2,d-1} \leftarrow \alpha_{2,d-1} +
-x_{d-1}^2 + x_{d-1} + C$; if~$\alpha_{2,d-1} + C\in \wp(\K)$, then this
-has a solution, otherwise we may assume that~$\alpha_{2,d-1} =
-\delta$.\qed
+If all $\alpha_i=0$, we are done: the pencil is canonical. If not, we search the value $\alpha_i$ with smallest degree. Using $G_4$, we may assume it is $\alpha_1$ or $\alpha_3$. We first suppose that we have $\deg(\alpha_1+\alpha_3)\gt m$, that is $\alpha_1$ and $\alpha_3$ have the same trailing term.
+Using $G_3$, we may assume $\alpha_1=H^m$, and therefore $\alpha_3=H^m+\alpha$, with $\deg(\alpha)\gt m$.  We look then for $X$ such that $G_2(X)(\alpha_2)=0$. We suppose first that $m\lt \frac{d-1}{2}$. In this case the system is triangular and all equations can be solved except maybe for this one: $\alpha_{2,d-1-m} = x_{(d-1)-2m}^2 + x_{(d-1)-2m}.$ Therefore we may assume that $\alpha_2=0$ or $\alpha_2=\delta H^{d-1-m}$ for some fixed
+$\delta \in \K[M_0] \smallsetminus \wp(\K[M_0])$. We note also that since $m\lt \frac{d-1}{2}$, $G_2(X)$ does not decrease the degree of $\alpha_4$.
+We suppose now that $m\geq \frac{d-1}{2}$. In this case, the system $G_2(X)(\alpha_2)=0$ has many solutions, but we can still find one such that $x_{2i-(d-1)}=0$ for $i\lt m$, that is one that does not decrease the degree of $\alpha_4$. So in this case, we can also assume that $\alpha_2=0$ and $\deg(\alpha_4)\geq m$.
+
+We  now examine the case where $\deg(\alpha_1 + \alpha_3)=m$. Using again $G_3$, we may assume that $\alpha_1=H^m$ or $\alpha_3=H^m$. Let's note $\alpha_1+\alpha_3=H^{m}\alpha$ where $\alpha$ is invertible. We are looking for $X$ such that $G_2(X)(\alpha_2)=G_2(X)(\alpha_4)$. By hypothesis on the degree, we can write $\alpha_2+\alpha_4=H^m \alpha'$ for some $\alpha'$. We naturally choose $X=\varphi^{-1}(\alpha'\alpha^{-1})$.
+At this stage, we can consider that $\alpha_2=\alpha_4$. However, the condition on the degree may not hold. If by chance $\deg(\alpha_2)\gt m$, then we are done. If on the contrary $\deg(\alpha_2)\leq m$, then by using $G_4$, we search instead for a canonical form of the first kind. \qed
+
+
+
+
+
+
+
+
+
+	
+	
+	%
+%We note that the system for~$G_1$ is triangular in the variables~$x_i$,
+%except for the last equation of each, which reads (as an equation
+%in~$x_{d-1}$) as
+%\begin{equation}\label{eq:G1-last}
+%\alpha_{1,d-1} \leftarrow \alpha_{1,d-1}
+  %+ \alpha_{2,0} x_{d-1}^2 + x_{d-1} + C,
+%\end{equation}
+%Hence the $(d-1)$~first terms of the equation
+%for~$G_1(X)$ can be solved in the same way as~$\alpha_1 \leftarrow
+%\alpha_1 + \varphi(X) \alpha_2$. The same considerations apply to~$G_2$.
+%
+%This shows that (modulo~$H^{d-1}$) the matrices~$G_i$ act on the
+%pair~$(\alpha_1, \alpha_2)$ as the elementary operations of~$SL_2(\K[M])$
+%acting on~$\K[M]^2$. Therefore, after applying such transformations, we
+%may assume that
+%\begin{equation}\label{eq:alpha-can}
+%\alpha_1 = H^m + \alpha_{1,d-1} H^{d-1},\, m \in \acco {0, \dots, d-1};
+%\qquad \alpha_2 = \alpha_{2,d-1} H^{d-1}.
+%\end{equation}
+%Since~$\alpha_{2,0} = 0$, the equation~\eqref{eq:G1-last} is
+%then~$\alpha_{1,d-1} \leftarrow \alpha_{1,d-1} + x_{d-1} + C$;
+%taking~$x_{d-1} = \alpha_{1,d-1} + C$, we may assume that~$\alpha_{1,d-1}
+%= 0$. Likewise, if~$m \geq 1$ the equation for~$G_2(X)$ allows us to
+%assume that~$\alpha_{2,d-1} = 0$. In the case where~$m = 0$, this
+%equation reads instead~$\alpha_{2,d-1} \leftarrow \alpha_{2,d-1} +
+%x_{d-1}^2 + x_{d-1} + C$; if~$\alpha_{2,d-1} + C\in \wp(\K)$, then this
+%has a solution, otherwise we may assume that~$\alpha_{2,d-1} =
+%\delta$.\qed
 \end{proof}
 
 \begin{theorem}\label{thm:IP1S-2}
@@ -1357,8 +1418,9 @@ $2^8$ & 128 & 133.s & 100.\\
 \end{center}
 
 \section{Conclusion and future work}
-We have shown that the resolution of a general instance of IP1S can be divided into special instances related to some matrices having all their elementary divisors being powers of the same irreducible polynomial. We have identified cases for which the complexity of the resolution of IP1S is clearly polynomial. 
-If there were ``hard'' instances\footnote{And the link with the Graph Isomorphism suggest that there are indeed.}, our study suggests to consider for instance problems where the elementary divisors of $M$ are $p,p^2,\ldots,p^d$ and $p$ is say a linear polynomial, say $\lambda-1$.With our notations, the dimension of the problem or equivalently the number of variables involved in the public quadratic forms is $n=\sum_{i=1}^{d}{i}=d(d+1)/2 \sim d^2/2$. The dimension of the corresponding commutant space -- which is a key parameter for algorithms such as the one used in \cite{DBLP:conf/pkc/BouillaguetFFP11} -- is  $\sum_{i=1}^{d}{(d+1-i)i}=d(d+1)(d+2)/6\sim d^3/6$.  We leave for a future work to see if this example or some variants may be of interest.
+We have shown that special instances of the quadratic homogeneous IP1S problem with $m=2$ equations can be solved in polynomial time. These instances are those where the characteristic endomorphism of the pencil (or its Pfaffian) is cyclic, and represent in practice a large fraction of generic instances. We have since also studied the case where the characteristic endomorphism is no longer cyclic and found similar results to be published. We also believe that the results may be extended to IP1S problem with more than 2 equations, thus proving that the original (quadratic) IP1S problem is solvable in polynomial time.
+%We have shown that the resolution of a general instance of IP1S can be divided into special instances related to some matrices having all their elementary divisors being powers of the same irreducible polynomial. We have identified cases for which the complexity of the resolution of IP1S is clearly polynomial. 
+%If there were ``hard'' instances\footnote{And the link with the Graph Isomorphism suggest that there are indeed.}, our study suggests to consider for instance problems where the elementary divisors of $M$ are $p,p^2,\ldots,p^d$ and $p$ is say a linear polynomial, say $\lambda-1$.With our notations, the dimension of the problem or equivalently the number of variables involved in the public quadratic forms is $n=\sum_{i=1}^{d}{i}=d(d+1)/2 \sim d^2/2$. The dimension of the corresponding commutant space -- which is a key parameter for algorithms such as the one used in \cite{DBLP:conf/pkc/BouillaguetFFP11} -- is  $\sum_{i=1}^{d}{(d+1-i)i}=d(d+1)(d+2)/6\sim d^3/6$.  We leave for a future work to see if this example or some variants may be of interest.
 
 %
 %For remaining cases the complexity is still an open problem. We believe that the cases closer to the two extreme ones are ``easier'', and the ``farthest'', the most difficult, in a way that needs to be made clearer. In order to find ``hard'' instances of IP1S, our study suggests to consider for instance problems where the elementary divisors are different powers of the same -- say linear -- polynomial: $\lambda - 1, (\lambda - 1)^2,\ldots, (\lambda - 1)^d$. 
@@ -1383,7 +1445,7 @@ If there were ``hard'' instances\footnote{And the link with the Graph Isomorphis
 \section{Complexity, Timings, and Other Considerations}
 \label{app:consid}
 All the experimental results have been obtained with an Opteron 850 2.2GHz, with 32 GBytes of Ram. The systems associated with the instance  of the problems and their solutions have been generated using the \Magma{}
-software, version 2.13-15.
+software, version 2.13-15. \Magma{} scripts cited in this paper can be obtained from the authors.
  
 %\subsection{Square Root of Matrices.}
 %In this paper, we have considered the equation $X^2=A$ in the unknown matrix $X$, where $A$ is a given non-singular matrix. 
@@ -1530,7 +1592,6 @@ column sep=4em, text height=1.5ex, text depth=0.25ex]
 \caption{Solutions of cyclic IP1S problem for $a$ and $b$ in even characteristic\label{fig:solutionIP1Seven}%
 }%
 \end{figure}
-}
 
 
 \MagmaTexOn
@@ -1965,6 +2026,9 @@ column sep=4em, text height=1.5ex, text depth=0.25ex]
 >)
 >*Qb^-1:s in Sols];
 >end function;
+
+}
+
 
 %
 %
