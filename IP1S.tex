@@ -1052,148 +1052,6 @@ two first equations we deduce~$y = \alpha_2 x + b$ with~$b \in \{ 0,1
 1) x$. If~$\alpha_2 \alpha_3 + \alpha_4 \neq 0$, this has exactly two
 solutions.
 \end{proof}
-% The solutions~$y$ of the equation~\eqref{eq:aut-G2} form an additive
-% group isomorphic to~$\F_2 \times \L^m$.
-% 
-% 
-% \begin{proof} The automorphisms of~$A_\infty$ are of the form~$G_2(y)
-% G_3(u^{-1}) G_1(x)$, with the conditions \begin{equation} (u+1)\:
-% \alpha_1 = \alpha_2 \,\varphi(x) + \theta(x), \qquad (u+1)\: \alpha_2 =
-% \alpha_1 \,\varphi(y) + \theta(y). \end{equation} Write~$\alpha_1 =
-% H^m$ and~$\alpha_2 = 0$ or~$\alpha_2 = H^{d-1}$. If~$d \geq 2$
-% or~$\alpha_2 = 0$ then we have~$\alpha_2^2 = \alpha_2 \theta(x) = 0 \in
-% \K[M]$. In this case the first equation has a unique solution~$u = u(x)
-% \in \K[M]^{\times}$ and the second one reduces to to~\eqref{eq:aut-G2}.
-% In the case where~$d = 1$ and~$\alpha_2 = \delta \notin \wp(\L)$, the
-% first equation solves as~$u = \delta x^2 + x + 1$, which is always
-% non-zero in~$\L$, and the second one is~$y^2 + y = \wp(\delta x)$,
-% which has the two solutions~$y = \delta x$ and~$y = \delta x + 1$.\qed
-% \end{proof}
-
-% \begin{proposition}\label{prop:quad-can}
-% Any regular pencil of quadratic forms is congruent to a pencil of the
-% form
-% \begin{equation}\label{eq:quad-can}
-% \def\arraystretch{.7}
-% A_\infty = \mat{A_1 & T \\ 0 & A_2}, \quad
-% A_0 = \mat{A_3 & TM \\ 0 & A_4 },
-% \end{equation}
-% where $M$, $T$~are as in Prop.~\ref{prop:bil-can} and $A_i$~are diagonal
-% matrices whose values~$\alpha_{i} = \psi(A_i)$ satisfy:
-% 
-% $\alpha_1=H^m$, $\deg(\alpha_1+\alpha_3)\gt m$, $\alpha_2=0$ or $\alpha_2=\delta H^{d-1-m}$, $\deg(\alpha_4)\geq m$,
-% for some $m \in
-% \acco {0, \dots, d}$,
-% and 
-% some fixed
-% $\delta \in \K[M_0] \smallsetminus \wp(\K[M_0])$;
-% either
-% $\alpha_1=H^m$ or $\alpha_3=H^m$, $\deg(\alpha_1+\alpha_3)= m$, $\alpha_2=\alpha_4$, $\deg(\alpha_2)\gt m$ 
-% for some $m \in
-% \acco {0, \dots, d}$,
-% and 
-% some fixed
-% $\delta \in \K[M_0] \smallsetminus \wp(\K[M_0])$;
-% 
-% 
-% %
-% %$(\alpha_1, \alpha_2)$ is either of the form~$(H^m, 0)$ for~$m \in
-% %\acco {0, \dots, d}$, or~$(1, \delta H^{d-1})$ for some fixed
-% %$\delta \in \K[M_0] \smallsetminus \wp(\K[M_0])$;
-% % Moreover, two such pencils~$a$, $a'$ are (positively) congruent if and
-% % only if they share the same values~$(m, \alpha_1 = \alpha_2, \alpha_3 =
-% % h^m)$ and~$\alpha'_4$ and~$\alpha_4$ differ by multiplication by an
-% % element of~$1 + h^{d-m} \K[m]$.
-% \end{proposition}
-% 
-% %In the case where~$m = 0$, the image of~$\alpha_{2,d-1}$ in $\K[M_0] /
-% %\wp(\K[M_0])$ is also known as the Arf invariant
-% %of~$A_\infty$~\cite{milnor1973symmetric}.
-% 
-% \begin{proof}
-% By Prop.~\ref{prop:bil-can}, we may compute bases in which the pencils of polar forms
-% have the form~\eqref{eq:bil-can}. In the same bases the pencils have the form~\eqref{eq:quad-can} with~$M$, $T$, $M_0$, $T_0$ as in
-% Theorem~\ref{transpose-symmetric} and where~$A_i$ are some diagonal matrices.
-% We now perform elementary transformations of the orthogonal group
-% of~$\Polm{A}$ to simplify the diagonal part of the quadratic pencil. We
-% use the transformations~$G_i(X)$ from~\eqref{eq:orthogonal-gen}. Let~$X =
-% x_0 + \dots + x_{d-1} H^{d-1} \in \K[M]$. We define
-% \begin{equation}\label{eq:theta}
-% \theta(X) = \psi (\Diagm{T\,X}) = \sum_{2i \geq (d-1)} x_{2i-(d-1)} H^i.
-% \end{equation}
-% The effects of the elementary transformations~$G_i(X)$ on the
-% pair~$(\alpha_1, \alpha_2)$ are:
-% \begin{align*}
-% %\label{eq:Gi-alpha}
-% G_1(X):&\quad\alpha_{1} \leftarrow \alpha_1 + \varphi(X)\, \alpha_2\,  +
-% \theta (X), \quad \alpha_2 \leftarrow \alpha_2;\\
-% % &\quad  \alpha_3 \leftarrow \alpha_3 + \varphi(X)\, \alpha_4\,  + \psi(\Delta(TX)),\\
-% % & \quad\alpha_2 \leftarrow \alpha_2, \quad\alpha_4 \leftarrow \alpha_4;\\
-% \numberthis
-% G_2(X):&\quad\alpha_{2} \leftarrow \alpha_2 + \varphi(X)\, \alpha_1\,  +
-% \theta (X), \quad \alpha_1 \leftarrow \alpha_1;\\
-% % &\quad  \alpha_4 \leftarrow \alpha_4 + \varphi(X)\, \alpha_3\,  + \psi(\Delta(TX)),\\
-% % & \quad\alpha_1 \leftarrow \alpha_1, \quad\alpha_3 \leftarrow \alpha_3;\\
-% G_3(X):&\quad\alpha_{1} \leftarrow \varphi(X)\, \alpha_1, \quad
-%   \alpha_2 \leftarrow \varphi(X^{-1})\, \alpha_2;\\
-% % &\quad\alpha_{3} \leftarrow \varphi(X)\, \alpha_3, \quad
-% %   \alpha_4 \leftarrow \varphi(X^{-1})\, \alpha_4;\\
-% G_4:&\quad\alpha_1 \leftrightarrow \alpha_2;
-% % \quad\alpha_3 \leftrightarrow \alpha_4.
-% \end{align*}
-% and the transformations act in the same way on the pair~$(\alpha_3,
-% \alpha_4)$.
-% 
-% As in Prop.~\ref{prop:diagonal-isomorphism}, we write~$A_i$ as
-% $d$~blocks~$A_{i,j}$ and define~$\alpha_{i,j} = \psi_0{A_{i,j}}$.
-% From what we get above we explicit the effects of the elementary transformation~$G_1(X)$ on the
-% coefficients~$\alpha_{i,j}$:
-% \begin{align*}
-% %\label{eq:Gi-alphai}
-% G_1(X):&\quad\alpha_{1,m} \leftarrow \alpha_{1,m}
-%   + \sum_{i+j=m} \alpha_{2,i}^{} x_j^2 \quad \text {for}\, m\lt \frac{d-1}{2},\\
-% &\quad\alpha_{1,m} \leftarrow \alpha_{1,m}
-%   + \sum_{i+j=m} \alpha_{2,i}^{} x_j^2 + x_{2m-(d-1)} \quad \text {for}\, m\geq \frac{d-1}{2};\\
-% 	\end{align*}
-% 
-% If all $\alpha_i=0$, we are done: the pencil is canonical. If not, we search the value $\alpha_i$ with smallest degree. Using $G_4$, we may assume it is $\alpha_1$ or $\alpha_3$. We first suppose that we have $\deg(\alpha_1+\alpha_3)\gt m$, that is $\alpha_1$ and $\alpha_3$ have the same trailing term.
-% Using $G_3$, we may assume $\alpha_1=H^m$, and therefore $\alpha_3=H^m+\alpha$, with $\deg(\alpha)\gt m$.  We look then for $X$ such that $G_2(X)(\alpha_2)=0$. We suppose first that $m\lt \frac{d-1}{2}$. In this case the system is triangular and all equations can be solved except maybe for this one: $\alpha_{2,d-1-m} = x_{(d-1)-2m}^2 + x_{(d-1)-2m}.$ Therefore we may assume that $\alpha_2=0$ or $\alpha_2=\delta H^{d-1-m}$ for some fixed
-% $\delta \in \K[M_0] \smallsetminus \wp(\K[M_0])$. We note also that since $m\lt \frac{d-1}{2}$, $G_2(X)$ does not decrease the degree of $\alpha_4$.
-% We suppose now that $m\geq \frac{d-1}{2}$. In this case, the system $G_2(X)(\alpha_2)=0$ has many solutions, but we can still find one such that $x_{2i-(d-1)}=0$ for $i\lt m$, that is one that does not decrease the degree of $\alpha_4$. So in this case, we can also assume that $\alpha_2=0$ and $\deg(\alpha_4)\geq m$.
-% 
-% We  now examine the case where $\deg(\alpha_1 + \alpha_3)=m$. Using again $G_3$, we may assume that $\alpha_1=H^m$ or $\alpha_3=H^m$. Let's note $\alpha_1+\alpha_3=H^{m}\alpha$ where $\alpha$ is invertible. We are looking for $X$ such that $G_2(X)(\alpha_2)=G_2(X)(\alpha_4)$. By hypothesis on the degree, we can write $\alpha_2+\alpha_4=H^m \alpha'$ for some $\alpha'$. We naturally choose $X=\varphi^{-1}(\alpha'\alpha^{-1})$.
-% At this stage, we can consider that $\alpha_2=\alpha_4$. However, the condition on the degree may not hold. If by chance $\deg(\alpha_2)\gt m$, then we are done. If on the contrary $\deg(\alpha_2)\leq m$, then by using $G_4$, we search instead for a canonical form of the first kind. \qed
-% 
-	%
-%We note that the system for~$G_1$ is triangular in the variables~$x_i$,
-%except for the last equation of each, which reads (as an equation
-%in~$x_{d-1}$) as
-%\begin{equation}\label{eq:G1-last}
-%\alpha_{1,d-1} \leftarrow \alpha_{1,d-1}
-  %+ \alpha_{2,0} x_{d-1}^2 + x_{d-1} + C,
-%\end{equation}
-%Hence the $(d-1)$~first terms of the equation
-%for~$G_1(X)$ can be solved in the same way as~$\alpha_1 \leftarrow
-%\alpha_1 + \varphi(X) \alpha_2$. The same considerations apply to~$G_2$.
-%
-%This shows that (modulo~$H^{d-1}$) the matrices~$G_i$ act on the
-%pair~$(\alpha_1, \alpha_2)$ as the elementary operations of~$SL_2(\K[M])$
-%acting on~$\K[M]^2$. Therefore, after applying such transformations, we
-%may assume that
-%\begin{equation}\label{eq:alpha-can}
-%\alpha_1 = H^m + \alpha_{1,d-1} H^{d-1},\, m \in \acco {0, \dots, d-1};
-%\qquad \alpha_2 = \alpha_{2,d-1} H^{d-1}.
-%\end{equation}
-%Since~$\alpha_{2,0} = 0$, the equation~\eqref{eq:G1-last} is
-%then~$\alpha_{1,d-1} \leftarrow \alpha_{1,d-1} + x_{d-1} + C$;
-%taking~$x_{d-1} = \alpha_{1,d-1} + C$, we may assume that~$\alpha_{1,d-1}
-%= 0$. Likewise, if~$m \geq 1$ the equation for~$G_2(X)$ allows us to
-%assume that~$\alpha_{2,d-1} = 0$. In the case where~$m = 0$, this
-%equation reads instead~$\alpha_{2,d-1} \leftarrow \alpha_{2,d-1} +
-%x_{d-1}^2 + x_{d-1} + C$; if~$\alpha_{2,d-1} + C\in \wp(\K)$, then this
-%has a solution, otherwise we may assume that~$\alpha_{2,d-1} =
-%\delta$.\qed
-% \end{proof}
 
 \begin{theorem}\label{thm:IP1S-2}
 Let~$\K$ be a finite field with characteristic two. The cyclic case of
@@ -1203,7 +1061,12 @@ two solutions.
 \end{theorem}
 
 \begin{proof}
-To solve the IP1S problem for two pencils~$A$ and~$B$, we may reduce them
+To solve the IP1S problem for two pencils~$A$ and~$B$, we first find
+coordinate changes putting both pencils in reduced form using
+Prop.~\refe{prop:quad-can}. Since they share the same characteristic
+values~$\alpha_1$ and~$\alpha_2$, the possible morphisms are described by
+Prop.~\ref{prop:aut-can}~\mkenumi{1}.
+
 to the form of Prop.~\ref{prop:quad-can}. Both pencils then have the same
 values~$\alpha_1$ and~$\alpha_2$; it remains to find an automorphism
 relating the values~$\alpha_3$ and~$\alpha_4$. This can be done via
