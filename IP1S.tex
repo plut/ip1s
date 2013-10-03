@@ -707,10 +707,7 @@ $7^6$ & 32 & 11.s. & 100.\\
 \section{IP1S in Characteristic Two}
 \label{IPeven}
 
-%\XXX{version de Jérôme}
-%\iffalse
-
-Let~$\K$ be a perfect field of characteristic two. In this case, the
+Let~$\K$ be a finite field of characteristic two. In this case, the
 polarity identity~\eqref{eq:polarity} shows that the polar form~$b =
 \Polm{q}$ attached to a quadratic form~$q$ is an alternating bilinear
 form.
@@ -932,7 +929,7 @@ for~$0 \leq m \leq (d-1)/2$. Moreover, these cases are mutually
 exclusive.
 \end{proposition}
 
-We shall say that a pencil in this form \emph{reduced}, and call the
+We shall say that a pencil in this form is \emph{reduced}, and call the
 values~$\alpha_i$ the \emph{characteristics} of~$A$. The image
 modulo~$\wp(\L)$ of the coefficient~$\alpha_{2, d-1-m}$ is known as the
 \emph{Arf invariant}~\cite{milnor1973symmetric} of~$A_{\infty}$.
@@ -967,7 +964,7 @@ G_3(X):&\quad\alpha_{1} \leftarrow \varphi(X)\, \alpha_1, \quad
   \alpha_2 \leftarrow \varphi(X^{-1})\, \alpha_2;\\
 % &\quad\alpha_{3} \leftarrow \varphi(X)\, \alpha_3, \quad
 %   \alpha_4 \leftarrow \varphi(X^{-1})\, \alpha_4;\\
-G_4:&\quad\alpha_1 \leftrightarrow \alpha_2;
+G_4:&\quad\alpha_1 \leftrightarrow \alpha_2.
 % \quad\alpha_3 \leftrightarrow \alpha_4.
 \end{align*}
 Using transformations~$G_4$ and~$G_3$, we may assume that~$\alpha_1 =
@@ -976,25 +973,26 @@ The transformation~$G_2(X)$ then reads as:
 \begin{equation}\label{eq:G2}
 \alpha_{2,d-1-i} \leftarrow \alpha_{2,d-1-i} + x_{d-1-i-m}^2 + x^{}_{d-1-2i},
 \end{equation}
-where~$x_{d-2i} = 0$ for~$d-2i < 0$. This has a solution for all~$i$
-except for~$i = m$, where the equation depends on~$x_{d-1-2m}^2 +
-x^{}_{d-1-2m}$. Hence, we may assume that~$\alpha_{d-1-m}$ is either~$0$
-or~$\delta$, and all others~$\alpha_{i}$ are zero.
+where~$x_{d-1-2i} = 0$ for~$d-1-2i < 0$. The equation $\alpha_{2,d-1-i}
+\leftarrow 0$ has a solution for all~$i$ except for~$i = m$, where it is
+of the form~$x_{d-1-2m}^2 + x^{}_{d-1-2m} = C$. Hence, we may assume
+that~$\alpha_{d-1-m}$ is either~$0$ or~$\delta$, and all
+others~$\alpha_{i}$ are zero.
 
 Finally, note that if~$m \geq d/2$, then~$\alpha_1 = H^m$ is in the image
 of~$\theta$; therefore, a transformation of the form~$G_1(X)$ allows us
-to replace~$\alpha_1$ with~$0$ in this case.
+to replace~$\alpha_1$ with~$0$ in this case.\qed
 \end{proof}
 
 \medbreak
 
 \begin{proposition}\label{prop:aut-can}
-Let~$A$ be a cyclic pencil of quadratic forms, reduced
-in the sense of Prop.~\ref{prop:quad-can}.
+Let~$A$ be a cyclic pencil of quadratic forms and~$\alpha_i$ be its
+characteristic values.
 \begin{enumerate}
-\item Assume that~$\alpha_1 \neq 0$. Then group of linear
-transformations~$g$ fixing the characteristics~$\alpha_1$ and~$\alpha_2$
-is isomorphic to~$\K[M] \times \F_2$.
+\item Assume that~$(\alpha_1, \alpha_2) \neq (0, 0)$. Then group of
+linear transformations~$g$ fixing the characteristics~$\alpha_1$
+and~$\alpha_2$ is isomorphic to~$\K[M] \times \F_2$.
 \item Assume that
 \setlength\abovedisplayskip{0ex}
 \setlength\belowdisplayskip{.5ex}
@@ -1008,17 +1006,18 @@ non-trivial automorphism.
 
 \begin{proof}
 \mkenumi{1}
+We may assume that $A$~is reduced and therefore that~$\alpha_1 = H^m$.
 Write the automorphism~$g$ as~$g = G_2(y) G_3(1+z)^{-1} G_1(x)$ for~$x, y,
-u \in \K[M]$. Then the characteristics~$\alpha_1$ and~$\alpha_2$ are
+z \in \K[M]$. Then the characteristics~$\alpha_1$ and~$\alpha_2$ are
 fixed by~$g$ if, and only if,
 \begin{equation}\label{eq:aut-generic}
 z\: \alpha_1 \;=\; \alpha_2\, \varphi(x) + \theta(x)
 \quad\text{and}\quad
 z\: \alpha_2 \;=\; \alpha_1\, \varphi(y) + \theta(y).
 \end{equation}
-For any~$x$, the first equation determines~$z$ such that~$(1+z)$~is
-invertible. With~$\alpha_1 = H^m$, the second equation then has exactly
-two solutions~$y$ and~$y + H^{d-1-2m}$.
+For any~$x$, the solution~$z$ of the first equation is such
+that~$(1+z)$~is invertible. With~$\alpha_1 = H^m$, the second equation
+then has exactly two solutions~$y$ and~$y + H^{d-1-2m}$.
 
 \mkenumi{2}
 Since~$\alpha_1 \alpha_4 + \alpha_2 \alpha_3 \not \equiv 0 \pmod{H}$, the
@@ -1050,45 +1049,35 @@ two first equations we deduce~$y = \alpha_2 x + b$ with~$b \in \{ 0,1
 \}$, and the system reduces to the single equation~$(\alpha_2 \alpha_3 +
 \alpha_4) x^2 = b(\alpha_3 +
 1) x$. If~$\alpha_2 \alpha_3 + \alpha_4 \neq 0$, this has exactly two
-solutions.
+solutions.\qed
 \end{proof}
 
 \begin{theorem}\label{thm:IP1S-2}
 Let~$\K$ be a finite field with characteristic two. The cyclic case of
 the IP1S problem is solvable using~$\Otilde{n^3}$ operations in the
-field~$\K$. Moreover, in the generic case, the IP1S problem has exactly
-two solutions.
+field~$\K$. Moreover, in the generic case, the cyclic IP1S problem has
+exactly two solutions.
 \end{theorem}
 
 \begin{proof}
 To solve the IP1S problem for two pencils~$A$ and~$B$, we first find
 coordinate changes putting both pencils in reduced form using
-Prop.~\refe{prop:quad-can}. Since they share the same characteristic
-values~$\alpha_1$ and~$\alpha_2$, the possible morphisms are described by
-Prop.~\ref{prop:aut-can}~\mkenumi{1}.
+Prop.~\ref{prop:quad-can}. This proposition is constructive and all
+linear algebra computations used require at most~$\Otilde{n^3}$ field
+operations.
 
-to the form of Prop.~\ref{prop:quad-can}. Both pencils then have the same
-values~$\alpha_1$ and~$\alpha_2$; it remains to find an automorphism
-relating the values~$\alpha_3$ and~$\alpha_4$. This can be done via
-Prop.~\ref{prop:aut-can}. Following along the proof of both propositions,
-we see that they are constructive and that all linear algebra algorithms
-used require at most~$\Otilde{n^3}$ field operations.
+The pencils then share the same characteristic values~$\alpha_1$
+and~$\alpha_2$, and it remains to find in the group described in
+Prop.~\ref{prop:aut-can}~\mkenumi{1} a morphism relating the
+characteristic values~$\alpha_3$ and~$\alpha_4$. The elements of this
+group have a triangular structure, so that it is possible to compute the
+value~$x \in \K[M]$ by successive approximation, again in no more
+that~$\Otilde{n^3}$ field operations.
 
 Solutions of the IP1S problem correspond bijectively to automorphisms of
-the pencil. Without loss of genericity, we may assume that~$\alpha_1 = 1$
-and $\alpha_4$~is invertible in~$\K[M]$. According to
-Prop.~\ref{prop:aut-can}, automorphisms of such a pencil are of the
-form~$G_2(y) G_3(u^{-1}) G_1(x)$ where
-\begin{gather*}\label{eq:aut-generic}
-u+1 \;=\; \theta(x) + \alpha_2\, \varphi(x), \quad
-  (u+1)\: \alpha_2 \;=\; \theta(y) + \varphi(y),\\
-(u+1)\: \alpha_3 \;=\; \theta(x) + \alpha_4\, \varphi(x), \quad
-  (u+1)\: \alpha_4 \;=\; \theta(y) + \alpha_3\, \varphi(y).
-\end{gather*}
-Eliminating~$(u+1)$ from the first two equations gives~$\varphi(y) =
-\theta(y)$, which means that~$y = 0$ or~$y = H^{d-1}$. Each of these
-cases has exactly one solution in~$x$ and~$u$. Therefore, the pencil
-generally has exactly one non-trivial automorphism.
+the pencil. Prop.~\ref{prop:aut-can}~\mkenumi{1} proves that there are
+exactly two such automorphisms, under a condition which is generic in an
+algebraic sense.\qed
 \end{proof}
 
 
