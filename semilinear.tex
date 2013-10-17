@@ -112,6 +112,7 @@ H^r$ of~$R$, where $a'$~is invertible, by
 \begin{equation}\label{eq:pseudo-inv}
 \widehat{a} \;=\; \frac{1}{a'} H^{d-r}.
 \end{equation}
+The pseudo-inverse of~$a$ generates the annulator ideal of~$a$ in~$R$.
 We note that we have the following relations between~$θ$, $ω$ and~$φ$:
 \begin{gather*}\label{eq:theta-omega}
 φ(a) θ(x) = θ(a^2 x); \quad
@@ -124,20 +125,20 @@ a \widehat{a} = 0; \quad a \widehat{a^2} = \widehat{a};\quad
 
 
 \begin{proposition}\label{prop:contracting}
-For any~$a, b ∈ R$, the equation
+For any~$b, c, d ∈ R$, the equation
 \begin{equation}
-φ(x) = a θ(x) + b
+φ(x) = b θ(x) + c θ(Hx) + d
 \end{equation}
 has:
 \begin{itemize}
-\item zero or two solutions in~$R$ if $a$~is invertible;
-\item one solution in~$R$ if $a$~is not invertible.
+\item zero or two solutions in~$R$ if $b$~is invertible;
+\item one solution in~$R$ if $b$~is not invertible.
 \end{itemize}
 \end{proposition}
 
 
 \begin{proof}
-The map~$x ↦ a θ(x) + b \pmod{H^{d-1}}$ is contracting for the $H$-adic
+The map~$x ↦ a b(x) + b \pmod{H^{d-1}}$ is contracting for the $H$-adic
 valuation on~$R$. Therefore, the equation has a unique solution
 modulo~$H^{d-1}$. Solving for the coefficient of~$H^{d-1}$ yields:
 \begin{itemize}
@@ -151,9 +152,12 @@ solution.
 
 
 
+\begin{proposition}\label{prop:eq}
+XXX We can solve the equation
 \begin{equation}\label{eq:theta}
 a φ(x) = b θ(x) + c θ(Hx) + ad
 \end{equation}
+\end{proposition}
 
 \begin{proof}
 Assume that $x$~is a solution of~\eqref{eq:theta}. Then $y = φ^{-1}(a^2)
@@ -175,68 +179,68 @@ then equivalent to
 \end{equation}
 \end{proof}
 
-\begin{proposition}\label{prop:omega}
-For any~$b ∈ R$ and integers~$r ≥ s$, the equation
-\begin{equation}
-φ(x) ≡ ω(H^s x) + b \pmod{H^{r - s}}
-\end{equation}
-has exactly~$\abs{k}^r$ solutions in~$k[H]/H^{2r-s}$.
-\end{proposition}
-
-
-\begin{proof}
-The equation reads as
-\begin{equation}
-x_{i}^2 = x_{2i+s+1} + b_i, \qquad \text{for~$i = 0, …, r-s-1$}.
-\end{equation}
-As~$i < 2i+s+1$ for all~$i$, this system is triangular with~$(2r-s)$
-variables and~$(r-s)$ equations.
-\end{proof}
-
-
-\begin{proposition}\label{prop:theta}
-For all integers~$r ≤ (d-1)/2$ and~$b ∈ R$ such that~$v_H(b) ≥ r$,
-the equation
-\begin{equation}\label{eq:theta}
-H^r φ(x) = a θ(x) + b.
-\end{equation}
-has either zero or $2·\abs{k}^{r}$ solutions in~$R$ if $a$~is invertible,
-and $\abs{k}^r$ solutions if $a$~is not invertible.
-\end{proposition}
-
-\begin{proof}
-For any solution~$x$ of~\eqref{eq:theta}, it is readily seen that~$y =
-H^{2r} x$ is a solution of
-\begin{equation}\label{eq:theta-y}
-φ(y) = a θ(y) + H^r b.
-\end{equation}
-Conversely, assume that~\eqref{eq:theta-y} has a solution~$y_0 ∈ R$.
-As~$v_H(H^r b) ≥ 2r$, $y_0$~is divisible by~$H^{2r}$ in~$R$, so that we
-may write~$y_0 = H^{2r} x_0$. We then have
-\begin{equation}
-H^{2r} φ(x_0) = a θ(H^{2r} x_0) + b = H^r (a θ(x_0) + b).
-\end{equation}
-From this we deduce that~$H^r φ(x_0) ≡ a θ(x_0) + b \pmod{H^{d-r}}$.
-Let~$b_1 ∈ R$ such that~$H^r φ(x_0) = a θ(x_0) + b + H^{d-r} b_1$, and
-write~$x = x_0 + H^{d-2r} x_1$; using relation~\ref{eq:theta-omega},
-equation~\ref{eq:theta} is then equivalent to
-\begin{equation}\label{eq:theta1}
-φ (x_1) ≡ a ω(x_1) + b_1 \pmod{H^r}, \quad x_1 ∈ k[H]/(H^{2r}).
-\end{equation}
-Write~$a = H^s a'$ with $a'$~invertible in~$R$, and let~$x_1 =
-φ^{-1}(a')^2 x_2 + φ^{-1} (b_1)$ and~$b_2 = θ ∘ φ^{-1}(b_1/a')$; then
-\eqref{eq:theta1}~is in turn equivalent to
-\begin{equation}\label{eq:theta2}
-φ (x_2) ≡ H^s (ω(x_2) + b_2) \pmod{H^r}, \quad x_2 ∈ k[H]/(H^{2r}).
-\end{equation}
-This obviously implies that~$x_2 ∈ H^s R$. Let~$x_2 = H^s x_3$.
-Equation~\eqref{eq:theta2} is then equivalent to
-\begin{equation}\label{eq:theta3}
-φ (x_3) ≡ ω(H^s x_3) + b_3 \pmod{H^{r-s}},
-  \quad x_3 ∈ k[H]/(H^{2r-s}).
-\end{equation}
-Applying Prop.~\ref{prop:omega} gives the result.
-\end{proof}
-
+% \begin{proposition}\label{prop:omega}
+% For any~$b ∈ R$ and integers~$r ≥ s$, the equation
+% \begin{equation}
+% φ(x) ≡ ω(H^s x) + b \pmod{H^{r - s}}
+% \end{equation}
+% has exactly~$\abs{k}^r$ solutions in~$k[H]/H^{2r-s}$.
+% \end{proposition}
+% 
+% 
+% \begin{proof}
+% The equation reads as
+% \begin{equation}
+% x_{i}^2 = x_{2i+s+1} + b_i, \qquad \text{for~$i = 0, …, r-s-1$}.
+% \end{equation}
+% As~$i < 2i+s+1$ for all~$i$, this system is triangular with~$(2r-s)$
+% variables and~$(r-s)$ equations.
+% \end{proof}
+% 
+% 
+% \begin{proposition}\label{prop:theta}
+% For all integers~$r ≤ (d-1)/2$ and~$b ∈ R$ such that~$v_H(b) ≥ r$,
+% the equation
+% \begin{equation}\label{eq:theta}
+% H^r φ(x) = a θ(x) + b.
+% \end{equation}
+% has either zero or $2·\abs{k}^{r}$ solutions in~$R$ if $a$~is invertible,
+% and $\abs{k}^r$ solutions if $a$~is not invertible.
+% \end{proposition}
+% 
+% \begin{proof}
+% For any solution~$x$ of~\eqref{eq:theta}, it is readily seen that~$y =
+% H^{2r} x$ is a solution of
+% \begin{equation}\label{eq:theta-y}
+% φ(y) = a θ(y) + H^r b.
+% \end{equation}
+% Conversely, assume that~\eqref{eq:theta-y} has a solution~$y_0 ∈ R$.
+% As~$v_H(H^r b) ≥ 2r$, $y_0$~is divisible by~$H^{2r}$ in~$R$, so that we
+% may write~$y_0 = H^{2r} x_0$. We then have
+% \begin{equation}
+% H^{2r} φ(x_0) = a θ(H^{2r} x_0) + b = H^r (a θ(x_0) + b).
+% \end{equation}
+% From this we deduce that~$H^r φ(x_0) ≡ a θ(x_0) + b \pmod{H^{d-r}}$.
+% Let~$b_1 ∈ R$ such that~$H^r φ(x_0) = a θ(x_0) + b + H^{d-r} b_1$, and
+% write~$x = x_0 + H^{d-2r} x_1$; using relation~\ref{eq:theta-omega},
+% equation~\ref{eq:theta} is then equivalent to
+% \begin{equation}\label{eq:theta1}
+% φ (x_1) ≡ a ω(x_1) + b_1 \pmod{H^r}, \quad x_1 ∈ k[H]/(H^{2r}).
+% \end{equation}
+% Write~$a = H^s a'$ with $a'$~invertible in~$R$, and let~$x_1 =
+% φ^{-1}(a')^2 x_2 + φ^{-1} (b_1)$ and~$b_2 = θ ∘ φ^{-1}(b_1/a')$; then
+% \eqref{eq:theta1}~is in turn equivalent to
+% \begin{equation}\label{eq:theta2}
+% φ (x_2) ≡ H^s (ω(x_2) + b_2) \pmod{H^r}, \quad x_2 ∈ k[H]/(H^{2r}).
+% \end{equation}
+% This obviously implies that~$x_2 ∈ H^s R$. Let~$x_2 = H^s x_3$.
+% Equation~\eqref{eq:theta2} is then equivalent to
+% \begin{equation}\label{eq:theta3}
+% φ (x_3) ≡ ω(H^s x_3) + b_3 \pmod{H^{r-s}},
+%   \quad x_3 ∈ k[H]/(H^{2r-s}).
+% \end{equation}
+% Applying Prop.~\ref{prop:omega} gives the result.
+% \end{proof}
+% 
 
 \end{document}
