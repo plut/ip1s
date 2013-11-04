@@ -458,9 +458,10 @@ M = %\small
 \mat{M_0 & 1 & & 0 \\ & \ddots\; & \ddots & \\
   & & \ddots & 1\\ 0 & & & M_0},
 \end{equation}
-where $M_0$~is the companion matrix of a polynomial~$p(\lambda) =
-\lambda^n+\sum_{i=0}^{n-1}{p_i\lambda^i}$. We then define matrices
-$T_0$~and~$T$ by
+where $M_0$~is the companion matrix of an irreducible
+polynomial~$p(\lambda) = \lambda^n+\sum_{i=0}^{n-1}{p_i\lambda^i}$. (Note
+that this is not the Frobenius normal form, although it is equivalent to
+it as long as $p$~is separable). We then define matrices $T_0$~and~$T$ by
 \begin{equation}
 % \label{eq:companion}
 % M_0 = \begin{pmatrix}
@@ -545,7 +546,6 @@ XM = MX \quad\text{and}\quad \transpose{X} A_{\infty} X = B_{\infty}.
 \end{equation}
 \end{enumerate}
 \end{proposition}
-
 
 \begin{proof}
 \mkenumi{1}.
@@ -935,7 +935,6 @@ values~$\alpha_i$ the \emph{characteristics} of~$A$. The image
 modulo~$\wp(\L)$ of the coefficient~$\alpha_{2, d-1-m}$ is known as the
 \emph{Arf invariant}~\cite{milnor1973symmetric} of~$A_{\infty}$.
 
-
 \begin{proof}
 By Prop.~\ref{prop:bil-can}, we may compute bases in which the pencils of
 polar forms have the form~\eqref{eq:bil-can}. In the same bases the
@@ -986,27 +985,48 @@ to replace~$\alpha_1$ with~$0$ in this case.\qed
 
 \medbreak
 
+The pencil~$A = (A_0, A_{\infty})$ is called \emph{semi-vanishing}
+if~$\alpha_1 = 0$, and~\emph{vanishing} if both pencils~$(A_0,
+A_{\infty})$ and~$(A_{\infty, A_0})$ are semi-vanishing.
 
-\begin{theorem}\label{prop:det-solutions}
-Let~$A, A'$ be two congruent cyclic pencils of quadratic forms with
-characteristic values~$(\alpha_i), (\alpha'_i)$. Assume that
-\begin{equation}\label{eq:determinant}
-\alpha'_1\, \alpha_4 \:+\: \alpha_2\, \alpha'_3 \;\not \equiv\; 0 \pmod{H}.
-\end{equation}
-Then there are at most four isomorphisms between~$A$ and~$A'$, and
-computing one of them is possible using no more than~$\Otilde{n^3}$ field
-operations.
+\begin{proposition}\label{prop:vanishing}
+Any vanishing pencil of quadrics is isomorphic to a pencil with the
+characteristics~$(0, 0, H^m, 0)$ with~$m \geq d/2$.
+\end{proposition}
+
+\begin{proof}
+Let~$A$ be a vanishing pencil. This means that $A$~is isomorphic to a
+pencil with the characteristics~$(0, 0, \alpha_3, \alpha_4)$ with~$v_H
+(\alpha_3), v_H(\alpha_4) \geq d/2$. The transformations
+preserving~$\alpha_1 = \alpha_2 = 0$ are of the form~$G_1(x)
+G_3(\varphi^{-1} (u^{-1})) G_2(y)$ with~$\theta(x) = \theta(y) = 0$, and
+the image of~$(\alpha_3, \alpha_4)$ is~$(\alpha'_3, \alpha'_4)$ such that
+\begin{gather*}\label{eq:alpha34}
+u \alpha'_3 = \alpha_3 + \alpha_4 \varphi(x) + \theta(H\,x),\\ u \alpha_4
+= \alpha'_4 + \alpha'_3 \varphi(y) + \theta(H\,y).
+\end{gather*}
+From the second equation, we may assume that~$\alpha_4 = 0$, unless~$v_H
+(\alpha_3) = d/2$ where~$\alpha_4 \in \acco { 0, \delta H^{d/2}}$. In
+this last case however, the first equation allows the change to~$\alpha_3
+= H^{m}$ with~$m \geq d/2+1$.\qed
+\end{proof}
+
+\begin{theorem}\label{th:ip1s}
+Let~$A, A'$ be two congruent cyclic pencils of quadratic
+forms. Then it is possible to compute an isomorphism between~$A$ and~$A'$
+in polynomial time.
 \end{theorem}
 
 \begin{proof}
-By Prop.~\ref{prop:quad-can}, we may assume that~$A, A'$~are reduced.
-Without changing the values~$\alpha_1, \alpha_2$, we may further assume
-the divisibility properties: $\alpha'_1 \mid \alpha_2$, $\alpha'_1 \mid
-\alpha'_3 \mid \alpha_4$. Let~$\beta_i \in \L[H]$ be such that
+By Prop.~\ref{prop:quad-can}, we may assume that~$A, A'$~are reduced. The
+vanishing (or semi-vanishing) case is taken care of by
+Prop.~\ref{prop:vanishing}. We may therefore assume that $A$~is not
+semi-vanishing and that~$\alpha_1 = \alpha'_1 \mid \alpha_2, \alpha'_3,
+\alpha_4$. Let~$\beta_i \in \L[H]$ be such that
 \begin{equation}\label{eq:beta}
 \alpha_2 = \alpha'_1 \beta_2, \qquad
 \alpha_3 = \alpha'_1 \beta'_3, \qquad
-\alpha_4 = \alpha'_3 \beta_4 = \alpha'_1 \beta'_3 \beta_4.
+\alpha_4 = \alpha'_1 \beta_4.
 \end{equation}
 According to~\eqref{eq:Gi-alpha}, a transformation of the form~$G_2^{}(x)
 G_3^{}(\varphi^{-1}(u^{-1})) G_1^{}(y)$ is an isomorphism between~$A$ and~$A'$
@@ -1016,44 +1036,208 @@ u \alpha'_1 = \alpha_1 + \alpha_2 \varphi(x) + \theta(x),\\
 \numberthis
 u \alpha_2 = \alpha'_2 + \alpha'_1 \varphi(y) + \theta(y),\\
 u \alpha'_3 = \alpha_3 + \alpha_4 \varphi(x) + \theta(M\,x),\\
-u \alpha_4 = \alpha'_4 + \alpha'_3 \varphi(y) + \theta(M\,y).\\
+u \alpha_4 = \alpha'_4 + \alpha'_3 \varphi(y) + \theta(M\,y).
 \end{gather*}
+Since $A$~is reduced, $v_H (\alpha_1) < v_H (\theta(x))$, and therefore
+the first equation determines an invertible~$u$. Eliminating~$u$ and
+performing a invertible linear combination of the last three equations
+yields the equations on~$(x, y)$:
+\begin{equation}\label{eq:matrix2}
+\begin{array}{lllcl}
+\alpha'_1 \beta_2^2 \varphi(x) + \alpha'_1 \varphi(y) 
+  &+\, \beta_2 \theta(x) + \theta(y) &&=&\alpha_1 \beta_2 + \alpha'_2,\\
+\alpha'_1 (\beta_2 \beta'_3 + \beta_4) \varphi(x)
+  &+\, \beta'_3 \theta(x) &+\,\theta(Mx) &=&\alpha_1 \beta'_3 + \alpha_3,\\
+&\hphantom{+} \beta_4 \theta(x) + \beta'_3 \theta(y)
+  &+\beta_2 \theta(Mx) + \theta(My) &=&\\
+&&&&\hskip 10ex \llap{$\alpha_1 \beta_4 + \alpha'_2 \beta'_3 +
+\alpha_3 \beta_2 + \alpha'_4$.}
+\end{array}\end{equation}
+Let~$z = y + \varphi^{-1}(\beta_2^2) x$ and let~$\alpha = \alpha'_1$,
+$\beta = \beta'_3 + M_0$ and~$\gamma = \beta_4 + \beta_2 \beta'_3$.
+We deduce from~\eqref{eq:semilinear} that~$\varphi(z) = \beta_2^2
+\varphi(x) + \varphi(y)$ and $\theta(z) = \beta_2 \theta(x) + \theta(y)$,
+and the system~\eqref{eq:matrix2} becomes
+\begin{equation}\label{eq:system-ip1s}
+\left\{\begin{array}{lllcl}
+\alpha \varphi(z) & +\, \hphantom{\beta} \theta(z) &&=&C,\\
+\alpha \gamma \varphi(x) & +\,\beta \theta(x) &+\theta(Hx) &=&C',\\
+&\hphantom{+\,}\gamma \theta(x) + \beta \theta(z) &+\theta(Hz) &=&C''.
+\end{array}\right.\end{equation}
+Proposition~\ref{prop:system-ip1s} explains how to solve such a system
+in~$\L[H]$.\qed
+\end{proof}
+% \begin{proof}
 % \begin{equation}\label{eq:matrix1} \mat{ \alpha_2 &  0 & 1 & 0 &
 % \alpha'_1 & \alpha_1 \\
 % 0 & \alpha'_1 & 0 & 1 & \alpha_2 & \alpha'_2 \\ \alpha_4 &  0 & 1 & 0 &
 % \alpha'_3 & \alpha_3 \\
 % 0 & \alpha'_3 & 0 & 1 & \alpha_4 & \alpha'_4} \mat{ \varphi(x) \\
 % \varphi(y) \\ \theta(x) \\ \theta(y) \\u \\ 1 } = 0. \end{equation}
-When $A'$~is in reduced form, the first equation of~\eqref{eq:matrix1}
-always determines an invertible~$u \pmod{H^{d-v_H (\alpha'_1)}}$, which
-is unique when $\alpha'_1$~is invertible.
-Write~$X = \smat{x \\ y}$.
-Eliminating~$u$ from equations~\eqref{eq:matrix1} and performing some
-linear combinations yields
-\begin{equation}\label{eq:matrix2}
-\alpha'_1 \mat{\beta_2^2 & 1 \\ \beta'_3 (\beta_2 + \beta_4) & 0 \\ 0 & 0}
-  \varphi (X)
-+ \mat{\beta_2 & 1 \\ \beta'_3 & 0 \\ \beta'_3 \beta_4; & \beta'_3}
-  \theta (X)
-+ \mat{0 & 0 \\ 1 & 0 \\ \beta_2 & 1} \theta (MX) + C = 0
+% When $A'$~is in reduced form, the first equation of~\eqref{eq:matrix1}
+% always determines an invertible~$u \pmod{H^{d-v_H (\alpha'_1)}}$, which
+% is unique when $\alpha'_1$~is invertible.
+% Write~$X = \smat{x \\ y}$.
+% Eliminating~$u$ from equations~\eqref{eq:matrix1} and performing some
+% linear combinations yields
+% \begin{equation}\label{eq:matrix2}
+% \alpha'_1 \mat{\beta_2^2 & 1 \\ \beta'_3 (\beta_2 + \beta_4) & 0 \\ 0 & 0}
+%   \varphi (X)
+% + \mat{\beta_2 & 1 \\ \beta'_3 & 0 \\ \beta'_3 \beta_4; & \beta'_3}
+%   \theta (X)
+% + \mat{0 & 0 \\ 1 & 0 \\ \beta_2 & 1} \theta (MX) + C = 0
+% \end{equation}
+% for some column vector~$C$.
+% The only non-zero minor of the first matrix is~$\alpha'_1 \beta'_3
+% (\beta_2 + \beta_4) = \alpha'_1 \alpha_4 + \alpha_2 \alpha'_3$. If it is
+% invertible, then this matrix is injective, and therefore all
+% solutions~$X$ satisfy an equation of the form
+% \begin{equation}\label{eq:contracting}
+% X = F(X) = 
+% B_0\,  \theta \circ \varphi^{-1} (X) +
+% B_1\,  \theta \circ \varphi^{-1} (MX) +
+% C,
+% \end{equation}
+% where the map $F \pmod{H^{d-1}}$ is contracting for the valuation~$v_H$.
+% Therefore, this equation has a unique solution~$X \pmod{H^{d-1}}$.
+% Solving for the coefficients of~$H^{d-1}$ in~$X$ yields equations which
+% are either linear or of Artin-Schreier type, and which between them have
+% at most four solutions.\qed
+% \end{proof}
+
+\subsection{Solving the semi-linear equations of the IP1S problem}
+
+We consider the algebra~$A = \L[H]/H^n$ equipped with the Frobenius
+endomorphism~$\varphi$ and the linear endomorphisms~$\theta$ defined
+in~\eqref{eq:theta} and~$\omega$ defined by
+\begin{equation}\label{eq:omega}
+\omega(\sum x_i H^i) = \sum_{2i + 1 \leq d-1} x_{2i+1} H^i.
 \end{equation}
-for some column vector~$C$.
-The only non-zero minor of the first matrix is~$\alpha'_1 \beta'_3
-(\beta_2 + \beta_4) = \alpha'_1 \alpha_4 + \alpha_2 \alpha'_3$. If it is
-invertible, then this matrix is injective, and therefore all
-solutions~$X$ satisfy an equation of the form
-\begin{equation}\label{eq:contracting}
-X = F(X) = 
-B_0\,  \theta \circ \varphi^{-1} (X) +
-B_1\,  \theta \circ \varphi^{-1} (MX) +
-C,
+We check that the operators~$\theta$ and~$\omega$ are semi-linear in the
+sense that
+\begin{equation}\label{eq:semilinear}
+\varphi(a) \theta(x) = \theta(a^2 x); \qquad
+\varphi(a) \omega(x) = \omega(a^2 x).
 \end{equation}
-where the map $F \pmod{H^{d-1}}$ is contracting for the valuation~$v_H$.
-Therefore, this equation has a unique solution~$X \pmod{H^{d-1}}$.
-Solving for the coefficients of~$H^{d-1}$ in~$X$ yields equations which
-are either linear or of Artin-Schreier type, and which between them have
-at most four solutions.\qed
+We also define the \emph{pseudo-inverse} of an element~$x = x' H^r \in
+A$, where $x'$~is invertible, as
+\begin{equation}\label{eq:pseudo-inv}
+\widehat{x} = \frac{1}{x'} H^{n-r}.
+\end{equation}
+This is well-defined if~$r = v_H(x) \leq d/2$. The pseudo-inverse of~$x$
+generates the annulator ideal of~$x$, and has the following properties:
+\begin{equation}\label{eq:prop-pseudo-inv}
+a \,\cdot\, \widehat{ab} = \widehat{b}; \qquad
+\varphi(\widehat{a}) = \widehat{\varphi(a)}; \qquad
+\theta(\widehat{\,a^2\,}\,x) = \varphi(\widehat{a})\, \omega(x).
+\end{equation}
+
+\begin{proposition}\label{prop:contracting}
+For all~$b$, $c$, $d \in A$, the equation
+\begin{equation}
+\varphi(x) \;=\; b\, \theta(x) + c\, \theta(Hx) + d
+\end{equation}
+has exactly one solution if $b$~is not invertible, and zero or two
+solutions if $b$~is invertible. It is possible to compute these solutions
+using no more than~$O(n\,\log n)$ operations in~$\L$.
+\end{proposition}
+
+\begin{proof}
+The map $x \mapsto \varphi^{-1} (b \theta(x) + c \theta(Hx) +
+d)$ is contracting for the $H$-adic valuation on~$A/H^{n-1}$,
+and has therefore a unique solution modulo~$H^{n-1}$. Solving for the
+coefficient of~$H^{n-1}$ yields an Artin-Schreier equation if $b$~is
+invertible, and a pseudo-linear equation if $H$~divides~$b$.
+\qed\end{proof}
+
+\begin{proposition}\label{prop:eq-omega}
+For all~$b$, $c$, $d \in A$ and~$r \leq n/2$, the equation
+\begin{equation}
+\varphi(x) \;\equiv\; b\, \omega(x) + c\, \omega(Hx) + d \pmod{H^r}
+\qquad (x \in L/H^{2r})
+\end{equation}
+is solvable using at most~$O(r^2)$ operations in~$\L$.
+\end{proposition}
+
+\begin{proof}
+Let~$m = \min (v_H (b), v_H (c))$. The first~$2m-1$ equations of the
+system are of the form~$x_i^2 = c_i x_0 + d_i x_1 + \dots + c_m
+x_{2(i-m)} + d_m x_{2(i-m)+1}$; since~$i > 2(i-m)+1$, this is triangular
+and has therefore unique solutions~$x_0, \dots, x_{2m-2}$. The equations
+for~$x_{2m-1}$ and~$x_{2m}$ read
+\begin{equation}\label{eq:x2m}\begin{array}{llll}
+x_{2m-1}^2 &= d_{2m-1} &+ c_{2m-1} x_0 + b_{2m-1} x_1 + \dots
+  &+ c_{m} x_{2m-2} + b_{m} x_{2m-1},\\
+x_{2m}^2 &= d_{2m} &+ c_{2m} x_0 + b_{2m} x_1 + \dots
+  &+ c_{m} x_{2m} + b_{m} x_{2m+1}.\\
+\end{array}\end{equation}
+If $b_m \neq 0$, then the first equation is an Artin-Schreier equation
+on~$x_{2m-1}$; else $c_m \neq 0$ and the second equation is an
+Artin-Schreier equation on~$x_{2m}$. All the equations for~$x_{2m+i}$
+with~$i \geq 1$ have the free variable~$x_{2m+2i}$ or~$x_{2m+2i+1}$.
+\qed\end{proof}
+
+
+\begin{proposition}\label{prop:eq-a-theta}
+For any~$a$, $b$, $c$, $d \in A$, the equation
+\begin{equation}\label{eq:a-theta}
+a \varphi(x) = b \theta(x) + c \theta(Hx) + ad
+\end{equation}
+is solvable in~$A$ using no more than~$O(n^2)$ operations in the
+field~$\L$.
+\end{proposition}
+
+\begin{proof}
+Assume that $x$~is a root of~\eqref{eq:a-theta}. Then $y= \varphi^{-1}
+(a^2) x$~is a root of
+\begin{equation}\label{eq:theta-y}
+\varphi(y) = b \theta(y) + c \theta(Hy) + d \pmod{\widehat{a}}.
+\end{equation}
+Conversely, let~$y$~be one of the (at most two) solutions
+of~\eqref{eq:theta-y}, computed in polynomial time with
+Prop.~\ref{prop:contracting}. Since~$v_H (y) \geq 2 v_H(a)$, we may write~$y
+= \varphi^{-1} (a^2) x'$ with~$x' \in A$, which is then a solution
+of~\eqref{eq:a-theta} modulo~$\widehat{a}$. Write~$x = x' +
+\widehat{\varphi^{-1}(a^2)} x''$. Equation~\eqref{eq:theta} is then
+equivalent to an equation of the form~$\varphi(x'') = b \omega(x'') + c
+\omega(H x'') + C \pmod{a}$, which can be solved via
+Prop.~\ref{prop:eq-omega}.
 \end{proof}
+
+\begin{proposition}\label{prop:system-ip1s}
+The system~\eqref{eq:system-ip1s} is solvable in~$A$ using at
+most~$O(n^2)$ operations in the field~$\L$.
+\end{proposition}
+
+\begin{proof}
+By Prop.~\ref{prop:eq-a-theta}, we can find solutions~$x'$ and~$z'$ of
+the first two equations of~\eqref{eq:system-ip1s}, respectively
+modulo~$\widehat{\alpha}$ and modulo~$\widehat{\alpha \gamma}$.
+Write~$x = x' + \varphi^{-1} ( \widehat{ (\alpha \gamma)^2 } ) x''$
+and~$z = z' + \varphi^{-1} ( \widehat{\alpha^2} ) z''$: then, using the
+rules~\eqref{eq:prop-pseudo-inv}, the system~\eqref{eq:system-ip1s} is
+equivalent to the equations on~$(x'', z'')$
+\begin{equation}\label{eq:system1}
+\left\{ \begin{array}{c@{\;\equiv\;}lll}
+\varphi(z'') & \omega(z'') &+ F(z') &\pmod{\alpha}\\
+\varphi(x'') & \beta \, \omega(x'') + \omega(Hx'') &+ F'(x')
+  &\pmod{\alpha\gamma}\\
+0 & \beta\, \omega (z'') + \omega(Hz'') + \omega(x'') &+ F''(z', x'),
+  &\pmod{\alpha}\\
+\end{array}\right.
+\end{equation}
+where the various~$F()$ are constants in~$A$. For any solution~$z''$ of
+the first equation, the remaining equations on~$x''$ are of the form
+\begin{equation}\label{eq:x''}
+\varphi(x'') \equiv \omega(Hx'') + C \pmod{\alpha \gamma}, \qquad
+\omega(x'') \equiv C' \pmod{\alpha},
+\end{equation}
+where both constants~$C, C'$ depend on~$x'$ and~$z$. Write~$x'' = \sum
+x_i H^i$. The second equation determines all coefficients~$x_{2i+1}$,
+while the first one is of the form~$x_i^2 + x_{2i} = C_i$. For~$i = 0$,
+this is an Artin-Schreier equation; for all~$i \geq 1$, this equation
+uniquely determines the value~$x_{2i}$.
+\qed\end{proof}
 
 % \begin{proposition}\label{prop:aut-can}
 % Let~$A$ be a cyclic pencil of quadratic forms and~$\alpha_i$ be its
