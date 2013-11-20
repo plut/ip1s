@@ -99,6 +99,7 @@
 %\newtheorem{lemma}{Lemma}
 
 % Macros Jérôme ---
+\makeatletter
 \def\L{\mathbb{L}}
 \let\s\scriptstyle
 \def\mat#1{\begin{pmatrix}#1\end{pmatrix}}
@@ -110,6 +111,27 @@
 \def\labelenumi{(\roman{enumi})}
 \def\mkenumi#1{\begingroup\setcounter{enumi}{#1}\labelenumi\endgroup}
 \long\def\commentgilles#1{}
+
+
+% Add a dot at end of macro argument
+\def\AddDot#1#2{\AddDot@A#2\end
+  \edef#1{\expandafter\noexpand #2\ifx.\last\else.\fi}}
+\def\AddDot@A#1{\let\car#1\futurelet\cdr \AddDot@B}
+\def\AddDot@B{\ifx\cdr\end\let\last\car\let\next\@gobble
+\else\let\next\AddDot@A\fi \next}
+% Add dot for subsubsubsections
+\let\old@sssection\subsubsection
+\def\subsubsection#1{\AddDot\tmp{#1}\old@sssection{\tmp}}
+
+% Put \qed where it belongs
+\let\old@proof\proof \let\old@eproof\endproof \let\old@qed\qed
+\newif\ifqed
+\def\proof{\qedtrue\old@proof}
+\def\endproof{\ifqed\unskip~\old@qed\fi}
+\def\qed{%
+\ifmmode \ifmeasuring@ \hskip .5\textwidth minus 2\textwidth\fi
+\else \quad\fi\global\qedfalse\old@qed}
+\makeatother
 % ---
 
 \newenvironment{keywords}{
@@ -430,9 +452,11 @@ this we derive the following:
 \begin{split}
 b_{\infty} (x, y) & = b_{\infty} (x,\: u(f) p(f) y + v(f) q(f) y ) \\
 &= b_{\infty} (u(f) p(f) x, y) \,+\, b_{\infty} (x, v(f) q(f) y) \\
-&= 0.\qed
+&= 0.
 \end{split}
 \end{equation}
+\par\vskip-\parskip\vskip-\baselineskip
+\vtop to 0pt{\vskip -2.5ex \hfill \qed \vss}
 \end{proof}
 
 %
@@ -487,7 +511,7 @@ T = \mat{0 & & T_0\\& \iddots &\\T_0 & & 0}.
 \end{equation}
 One can easily verify that $T_0$~is invertible, symmetric
 and~$\transpose{M_0} T_0 = T_0 M_0$, and that the same is true for~$T$
-and~$M$.\qed
+and~$M$.
 % satisfy the relation $\transpose{M}T = TM$ and $T$ is obviously non-singular and symmetric. Therefore the theorem is proven for any companion matrix. The result can easily be generalized when $A$ is in normal form: since $M$ is block-diagonal and each block is the companion matrix of some elementary divisor, $T$ can also be built up as block-diagonal, each block being non-singular symmetric. Then the result can be generalized to all matrices: for any matrix $N$ there exist a matrix $M$ in normal form and a non-singular matrix $P$ such as $N=P^{-1}MP$.  Since we have from previous step: $\transpose{M} = TMT^{-1}$ for some symmetric non-singular matrix $T$, we easily get $\transpose{N}=(\transpose{P}TP)N(\transpose{P}TP)^{-1}$ and $\transpose{P}TP$ is obviously non-singular symmetric.
 % \qed
 \end{proof}
@@ -562,7 +586,7 @@ computations prove~\mkenumi{2}.
 
 The equations~\eqref{eq:congruent-commute} follows directly from the
 equality $\transpose{X} A_{\infty} (\lambda + M ) X \;=\;
-\transpose{X} A_{\infty} X (\lambda + X^{-1} M  X)$.\qed
+\transpose{X} A_{\infty} X (\lambda + X^{-1} M  X)$.
 \end{proof}
 
 We now restrict ourselves to the case where the characteristic
@@ -590,7 +614,7 @@ we deduce that also~$\transpose{X} A_{\infty} = A_{\infty} X$.
 
 The relation~$\transpose{X} A_{\infty} X = B_{\infty}$ may therefore be
 rewritten as~$A_{\infty} X^2 = B_{\infty}$, or~$X^2 = A_{\infty}^{-1}
-B_{\infty}$.\qed
+B_{\infty}$.
 \end{proof}
 
 \begin{theorem}\label{thm:IP1S-odd}
@@ -616,7 +640,7 @@ polynomial $g(M)$; this again requires~$\Otilde{n^3}$ operations.
 To solve the equation~$y^2 = g(M)$ in the ring~$\K[M] = \K[x]/p(x)^e$, we
 first solve it in the (finite) residual field~$\K[x]/p(x)$, with
 complexity~$\Otilde{n^3}$ again; lifting the solution to the ring~$\K[M]$
-requires only~$\Otilde{n^2}$ with Hensel lifting.\qed
+requires only~$\Otilde{n^2}$ with Hensel lifting.
 \end{proof}
 
 Solutions of the IP1S problem are square roots of an element~$C$ of the
@@ -770,7 +794,6 @@ moreover we can choose~$a$ so that~$b_{\infty}(x', f^i y) = 0$ for all~$i
 \allowbreak f^{n-1} y, f^{n-2} y, \dots, \allowbreak fy, y)$ is a symplectic basis
 for~$b_\infty$ on~$W$. By construction, its Lagrangian is~$\K[f] x$,
 which is obviously stable by the characteristic endomorphism~$f$.
-\qed
 \end{proof}
 
 \begin{proposition}\label{prop:bil-can}
@@ -789,7 +812,7 @@ From the equation~\ref{eq:pfaffian}, choose a matrix~$P$ such
 that $M = P^{-1} F P$~is in rational normal form and define~$T$ as in
 Theorem~\ref{transpose-symmetric}. Then the coordinate
 change{\vrule width 0pt height 3.5ex}~$\smat{P & 0 \\ 0 &
-\transpose{P}^{-1}\,T}$ produces the required form.\qed
+\transpose{P}^{-1}\,T}$ produces the required form.
 \end{proof}
 
 % Let~$A$ be a pencil as in~\eqref{eq:bil-can}. The
@@ -829,9 +852,11 @@ X &= G_2^{}(X_1^{-1} X_3^{}) \:\cdot\: G_3^{}(X_1^{})
   \:\cdot\: G_1^{}(X_1^{-1} X_2^{}) \\
   &= G_2^{}(X_2^{-1} X_4^{}) \:\cdot\: G_3^{}(X_2^{})
   \:\cdot\: G_1^{}(X_2^{-1} X_1^{}) \:\cdot\: G_4^{}
-  \qquad \qquad \qed \\
 \end{align*}
+\par\vskip-\parskip\vskip-\baselineskip
+\vtop to 0pt{\vskip -3.6ex \hfill \qed \vss}
 \end{proof}
+
 
 \subsection{Pencils of quadratic forms}
 
@@ -907,7 +932,7 @@ using the symmetry of~$T_0 M_0$ yields
 \mkenumi{3} From direct computation we find that the diagonal blocks
 of~$\transpose{X} D X$ are $B_m = \sum_{i+j=m} \transpose{X_i} D_j X_i$;
 hence~$\Diagm{B_m} = \sum \Diagm{T_0 \psi_0(D_j) X_i^2}$ and~$\psi_0(B_m)
-= \sum \psi_0(D_j)\, \varphi(X_i)$.\qed
+= \sum \psi_0(D_j)\, \varphi(X_i)$.
 \end{proof}
 
 For any binary field~$\K$, we write~$\wp(\K)$ for the set of
@@ -979,7 +1004,7 @@ others~$\alpha_{i}$ are zero.
 
 Finally, note that if~$m \geq d/2$, then~$\alpha_1 = H^m$ is in the image
 of~$\theta$; therefore, a transformation of the form~$G_1^{}(X)$ allows us
-to replace~$\alpha_1$ with~$0$ in this case.\qed
+to replace~$\alpha_1$ with~$0$ in this case.
 \end{proof}
 
 \medbreak
@@ -1007,7 +1032,7 @@ u \alpha'_3 = \alpha_3 + \alpha_4 \varphi(x) + \theta(H\,x),\\ u \alpha_4
 From the second equation, we may assume that~$\alpha_4 = 0$, unless~$v_H
 (\alpha_3) = d/2$ where~$\alpha_4 \in \acco { 0, \delta H^{d/2}}$. In
 this last case however, the first equation allows the change to~$\alpha_3
-= H^{m}$ with~$m \geq d/2+1$.\qed
+= H^{m}$ with~$m \geq d/2+1$.
 \end{proof}
 
 \begin{theorem}\label{th:ip1s}
@@ -1064,7 +1089,7 @@ and the system~\eqref{eq:matrix2} becomes
 &\hphantom{+\,}\gamma \theta(x) + \beta \theta(z) &+\theta(Hz) &=&C''.
 \end{array}\right.\end{equation}
 Proposition~\ref{prop:system-ip1s} explains how to solve such a system
-in~$\L[H]$.\qed
+in~$\L[H]$.
 \end{proof}
 % \begin{proof}
 % \begin{equation}\label{eq:matrix1} \mat{ \alpha_2 &  0 & 1 & 0 &
@@ -1147,7 +1172,7 @@ d)$ is contracting for the $H$-adic valuation on~$A/H^{n-1}$,
 and has therefore a unique solution modulo~$H^{n-1}$. Solving for the
 coefficient of~$H^{n-1}$ yields an Artin-Schreier equation if $b$~is
 invertible, and a pseudo-linear equation if $H$~divides~$b$.
-\qed\end{proof}
+\end{proof}
 
 \begin{proposition}\label{prop:eq-omega}
 For all~$b$, $c$, $d \in A$ and~$r \leq n/2$, the equation
@@ -1174,7 +1199,7 @@ If $b_m \neq 0$, then the first equation is an Artin-Schreier equation
 on~$x_{2m-1}$; else $c_m \neq 0$ and the second equation is an
 Artin-Schreier equation on~$x_{2m}$. All the equations for~$x_{2m+i}$
 with~$i \geq 1$ have the free variable~$x_{2m+2i}$ or~$x_{2m+2i+1}$.
-\qed\end{proof}
+\end{proof}
 
 
 \begin{proposition}\label{prop:eq-a-theta}
@@ -1236,7 +1261,7 @@ x_i H^i$. The second equation determines all coefficients~$x_{2i+1}$,
 while the first one is of the form~$x_i^2 + x_{2i} = C_i$. For~$i = 0$,
 this is an Artin-Schreier equation; for all~$i \geq 1$, this equation
 uniquely determines the value~$x_{2i}$.
-\qed\end{proof}
+\end{proof}
 
 % \begin{proposition}\label{prop:aut-can}
 % Let~$A$ be a cyclic pencil of quadratic forms and~$\alpha_i$ be its
