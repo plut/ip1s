@@ -124,13 +124,33 @@
 \def\subsubsection#1{\AddDot\tmp{#1}\old@sssection{\tmp}}
 
 % Put \qed where it belongs
-\let\old@proof\proof \let\old@eproof\endproof \let\old@qed\qed
+\let\old@proof\proof \let\old@eproof\endproof
 \newif\ifqed
 \def\proof{\qedtrue\old@proof}
-\def\endproof{\ifqed\unskip~\old@qed\fi}
-\def\qed{%
-\ifmmode \ifmeasuring@ \hskip .5\textwidth minus 2\textwidth\fi
-\else \quad\fi\global\qedfalse\old@qed}
+\def\endproof{\ifqed\unskip~\qed\fi}
+\newif\ifqed@math
+\def\endmathdisplay#1{%
+  \ifmmode \else \@badmath \fi
+  \endmathdisplay@a
+  $$%
+  \ifqed@math \vadjust{\vbox to 0pt{\vskip -1.7\baselineskip
+  \llap{\qed\hskip 2.2em \hskip -\hsize}\vss}}\global\qed@mathfalse \fi
+  \global\let\df@label\@empty \global\let\df@tag\@empty
+  \global\tag@false \global\let\alt@tag\@empty
+  \global\@eqnswfalse
+}
+\def\qedhere{\ifmmode\global\qed@mathtrue\else\qed\fi\global\qedfalse}
+
+% \def\qed@eqn{\ifmmode\aftergroup\qed@eqn\else
+%   \vadjust{\vbox to 0pt{\vskip -2.3\baselineskip
+%   \llap{\qed\hskip 2.2em \hskip -\hsize}\vss}}%
+%   \fi}
+% \def\qed@split{\\\ifmeasuring@ \else \noalign{\vskip -2\baselineskip
+%   \llap{ZZ\vbox to 0pt{\vskip .7\baselineskip\hbox{\qed\quad}\vss}%
+%   \hskip -.5\hsize}}\fi}
+% \def\qedhere{%
+%   \ifmmode \ifingather@ \qed@split \else \aftergroup\qed@eqn \fi
+%   \else \qed\fi \global\qedfalse}
 \makeatother
 % ---
 
@@ -193,6 +213,11 @@ We show that the difficulty of the problem is directly linked to the so-called e
 %%GM-1
 %We also introduce an efficient construction of a class of IP1S instances that appear to resist known attacks. These can be conjectured  to represent strong instances and to be suitable for cryptographic applications. We propose challenge parameter values of relatively small size for the restriction of the IP1S authentication scheme proposed by Patarin to this class of instances and encourage cryptanalysts to scrutinize their security.
 \end{abstract}
+
+{\def\thefootnote{}
+\footnotetext[1]{\tiny \textcopyright IACR 2013. This article is a
+revision of the version published by Springer-Verlag, available as part
+of the proceedings of ASIACRYPT 2013.}}
 
 %\begin{keywords}
 %cryptanalysis, authentication schemes, multivariate cryptography, matrix algebra.
@@ -452,11 +477,9 @@ this we derive the following:
 \begin{split}
 b_{\infty} (x, y) & = b_{\infty} (x,\: u(f) p(f) y + v(f) q(f) y ) \\
 &= b_{\infty} (u(f) p(f) x, y) \,+\, b_{\infty} (x, v(f) q(f) y) \\
-&= 0.
+&= 0.\qedhere
 \end{split}
 \end{equation}
-\par\vskip-\parskip\vskip-\baselineskip
-\vtop to 0pt{\vskip -2.5ex \hfill \qed \vss}
 \end{proof}
 
 %
@@ -847,14 +870,13 @@ matrices~$\smat{X_1&X_2\\X_3&X_4}$ such that all~$X_i$ commute with~$M$
 algebra~$\K[M]$), and~$X_1 X_4 + X_2 X_3 = 1$.
 This implies that at least one of~$X_1 X_4$ and~$X_2 X_3$ is invertible;
 depending on this, we may write at least one of the two decompositions:
-\begin{align*} \numberthis
+\begin{equation}\begin{split}
 X &= G_2^{}(X_1^{-1} X_3^{}) \:\cdot\: G_3^{}(X_1^{})
   \:\cdot\: G_1^{}(X_1^{-1} X_2^{}) \\
   &= G_2^{}(X_2^{-1} X_4^{}) \:\cdot\: G_3^{}(X_2^{})
   \:\cdot\: G_1^{}(X_2^{-1} X_1^{}) \:\cdot\: G_4^{}
-\end{align*}
-\par\vskip-\parskip\vskip-\baselineskip
-\vtop to 0pt{\vskip -3.6ex \hfill \qed \vss}
+\qedhere
+\end{split}\end{equation}
 \end{proof}
 
 
@@ -973,12 +995,11 @@ from~\eqref{eq:orthogonal-gen}. Let~$X = x_0 + \dots + x_{d-1} H^{d-1}
 \end{equation}
 The effects of the elementary transformations~$G_i(X)$ on the
 pair~$(\alpha_1, \alpha_2)$ are:
-\begin{align*}\label{eq:Gi-alpha}
+\begin{equation}\begin{split}\label{eq:Gi-alpha}
 G_1^{}(X):&\quad\alpha_{2} \leftarrow \alpha_2 + \varphi(X)\, \alpha_1\,  +
 \theta (X), \quad \alpha_1 \leftarrow \alpha_1;\\
 % &\quad  \alpha_3 \leftarrow \alpha_3 + \varphi(X)\, \alpha_4\,  + \psi(\Delta(TX)),\\
 % & \quad\alpha_2 \leftarrow \alpha_2, \quad\alpha_4 \leftarrow \alpha_4;\\
-\numberthis
 G_2^{}(X):&\quad\alpha_{1} \leftarrow \alpha_1 + \varphi(X)\, \alpha_2\,  +
 \theta (X), \quad \alpha_2 \leftarrow \alpha_2;\\
 % &\quad  \alpha_4 \leftarrow \alpha_4 + \varphi(X)\, \alpha_3\,  + \psi(\Delta(TX)),\\
@@ -989,7 +1010,7 @@ G_3^{}(X):&\quad\alpha_{1} \leftarrow \varphi(X)\, \alpha_1, \quad
 %   \alpha_4 \leftarrow \varphi(X^{-1})\, \alpha_4;\\
 G_4^{}:&\quad\alpha_1 \leftrightarrow \alpha_2.
 % \quad\alpha_3 \leftrightarrow \alpha_4.
-\end{align*}
+\end{split}\end{equation}
 Using transformations~$G_4^{}$ and~$G_3^{}$, we may assume that~$\alpha_1 =
 H^m$ for~$0 \leq m \leq d$ and $\alpha_2$~has valuation~$\geq m$.
 The transformation~$G_2^{}(X)$ then reads as:
