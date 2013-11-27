@@ -247,7 +247,9 @@ The IP1S problem was introduced in \cite{HFE} by Patarin, who proposed in the sa
 zero-knowledge %end
 proof for Graph Isomorphism by Goldreich et al. \cite{Goldreich2001}. It can be converted into a (less practical) asymmetric signature scheme using the Fiat-Shamir transformation. The IP1S problem and the related identification scheme possess several attractive features: 
 \begin{itemize}
-\item{the IP1S problem can be reasonably conjectured not to be solvable in polynomial time: it has been shown  in \cite{DBLP:conf/eurocrypt/PatarinGC98} that the quadratic version of IP1S (QIP1S for short) is at least as hard as the Graph Isomorphism problem (GI)\footnote{However we recently discovered a mistake in the corresponding proof in  \cite{DBLP:conf/eurocrypt/PatarinGC98}, that let us think that quadratic IP1S is not indeed as hard as GI. More precisely quadratic IP1S should be solvable in polynomial time.}, one of the most extensively studied problems in complexity theory. While the GI problem is not believed to be NP-complete since it is NP and co-NP and hard instances of GI are difficult to construct for small parameter values, GI is generally believed not to be solvable in polynomial time. }
+\item{the IP1S problem can be reasonably conjectured not to be solvable
+in polynomial time: it has been shown  in
+\cite{DBLP:conf/eurocrypt/PatarinGC98} that the quadratic version of IP1S (QIP1S for short) is at least as hard as the Graph Isomorphism problem (GI)\footnote{However we recently discovered a mistake in the corresponding proof in  \cite{DBLP:conf/eurocrypt/PatarinGC98}, that makes us think that quadratic IP1S is not indeed as hard as GI. More precisely quadratic IP1S should be solvable in polynomial time.}, one of the most extensively studied problems in complexity theory. While the GI problem is not believed to be NP-complete since it is NP and co-NP and hard instances of GI are difficult to construct for small parameter values, GI is generally believed not to be solvable in polynomial time. }
 \item{unlike the encryption or signature schemes based on IP2S mentioned above, the IP1S scheme does not use special trapdoor instances of the IP1S problem and therefore its security is directly related to the intractability of general IP1S instances.} 
 \end{itemize}
 The IP1S problem also has some loose connections with the multivariate signature scheme UOV~\cite{DBLP:conf/eurocrypt/KipnisPG99}, that has until now remarkably well survived all advances in the cryptanalysis of multivariate schemes. While in UOV the public quadratic function $b$ is related to the secret quadratic function by the equation $b = a \circ S$, both $a$ and $S$ are unknown whereas only $S$ is unknown in the IP1S problem.  % \\
@@ -259,7 +261,7 @@ Initial assessments of the security of practical instances of the IP1S problem s
 Significant advances on solving IP1S instances that are practically relevant for cryptography were made quite recently \cite{DBLP:conf/pkc/BouillaguetFFP11,bouillaguet2011thesis}. Dubois in \cite{DBLP:conf/pkc/DuboisK11} and the authors of \cite{DBLP:conf/pkc/BouillaguetFFP11} were the first to notice that the IP1S problem induces numerous 
 linear equations %GM-1 : à reprendre...
 %\footnote{These equations are easy to derive by considering symmetric matrices $\Polm{A}_i$  and $\Polm{B}_i$ of the polar forms $\Pol(a_i)$, resp. $\Pol(b_i)$, that are related -- as shown in the next section -- by the equations $\Polm{B}_i = \transpose{S}\Polm{A}_iS$ or equivalently by the $mn^2$ linear relations $T \Polm{B}_i =  \Polm{A}_i S$.} 
-in the coefficients of the  matrix of S and of the inverse mapping $T = S^{-1}$. 
+in the coefficients of the  matrix of $S$ and of the inverse mapping $T = S^{-1}$. 
  When $m \geq 3$, the number $mn^2$ of obtained linear equations is substantially larger than the number $2n^2$ of variables. While the system cannot have full rank since the dimension of the vector space of solutions is at least 1, it can heuristically be expected to have a very small vector space of solutions that can be tried exhaustively. The authors of \cite{DBLP:conf/pkc/BouillaguetFFP11} even state that they ``empirically find one solution (when the polynomials are randomly chosen)''. 
  
 Therefore the most interesting remaining case appears to be $m=2$.
@@ -370,7 +372,7 @@ $ \Polm{B_i}= \transpose{X} \Polm{A_i} X$;
 $ \Diagm{B_i} = \Diagm{\transpose{X} A_i X}.$
 
 \end{itemize}
-In the following sections we will consider IP1S instances such that $m = 2$,  that are believed to represent the most ``interesting''  instances of IP1S as reminded above.  Matrix pencils, that can be viewed as $n \times n$ matrices whose coefficients are polynomials of degree 1 of $\K[\lambda]$ represent a convenient way to capture the above equations in a more compact way. If we denote by $A$ and $B$ the matrix pencils $\lambda A_0+ A_1$ and $\lambda B_0+ B_1$, and by extension $\Polm{A}$ and  $\Polm{B}$ the symmetric matrix pencils $\lambda \Polm{A}_0+ \Polm{A}_1$ and $\lambda \Polm{B}_0+ \Polm{B}_1$, the two polar equations can be written in one equation: $\Polm{B} =  \transpose{X} \Polm{A} X.$
+In the following sections we will consider IP1S instances such that $m = 2$,  that are believed to represent the most ``interesting''  instances of IP1S as reminded above.  Matrix pencils, that can be viewed as $n \times n$ matrices whose coefficients are polynomials of degree 1 of $\K[\lambda]$ represent a convenient way to capture the above equations in a more compact way. If we denote by $A$ and $B$ the matrix pencils $\lambda A_{\infty}+ A_0$ and $\lambda B_{\infty}+ B_0$, and by extension $\Polm{A}$ and  $\Polm{B}$ the symmetric matrix pencils $\lambda \Polm{A}_{\infty}+ \Polm{A}_0$ and $\lambda \Polm{B}_{\infty}+ \Polm{B}_0$, the two polar equations can be written in one equation: $\Polm{B} =  \transpose{X} \Polm{A} X.$
 However, as detailed in the next section, the theory of pencils is far more powerful than just a convenient notation for pairs of matrices. See for instance \cite{DBLP:conf/asiacrypt/BouillaguetFM11}.
 
 \subsection{Mathematical background}
@@ -691,7 +693,7 @@ Intuitively, when $c$ grows from $n$ to $n^2$, the number of solutions grows acc
 }
 
 
-\subsubsection{Summary and Computer experiments.}
+\subsubsection{Summary and Computer Experiments.}
 The case where all the elementary divisors of $\Polm{A}$ are pairwise co-prime -- or equivalently where $M$ is cyclic -- represents 
 in practice a quite large
 fraction of random cases (see for instance~\cite{MR1356142}). In this case, %hg2
@@ -964,6 +966,7 @@ of squares. We fix an element~$\delta$ of~$\L \smallsetminus \wp(\L)$.
 
 \begin{proposition}\label{prop:quad-can}
 Any regular pencil of quadratic forms is congruent to a pencil of the
+form
 \begin{equation}\label{eq:quad-can}
 \def\arraystretch{.7}
 A_\infty = \mat{A_1 & T \\ 0 & A_2}, \quad
