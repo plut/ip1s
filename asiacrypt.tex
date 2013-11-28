@@ -2,9 +2,11 @@
 \documentclass{beamer}%<<<
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
+\usepackage{booktabs}
+\usepackage{colortbl}
+\usepackage{dcolumn}
 \usepackage{math}
 \usepackage{unicode}
-\usepackage{booktabs}
 \usetheme{CambridgeUS}
 \useinnertheme{rectangles}
 
@@ -27,6 +29,19 @@
 \setbeamertemplate{blocks}[default]
 \setbeamertemplate{title page}[default][rounded=false,shadow=false]%>>>
 \makeatletter
+% Playing with colortbl
+\let\orig@CT@setup\CT@setup
+\let\CT@tablecolor\@empty
+\let\CT@tablefg\@empty
+\let\CT@rowfg\@empty
+\def\tablecolor#1{\def\CT@tablecolor{#1}}
+\def\tablefg#1{\def\CT@rowfg{#1}}
+\def\rowfg#1{\gdef\CT@rowfg{#1}}
+\def\CT@setup{\orig@CT@setup
+  \ifx\CT@tablecolor\@empty\else\CT@color{\CT@tablecolor}\fi
+  \ifx\CT@tablefg\@empty\else\color{\CT@tablefg}\fi
+  \ifx\CT@rowfg\@empty\else\color{\CT@rowfg}\fi
+}
 \setbeamertemplate{headline}{\leavevmode\hbox{%%<<<
   \begin{beamercolorbox}[wd=.5\paperwidth,ht=2.25ex,dp=1ex,center]
   {title in head/foot}%
@@ -65,22 +80,32 @@
 \def\strong#1{{\bf\color{rouge}#1}}
 \def\mat#1{\begin{pmatrix}#1\end{pmatrix}}
 \let\mathrm\mathsf
+\def\bigstrut{\leavevmode \vrule width 0pt height \baselineskip depth
+.5\baselineskip}
 %>>>
 
 \begin{document}
-\title[New insights into IP1S]%<<<
-  {New insights into the Isomorphism of Polynomials problem IP1S and
+\title[New insight into IP1S]%<<<
+  {New insight into the Isomorphism of Polynomials problem IP1S and
   its use in cryptography}
-\author{G. Macario-Rat\inst{2}, \underline{J. Plût}\inst{1}, H. Gilbert}
-\date{XXX date}
+\author{G. Macario-Rat\inst{1}, \underline{J. Plût}\inst{2}, H.
+Gilbert\inst{3}}
+\date{2013-12-02}
 \institute[]{%
-\inst{1}ANSSI,
-51 Boulevard de la Tour-Maubourg, 75007 Paris, France \and
-\inst{2}Orange Labs,
-38--40, rue du Général Leclerc, 92794 Issy-les-Moulineaux Cedex 9, France}%
-\titlegraphic{\includegraphics[width=10ex]{anssi-macaron}
+\inst{1}Orange Labs, \url{gilles.macario-rat@orange.fr}
+% 38--40, rue du Général Leclerc, 92794 Issy-les-Moulineaux Cedex 9, France
+\and
+\inst{2}ANSSI, \url{jerome.plut@ssi.gouv.fr}
+% 51 Boulevard de la Tour-Maubourg, 75007 Paris, France \and
+\and
+\inst{3}ANSSI, \url{henri.gilbert@ssi.gouv.fr}
+}%
+\titlegraphic{\leavevmode
 % Ratio of π/4 to have the same area
-\hfil \raise 1.07ex\hbox{\includegraphics[width=7.85ex]{orange}}}
+\raise 1.07ex\hbox{\includegraphics[width=7.85ex]{orange-logo}}
+\hfil
+\includegraphics[width=10ex]{anssi-macaron}
+}
 
 \begin{frame}
 \titlepage
@@ -88,9 +113,12 @@
 \section{Introduction}
 \begin{frame}\frametitle{Isomorphism of polynomials with one secret} %<<<
 
+We consider a field~$K$ and the algebra~$K[x_1,…,x_n]$ of polynomials in
+$n$~variables.
+
 \begin{definition}[Isomorphic polynomials]
-Two families of polynomials~$(a_1, …, a_m)$ and~$(b_1, …, b_m)$ in the
-variables~$(x_1, …, x_n)$ are \emph{isomorphic} if they are related by a
+Two families of polynomials~$(a_1, …, a_m)$ and~$(b_1, …, b_m)$
+are \emph{isomorphic} if they are related by a
 bijective linear transformation~$g$ of the variables~$(x_1, …, x_n)$:
 \[ a_i (x_1, …, x_n) = b_i (g_1 (x_1, …, x_n), …, g_n (x_1, …, x_n)). \]
 \end{definition}
@@ -110,15 +138,30 @@ advance to be isomorphic, compute an isomorphism~$g$.
 \end{description}
 \end{df}
 
-Parameters of the problem:
+\bigskip
+Other common related problems:
+\begin{itemize}
+\item[MQ] Find a common root to a family of multivariate quadratic
+equations.
+\item[IP2S] Identify a linear combination of the $a_i$ with the~$b_i$.
+\end{itemize}
+\end{frame}%>>>
+\begin{frame}\frametitle{Parameters of the IP1S problem}%<<<
 
-\medbreak\hfil\begin{tabular}{cll}\toprule \color{rouge}$m$ & Number of
+\hfil\begin{tabular}{cll}\toprule \color{rouge}$m$ & Number of
 polynomials & (1 or 2)\\ \color{rouge}$n$ & Number of variables &
 (large)\\ \color{rouge}$d$ & Degree of the polynomials & (2 or 3)\\
 \color{rouge}$K$ & Base field\\\bottomrule
 \end{tabular}
-\medbreak
 
+\bigskip
+\begin{itemize}
+\item The IP1S problem is easier (overdetermined) with more polynomials.
+\item Key size depends on the number of polynomials and on their degree.
+\item The complexity of attacks depends on the number of variables.
+\end{itemize}
+
+\bigskip
 This work focuses on the case of \strong{two homogeneous quadratic
 polynomials} over a finite field \strong{of any characteristic}.
 \end{frame}%>>>
@@ -250,8 +293,9 @@ where $a_{∞}$, $b_{∞}$ and~$a_{∞} m$, $b_{∞} m$ are symmetric.
 \begin{frame}\frametitle{Equivalence of cyclic bilinear pencils}%<<<
 The pencil~$(a_{λ})$~is \emph{cyclic} if the characteristic
 endomorphism~$m_{a}$~is cyclic (its characteristic polynomial is equal to
-its minimal polynomial). In this case:
+its minimal polynomial).
 \begin{itemize}
+\item Random instances of IP1S are generally cyclic.
 \item The commuting space of~$m_{a}$~is reduced to the ring of
 polynomials~$K[m_a]$.
 \item The fact that $a_{∞}\, m = \transpose{m}\, a_{∞}$ means that, for
@@ -263,7 +307,6 @@ a_{∞}\, s^2 = b_{∞}, \qquad \text{or}\qquad s^2 = a_{∞}^{-1}\, b_{∞},
 \quad s ∈ K[m].
 \end{equation*}
 \item When $K$~is a finite field, this is easy to solve.
-\item Random instances of IP1S are generally cyclic.
 \end{itemize}
 \end{frame}%>>>
 \begin{frame}\frametitle{Cyclic IP1S when~$2 ≠ 0$}%<<<
@@ -284,6 +327,40 @@ b_{∞}^{-1}$ in~$K[m]$.
 \end{itemize}
 Moreover, we know the exact number of solutions to the IP1S problem.
 \end{frame}%>>>
+\begin{frame}\frametitle{Computer experiments for random instances}%<<<
+
+\def\arraystretch{1.2}\tablecolor{bleu!20}
+\def\w{\color{white}}\def\.{\hphantom{.}}\def\0{\hphantom{0}}
+\hfil\begin{tabular}{rrrr}
+\rowcolor{bleu} \w $q$ & \w $n$ & \w $t$ (s) & \w \% cyclic\\
+3 & 80 & 5 & 87\\
+3 & 128 & 34 & 88\\
+$3^{10}$ & 32 & 15 & 100\\
+\end{tabular}\hfil
+%
+\begin{tabular}{rrrr}
+\rowcolor{bleu} \w $q$ & \w $n$ & \w $t$ (s) & \w \% cyclic\\
+5 & 20 & 0.07 & 95\\
+5 & 32 & 0.28& 95\\
+5 & 80 & 7\.\0\0& 95\\
+\end{tabular}
+
+\bigskip
+\tablecolor{bleu!20}
+\hskip 0pt plus 2fil\begin{tabular}{rrrr}
+\rowcolor{bleu} \w $q$ & \w $n$ & \w $t$ (s) & \w \% cyclic\\
+$7^6$ & 32 & 11\.\0\0 & 100\\
+65537 & 8 & 0.04 & 100\\
+65537 & 20 & 1\.\0\0 & 100\\
+% &  &  & \\
+\end{tabular}
+\bigskip
+
+\begin{itemize}
+\item Opteron 850 2.2 GHz, 32 GB RAM.
+\item MAGMA version 2.13-15.
+\end{itemize}
+\end{frame}%>>>
 \section{IP1S in characteristic two}
 \begin{frame}\frametitle{Quadratic forms in characteristic two}%<<<
 \begin{itemize}
@@ -296,10 +373,16 @@ Moreover, we know the exact number of solutions to the IP1S problem.
 \quad⊕\quad {\text{(sum of squares)}}.
 \end{equation*}
 We can solve IP1S separately for both parts.
-\item Regular quadratic forms are classified by their Arf invariant. For
-example, all regular quadratic forms in dimension~$2$ are equivalent to
+\item The analogue of the group of squares in~$K^{×}$ is the additive
+subgroup (of index two)~
+\begin{equation*}℘(K) = \acco {λ^2 + λ,\; λ ∈ K}.
+\end{equation*}
+
+{\spaceskip .31ex plus 1fil
+For example, all regular quadratic forms in dimension~$2$ are equivalent
+to}
 \begin{equation*}
-x^2+xy+α\,y^2 \qquad \text{for $α ∈ K / \{ λ^2 + λ, λ ∈ K \}$}.
+x^2+xy+α\,y^2 \qquad \text{for $α ∈ K / ℘(K)$.}
 \end{equation*}
 \end{itemize}
 \end{frame}%>>>
@@ -379,17 +462,24 @@ where $φ$~is the Frobenius map on~$K[M]$: $φ(∑ x_i M^i) = ∑ x_i^2 M^i$.
 \end{block}
 \end{frame}%>>>
 \begin{frame}\frametitle{Local equations for IP1S in $K[M]$}%<<<
-An orthogonal map~$G_2(x)\,G_3(u)\, G_1(y)$ is a solution of the IP1S
-problem iff we can solve in $K[M]$ a system of equations of the form
-\begin{equation*}
+Let~$s = G_2(x)\,G_3(u)\,G_1(y)$ be an orthogonal map. The action of~$s$
+on the diagonal coefficients is described by \strong{four semi-linear
+equations} equations on~$x$, $y$, $u$ in the algebra~$K[M]$.
+
+\medbreak
+We can eliminate~$u$ and perform a linear change of variables to reduce
+IP1S to a system of the form\abovedisplayskip 1ex
+\begin{equation*}\belowdisplayskip 1ex
 \left\{\begin{array}{lllcl}
-\alpha \varphi(z) & +\, \hphantom{\beta} \theta(z) &&=&C,\\
-\alpha \gamma \varphi(x) & +\,\beta \theta(x) &+\theta(Hx) &=&C',\\
-&\hphantom{+\,}\gamma \theta(x) + \beta \theta(z) &+\theta(Hz) &=&C''.
+{\color{rouge}\alpha} \varphi(z) & +\, \hphantom{\beta} \theta(z)
+  &&=&C,\\
+{\color{rouge}\alpha \gamma} \varphi(x) & +\,\beta \theta(x) &+\theta(Mx)
+  &=&C',\\
+&\hphantom{+\,}\gamma \theta(x) + \beta \theta(z) &+\theta(Mz) &=&C''.
 \end{array}\right.\end{equation*}
 We note that
 \begin{itemize}
-\item $φ$~preserves the valuation on~$K[M]$;
+\item $φ$~is bijective and preserves the valuation on~$K[M]$;
 \item $θ$~is a contracting map (modulo $M^{d-1}$).
 \end{itemize}
 
@@ -404,7 +494,7 @@ M^{e} φ(x) = a\, θ(x) + b
 \end{equation*}
 to prove the following result:
 \begin{block}{Proposition}
-The local equations may be solved using no more than~$O(d^2)$
+The local equations for IP1S may be solved using no more than~$O(d^2)$
 operations in the field~$K$.
 \end{block}
 
@@ -424,4 +514,45 @@ O(n^3)$ operations in~$K$.
 \end{itemize}
 Moreover, we can count the solutions to the IP1S problem.
 \end{frame}%>>>
+\begin{frame}\frametitle{Computer experiments for random instances}%<<<
+\def\arraystretch{1.2}\tablecolor{bleu!20}
+\def\w{\color{white}}\def\.{\hphantom{.}}\def\0{\hphantom{0}}
+\hfil\hfil\begin{tabular}{rrrr}
+\rowcolor{bleu} \w $q$ & \w $n$ & \w $t$ (s) & \w \% cyclic\\
+2 & 32 & 0.07 & 96\\
+2 & 128 & 2\.\0\0 & 95\\
+2 & 256 & 33\.\0\0 & 94\\
+$2^4$ & 32 & 0.3\0 & 100\\
+$2^7$ & 32 & 0.5\0 & 100\\
+\end{tabular}
+\bigskip
+
+In most cases, the determinant~$α_1 α_4 + α_2 α_3$ is invertible
+in~$K[M]$, so that the quadratic convergence of the fixed point theorem
+allows us to solve the local equations in~$O(d\,\log d)$.
+\end{frame}%>>>
+\section{Conclusion}
+\begin{frame}\frametitle{Conclusion and future work}%<<<
+Cyclic case:
+\begin{itemize}
+\item Proof of polynomiality of IP1S in all characteristics.
+\item Uses classification of quadratic forms.
+\item Complexity dominated by linear algebra.
+\end{itemize}
+
+\bigskip
+Non-cyclic case:
+\begin{itemize}
+\item The commutant of the characteristic endomorphism is harder to
+manipulate.
+\item The IP1S problem has more solutions than in the cyclic case.
+\begin{itemize}
+\item For example: in the extremely non-cyclic case where $b_{0} = 0$,
+the solutions are parametered by the full orthogonal group of~$b_{∞}$.
+\item Giving a parametrization of the space of solutions would help
+solving the problem for more than two polynomials.
+\end{itemize}
+\end{itemize}
+\end{frame}%>>>
+
 \end{document}

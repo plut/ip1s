@@ -1705,51 +1705,52 @@ It is most likely that the polar equations behave as in the odd characteristic c
 %hg5 \subsubsection{Generic problem.}
 }
 
-\subsubsection{IP1S problem for $a$ and $b$: Summary and Computer Experiments.}%end
-
-\commentgilles{
-Finally, as for the odd case, %hg5 the solution of a generic problem can be easily derived from all its sub-problems,
-if an efficient solving method is available for each sub-system -- as was shown to be the case if each sub-system is associated with one single elementary divisor, i.e. $M$ is cyclic (see Fig.~\ref{fig:solutionIP1Seven} in Appendix~\ref{app:figs})-- then solutions of IP1S problem for $a$ and $b$ can be easily derived  thanks to the congruence matrices $Q_a$ and $Q_b$ and Lemma~\ref{lemma:equivIP1S}. We give in Appendix~\ref{app:scripts} the description of the complete algorithm enabling to reconstruct a complete solution from the set of solutions of each sub-system, agreed of course % hg5 they are all cyclic. 
-$M$ is cyclic. %end
-}
-Next table gives timings of our \Magma{} script "SolveCyclicEvenIP1S", %hg5
-with %end
- the same convention as for the odd case %hg5.
-: $\tau$ represents the observed fraction of cyclic cases and $t$ the average computing time over these cases. 
-%
-%Therefore, if all sub-systems have only one elementary divisor, the total number of solutions is $2^d$ where $d$ is the number of independent sub-systems.
-
-\begin{center}
-%\begin{table}%
-\begin{tabular}{||c|c|r|r||}
-\hline
-$q$ & $n$ & $t$ & $\tau$\\
-\hline
-\hline
-2 & 32 & 0.07s. & 96.\\
-2 & 128 & 2.s. & 95.\\
-2 & 256 & 33.s. & 94.\\
-\hline
-$2^4$ & 32 & 0.3s. & 100.\\
-\hline
-$2^7$ & 32 & 0.5s. & 100.\\
-\hline
-\end{tabular}
-\begin{tabular}{||c|c|r|r||}
-\hline
-$q$ & $n$ & $t$ & $\tau$\\
-\hline
-\hline
-$2^8$ & 20 & 0.2s. & 100.\\
-$2^8$ & 32 & 0.6s. & 100.\\
-$2^8$ & 80 & 20.s. & 100.\\
-$2^8$ & 128 & 133.s & 100.\\
-\hline
-\end{tabular}
-%\caption{}
-%\label{}
-%\end{table}
-\end{center}
+% % Supprimé après discussion pour eprint - Jérôme
+% \subsubsection{IP1S problem for $a$ and $b$: Summary and Computer Experiments.}%end
+% 
+% \commentgilles{
+% Finally, as for the odd case, %hg5 the solution of a generic problem can be easily derived from all its sub-problems,
+% if an efficient solving method is available for each sub-system -- as was shown to be the case if each sub-system is associated with one single elementary divisor, i.e. $M$ is cyclic (see Fig.~\ref{fig:solutionIP1Seven} in Appendix~\ref{app:figs})-- then solutions of IP1S problem for $a$ and $b$ can be easily derived  thanks to the congruence matrices $Q_a$ and $Q_b$ and Lemma~\ref{lemma:equivIP1S}. We give in Appendix~\ref{app:scripts} the description of the complete algorithm enabling to reconstruct a complete solution from the set of solutions of each sub-system, agreed of course % hg5 they are all cyclic. 
+% $M$ is cyclic. %end
+% }
+% Next table gives timings of our \Magma{} script "SolveCyclicEvenIP1S", %hg5
+% with %end
+%  the same convention as for the odd case %hg5.
+% : $\tau$ represents the observed fraction of cyclic cases and $t$ the average computing time over these cases. 
+% %
+% %Therefore, if all sub-systems have only one elementary divisor, the total number of solutions is $2^d$ where $d$ is the number of independent sub-systems.
+% 
+% \begin{center}
+% %\begin{table}%
+% \begin{tabular}{||c|c|r|r||}
+% \hline
+% $q$ & $n$ & $t$ & $\tau$\\
+% \hline
+% \hline
+% 2 & 32 & 0.07s. & 96.\\
+% 2 & 128 & 2.s. & 95.\\
+% 2 & 256 & 33.s. & 94.\\
+% \hline
+% $2^4$ & 32 & 0.3s. & 100.\\
+% \hline
+% $2^7$ & 32 & 0.5s. & 100.\\
+% \hline
+% \end{tabular}
+% \begin{tabular}{||c|c|r|r||}
+% \hline
+% $q$ & $n$ & $t$ & $\tau$\\
+% \hline
+% \hline
+% $2^8$ & 20 & 0.2s. & 100.\\
+% $2^8$ & 32 & 0.6s. & 100.\\
+% $2^8$ & 80 & 20.s. & 100.\\
+% $2^8$ & 128 & 133.s & 100.\\
+% \hline
+% \end{tabular}
+% %\caption{}
+% %\label{}
+% %\end{table}
+% \end{center}
 
 \section{Conclusion and future work}
 We have shown that special instances of the quadratic homogeneous IP1S problem with $m=2$ equations can be solved in polynomial time. These instances are those where the characteristic endomorphism of the pencil (or its Pfaffian) is cyclic, and represent in practice a large fraction of generic instances. We have since also studied the case where the characteristic endomorphism is no longer cyclic and found similar results to be published. We also believe that the results may be extended to IP1S problem with more than 2 equations, thus proving that the original (quadratic) IP1S problem is solvable in polynomial time.
