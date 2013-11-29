@@ -1,4 +1,3 @@
-
 \documentclass{beamer}%<<<
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
@@ -9,7 +8,6 @@
 \usepackage{unicode}
 \usetheme{CambridgeUS}
 \useinnertheme{rectangles}
-
 
 \usenavigationsymbolstemplate{}%<<<
 \definecolor{bleu}{rgb}{.1,.4,.6}%1a6699
@@ -78,6 +76,7 @@
 % Misc
 \def\transpose{{}^{\mathrm{\scriptscriptstyle t}}\!}
 \def\strong#1{{\bf\color{rouge}#1}}
+\def\emphz#1{\emph{{\color{bleu}#1}}}
 \def\mat#1{\begin{pmatrix}#1\end{pmatrix}}
 \let\mathrm\mathsf
 \def\bigstrut{\leavevmode \vrule width 0pt height \baselineskip depth
@@ -118,23 +117,23 @@ $n$~variables.
 
 \begin{definition}[Isomorphic polynomials]
 Two families of polynomials~$(a_1, …, a_m)$ and~$(b_1, …, b_m)$
-are \emph{isomorphic} if they are related by a
-bijective linear transformation~$g$ of the variables~$(x_1, …, x_n)$:
-\[ a_i (x_1, …, x_n) = b_i (g_1 (x_1, …, x_n), …, g_n (x_1, …, x_n)). \]
+are \emphz{isomorphic} if they are related by a
+bijective linear transformation~$s$ of the variables~$(x_1, …, x_n)$:
+\[ a_i (x_1, …, x_n) = b_i (s_1 (x_1, …, x_n), …, s_n (x_1, …, x_n)). \]
 \end{definition}
 
-In cryptographical applications (e.g. the identification protocol of
-[Patarin~1996]: the families~$a$ and~$b$ are public and the
-transformation~$s$ is the secret.
+In cryptographical applications,the families~$a$ and~$b$ are public and the
+transformation~$s$ is the secret (e.g. the identification protocol of
+[Patarin~1996]).
 \end{frame}%>>>
 \begin{frame}\frametitle{The IP1S problem}%<<<
 
-\begin{df}[Identity of polynomials with one secret]
+\begin{df}[Isomorphism of polynomials with one secret]
 Given two families of polynomials~$(a_i)$ and~$(b_i)$:
 \begin{description}[labelwidth=1ex,align=parleft]
 \item[Decisional IP1S] Determine if they are isomorphic.
 \item[\textbf{Computational IP1S}] If the polynomials are known in
-advance to be isomorphic, compute an isomorphism~$g$.
+advance to be isomorphic, compute an isomorphism~$s$.
 \end{description}
 \end{df}
 
@@ -142,8 +141,9 @@ advance to be isomorphic, compute an isomorphism~$g$.
 Other common related problems:
 \begin{itemize}
 \item[MQ] Find a common root to a family of multivariate quadratic
-equations.
-\item[IP2S] Identify a linear combination of the $a_i$ with the~$b_i$.
+equations (NP-complete).
+\item[IP2S] Allow a linear combination of the polynomials: $t ∘ a ∘ s =
+b$.
 \end{itemize}
 \end{frame}%>>>
 \begin{frame}\frametitle{Parameters of the IP1S problem}%<<<
@@ -156,7 +156,7 @@ polynomials & (1 or 2)\\ \color{rouge}$n$ & Number of variables &
 
 \bigskip
 \begin{itemize}
-\item The IP1S problem is easier (overdetermined) with more polynomials.
+\item The IP1S problem is easier (overdetermined) with more than 2 polynomials.
 \item Key size depends on the number of polynomials and on their degree.
 \item The complexity of attacks depends on the number of variables.
 \end{itemize}
@@ -176,13 +176,25 @@ polynomials} over a finite field \strong{of any characteristic}.
 % \end{frame}%>>>
 \begin{frame}\frametitle{Previous algorithms}%<<<
 \begin{itemize}
-\item{} [Levy-dit-Vehel, Perret 2004]: find algebraic equations satisfied
-by the entries of a solution matrix, and solve these equations using a
-Gröbner basis computation.
+% \item{} [Levy-dit-Vehel, Perret 2004]: find algebraic equations satisfied
+% by the entries of a solution matrix, and solve these equations using a
+% Gröbner basis computation.
 \item{} [Bouillaguet, Faugère, Fouque, Perret 2011]: transform the
-problem to an overdetermined system of quadratic and linear equations,
-then solve this system by a Gröbner basis computation.
-\bigbreak
+problem to an overdetermined system of quadratic and linear equations.
+\begin{itemize}
+\item Solve experimentally the systems with Gröbner bases in time
+$\widetilde O(n^6)$.
+\item Solved all the quadratic IP1S challenges from [Patarin~1996]
+
+\def\arraystretch{1.2}\tablecolor{bleu!20}
+\def\w{\color{white}}\def\.{\hphantom{.}}\def\0{\hphantom{0}}
+\hfil\begin{tabular}{rr}
+\rowcolor{bleu}\w $q$ & \w $n$\\
+2 & 16\\
+$2^4$ & 6\\
+2 & 32\\
+\end{tabular}
+\end{itemize}
 \item This work: use structure theorems on (pairs of) quadratic forms to
 reduce them to canonical forms.
 
@@ -214,14 +226,14 @@ reduce them to canonical forms.
 \begin{frame}\frametitle{Quadratic IP1S for~$m = 1$}%<<<
 What about IP1S for \strong{one} polynomial?
 \begin{itemize}
-\item The case~$m = 1$ corresponds to equivalence of quadratic forms of~$n$
+\item The case~$m = 1$ corresponds to isomorphism of quadratic forms of~$n$
 variables.
-\item To a quadratic form~$q$ we associate the \emph{polar form}~$b$
+\item To a quadratic form~$q$ we associate the \emphz{polar form}~$b$
 defined by
 \begin{equation*}
 b(x,y) = q(x+y) - q(x) - q(y).
 \end{equation*}
-\item This is a symmetric bilinear form. It satisfies the \emph{polarity
+\item This is a symmetric bilinear form. It satisfies the \emphz{polarity
 identity}
 \begin{equation*}
 2\,q(x) = b(x,x).
@@ -245,14 +257,15 @@ their Gauß reduction.
 \begin{frame}\frametitle{Regularity of bilinear pencils}%<<<
 What about IP1S for \strong{two} polynomials?
 \begin{itemize}
-\item A \emph{bilinear pencil} is an affine line in the space of bilinear
+\item A \emphz{bilinear pencil} is an affine line in the space of bilinear
 forms:
 \begin{equation*}
 λ ↦  b_{λ} = b_{0} + λ b_{∞}
 \end{equation*}
 defined by two bilinear forms $b_{∞}, b_{0}$. It is called
 \begin{description}
-\item[degenerate] if $\det b_{λ} = 0$ for all~$λ$, \item[regular] if
+\item[\emphz{degenerate}] if $\det b_{λ} = 0$ for all~$λ$,
+\item[\emphz{regular}] if
 $b_{∞}$~is regular (= invertible).
 \end{description}
 \item Any pencil is a direct sum
@@ -265,10 +278,10 @@ replacing~$b_{∞}$ by $b_{λ}$ where~$\det b_{λ} ≠ 0$, we may assume that
 it is regular.\\(this may require a (small) extension of scalars).
 \end{itemize}
 \end{frame}%>>>
-\begin{frame}\frametitle{Equivalence of regular bilinear pencils}%<<<
+\begin{frame}\frametitle{Isomorphism of regular bilinear pencils}%<<<
 \begin{itemize}
 \item If $(b_{λ})$~is a regular pencil, then $m_{b} = b_{∞}^{-1} b_0$~is
-an endomorphism of~$K^n$, which we call the \emph{characteristic
+an endomorphism of~$K^n$, which we call the \emphz{characteristic
 automorphism} of~$b$. We may then write
 \begin{equation*}
 b_{λ} = b_{∞} (λ + m_{b}).
@@ -282,16 +295,16 @@ s^{-1} · m_{a} · s = m_{b}.
 \end{equation*}
 \item If $(a_{λ})$ and~$(b_{λ})$ are isomorphic, then $m_{a}$ and~$m_{b}$
 are similar, and we may assume that they are equal.
-\item The equivalence problem becomes:
+\item The IP1S problem becomes:
 \begin{equation*}
 \transpose{s} · a_{∞} · s = b_{∞} \qquad\text{and}\qquad
 \text{$s$~commutes with~$m$.}
 \end{equation*}
-where $a_{∞}$, $b_{∞}$ and~$a_{∞} m$, $b_{∞} m$ are symmetric.
+where $a_{∞}$, $b_{∞}$ and~$a_0 = a_{∞} m$, $b_0 = b_{∞} m$ are symmetric.
 \end{itemize}
 \end{frame}%>>>
-\begin{frame}\frametitle{Equivalence of cyclic bilinear pencils}%<<<
-The pencil~$(a_{λ})$~is \emph{cyclic} if the characteristic
+\begin{frame}\frametitle{Isomorphism of cyclic bilinear pencils}%<<<
+The pencil~$(a_{λ})$~is \emphz{cyclic} if the characteristic
 endomorphism~$m_{a}$~is cyclic (its characteristic polynomial is equal to
 its minimal polynomial).
 \begin{itemize}
@@ -301,7 +314,7 @@ polynomials~$K[m_a]$.
 \item The fact that $a_{∞}\, m = \transpose{m}\, a_{∞}$ means that, for
 all~$s$ commuting with~$a_{∞}$, the same equation~$a_{∞}\, s =
 \transpose{s}\, a_{∞}$ holds.
-\item The equivalence problem~$\transpose{s}\, a_{∞}\, s = b_{∞}$ becomes
+\item The relation~$\transpose{s}\, a_{∞}\, s = b_{∞}$ simplifies to
 \begin{equation*}
 a_{∞}\, s^2 = b_{∞}, \qquad \text{or}\qquad s^2 = a_{∞}^{-1}\, b_{∞},
 \quad s ∈ K[m].
@@ -312,7 +325,7 @@ a_{∞}\, s^2 = b_{∞}, \qquad \text{or}\qquad s^2 = a_{∞}^{-1}\, b_{∞},
 \begin{frame}\frametitle{Cyclic IP1S when~$2 ≠ 0$}%<<<
 \begin{theorem}[Solving cyclic IP1S in odd characteristic]
 Let~$K$ be a finite field with odd characteristic and~$(a_{λ})$,
-$(b_{λ})$ be two equivalent cyclic pencils of quadratic forms of
+$(b_{λ})$ be two isomorphic cyclic pencils of quadratic forms of
 dimension~$n$.
 
 It is possible to compute an isomorphism between~$(a_{λ})$ and~$(b_{λ})$
@@ -372,18 +385,21 @@ $7^6$ & 32 & 11\.\0\0 & 100\\
 \underbrace{\text{(regular quadratic form)}}_{\text{even dimension}}
 \quad⊕\quad {\text{(sum of squares)}}.
 \end{equation*}
-We can solve IP1S separately for both parts.
-\item The analogue of the group of squares in~$K^{×}$ is the additive
-subgroup (of index two)~
-\begin{equation*}℘(K) = \acco {λ^2 + λ,\; λ ∈ K}.
-\end{equation*}
-
-{\spaceskip .31ex plus 1fil
-For example, all regular quadratic forms in dimension~$2$ are equivalent
-to}
-\begin{equation*}
-x^2+xy+α\,y^2 \qquad \text{for $α ∈ K / ℘(K)$.}
-\end{equation*}
+The sum of squares is easy (semi-linear). Thus we may assume that the
+polar pencil is regular.
+\item We first compute all possible isomorphisms for the polar pencils,
+and then look for an isomorphism that has the right action on the
+diagonal coefficients.
+% \item The analogue of the group of squares in~$K^{×}$ is the additive
+% subgroup (of index two)~
+% \begin{equation*}℘(K) = \acco {λ^2 + λ,\; λ ∈ K}.
+% \end{equation*}
+% {\spaceskip .31ex plus 1fil
+% For example, all regular quadratic forms in dimension~$2$ are isomorphic
+% to}
+% \begin{equation*}
+% x^2+xy+α\,y^2 \qquad \text{for $α ∈ K / ℘(K)$.}
+% \end{equation*}
 \end{itemize}
 \end{frame}%>>>
 \begin{frame}\frametitle{Pencils of alternating bilinear forms}%<<<
@@ -396,13 +412,13 @@ A_{∞} = \mat{0 & T\\T & 0}, \quad A_{0} = \mat{0 & TM\\TM & 0},
 where $T$~is an invertible symmetric matrix such that $TM$~is symmetric.
 \end{theorem}
 \begin{itemize}
-\item The endomorphism $M$~is the \emph{Pfaffian} of~$(A_{λ})$. We may
+\item The endomorphism $M$~is the \emphz{Pfaffian} of~$(A_{λ})$. We may
 select an appropriate representative of~$M$ in its conjugacy class (so
 that for IP1S, we again have $M = M_A = M_B$), and $T$~depends only
 on~$M$.
-\item If the quadratic pencils~$(A_{λ})$ and~$(B_{λ})$ are equivalent, we
+\item If the quadratic pencils~$(A_{λ})$ and~$(B_{λ})$ are isomorphic, we
 may assume that both polar pencils are equal, and of the above form.
-\item The pencil is called \emph{cyclic} if $M$~is cyclic.
+\item The pencil is called \emphz{cyclic} if $M$~is cyclic.
 \end{itemize}
 \end{frame}%>>>
 \begin{frame}\frametitle{Automorphisms of alternating pencils}%<<<
@@ -416,7 +432,7 @@ G_3(x) = \mat{x & 0\\0 & x^{-1}},\quad G_4 = \mat{0 & 1\\1 & 0},
 where~$x ∈ K[M]$.
 \end{theorem}
 
-We actually have a LU decomposition: any positive automorphism is of the form
+We actually have a LU decomposition: any (positive) automorphism is of the form
 $G_2(y) G_3(u) G_1(x)$ for~$x, y ∈ K[M]$ and~$u ∈ K[M]^{×}$.
 
 \end{frame}%>>>
@@ -501,7 +517,7 @@ operations in the field~$K$.
 \end{frame}%>>>
 \begin{frame}\frametitle{Solving cyclic IP1S}%<<<
 \begin{theorem}[Cyclic IP1S in characteristic two]
-Let~$K$ be a binary field and~$(A_{λ})$, $(B_{λ})$ be two equivalent
+Let~$K$ be a binary field and~$(A_{λ})$, $(B_{λ})$ be two isomorphic
 cyclic pencils of quadratic forms on~$K^n$. It is possible to compute an
 isomorphism from~$(A_{λ})$ to~$(B_{λ})$ using no more than~$\widetilde
 O(n^3)$ operations in~$K$.
