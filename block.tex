@@ -359,6 +359,63 @@ the identity matrix, or the diagonal matrix~$(1, …, 1, δ)$.
 Use propositions~\ref{prop:bb-diag} and~\ref{prop:local-diag}.
 \end{proof}
 
+
+\section{In characteristic two}%<<<1
+\subsection{Action of the commutant on diagonal matrices}
+
+Let~$u$ be an integer. We define a $k-$linear map~$λ_u$ from $u ×
+u$-matrices to~$R_u = k[H]/H^u$ in the following way:
+\begin{equation}
+λ_u((a_{i,j})_{i,j=1,…,u}) = ∑_{i=1}^{u} a_{i,i} H^{i-1}.
+\end{equation}
+
+\begin{prop}
+Let~$φ: R → R$ be the Frobenius map, defined by~$φ(∑ x_i H^i) = ∑
+x_i^2 H^i$. Then for all~$x ∈ k[H_u]$,
+\begin{equation}
+λ_u (\transpose{x} \, A\, x) = φ(x)\, λ_u(A).
+\end{equation}
+\end{prop}
+
+
+\begin{proof}
+Given that $λ_u$~is $k$-linear, it is enough to prove that
+$λ_u(\transpose{H_u} \, A\, H_u) = H λ_u(A)$.
+\end{proof}
+
+
+\begin{lem}
+Let~$u, v$ be two integers and~$A ∈ R^{u × u}$.
+\begin{equation}
+λ_v ( \transpose{J_{u,v}}\, A\, J_{u,v}) \;=\;
+H^{\max (v-u, 0)}\,λ_u(A).
+\end{equation}
+\end{lem}
+
+
+\begin{prop}
+Let~$n_1 ≥ … ≥ n_r$. For any symmetric matrix~$A$ written as
+blocks~$A_{i,j}$ of size~$n_i × n_j$, define~$Λ(A)$ as the line matrix of
+length~$r$ with coefficients in~$R_1 = k[H]/H^{n_1}$:
+\begin{equation*}
+Λ(A) = ( H^{n_1 - n_i}\, λ_{n_i} (A_{i,i}))_{i=1,…, r}.
+\end{equation*}
+Then, for any~$X ∈ \ro C(M)$:
+\begin{equation}
+Λ(\transpose{X}\,A\,X) = Λ(A)\, φ(Ψ(X)).
+\end{equation}
+\end{prop}
+
+
+\begin{prop}
+Let~$A = \mat{Δ_1 & TM \\ 0 & Δ_2}$ and~$X = \mat{X_{1,1} & X_{1,2}\\
+X_{2,1} & X_{2,2}}$, where~$X_i ∈ \ro C(M)$ and~$Δ_i$ are diagonal.
+
+Then $\transpose{X} A X$ has diagonal
+\[ Λ(\transpose{X} A X) = ( Λ(Δ_1) φΨ(X{1,i}) + Λ(Δ_2) φψ(X_{2,i}) +
+  Λ(\transpose{X_{1,i}} TM X_{2,i}))_{i=1,2}. \]
+\end{prop}
+
 \begin{thebibliography}{99}%<<<1
 \bibitem{omeara} Timothy O'Meara, \emph{Introduction to quadratic forms}.
 \bibitem{milnorhusemoller} H. Milnor, D. Husemoller, \emph{Symmetric

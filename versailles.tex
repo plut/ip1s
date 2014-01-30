@@ -1,0 +1,540 @@
+\documentclass{beamer}%<<<
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[francais]{babel}
+\usepackage{booktabs}
+\usepackage{colortbl}
+\usepackage{dcolumn}
+\usepackage{math}
+\usepackage{unicode}
+\usetheme{CambridgeUS}
+\useinnertheme{rectangles}
+
+\usenavigationsymbolstemplate{}%<<<
+\definecolor{bleu}{rgb}{.1,.4,.6}%1a6699
+\definecolor{rouge}{rgb}{.6,.1,.15}
+\setbeamercolor{structure}{fg=rouge!80}
+\setbeamercolor{palette primary}{fg=white,bg=rouge!90}
+\setbeamercolor{palette secondary}{fg=white,bg=rouge!80}
+\setbeamerfont{frametitle}{size=\large}
+\setbeamercolor{title}{fg=white,bg=bleu!60}
+\setbeamercolor{title in head/foot}{fg=white,bg=bleu!90}
+\setbeamercolor{section in head/foot}{fg=white,bg=bleu}
+\setbeamercolor{frametitle}{fg=white,bg=bleu!80}
+\setbeamercolor{block title}{fg=white,bg=bleu!80}
+\setbeamercolor{block body}{fg=black,bg=bleu!20}
+\setbeamercolor{author in head/foot}{parent=palette secondary}
+\setbeamercolor{date in head/foot}{parent=palette primary}
+\setbeamertemplate{blocks}[default]
+\setbeamertemplate{title page}[default][rounded=false,shadow=false]%>>>
+\makeatletter
+% Playing with colortbl
+\let\orig@CT@setup\CT@setup
+\let\CT@tablecolor\@empty
+\let\CT@tablefg\@empty
+\let\CT@rowfg\@empty
+\def\tablecolor#1{\def\CT@tablecolor{#1}}
+\def\tablefg#1{\def\CT@rowfg{#1}}
+\def\rowfg#1{\gdef\CT@rowfg{#1}}
+\def\CT@setup{\orig@CT@setup
+  \ifx\CT@tablecolor\@empty\else\CT@color{\CT@tablecolor}\fi
+  \ifx\CT@tablefg\@empty\else\color{\CT@tablefg}\fi
+  \ifx\CT@rowfg\@empty\else\color{\CT@rowfg}\fi
+}
+\setbeamertemplate{headline}{\leavevmode\hbox{%%<<<
+  \begin{beamercolorbox}[wd=.5\paperwidth,ht=2.25ex,dp=1ex,center]
+  {title in head/foot}%
+    \usebeamerfont{title in head/foot}\insertshorttitle
+  \end{beamercolorbox}%
+  \begin{beamercolorbox}[wd=.5\paperwidth,ht=2.25ex,dp=1ex,center]
+  {section in head/foot}%
+    \usebeamerfont{section in head/foot}\insertsectionhead\hspace*{2ex}
+  \end{beamercolorbox}%
+%   \begin{beamercolorbox}[wd=.5\paperwidth,ht=2.65ex,dp=1.5ex,left]
+%   {subsection in head/foot}%
+%     \usebeamerfont{subsection in head/foot}\hspace*{2ex}\insertsubsectionhead
+%   \end{beamercolorbox}
+}\vskip0pt }%>>>
+\setbeamertemplate{footline}{\leavevmode\hbox{%%<<<
+  \begin{beamercolorbox}[wd=.5\paperwidth,ht=2.25ex,dp=1ex,center]
+  {author in head/foot}%
+    \usebeamerfont{author in head/foot}\insertshortauthor
+    \expandafter\beamer@ifempty\expandafter
+    {\beamer@shortinstitute}{}{~~(\insertshortinstitute)}
+  \end{beamercolorbox}%
+%   \begin{beamercolorbox}[wd=.5\paperwidth,ht=2.25ex,dp=1ex,center]
+%   {title in head/foot}%
+%     \usebeamerfont{title in head/foot}\insertshorttitle
+%   \end{beamercolorbox}%
+  \begin{beamercolorbox}[wd=.5\paperwidth,ht=2.25ex,dp=1ex,right]
+  {date in head/foot}%
+    \usebeamerfont{date in head/foot}\insertshortdate{}\hspace*{2em}
+    \insertframenumber{} / \inserttotalframenumber\hspace*{2ex} 
+  \end{beamercolorbox}
+}\vskip 0pt }%>>>
+\makeatother
+
+% Misc
+\def\transpose{{}^{\mathrm{\scriptscriptstyle t}}\!}
+\def\strong#1{{\bf\color{rouge}#1}}
+\def\emphz#1{\emph{{\color{bleu}#1}}}
+\def\mat#1{\begin{pmatrix}#1\end{pmatrix}}
+\let\mathrm\mathsf
+\def\bigstrut{\leavevmode \vrule width 0pt height \baselineskip depth
+.5\baselineskip}
+%>>>
+
+
+\begin{document}
+\section{Introduction}
+\title[IP1S]%<<<
+  {Avancées sur un problème d'isomorphisme de polynômes\\
+  et pinceaux de formes quadratiques}
+\author{G. Macario-Rat\inst{1}, \textbf{J. Plût}\inst{2}, H.
+Gilbert\inst{3}}
+\date{2014-01-15}
+\institute[]{%
+\inst{1}Orange Labs, \url{gilles.macario-rat@orange.fr}
+% 38--40, rue du Général Leclerc, 92794 Issy-les-Moulineaux Cedex 9, France
+\and
+\inst{2}ANSSI, \url{jerome.plut@ssi.gouv.fr}
+% 51 Boulevard de la Tour-Maubourg, 75007 Paris, France \and
+\and
+\inst{3}ANSSI, \url{henri.gilbert@ssi.gouv.fr}
+}%
+\titlegraphic{\leavevmode
+% Ratio of π/4 to have the same area
+\raise 1.07ex\hbox{\includegraphics[width=7.85ex]{orange-logo}}
+\hfil
+\includegraphics[width=10ex]{anssi-macaron}
+}
+
+\begin{frame}
+\titlepage
+\end{frame}%>>>
+\begin{frame}\frametitle{Isomorphisme de polynômes à un secret}%<<<
+On fixe un corps~$k$ et l'algèbre~$k[x_1,…,x_n]$ des polynômes en
+$n$~variables.
+
+\begin{definition}[Familles de polynômes isomorphes]
+Deux familles de polynômes~$(a_1,…, a_m)$ et~$(b_1, …, b_m)$ sont
+\emphz{isomorphes} si elles sont reliées par un changement de variables
+linéaire bijectif~$s$ :
+\[ a_i (x_1, …, x_n) = b_i (s_1 (x_1, …, x_n), …, s_n (x_1, …, x_n)). \]
+\end{definition}
+
+Application cryptographique : protocole d'identification de
+[Patarin~1996]. Les familles $a$, $b$~sont publiques, et $s$~est le
+secret. Pour prouver la connaissance de~$s$:
+\begin{itemize}
+\item le prouveur construit un changement de variables linéaire
+aléatoire~$t$ et divulgue~$c = a ∘ t$ ;
+\item le vérifieur demande aléatoirement un isomorphisme entre~$c$
+et~$a$, ou entre $c$~et~$b$.
+\end{itemize}
+\end{frame}%>>>
+\begin{frame}\frametitle{Paramètres du problème IP1S}%<<<
+
+\begin{tabular}{cll}\toprule
+\color{rouge} $m$ & Nombre de polynômes & (1 ou 2)\\
+\color{rouge} $n$ & Nombre de variables & (grand) \\
+\color{rouge} $d$ & Degré des polynômes & (2 ou 3) \\
+\color{rouge} $k$ & Corps de base & Caractéristique ?\\
+\bottomrule\end{tabular}
+
+\bigskip
+\begin{itemize}
+\item Le problème IP1S est {plus facile} (surdéterminé) avec plus
+de deux polynômes.
+\item La taille de la clé publique dépend du nombre de polynômes et de
+leur degré.
+\item La complexité des attaques dépend du nombre de variables.
+\end{itemize}
+
+\bigskip
+Nous considérons le cas de \strong{deux polynômes homogènes quadratiques}
+sur un corps de \strong{toute caractéristique}.
+\end{frame}%>>>
+\begin{frame}\frametitle{Algorithmes précédents}%<<<
+
+\begin{itemize}
+\item{} [Bouillaguet, Faugère, Fouque, Perret 2011]: transforment le
+problème en un système quadratique + linéaire surdéterminé.
+\begin{itemize}
+\item Résolvent expérimentalement (Gröbner) en temps~$\widetilde O(n^6)$.
+\item Cassent toutes les tailles de paramètres proposées par
+[Patarin~1996] pour le cas quadratique.
+\def\arraystretch{1.2}\tablecolor{bleu!20}
+\def\w{\color{white}}\def\.{\hphantom{.}}\def\0{\hphantom{0}}
+\par\hfil\begin{tabular}{rr}
+\rowcolor{bleu!80}\w $q$ & \w $n$\\
+2 & 16\\
+$2^4$ & 6\\
+2 & 32\\
+\end{tabular}
+\end{itemize}
+\item Ce travail: utilise des théorèmes de structure sur les (paires de)
+formes quadratiques pour les ramener à une forme canonique.
+\begin{itemize}
+\item Utilise essentiellement de l'algèbre linéaire ou polynomiale (pas
+de base de Gröbner).
+\item Traitement spécifique pour la caractéristique~$2$.
+\end{itemize}
+\end{itemize}
+\end{frame}%>>>
+\section{Caractéristique~$≠2$}
+\begin{frame}\frametitle{IP1S quadratique: le cas~$m = 1$}%<<<
+Cas stupide : \strong{un seul} polynôme.
+
+\begin{itemize}
+\item Le cas~$m = 1$ correspond à calculer un isomorphisme entre deux
+formes quadratiques en~$n$ variables.
+\item À une forme quadratique~$q$, on associe la \emphz{forme
+polaire}~$b$ définie par
+\begin{equation*}
+b(x,y) = q(x+y) - q(x) - q(y).
+\end{equation*}
+\item C'est une forme bilinéaire symétrique, reliée à~$q$ par
+l'\emphz{équation de polarité} :
+\begin{equation*}
+2\,q(x) = b(x,x).
+\end{equation*}
+\item Si $2 ≠ 0$ dans~$K$, les formes quadratiques sont en bijection avec
+les formes bilinéaires symétriques. Toute forme quadratique régulière est
+isométrique à une forme diagonale~$(1,…,1)$ ou~$(1,…,1, δ)$, où $δ$~n'est
+pas un carré.
+\end{itemize}
+\end{frame}%>>>
+\begin{frame}\frametitle{Pinceaux de formes bilinéaires}%<<<
+Cas de \strong{deux} polynômes~$(a_{∞}, a_{0})$
+\begin{itemize}
+\item Un \emphz{pinceau bilinéaire} est une droite projective dans
+l'espace des formes bilinéaires:
+\begin{equation}
+λ ↦ b_{λ} = b_{0} + λ b_{∞}.
+\end{equation}
+Il est dit
+\begin{description}
+\item[\emphz{dégénéré}] si, pour tout~$λ$, $\det b_{λ} = 0$;
+\item[\emphz{régulier}] si l'une des formes (par exemple~$b_{∞}$) est
+régulière (= inversible).
+\end{description}
+\item Tout pinceau est la somme directe d'un pinceau non-dégénéré et d'un
+pinceau nul.
+\item On peut supposer que le pinceau non-dégénéré est régulier (quitte à
+procéder à une (petite) extension des scalaires).
+\end{itemize}
+\end{frame}%>>>
+\begin{frame}\frametitle{Isomorphisme de pinceaux réguliers bilinéaires}%<<<
+\begin{itemize}
+\item Soit~$b_{λ} = b_{∞} λ  + b_0 = b_{∞} ( λ + m_{b})$ un pinceau
+bilinéaire régulier ; $m_{b} = b_{∞}^{-1} b_0$ est l'\emphz{endomorphisme
+caractéristique} de~$b$.
+\item Un isomorphisme entre~$(a_{λ})$ et~$(b_{λ})$ est une
+application linéaire bijective~$s$ telle que~$\transpose{s} · a_{λ} · s =
+b_{λ}$, soit encore
+\begin{equation*}
+\transpose{s} · a_{∞} · s = b_{∞} \qquad\text{et}\qquad
+s^{-1} · m_{a} · s = m_{b}.
+\end{equation*}
+\item Si~$(a_{λ})$ et~$(b_{λ})$ sont isomorphes, alors quitte à effectuer
+un changement de base sur~$b$, on peut supposer~$m_a = m_b$.
+\item Le problème IP1S devient :
+\begin{equation*}
+\transpose{s} · a_{∞} · s = b_{∞} \qquad\text{et}\qquad
+\text{$s$~commute avec~$m$,}
+\end{equation*}
+où $a_{∞}$, $b_{∞}$, $a_{∞} m$, $b_{∞} m$ sont symétriques.
+\end{itemize}
+\end{frame}%>>>
+\begin{frame}\frametitle{Isomorphisme de pinceaux bilinéaires : le %<<<
+cas cyclique}
+L'endomorphisme~$m$ est \emphz{cyclique} si son polynôme minimal est égal
+à son polynôme caractéristique. Dans ce cas :
+\begin{itemize}
+\item Le commutant de~$m$ est réduit à l'algèbre de polynômes~$k[m]$.
+\item Puisque~$a_{∞}\,m = \transpose{m}\, a_{∞}$, toute~$s$
+commutant à~$a_{∞}$ vérifie la même relation~$a_{∞}\,s = s\,a_{∞}$.
+\item L'équation de IP1S $\transpose{s}\, a_{∞}\, s = b_{∞}$ se simplifie
+en~$a_{∞}\, s^2 = b_{∞}$.
+\item Il suffit de calculer une racine carrée de~$a_{∞}^{-1} b_{∞}$ dans
+l'algèbre~$k[m]$, ce qui est facile si $k$~est fini.
+\end{itemize}
+\end{frame}%>>>
+\begin{frame}\frametitle{IP1S cyclique en caractéristique impaire}%<<<
+\begin{thm}[Résolution de IP1S cyclique en caractéristique impaire]
+Soient~$k$ un corps fini de caractéristique impaire et~$(a_{λ})$,
+$(b_{λ})$ deux pinceaux de formes quadratiques de dimension~$n$ sur~$k$,
+isomorphes et cycliques.
+
+Il est possible de calculer un isomorphisme entre~$(a_{λ})$ et~$(b_{λ})$
+en~$\widetilde O(n^3)$ opérations dans~$k$.
+\end{thm}
+\begin{itemize}
+\item Remplacer~$b$ par~$b'$ telle que~$m = m_{b} = m_{b'}$.
+\item Calculer et factoriser le polynôme mimimal de~$m$.
+\item Calculer les racines carrées de~$a_{∞}^{-1} b_{∞}$ dans les corps
+résiduels de~$k[m]$.
+\item Relever (Hensel) aux localisations de~$k[m]$.
+\item Recoller (restes chinois).
+\end{itemize}
+De plus, on connaît le nombre de solutions.
+\end{frame}%>>>
+\begin{frame}\frametitle{Expérimentalement (instances aléatoires)}%<<<
+\def\arraystretch{1.2}\tablecolor{bleu!20}
+\def\w{\color{white}}\def\.{\hphantom{.}}\def\0{\hphantom{0}}
+\hfil\begin{tabular}{rrrr}
+\rowcolor{bleu!80} \w $q$ & \w $n$ & \w $t$ (s) & \w \% cyclic\\
+3 & 80 & 5 & 87\\
+3 & 128 & 34 & 88\\
+$3^{10}$ & 32 & 15 & 100\\
+\end{tabular}\hfil
+%
+\begin{tabular}{rrrr}
+\rowcolor{bleu!80} \w $q$ & \w $n$ & \w $t$ (s) & \w \% cyclic\\
+5 & 20 & 0.07 & 95\\
+5 & 32 & 0.28& 95\\
+5 & 80 & 7\.\0\0& 95\\
+\end{tabular}
+
+\bigskip
+\tablecolor{bleu!20}
+\hskip 0pt plus 2fil\begin{tabular}{rrrr}
+\rowcolor{bleu!80} \w $q$ & \w $n$ & \w $t$ (s) & \w \% cyclic\\
+$7^6$ & 32 & 11\.\0\0 & 100\\
+65537 & 8 & 0.04 & 100\\
+65537 & 20 & 1\.\0\0 & 100\\
+% &  &  & \\
+\end{tabular}
+\bigskip
+
+\begin{itemize}
+\item Opteron 850 2.2 GHz, 32 GB RAM.
+\item MAGMA version 2.13-15.
+\end{itemize}
+\end{frame}%>>>
+\section{Caractéristique~$2$}
+\begin{frame}\frametitle{Formes quadratiques en caractéristique deux}%<<<
+
+\begin{itemize}
+\item Si~$2 = 0$ dans~$k$, l'identité de polarité devient~$b(x,x) = 0$:
+la forme polaire est une forme bilinéaire \strong{alternée}.
+\item L'application de polarité n'est plus une bijection entre les formes
+quadratiques et bilinéaires.
+\item En général, on peut écrire une forme quadratique comme somme
+directe
+\begin{equation*}
+\underbrace{\text{(forme quadratique régulière)}}_{\text{dimension
+paire}} \quad ⊕ \quad \text{(somme de carrés)}.
+\end{equation*}
+\item La somme de carrés est facile (semi-linéaire). On travaille donc
+sur les formes quadratiques régulières.
+\item On décrit tous les isomorphismes entre les pinceaux polaires, et on
+cherche à résoudre les équations données par leur action sur les
+coefficients diagonaux.
+\end{itemize}
+\end{frame}%>>>
+\begin{frame}\frametitle{Pinceaux de formes bilinéaires alternées}%<<<
+Tout pinceau de formes bilinéaires alternées admet une base dans laquelle
+il a pour matrice
+\begin{equation*}
+A_{∞} = \mat{0 & T\\T & 0}, \quad A_{0} = \mat{0 & TM\\TM & 0},
+\end{equation*}
+où $T$~est une matrice inversible telle que~$T$ et~$TM$ soient
+symétriques.
+
+\begin{itemize}
+\item
+L'endomorphisme~$M$ est le \emphz{Pfaffien} de~$(A_{λ})$. La matrice~$T$
+ne dépend que de~$M$.
+\item
+Si deux pinceaux~$(A_{λ})$, $(B_{λ})$ sont isomorphes, on peut supposer
+que leurs pinceaux polaires sont égaux et de la forme ci-dessus.
+\item Le pinceau est dit \emphz{cyclique} si $M$~est cyclique.
+\end{itemize}
+\end{frame}%>>>
+\begin{frame}\frametitle{Automorphismes des pinceaux alternés}%<<<
+\begin{thm}[Structure du groupe orthogonal]
+Le groupe d'automorphismes d'un pinceau de formes bilinéaires alternées
+cyclique est engendré par les matrices
+\begin{gather*}
+G_1(x) = \mat{1 & x\\0 & 1}, \quad G_2(x) = \mat{1 & 0\\x & 1},\\
+G_3(x) = \mat{x & 0\\0 & x^{-1}},\quad G_4 = \mat{0 & 1\\1 & 0},
+\end{gather*}
+pour~$x ∈ k[M]$.
+\end{thm}
+
+Plus précisément, on a une décomposition LU : tout automorphisme
+(positif) est de la forme \[ G_2(y) G_3(u) G_1(x) \] pour~$x, y ∈ k[M]$
+et~$u ∈ k[M]^{×}$.
+\end{frame}%>>>
+\begin{frame}\frametitle{Localisation du problème}%<<<
+\begin{itemize}
+\item Quitte à factoriser le polynôme minimal de~$M$, on suppose qu'il
+est de la forme~$f_0^d$, où~$f_0$~est irréductible.
+\item Dans ce cas, la matrice~$M$ est semblable à la
+matrice~$\tiny\mat{M_0 & 1 & & 0 \\[-2ex]
+& ⋱\; & ⋱ & \\[-2ex] & & ⋱ & 1\\ 0 & & & M_0}$, où $M_0$~est la matrice
+compagnon de~$f_0$.
+\item En général : extension des scalaires au corps~$k[M_0]$. Pour
+simplifier : on présente uniquement le cas où~$f_0 = 1$ (et donc
+$M_0$~est la matrice~$(0)$). Dans ce cas, $T$~est la matrice
+anti-identité.
+\end{itemize}
+\end{frame}%>>>
+\begin{frame}\frametitle{Représentation algébrique de la diagonale}%<<<
+Pour toute matrice~$A = (a_{i,j})$ de taille~$d × d$, on note
+\begin{equation*}
+ψ(A) = ∑ a_{i,i} M^{i-1} \quad ∈ R = k[M] / M^d.
+\end{equation*}
+La restriction de~$ψ$ aux matrices diagonales les met en bijection avec
+l'algèbre~$R = k[M]$.
+\begin{block}{Action du groupe orthogonal sur les coefficients diagonaux}
+\begin{itemize}
+\item Soient~$A$ une matrice diagonale, $x = ∑ x_i M^i ∈ k[M]$, et $A' = \transpose{x} A
+x$. Alors :
+\abovedisplayskip 1ex \belowdisplayskip 1ex
+\begin{equation*}
+ψ(A') \;=\; φ(x)\, ψ(A) \;=\; (∑ x_i^2 M^i) ψ(A).
+\end{equation*}
+\item Soit~$θ(x) = ψ(TX)$; alors
+\begin{equation*}
+θ(x) = ψ(TX) = ∑ x_{d-1-2i} M^{d-1-i}.
+\end{equation*}
+\end{itemize}
+\end{block}
+\end{frame}%>>>
+\begin{frame}\frametitle{Action du groupe orthogonal sur les coefficients diagonaux}%<<<
+Le problème IP1S se ramène à : étant données~$M$ et~$T$, classifier les
+matrices de la forme
+\begin{equation*}\belowdisplayskip 1ex
+\mat{A_1 & T\\0 & A_2}, \mat{A_3 & TM\\0 & A_4}
+%\quad\text{et}\quad
+% \mat{B_1 & T\\0 & B_2}, \mat{B_3 & TM\\0 & B_4}.
+\end{equation*}
+où les~$A_i$ sont des matrices diagonales.
+
+\begin{thm}
+Soit~$α_i = ψ(A_i)$.
+L'action des matrices~$G_1(x)$, $G_2(x)$, $G_3(x)$ sur les coefficients
+diagonaux est donnée par :
+\begin{equation*} \begin{split}
+G_1^{}(x):&\quadα_{2} ← α_2 + φ(x)\, α_1\, + θ (x), \quad α_1 ← α_1;\\
+G_2^{}(x):&\quadα_{1} ← α_1 + φ(x)\, α_2\, + θ (x), \quad α_2 ← α_2;\\
+G_3^{}(x):&\quadα_{1} ← φ(x)\, α_1, \quad α_2 ← φ(x^{-1})\, α_2;\\
+G_4^{}:&\quadα_1 \leftrightarrow α_2.
+\end{split} \end{equation*}
+\end{thm}
+\end{frame}%>>>
+\begin{frame}\frametitle{Équations locales pour IP1S}%<<<
+Soit~$s = G_2(x)\,G_3(φ^{-1}(u^{-1}))\,G_1(y)$ une application
+orthogonale (positive). Le problème IP1S se ramène au système de
+\strong{quatre équations semi-linéaires} en~$x$, $y$, $u$ :
+\begin{gather*}
+u α'_1 = α_1 + α_2 φ(x) + θ(x),\\
+u α_2 = α'_2 + α'_1 φ(y) + θ(y),\\
+u α'_3 = α_3 + α_4 φ(x) + θ(M\,x),\\
+u α_4 = α'_4 + α'_3 φ(y) + θ(M\,y).
+\end{gather*}
+\end{frame}%>>>
+\begin{frame}\frametitle{Résolution locale de IP1S}%<<<
+On peut éliminer~$u$ pour se ramener à un système en les deux
+inconnues~$x$ et~$z$~:
+\begin{equation*}\belowdisplayskip 1ex
+\left\{\begin{array}{lllcl}
+{\color{rouge}α} φ(z) & +\, \hphantom{β} θ(z)
+  &&=&C,\\
+{\color{rouge}α γ} φ(x) & +\,β θ(x) &+θ(Mx)
+  &=&C',\\
+&\hphantom{+\,}γ θ(x) + β θ(z) &+θ(Mz) &=&C''.
+\end{array}\right.\end{equation*}
+\begin{itemize}
+\item $φ$~est bijective et conserve la valuation dans~$k[M]$; $θ$~est une
+application (presque) contractante.
+\item Si $α γ ( = α_1 α_4 + α_2 α_3)$~est inversible
+dans~$k[M]$, le théorème du point fixe permet de résoudre le système
+en~$O(d)$ étapes.
+\item Dans le cas général : en étudiant des équations de la forme
+$M^{e} φ(x) = a\, θ(x) + b$, on peut résoudre en~$O(d)$ étapes.
+\end{itemize}
+\end{frame}%>>>
+\begin{frame}\frametitle{Résolution de IP1S cyclique en caractéristique deux}%<<<
+\begin{thm}[IP1S cyclique en caractéristique 2]
+Soient~$k$ un corps binaire et~$(A_{λ})$, $(B_{λ})$ deux pinceaux de
+formes quadratiques sur~$k^n$, isomorphes et cycliques. Il est possible
+de calculer un isomorphisme entre~$(A_{λ})$ et~$(B_{λ})$ en au
+plus~$\widetilde O(n^3)$ opérations dans~$k$.
+\end{thm}
+\begin{itemize}
+\item Calculer et factoriser les polynômes caractéristiques.
+\item Décomposition primaire des deux pinceaux.
+\item Résolution des équations locales (théorème de point fixe).
+\item Assemblage (restes chinois).
+\end{itemize}
+De plus, il est raisonnable de compter les solutions du problème.
+\end{frame}%>>>
+\begin{frame}\frametitle{Expérimentalement (instances aléatoires}%<<<
+\def\arraystretch{1.2}\tablecolor{bleu!20}
+\def\w{\color{white}}\def\.{\hphantom{.}}\def\0{\hphantom{0}}
+\hfil\hfil\begin{tabular}{rrrr}
+\rowcolor{bleu!80} \w $q$ & \w $n$ & \w $t$ (s) & \w \% cyclic\\
+2 & 32 & 0.07 & 96\\
+2 & 128 & 2\.\0\0 & 95\\
+2 & 256 & 33\.\0\0 & 94\\
+$2^4$ & 32 & 0.3\0 & 100\\
+$2^7$ & 32 & 0.5\0 & 100\\
+\end{tabular}
+\bigskip
+
+(Note : en général, le déterminant~$α_1 α_4 + α_2 α_3$ est inversible
+dans~$k[M]$, et la résolution locale est dominée par le théorème du point
+fixe).
+\end{frame}%>>>
+\section{Conclusion}
+\begin{frame}\frametitle{Conclusion}
+Dans le cas cyclique :
+\begin{itemize}
+\item Preuve de la polynomialité de IP1S en toute caractéristique.
+\item Complexité dominée par l'algèbre linéaire et polynomiale.
+\item Utilise la classification des formes quadratiques.
+\end{itemize}
+
+Restent à faire :
+\begin{itemize}
+\item Le cas non-cyclique \strong{(résolu en caractéristique impaire)}.
+\item Le cas de~$≥ 3$ formes quadratiques.
+\item Les équations cubiques...
+\end{itemize}
+\end{frame}
+
+
+
+\end{document}
+% --- vieux
+Moreover, we can count the solutions to the IP1S problem.
+\end{frame}%>>>
+\section{Conclusion}
+\begin{frame}\frametitle{Conclusion and future work}%<<<
+Cyclic case:
+\begin{itemize}
+\item Proof of polynomiality of IP1S in all characteristics.
+\item Uses classification of quadratic forms.
+\item Complexity dominated by linear algebra.
+\end{itemize}
+
+\bigskip
+Non-cyclic case:
+\begin{itemize}
+\item The commutant of the characteristic endomorphism is harder to
+manipulate.
+\item The IP1S problem has more solutions than in the cyclic case.
+\begin{itemize}
+\item For example: in the extremely non-cyclic case where $b_{0} = 0$,
+the solutions are parametered by the full orthogonal group of~$b_{∞}$.
+\item Giving a parametrization of the space of solutions would help
+solving the problem for more than two polynomials.
+\end{itemize}
+\end{itemize}
+\end{frame}%>>>
+
+\end{document}
