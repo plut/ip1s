@@ -24,6 +24,7 @@
 \def\acco#1{\left\{#1\right\}}
 \def\abs#1{\left|#1\right|}
 \def\mat#1{\begin{pmatrix}#1\end{pmatrix}}
+\def\card#1{\abs{#1}}
 %>>>
 
 \begin{document}
@@ -360,68 +361,177 @@ Use propositions~\ref{prop:bb-diag} and~\ref{prop:local-diag}.
 \end{proof}
 
 
-\section{In characteristic two}%<<<1
-\subsection{Action of the commutant on diagonal matrices}
+% \section{In characteristic two}%<<<1
+% \subsection{Action of the commutant on diagonal matrices}
+% 
+% Let~$u$ be an integer. We define a $k-$linear map~$λ_u$ from $u ×
+% u$-matrices to~$R_u = k[H]/H^u$ in the following way:
+% \begin{equation}
+% λ_u((a_{i,j})_{i,j=1,…,u}) = ∑_{i=1}^{u} a_{i,i} H^{i-1}.
+% \end{equation}
+% 
+% \begin{prop}
+% Let~$φ: R → R$ be the Frobenius map, defined by~$φ(∑ x_i H^i) = ∑
+% x_i^2 H^i$. Then for all~$x ∈ k[H_u]$,
+% \begin{equation}
+% λ_u (\transpose{x} \, A\, x) = φ(x)\, λ_u(A).
+% \end{equation}
+% \end{prop}
+% 
+% 
+% \begin{proof}
+% Given that $λ_u$~is $k$-linear, it is enough to prove that
+% $λ_u(\transpose{H_u} \, A\, H_u) = H λ_u(A)$.
+% \end{proof}
+% 
+% 
+% \begin{lem}
+% Let~$u, v$ be two integers and~$A ∈ R^{u × u}$.
+% \begin{equation}
+% λ_v ( \transpose{J_{u,v}}\, A\, J_{u,v}) \;=\;
+% H^{\max (v-u, 0)}\,λ_u(A).
+% \end{equation}
+% \end{lem}
+% 
+% 
+% \begin{prop}
+% Let~$n_1 ≥ … ≥ n_r$. For any symmetric matrix~$A$ written as
+% blocks~$A_{i,j}$ of size~$n_i × n_j$, define~$Λ(A)$ as the line matrix of
+% length~$r$ with coefficients in~$R_1 = k[H]/H^{n_1}$:
+% \begin{equation*}
+% Λ(A) = ( H^{n_1 - n_i}\, λ_{n_i} (A_{i,i}))_{i=1,…, r}.
+% \end{equation*}
+% Then, for any~$X ∈ \ro C(M)$:
+% \begin{equation}
+% Λ(\transpose{X}\,A\,X) = Λ(A)\, φ(Ψ(X)).
+% \end{equation}
+% \end{prop}
+% 
+% 
+% \begin{prop}
+% Let~$A = \mat{Δ_1 & TM \\ 0 & Δ_2}$ and~$X = \mat{X_{1,1} & X_{1,2}\\
+% X_{2,1} & X_{2,2}}$, where~$X_i ∈ \ro C(M)$ and~$Δ_i$ are diagonal.
+% 
+% Then $\transpose{X} A X$ has diagonal
+% \[ Λ(\transpose{X} A X) = ( Λ(Δ_1) φΨ(X{1,i}) + Λ(Δ_2) φψ(X_{2,i}) +
+%   Λ(\transpose{X_{1,i}} TM X_{2,i}))_{i=1,2}. \]
+% \end{prop}
+% 
+\section{Recovering the second secret}
 
-Let~$u$ be an integer. We define a $k-$linear map~$λ_u$ from $u ×
-u$-matrices to~$R_u = k[H]/H^u$ in the following way:
-\begin{equation}
-λ_u((a_{i,j})_{i,j=1,…,u}) = ∑_{i=1}^{u} a_{i,i} H^{i-1}.
-\end{equation}
+Two families of polynomials~$(a_1,…,a_m)$ and~$(b_1,…,b_m)$ are
+\emph{isomorphic with two secrets} if there exist bijective linear
+transformations~$s$ of the $n$~variables and~$h$ of the $m$~polynomials
+such that $h ∘ a ∘ s = b$.
 
-\begin{prop}
-Let~$φ: R → R$ be the Frobenius map, defined by~$φ(∑ x_i H^i) = ∑
-x_i^2 H^i$. Then for all~$x ∈ k[H_u]$,
+Assume that $m = 2$. Then the second secret~$t$ is a homography in two
+variables. Assume moreover that $a_{λ} = λ a_∞ + a_0$ and~$b_{λ} = λ
+b_{∞} + b_0$ are regular pencils of quadratic forms and that $2≠ 0$
+in~$k$. Then the homography~$h$ maps the characteristic polynomial~$f(λ)
+= \det (a_{λ})$ to~$g(λ) = \det (b_{λ})$. In particular, it maps the
+prime factors of~$f$ to those of~$g$, respecting both their degree and
+their exponent as a factor of the characteristic polynomial.
+
+Arrange the factors of~$f$ and~$g$ by sets~$S_{i,j}$ and~$T_{i,j}$ of
+factors of degree~$i$ and exponent~$j$. Then $h$~is the unique homography
+mapping all the elements of~$S_{d,e}$ to~$T_{d,e}$ for each pair~$(d,e)$.
+We compute the intersection for~$(d,e)$ of the set~$H_{d,e}$ of
+homographies mapping the prime polynomials of~$S_{d,e}$ to~$T_{d,e}$. In
+most cases, the first set~$H_{d,e}$ already has only one candidate, which
+is therefore the second secret. The discussion depends on the degree~$d$
+of the polynomials. We note that the sum of the size of the
+sets~$S_{d,e}$ is the number of variables~$n$; therefore, we may use the
+worst-case estimate~$\card{S_{d,e}} = O(n)$ for each~$(d,e)$.
+
+We shall use the following classic results.
+\begin{prop}\label{prop:homography}
+\begin{enumerate}
+\item Let~$(x_1, x_2, x_3)$ and~$(y_1, y_2, y_3)$ be two (ordered)
+triples of distinct points of~$ℙ^1(k)$. There exists a unique
+homography~$h ∈ \mathrm{PGL}_2(k)$ such that~$h(x_i) = y_i$.
+\item Let~$(x_1, x_2, x_3, x_4)$ and~$(y_1, y_2, y_3, y_4)$ be two
+(ordered) quadruplets of distinct points. They are homographic iff they
+have the same cross-ratio~$B(x) = B(y)$, where
 \begin{equation}
-λ_u (\transpose{x} \, A\, x) = φ(x)\, λ_u(A).
+B(x) = \frac{(x_1-x_3)(x_2-x_4)}{(x_1-x_4)(x_2-x_3)}.
 \end{equation}
+\item Let~$\acco{x_1, x_2, x_3, x_4}$ and~$\acco{y_1, y_2, y_3, y_4}$ be
+two (unordered) sets of four points. They are homographic iff they have
+the same $j$-invariant~$j(x) = j(y)$, where
+\begin{equation}
+j(x) = \frac{(B(x)^2-B(x)+1)^3}{B(x)^2(1-B(x))^2}.
+\end{equation}
+\item Let~$u(x) = ∑ u_i x^i$ and~$v(x)$ be two monic polynomials
+of degree four. They are homographic iff they have the same $j$-invariant,
+where $j(u)$~is a polynomial of degree~$6$ in the coefficients of~$u$.
+\end{enumerate}
 \end{prop}
 
 
-\begin{proof}
-Given that $λ_u$~is $k$-linear, it is enough to prove that
-$λ_u(\transpose{H_u} \, A\, H_u) = H λ_u(A)$.
-\end{proof}
+\paragraph{Case~$d = 1$.}
+If $\card{S_{1,e}} ≥ 3$, then we may immediately recover the
+homography~$h$: namely, fix a triple~$(x_1,x_2,x_3)$ in~$S_{1,e}$, and
+iterate over the triples in~$T_{1,e}$. For each such triple, there exists
+a unique homography~$h$ such that~$h(x_i) = y_i$. This homography belongs
+to~$H_{1,e}$ iff the images of all the other points of~$S_{1,e}$ belong
+to~$T_{1,e}$. Since there are~$3!\binom{\card{S_{1,e}}}{3} = O(n^3)$
+triples~$(y_i)$, this computation requires~$O(n^3)$ field operations.
 
+If $1 ≤ \card{S_{1,e}} ≤ 2$, then $H_{1,e}$~may be explicitly computed as
+the union of the set of homographies mapping the elements of~$S_{1,e}$ to
+those of~$T_{1,e}$ for all permutations of~$T_{1,e}$.
 
-\begin{lem}
-Let~$u, v$ be two integers and~$A ∈ R^{u × u}$.
-\begin{equation}
-λ_v ( \transpose{J_{u,v}}\, A\, J_{u,v}) \;=\;
-H^{\max (v-u, 0)}\,λ_u(A).
-\end{equation}
-\end{lem}
+\paragraph{Case~$d = 2$.}
+Assume $\card{S_{2,e}} ≥ 2$. Let~$u_1, u_2 ∈ S_{2,e}$ and~$v_1, v_2 ∈
+T_{2,e}$ be monic polynomials of degree~two. Any homography between the
+sets~$\acco{u_1, u_2}$ and~$\acco{v_1, v_2}$ will map~$u_1 u_2$ to~$v_1
+v_2$. By Prop.~\ref{prop:homography}(iv), there exists at most a bounded
+number of such homographies. Since there are~$\binom{\card{S_{2,e}}}{2} =
+O(n^2)$ pairs~$(v_1, v_2)$, this requires~$O(n^2)$ field operations.
 
+If~$\card{S_{2,e}} = 1$, then $H_{2,e}$~is the set of all homographies
+mapping the unique element of~$S_{2,e}$ to the unique element
+of~$T_{2,e}$.
 
-\begin{prop}
-Let~$n_1 ≥ … ≥ n_r$. For any symmetric matrix~$A$ written as
-blocks~$A_{i,j}$ of size~$n_i × n_j$, define~$Λ(A)$ as the line matrix of
-length~$r$ with coefficients in~$R_1 = k[H]/H^{n_1}$:
-\begin{equation*}
-Λ(A) = ( H^{n_1 - n_i}\, λ_{n_i} (A_{i,i}))_{i=1,…, r}.
-\end{equation*}
-Then, for any~$X ∈ \ro C(M)$:
-\begin{equation}
-Λ(\transpose{X}\,A\,X) = Λ(A)\, φ(Ψ(X)).
-\end{equation}
-\end{prop}
+\paragraph{Case~$d = 3$.}
+Fix an element~$u ∈ S_{3,e}$. For all~$v ∈ T_{3,e}$, there exist at
+most~$3! = 6$ homographies~$h$ mapping~$u$ to~$v$. Each candidate belongs
+to~$H_{3,e}$ iff it maps all other elements of~$S_{3,e}$ to elements
+of~$T_{3,e}$. There are~$\card{S_{3,e}} = O(n)$ candidates~$u$ and
+therefore~$O(n)$ candidate homographies~$h$.
 
+\paragraph{Case~$d = 4$.}
+Fix an element~$u ∈ S_{4,e}$. The candidates as homographic images of~$u$
+in~$T_{4,e}$ are the~$v$ such that~$j(v) = j(u)$. Each candidate
+polynomial~$v$ gives at most $4! = 24$~candidates homographies~$h$. This
+allows to compute~$H_{4,e}$ in~$O(n)$ field operations.
 
-\begin{prop}
-Let~$A = \mat{Δ_1 & TM \\ 0 & Δ_2}$ and~$X = \mat{X_{1,1} & X_{1,2}\\
-X_{2,1} & X_{2,2}}$, where~$X_i ∈ \ro C(M)$ and~$Δ_i$ are diagonal.
+\paragraph{Case~$d ≥ 5$.} The naïve method is to derive~$(d-4)$ times the
+elements of~$S_{d,e}$ to reduce to the case where~$d = 4$. However, as
+this uses only the five leading coefficients, if the polynomials are
+specially chosen we may find too many homographies. Instead, we first
+compose all the elements of~$S_{d,e}$ and~$T_{d,e}$ by a known, randomly
+chosen homography~$r$. If it still happens that there are two
+non-homographic elements~$u_1, u_2 ∈ S_{d,e}$ such that~$(r ∘
+u_i)^{(d-4)}$ are homographic, we only need to change the random
+homography~$r$. In this way, we may compute the set~$H_{d,e}$ in at
+most~$O(n)$ field operations.
 
-Then $\transpose{X} A X$ has diagonal
-\[ Λ(\transpose{X} A X) = ( Λ(Δ_1) φΨ(X{1,i}) + Λ(Δ_2) φψ(X_{2,i}) +
-  Λ(\transpose{X_{1,i}} TM X_{2,i}))_{i=1,2}. \]
-\end{prop}
+\paragraph{Computing the hidden homography.}
+
+The hidden homography~$h$ lies in the intersection of all sets~$H_{d,e}$.
+As each one of these sets is likely to be extremely small or even reduced
+to~$\acco{h}$, we compute them in increasing order of assumed complexity,
+using estimates given above depending on~$d$ and~$\card{S_{d,e}}$. In
+total, we find a bounded number of candidate homographies using no more
+than~$O(n^3)$ operations in~$k$.
+
 
 \begin{thebibliography}{99}%<<<1
 \bibitem{omeara} Timothy O'Meara, \emph{Introduction to quadratic forms}.
 \bibitem{milnorhusemoller} H. Milnor, D. Husemoller, \emph{Symmetric
-bilinear forms}.
-\bibitem{MPG2013} G. Macario-Rat, J. Plût, H. Gilbert,
-\emph{New Insight into the Isomorphism of Polynomial Problem IP1S
- and its Use in Cryptography}, ASIACRYPT 2013.
+bilinear forms}. \bibitem{MPG2013} G. Macario-Rat, J. Plût, H. Gilbert,
+\emph{New Insight into the Isomorphism of Polynomial Problem IP1S and its
+Use in Cryptography}, ASIACRYPT 2013.
 \end{thebibliography}%>>>1
 \end{document}
