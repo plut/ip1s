@@ -87,9 +87,10 @@
 \title[New insight into IP1S]%<<<
   {New insight into the Isomorphism of Polynomials problem IP1S and
   its use in cryptography}
-\author{G. Macario-Rat\inst{1}, \underline{J. Plût}\inst{2}, H.
-Gilbert\inst{3}}
-\date{2013-12-02}
+\author{Gilles Macario-Rat\inst{1}\and \emph{Jérôme Plût}\inst{2}\and
+Henri Gilbert\inst{3}}
+\date[2013-12-02]{2013-12-02\par
+Full version: {\small \color{bleu}\tt eprint.iacr.org/2013/799}.}
 \institute[]{%
 \inst{1}Orange Labs, \url{gilles.macario-rat@orange.fr}
 % 38--40, rue du Général Leclerc, 92794 Issy-les-Moulineaux Cedex 9, France
@@ -123,8 +124,8 @@ bijective linear transformation~$s$ of the variables~$(x_1, …, x_n)$:
 \end{definition}
 
 In cryptographical applications,the families~$a$ and~$b$ are public and the
-transformation~$s$ is the secret (e.g. the identification protocol of
-[Patarin~1996]).
+transformation~$s$ is the secret (e.g. in the identification protocol of
+{\color{rouge}[Patarin~1996]}).
 \end{frame}%>>>
 \begin{frame}\frametitle{The IP1S problem}%<<<
 
@@ -179,7 +180,7 @@ polynomials} over a finite field \strong{of any characteristic}.
 % \item{} [Levy-dit-Vehel, Perret 2004]: find algebraic equations satisfied
 % by the entries of a solution matrix, and solve these equations using a
 % Gröbner basis computation.
-\item{} [Bouillaguet, Faugère, Fouque, Perret 2011]: transform the
+\item{} {\color{rouge}[Bouillaguet, Faugère, Fouque, Perret 2011]}: transform the
 problem to an overdetermined system of quadratic and linear equations.
 \begin{itemize}
 \item Solve experimentally the systems with Gröbner bases in time
@@ -444,8 +445,9 @@ form~$f = f_0^{d}$, where $f_0$~is irreducible.
 & ⋱\; & ⋱ & \\[-2ex] & & ⋱ & 1\\ 0 & & & M_0}$, where $M_0$~is the
 companion matrix of~$f_0$. (This is almost the Frobenius normal form).
 \item For simplicity, we present here only the case where~$M_0 = 0$. In
-this case, $T$~is the anti-diagonal matrix.
-\item We map diagonal matrices to~$K[M]$ in the following way:
+this case, $T$~is the reverse-identity matrix and $K[M]$~is the local
+algebra~$K[M]/M^d$.
+\item We map linearly diagonal matrices to~$K[M]$ in the following way:
 \begin{equation*}
 ψ: \quad A = \mathrm{diag}(a_0,…,a_{n-1}) ↦  α = ∑ a_i M^i ∈ K[M].
 \end{equation*}
