@@ -1,0 +1,1131 @@
+
+% Preamble for Unicode characters.
+\RequirePackage{amsmath}
+\ifx\directlua\undefined
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\else
+\usepackage{fontspec}
+% unicode-math bugue ici
+\def\DeclareUnicodeCharacter#1#2{%
+\def\tmp{#2}\uccode`\~="#1 \catcode"#1 \active
+\uppercase{\global\let~\tmp}%
+\uccode`\~=0}
+\fi
+\newcommand{\@ifdisplay}[2]{\mathchoice{#1}{#2}{#2}{#2}}%
+% Extensible arrows%<<<
+\def\mapstofill@{\arrowfill@{\mapstochar\relbar}\relbar\rightarrow}
+\newcommand{\xmapsto}[2][]{\ext@arrow 0399\mapstofill@{#1}{#2}}
+\def\mapsfromfill@{\arrowfill@\leftarrow\relbar{\relbar\mapsfromchar}}
+\newcommand{\xmapsfrom}[2][]{\ext@arrow 0399\mapsfromfill@{#1}{#2}}
+\def\longhookrightarrow{\DOTSB\lhook\protect\relbar\protect\joinrel\rightarrow}
+\def\hookrightarrowfill@{\arrowfill@{\lhook\mkern 3mu}\relbar\rightarrow}
+\newcommand{\xhookrightarrow}[2][]{\ext@arrow 0399\hookrightarrowfill@{#1}{#2}}
+%>>>
+% Automatic arrows%<<<
+\def\@matharrow#1#2#3{%
+  \let\@matharr@short@#1 \let\@matharr@long@#2 \let\@matharr@x@#3
+  \let\@matharr@up@\relax \let\@matharr@down@\relax
+\@matharr@step}
+\def\@matharr@step{\futurelet\@matharr@what \@matharr@}
+\def\@matharr@{\let\next\@matharr@do
+  \ifx ^\@matharr@what\let\next\@matharr@up \fi
+  \ifx _\@matharr@what\let\next\@matharr@down \fi
+\next}
+\def\@matharr@up^#1{\def\@matharr@up@{#1}\@matharr@step}
+\def\@matharr@down_#1{\def\@matharr@down@{#1}\@matharr@step}
+\def\@matharr@do{%
+  \let\@matharr@do@\@matharr@x
+  \ifx\@matharr@up@\relax \ifx\@matharr@down@\relax
+    % Make an unlabeled arrow. Make it long if in display mode, short
+    % otherwise.
+    \def\@matharr@do@{\@ifdisplay{\@matharr@long@}{\@matharr@short@}}%
+  \fi \fi
+\@matharr@do@}
+% Make a labeled extensible arrow.
+\def\@matharr@x{%
+  \@ifdisplay
+  {\@matharr@x@[\mkern 8mu\@matharr@down@\mkern 8mu]%
+    {\mkern 8mu\@matharr@up@\mkern 8mu}}%
+  {\@matharr@x@[\mkern 12mu\@matharr@down@\mkern 12mu]%
+    {\mkern 12mu\@matharr@up@\mkern 12mu}}%
+}
+
+\def\autorightarrow{\@matharrow\rightarrow\longrightarrow\xrightarrow}%
+\def\autoleftarrow{\@matharrow\leftarrow\longleftarrow\xleftarrow}%
+\def\automapsto{\@matharrow\mapsto\longmapsto\xmapsto}%
+\def\automapsfrom{\@matharrow\mapsfrom\longmapsfrom\xmapsfrom}%
+\def\autohookrightarrow{\@matharrow\hookrightarrow\longhookrightarrow
+  \xhookrightarrow}
+%>>>
+% Capital Greek letters%<<<
+\def\Alpha{A}
+\def\Beta{B}
+\def\Epsilon{E}
+\def\Zeta{Z}
+\def\Eta{H}
+\def\Iota{I}
+\def\Kappa{K}
+\def\Mu{M}
+\def\Nu{N}
+\def\Omicron{O}
+\def\Rho{P}
+\def\Tau{T}
+\def\Chi{X}
+\def\omicron{o}
+%%>>>
+% This is a generated file, do not edit !
+%   NO-BREAK SPACE
+\DeclareUnicodeCharacter{00A0}{~}
+% ¡ INVERTED EXCLAMATION MARK
+\DeclareUnicodeCharacter{00A1}{\textexclamdown}
+% ¢ CENT SIGN
+\DeclareUnicodeCharacter{00A2}{\textcent}
+% £ POUND SIGN
+\DeclareUnicodeCharacter{00A3}{\pounds}
+% ¤ CURRENCY SIGN
+\DeclareUnicodeCharacter{00A4}{\textcurrency}
+% ¥ YEN SIGN
+\DeclareUnicodeCharacter{00A5}{\textyen}
+% ¦ BROKEN BAR
+\DeclareUnicodeCharacter{00A6}{\textbrokenbar}
+% § SECTION SIGN
+\DeclareUnicodeCharacter{00A7}{\S}
+% ¨ DIAERESIS
+\DeclareUnicodeCharacter{00A8}{\"{ }}
+% © COPYRIGHT SIGN
+\DeclareUnicodeCharacter{00A9}{\copyright}
+% ª FEMININE ORDINAL INDICATOR
+\DeclareUnicodeCharacter{00AA}{\textordfeminine}
+% « LEFT-POINTING DOUBLE ANGLE QUOTATION MARK
+\DeclareUnicodeCharacter{00AB}{\guillemotleft}
+% ¬ NOT SIGN
+\DeclareUnicodeCharacter{00AC}{\neg}
+% ® REGISTERED SIGN
+\DeclareUnicodeCharacter{00AE}{\textregistered}
+% ¯ MACRON
+\DeclareUnicodeCharacter{00AF}{\textasciimacron­}
+% ° DEGREE SIGN
+\DeclareUnicodeCharacter{00B0}{\textsuperscript{o}}
+% ± PLUS-MINUS SIGN
+\DeclareUnicodeCharacter{00B1}{\pm}
+% ² SUPERSCRIPT TWO
+\DeclareUnicodeCharacter{00B2}{\textsuperscript{2}}
+% ³ SUPERSCRIPT THREE
+\DeclareUnicodeCharacter{00B3}{\textsuperscript{3}}
+% µ MICRO SIGN
+\DeclareUnicodeCharacter{00B5}{\textmu}
+% ¶ PILCROW SIGN
+\DeclareUnicodeCharacter{00B6}{\P}
+% · MIDDLE DOT
+\DeclareUnicodeCharacter{00B7}{\cdot}
+% ¹ SUPERSCRIPT ONE
+\DeclareUnicodeCharacter{00B9}{\textsuperscript{1}}
+% º MASCULINE ORDINAL INDICATOR
+\DeclareUnicodeCharacter{00BA}{\textordmasculine}
+% » RIGHT-POINTING DOUBLE ANGLE QUOTATION MARK
+\DeclareUnicodeCharacter{00BB}{\guillemotright}
+% ¼ VULGAR FRACTION ONE QUARTER
+\DeclareUnicodeCharacter{00BC}{\ensuremath{\sfrac{1}{4}}}
+% ½ VULGAR FRACTION ONE HALF
+\DeclareUnicodeCharacter{00BD}{\ensuremath{\sfrac{1}{2}}}
+% ¾ VULGAR FRACTION THREE QUARTERS
+\DeclareUnicodeCharacter{00BE}{\ensuremath{\sfrac{3}{4}}}
+% ¿ INVERTED QUESTION MARK
+\DeclareUnicodeCharacter{00BF}{\textquestiondown}
+% × MULTIPLICATION SIGN
+\DeclareUnicodeCharacter{00D7}{\times}
+% ÷ DIVISION SIGN
+\DeclareUnicodeCharacter{00F7}{\div}
+% ı LATIN SMALL LETTER DOTLESS I
+\DeclareUnicodeCharacter{0131}{\imath}
+% ȷ LATIN SMALL LETTER DOTLESS J
+\DeclareUnicodeCharacter{0237}{\jmath}
+% Α GREEK CAPITAL LETTER ALPHA
+\DeclareUnicodeCharacter{0391}{\Alpha}
+% Β GREEK CAPITAL LETTER BETA
+\DeclareUnicodeCharacter{0392}{\Beta}
+% Γ GREEK CAPITAL LETTER GAMMA
+\DeclareUnicodeCharacter{0393}{\Gamma}
+% Δ GREEK CAPITAL LETTER DELTA
+\DeclareUnicodeCharacter{0394}{\Delta}
+% Ε GREEK CAPITAL LETTER EPSILON
+\DeclareUnicodeCharacter{0395}{\Epsilon}
+% Ζ GREEK CAPITAL LETTER ZETA
+\DeclareUnicodeCharacter{0396}{\Zeta}
+% Η GREEK CAPITAL LETTER ETA
+\DeclareUnicodeCharacter{0397}{\Eta}
+% Θ GREEK CAPITAL LETTER THETA
+\DeclareUnicodeCharacter{0398}{\Theta}
+% Ι GREEK CAPITAL LETTER IOTA
+\DeclareUnicodeCharacter{0399}{\Iota}
+% Κ GREEK CAPITAL LETTER KAPPA
+\DeclareUnicodeCharacter{039A}{\Kappa}
+% Λ GREEK CAPITAL LETTER LAMDA
+\DeclareUnicodeCharacter{039B}{\Lambda}
+% Μ GREEK CAPITAL LETTER MU
+\DeclareUnicodeCharacter{039C}{\Mu}
+% Ν GREEK CAPITAL LETTER NU
+\DeclareUnicodeCharacter{039D}{\Nu}
+% Ξ GREEK CAPITAL LETTER XI
+\DeclareUnicodeCharacter{039E}{\Xi}
+% Ο GREEK CAPITAL LETTER OMICRON
+\DeclareUnicodeCharacter{039F}{\Omicron}
+% Π GREEK CAPITAL LETTER PI
+\DeclareUnicodeCharacter{03A0}{\Pi}
+% Ρ GREEK CAPITAL LETTER RHO
+\DeclareUnicodeCharacter{03A1}{\Rho}
+% Σ GREEK CAPITAL LETTER SIGMA
+\DeclareUnicodeCharacter{03A3}{\Sigma}
+% Τ GREEK CAPITAL LETTER TAU
+\DeclareUnicodeCharacter{03A4}{\Tau}
+% Υ GREEK CAPITAL LETTER UPSILON
+\DeclareUnicodeCharacter{03A5}{\Upsilon}
+% Φ GREEK CAPITAL LETTER PHI
+\DeclareUnicodeCharacter{03A6}{\Phi}
+% Χ GREEK CAPITAL LETTER CHI
+\DeclareUnicodeCharacter{03A7}{\Chi}
+% Ψ GREEK CAPITAL LETTER PSI
+\DeclareUnicodeCharacter{03A8}{\Psi}
+% Ω GREEK CAPITAL LETTER OMEGA
+\DeclareUnicodeCharacter{03A9}{\Omega}
+% α GREEK SMALL LETTER ALPHA
+\DeclareUnicodeCharacter{03B1}{\alpha}
+% β GREEK SMALL LETTER BETA
+\DeclareUnicodeCharacter{03B2}{\beta}
+% γ GREEK SMALL LETTER GAMMA
+\DeclareUnicodeCharacter{03B3}{\gamma}
+% δ GREEK SMALL LETTER DELTA
+\DeclareUnicodeCharacter{03B4}{\delta}
+% ε GREEK SMALL LETTER EPSILON
+\DeclareUnicodeCharacter{03B5}{\varepsilon}
+% ζ GREEK SMALL LETTER ZETA
+\DeclareUnicodeCharacter{03B6}{\zeta}
+% η GREEK SMALL LETTER ETA
+\DeclareUnicodeCharacter{03B7}{\eta}
+% θ GREEK SMALL LETTER THETA
+\DeclareUnicodeCharacter{03B8}{\theta}
+% ι GREEK SMALL LETTER IOTA
+\DeclareUnicodeCharacter{03B9}{\iota}
+% κ GREEK SMALL LETTER KAPPA
+\DeclareUnicodeCharacter{03BA}{\kappa}
+% λ GREEK SMALL LETTER LAMDA
+\DeclareUnicodeCharacter{03BB}{\lambda}
+% μ GREEK SMALL LETTER MU
+\DeclareUnicodeCharacter{03BC}{\mu}
+% ν GREEK SMALL LETTER NU
+\DeclareUnicodeCharacter{03BD}{\nu}
+% ξ GREEK SMALL LETTER XI
+\DeclareUnicodeCharacter{03BE}{\xi}
+% ο GREEK SMALL LETTER OMICRON
+\DeclareUnicodeCharacter{03BF}{\omicron}
+% π GREEK SMALL LETTER PI
+\DeclareUnicodeCharacter{03C0}{\pi}
+% ρ GREEK SMALL LETTER RHO
+\DeclareUnicodeCharacter{03C1}{\rho}
+% ς GREEK SMALL LETTER FINAL SIGMA
+\DeclareUnicodeCharacter{03C2}{\varsigma}
+% σ GREEK SMALL LETTER SIGMA
+\DeclareUnicodeCharacter{03C3}{\sigma}
+% τ GREEK SMALL LETTER TAU
+\DeclareUnicodeCharacter{03C4}{\tau}
+% υ GREEK SMALL LETTER UPSILON
+\DeclareUnicodeCharacter{03C5}{\upsilon}
+% φ GREEK SMALL LETTER PHI
+\DeclareUnicodeCharacter{03C6}{\varphi}
+% χ GREEK SMALL LETTER CHI
+\DeclareUnicodeCharacter{03C7}{\chi}
+% ψ GREEK SMALL LETTER PSI
+\DeclareUnicodeCharacter{03C8}{\psi}
+% ω GREEK SMALL LETTER OMEGA
+\DeclareUnicodeCharacter{03C9}{\omega}
+% ϐ GREEK BETA SYMBOL
+\DeclareUnicodeCharacter{03D0}{\ensuremath\varbeta}
+% ϑ GREEK THETA SYMBOL
+\DeclareUnicodeCharacter{03D1}{\vartheta}
+% ϕ GREEK PHI SYMBOL
+\DeclareUnicodeCharacter{03D5}{\phi}
+% ϖ GREEK PI SYMBOL
+\DeclareUnicodeCharacter{03D6}{\ensuremath\varpi}
+% Ϙ GREEK LETTER ARCHAIC KOPPA
+\DeclareUnicodeCharacter{03D8}{\ensuremath{\Qoppa}}
+% ϙ GREEK SMALL LETTER ARCHAIC KOPPA
+\DeclareUnicodeCharacter{03D9}{\ensuremath{\qoppa}}
+% Ϛ GREEK LETTER STIGMA
+\DeclareUnicodeCharacter{03DA}{\ensuremath{\Stigma}}
+% ϛ GREEK SMALL LETTER STIGMA
+\DeclareUnicodeCharacter{03DB}{\ensuremath{\stigma}}
+% Ϝ GREEK LETTER DIGAMMA
+\DeclareUnicodeCharacter{03DC}{\ensuremath{\Digamma}}
+% ϝ GREEK SMALL LETTER DIGAMMA
+\DeclareUnicodeCharacter{03DD}{\ensuremath{\digamma}}
+% Ϟ GREEK LETTER KOPPA
+\DeclareUnicodeCharacter{03DE}{\ensuremath{\Koppa}}
+% ϟ GREEK SMALL LETTER KOPPA
+\DeclareUnicodeCharacter{03DF}{\ensuremath{\koppa}}
+% Ϡ GREEK LETTER SAMPI
+\DeclareUnicodeCharacter{03E0}{\ensuremath{\Sampi}}
+% ϡ GREEK SMALL LETTER SAMPI
+\DeclareUnicodeCharacter{03E1}{\ensuremath{\sampi}}
+% ϰ GREEK KAPPA SYMBOL
+\DeclareUnicodeCharacter{03F0}{\ensuremath{\varkappa}}
+% ϱ GREEK RHO SYMBOL
+\DeclareUnicodeCharacter{03F1}{\ensuremath{\varrho}}
+% ϵ GREEK LUNATE EPSILON SYMBOL
+\DeclareUnicodeCharacter{03F5}{\epsilon}
+% ϶ GREEK REVERSED LUNATE EPSILON SYMBOL
+\DeclareUnicodeCharacter{03F6}{\ensuremath{\backepsilon}}
+% ᵢ LATIN SUBSCRIPT SMALL LETTER I
+\DeclareUnicodeCharacter{1D62}{\ensuremath{_i}}
+% ᵣ LATIN SUBSCRIPT SMALL LETTER R
+\DeclareUnicodeCharacter{1D63}{\ensuremath{_r}}
+% ᵤ LATIN SUBSCRIPT SMALL LETTER U
+\DeclareUnicodeCharacter{1D64}{\ensuremath{_u}}
+% ᵥ LATIN SUBSCRIPT SMALL LETTER V
+\DeclareUnicodeCharacter{1D65}{\ensuremath{_v}}
+% – EN DASH
+\DeclareUnicodeCharacter{2013}{\text{--}}
+% — EM DASH
+\DeclareUnicodeCharacter{2014}{\text{---}}
+% ‖ DOUBLE VERTICAL LINE
+\DeclareUnicodeCharacter{2016}{\textbardbl}
+% ‘ LEFT SINGLE QUOTATION MARK
+\DeclareUnicodeCharacter{2018}{\textquoteleft}
+% ’ RIGHT SINGLE QUOTATION MARK
+\DeclareUnicodeCharacter{2019}{\textquoteright}
+% ‚ SINGLE LOW-9 QUOTATION MARK
+\DeclareUnicodeCharacter{201A}{\quotesinglbase}
+% “ LEFT DOUBLE QUOTATION MARK
+\DeclareUnicodeCharacter{201C}{\textquotedblleft}
+% ” RIGHT DOUBLE QUOTATION MARK
+\DeclareUnicodeCharacter{201D}{\textquotedblright}
+% „ DOUBLE LOW-9 QUOTATION MARK
+\DeclareUnicodeCharacter{201E}{\quotedblbase}
+% † DAGGER
+\DeclareUnicodeCharacter{2020}{\dag}
+% ‡ DOUBLE DAGGER
+\DeclareUnicodeCharacter{2021}{\ddag}
+% • BULLET
+\DeclareUnicodeCharacter{2022}{\bullet}
+% … HORIZONTAL ELLIPSIS
+\DeclareUnicodeCharacter{2026}{\dots}
+% ‰ PER MILLE SIGN
+\DeclareUnicodeCharacter{2030}{\textperthousand}
+% ‱ PER TEN THOUSAND SIGN
+\DeclareUnicodeCharacter{2031}{\textpertenthousand}
+% ′ PRIME
+\DeclareUnicodeCharacter{2032}{\prime}
+% ″ DOUBLE PRIME
+\DeclareUnicodeCharacter{2033}{\second}
+% ‴ TRIPLE PRIME
+\DeclareUnicodeCharacter{2034}{\third}
+% ‵ REVERSED PRIME
+\DeclareUnicodeCharacter{2035}{\backprime}
+% ‸ CARET
+\DeclareUnicodeCharacter{2038}{\ifmmode\widehat{}\else\textasciicircum\fi}
+% ‹ SINGLE LEFT-POINTING ANGLE QUOTATION MARK
+\DeclareUnicodeCharacter{2039}{\guilsinglleft}
+% › SINGLE RIGHT-POINTING ANGLE QUOTATION MARK
+\DeclareUnicodeCharacter{203A}{\guilsinglright}
+% ※ REFERENCE MARK
+\DeclareUnicodeCharacter{203B}{\textreferencemark}
+% ‼ DOUBLE EXCLAMATION MARK
+\DeclareUnicodeCharacter{203C}{{!\kern -.5ex!}}
+% ‽ INTERROBANG
+\DeclareUnicodeCharacter{203D}{\textinterrobang}
+% ‾ OVERLINE
+\DeclareUnicodeCharacter{203E}{\overline{\;}}
+% ⁂ ASTERISM
+\DeclareUnicodeCharacter{2042}{\asterism}
+% ⁅ LEFT SQUARE BRACKET WITH QUILL
+\DeclareUnicodeCharacter{2045}{\textlquill}
+% ⁆ RIGHT SQUARE BRACKET WITH QUILL
+\DeclareUnicodeCharacter{2046}{\textrquill}
+% ⁇ DOUBLE QUESTION MARK
+\DeclareUnicodeCharacter{2047}{{?\kern -.5ex?}}
+% ⁈ QUESTION EXCLAMATION MARK
+\DeclareUnicodeCharacter{2048}{{?\kern -.5ex!}}
+% ⁉ EXCLAMATION QUESTION MARK
+\DeclareUnicodeCharacter{2049}{{!\kern -.5ex?}}
+% ⁒ COMMERCIAL MINUS SIGN
+\DeclareUnicodeCharacter{2052}{\textdiscount}
+% ⁢ INVISIBLE TIMES
+\DeclareUnicodeCharacter{2062}{{}}
+% ⁰ SUPERSCRIPT ZERO
+\DeclareUnicodeCharacter{2070}{^0}
+% ⁴ SUPERSCRIPT FOUR
+\DeclareUnicodeCharacter{2074}{^4}
+% ⁵ SUPERSCRIPT FIVE
+\DeclareUnicodeCharacter{2075}{^5}
+% ⁶ SUPERSCRIPT SIX
+\DeclareUnicodeCharacter{2076}{^6}
+% ⁷ SUPERSCRIPT SEVEN
+\DeclareUnicodeCharacter{2077}{^7}
+% ⁸ SUPERSCRIPT EIGHT
+\DeclareUnicodeCharacter{2078}{^8}
+% ⁹ SUPERSCRIPT NINE
+\DeclareUnicodeCharacter{2079}{^9}
+% ⁿ SUPERSCRIPT LATIN SMALL LETTER N
+\DeclareUnicodeCharacter{207F}{^n}
+% ₀ SUBSCRIPT ZERO
+\DeclareUnicodeCharacter{2080}{_0}
+% ₁ SUBSCRIPT ONE
+\DeclareUnicodeCharacter{2081}{_1}
+% ₂ SUBSCRIPT TWO
+\DeclareUnicodeCharacter{2082}{_2}
+% ₃ SUBSCRIPT THREE
+\DeclareUnicodeCharacter{2083}{_3}
+% ₄ SUBSCRIPT FOUR
+\DeclareUnicodeCharacter{2084}{_4}
+% ₅ SUBSCRIPT FIVE
+\DeclareUnicodeCharacter{2085}{_5}
+% ₆ SUBSCRIPT SIX
+\DeclareUnicodeCharacter{2086}{_6}
+% ₇ SUBSCRIPT SEVEN
+\DeclareUnicodeCharacter{2087}{_7}
+% ₈ SUBSCRIPT EIGHT
+\DeclareUnicodeCharacter{2088}{_8}
+% ₉ SUBSCRIPT NINE
+\DeclareUnicodeCharacter{2089}{_9}
+% ₊ SUBSCRIPT PLUS SIGN
+\DeclareUnicodeCharacter{208A}{_+}
+% ₋ SUBSCRIPT MINUS
+\DeclareUnicodeCharacter{208B}{_-}
+% ₌ SUBSCRIPT EQUALS SIGN
+\DeclareUnicodeCharacter{208C}{_=}
+% ₍ SUBSCRIPT LEFT PARENTHESIS
+\DeclareUnicodeCharacter{208D}{_(}
+% ₎ SUBSCRIPT RIGHT PARENTHESIS
+\DeclareUnicodeCharacter{208E}{_)}
+% ₐ LATIN SUBSCRIPT SMALL LETTER A
+\DeclareUnicodeCharacter{2090}{_a}
+% ₑ LATIN SUBSCRIPT SMALL LETTER E
+\DeclareUnicodeCharacter{2091}{_e}
+% ₒ LATIN SUBSCRIPT SMALL LETTER O
+\DeclareUnicodeCharacter{2092}{_o}
+% ₓ LATIN SUBSCRIPT SMALL LETTER X
+\DeclareUnicodeCharacter{2093}{_x}
+% ₕ ???
+\DeclareUnicodeCharacter{2095}{_h}
+% ₖ ???
+\DeclareUnicodeCharacter{2096}{_k}
+% ₗ ???
+\DeclareUnicodeCharacter{2097}{_l}
+% ₘ ???
+\DeclareUnicodeCharacter{2098}{_m}
+% ₙ ???
+\DeclareUnicodeCharacter{2099}{_n}
+% ₚ ???
+\DeclareUnicodeCharacter{209A}{_p}
+% ₛ ???
+\DeclareUnicodeCharacter{209B}{_s}
+% ₜ ???
+\DeclareUnicodeCharacter{209C}{_t}
+% ℂ DOUBLE-STRUCK CAPITAL C
+\DeclareUnicodeCharacter{2102}{\ensuremath{\mathbb{C}}}
+% ℇ EULER CONSTANT
+\DeclareUnicodeCharacter{2107}{\ensuremath{\Euler}}
+% ℊ SCRIPT SMALL G
+\DeclareUnicodeCharacter{210A}{\ensuremath{\mathcal g}}
+% ℋ SCRIPT CAPITAL H
+\DeclareUnicodeCharacter{210B}{\ensuremath{\mathrsfs H}}
+% ℌ BLACK-LETTER CAPITAL H
+\DeclareUnicodeCharacter{210C}{\ensuremath{\mathfrak H}}
+% ℍ DOUBLE-STRUCK CAPITAL H
+\DeclareUnicodeCharacter{210D}{\ensuremath{\mathbb{H}}}
+% ℏ PLANCK CONSTANT OVER TWO PI
+\DeclareUnicodeCharacter{210F}{\hbar}
+% ℐ SCRIPT CAPITAL I
+\DeclareUnicodeCharacter{2110}{\ensuremath{\mathrsfs I}}
+% ℑ BLACK-LETTER CAPITAL I
+\DeclareUnicodeCharacter{2111}{\Im}
+% ℒ SCRIPT CAPITAL L
+\DeclareUnicodeCharacter{2112}{\ensuremath{\mathrsfs L}}
+% ℓ SCRIPT SMALL L
+\DeclareUnicodeCharacter{2113}{\ensuremath{\ell}}
+% ℕ DOUBLE-STRUCK CAPITAL N
+\DeclareUnicodeCharacter{2115}{\ensuremath{\mathbb{N}}}
+% ℘ SCRIPT CAPITAL P
+\DeclareUnicodeCharacter{2118}{\ensuremath{\wp}}
+% ℙ DOUBLE-STRUCK CAPITAL P
+\DeclareUnicodeCharacter{2119}{\ensuremath{\mathbb{P}}}
+% ℚ DOUBLE-STRUCK CAPITAL Q
+\DeclareUnicodeCharacter{211A}{\ensuremath{\mathbb{Q}}}
+% ℝ DOUBLE-STRUCK CAPITAL R
+\DeclareUnicodeCharacter{211D}{\ensuremath{\mathbb{R}}}
+% ™ TRADE MARK SIGN
+\DeclareUnicodeCharacter{2122}{\texttrademark}
+% ℤ DOUBLE-STRUCK CAPITAL Z
+\DeclareUnicodeCharacter{2124}{\ensuremath{\mathbb{Z}}}
+% Ω OHM SIGN
+\DeclareUnicodeCharacter{2126}{\Omega}
+% ℧ INVERTED OHM SIGN
+\DeclareUnicodeCharacter{2127}{\mho}
+% ℨ BLACK-LETTER CAPITAL Z
+\DeclareUnicodeCharacter{2128}{\ensuremath{\mathfrak Z}}
+% K KELVIN SIGN
+\DeclareUnicodeCharacter{212A}{\ensuremath{\mathrm K}}
+% Å ANGSTROM SIGN
+\DeclareUnicodeCharacter{212B}{\ensuremath{\mathring{\mathrm A}}}
+% ℬ SCRIPT CAPITAL B
+\DeclareUnicodeCharacter{212C}{\ensuremath{\mathrsfs B}}
+% ℭ BLACK-LETTER CAPITAL C
+\DeclareUnicodeCharacter{212D}{\ensuremath{\mathfrak C}}
+% ℮ ESTIMATED SYMBOL
+\DeclareUnicodeCharacter{212E}{\textestimated}
+% ℯ SCRIPT SMALL E
+\DeclareUnicodeCharacter{212F}{\ensuremath{\mathrsfs e}}
+% ℰ SCRIPT CAPITAL E
+\DeclareUnicodeCharacter{2130}{\ensuremath{\mathrsfs E}}
+% ℱ SCRIPT CAPITAL F
+\DeclareUnicodeCharacter{2131}{\ensuremath{\mathrsfs F}}
+% Ⅎ TURNED CAPITAL F
+\DeclareUnicodeCharacter{2132}{\Finv}
+% ℵ ALEF SYMBOL
+\DeclareUnicodeCharacter{2135}{\aleph}
+% ℶ BET SYMBOL
+\DeclareUnicodeCharacter{2136}{\beth}
+% ℷ GIMEL SYMBOL
+\DeclareUnicodeCharacter{2137}{\gimel}
+% ℸ DALET SYMBOL
+\DeclareUnicodeCharacter{2138}{\daleth}
+% ℼ DOUBLE-STRUCK SMALL PI
+\DeclareUnicodeCharacter{213C}{\mathbb{\pi}}
+% ℽ DOUBLE-STRUCK SMALL GAMMA
+\DeclareUnicodeCharacter{213D}{\mathbb{\gamma}}
+% ℾ DOUBLE-STRUCK CAPITAL GAMMA
+\DeclareUnicodeCharacter{213E}{\mathbb{\Pi}}
+% ℿ DOUBLE-STRUCK CAPITAL PI
+\DeclareUnicodeCharacter{213F}{\mathbb{\Gamma}}
+% ⅀ DOUBLE-STRUCK N-ARY SUMMATION
+\DeclareUnicodeCharacter{2140}{\mathbb{\Sigma}}
+% ⅁ TURNED SANS-SERIF CAPITAL G
+\DeclareUnicodeCharacter{2141}{\Game}
+% ⅄ TURNED SANS-SERIF CAPITAL Y
+\DeclareUnicodeCharacter{2144}{\Yup}
+% ⅆ DOUBLE-STRUCK ITALIC SMALL D
+\DeclareUnicodeCharacter{2146}{\mathrm{d}}
+% ⅈ DOUBLE-STRUCK ITALIC SMALL I
+\DeclareUnicodeCharacter{2148}{\imath}
+% ⅉ DOUBLE-STRUCK ITALIC SMALL J
+\DeclareUnicodeCharacter{2149}{\jmath}
+% ⅋ TURNED AMPERSAND
+\DeclareUnicodeCharacter{214B}{\invamp}
+% ← LEFTWARDS ARROW
+\DeclareUnicodeCharacter{2190}{\autoleftarrow}
+% ↑ UPWARDS ARROW
+\DeclareUnicodeCharacter{2191}{\uparrow}
+% → RIGHTWARDS ARROW
+\DeclareUnicodeCharacter{2192}{\autorightarrow}
+% ↓ DOWNWARDS ARROW
+\DeclareUnicodeCharacter{2193}{\downarrow}
+% ↔ LEFT RIGHT ARROW
+\DeclareUnicodeCharacter{2194}{\leftrightarrow}
+% ↕ UP DOWN ARROW
+\DeclareUnicodeCharacter{2195}{\updownarrow}
+% ↖ NORTH WEST ARROW
+\DeclareUnicodeCharacter{2196}{\nwarrow}
+% ↗ NORTH EAST ARROW
+\DeclareUnicodeCharacter{2197}{\nearrow}
+% ↘ SOUTH EAST ARROW
+\DeclareUnicodeCharacter{2198}{\searrow}
+% ↙ SOUTH WEST ARROW
+\DeclareUnicodeCharacter{2199}{\swarrow}
+% ↚ LEFTWARDS ARROW WITH STROKE
+\DeclareUnicodeCharacter{219A}{\nleftarrow}
+% ↛ RIGHTWARDS ARROW WITH STROKE
+\DeclareUnicodeCharacter{219B}{\nrightarrow}
+% ↞ LEFTWARDS TWO HEADED ARROW
+\DeclareUnicodeCharacter{219E}{\twoheadleftarrow}
+% ↠ RIGHTWARDS TWO HEADED ARROW
+\DeclareUnicodeCharacter{21A0}{\twoheadrightarrow}
+% ↢ LEFTWARDS ARROW WITH TAIL
+\DeclareUnicodeCharacter{21A2}{\leftarrowtail}
+% ↣ RIGHTWARDS ARROW WITH TAIL
+\DeclareUnicodeCharacter{21A3}{\rightarrowtail}
+% ↤ LEFTWARDS ARROW FROM BAR
+\DeclareUnicodeCharacter{21A4}{\automapsfrom}
+% ↦ RIGHTWARDS ARROW FROM BAR
+\DeclareUnicodeCharacter{21A6}{\automapsto}
+% ↩ LEFTWARDS ARROW WITH HOOK
+\DeclareUnicodeCharacter{21A9}{\hookleftarrow}
+% ↪ RIGHTWARDS ARROW WITH HOOK
+\DeclareUnicodeCharacter{21AA}{\autohookrightarrow}
+% ↫ LEFTWARDS ARROW WITH LOOP
+\DeclareUnicodeCharacter{21AB}{\looparrowleft}
+% ↬ RIGHTWARDS ARROW WITH LOOP
+\DeclareUnicodeCharacter{21AC}{\looparrowright}
+% ↭ LEFT RIGHT WAVE ARROW
+\DeclareUnicodeCharacter{21AD}{\leftrightsquigarrow}
+% ↮ LEFT RIGHT ARROW WITH STROKE
+\DeclareUnicodeCharacter{21AE}{\nleftrightarrow}
+% ↯ DOWNWARDS ZIGZAG ARROW
+\DeclareUnicodeCharacter{21AF}{\lightning}
+% ↰ UPWARDS ARROW WITH TIP LEFTWARDS
+\DeclareUnicodeCharacter{21B0}{\Lsh}
+% ↱ UPWARDS ARROW WITH TIP RIGHTWARDS
+\DeclareUnicodeCharacter{21B1}{\Rsh}
+% ↶ ANTICLOCKWISE TOP SEMICIRCLE ARROW
+\DeclareUnicodeCharacter{21B6}{\curvearrowleft}
+% ↷ CLOCKWISE TOP SEMICIRCLE ARROW
+\DeclareUnicodeCharacter{21B7}{\curvearrowright}
+% ↺ ANTICLOCKWISE OPEN CIRCLE ARROW
+\DeclareUnicodeCharacter{21BA}{\circlearrowleft}
+% ↻ CLOCKWISE OPEN CIRCLE ARROW
+\DeclareUnicodeCharacter{21BB}{\circlearrowright}
+% ↼ LEFTWARDS HARPOON WITH BARB UPWARDS
+\DeclareUnicodeCharacter{21BC}{\leftharpoonup}
+% ↽ LEFTWARDS HARPOON WITH BARB DOWNWARDS
+\DeclareUnicodeCharacter{21BD}{\leftharpoondown}
+% ↾ UPWARDS HARPOON WITH BARB RIGHTWARDS
+\DeclareUnicodeCharacter{21BE}{\upharpoonright}
+% ↿ UPWARDS HARPOON WITH BARB LEFTWARDS
+\DeclareUnicodeCharacter{21BF}{\upharpoonleft}
+% ⇀ RIGHTWARDS HARPOON WITH BARB UPWARDS
+\DeclareUnicodeCharacter{21C0}{\rightharpoonup}
+% ⇁ RIGHTWARDS HARPOON WITH BARB DOWNWARDS
+\DeclareUnicodeCharacter{21C1}{\rightharpoondown}
+% ⇂ DOWNWARDS HARPOON WITH BARB RIGHTWARDS
+\DeclareUnicodeCharacter{21C2}{\downharpoonright}
+% ⇃ DOWNWARDS HARPOON WITH BARB LEFTWARDS
+\DeclareUnicodeCharacter{21C3}{\downharpoonleft}
+% ⇄ RIGHTWARDS ARROW OVER LEFTWARDS ARROW
+\DeclareUnicodeCharacter{21C4}{\rightleftarrows}
+% ⇅ UPWARDS ARROW LEFTWARDS OF DOWNWARDS ARROW
+\DeclareUnicodeCharacter{21C5}{\updownarrows}
+% ⇆ LEFTWARDS ARROW OVER RIGHTWARDS ARROW
+\DeclareUnicodeCharacter{21C6}{\leftrightarrows}
+% ⇇ LEFTWARDS PAIRED ARROWS
+\DeclareUnicodeCharacter{21C7}{\leftleftarrows}
+% ⇈ UPWARDS PAIRED ARROWS
+\DeclareUnicodeCharacter{21C8}{\upuparrows}
+% ⇉ RIGHTWARDS PAIRED ARROWS
+\DeclareUnicodeCharacter{21C9}{\rightrightarrows}
+% ⇊ DOWNWARDS PAIRED ARROWS
+\DeclareUnicodeCharacter{21CA}{\downdownarrows}
+% ⇋ LEFTWARDS HARPOON OVER RIGHTWARDS HARPOON
+\DeclareUnicodeCharacter{21CB}{\leftrightharpoons}
+% ⇌ RIGHTWARDS HARPOON OVER LEFTWARDS HARPOON
+\DeclareUnicodeCharacter{21CC}{\rightleftharpoons}
+% ⇍ LEFTWARDS DOUBLE ARROW WITH STROKE
+\DeclareUnicodeCharacter{21CD}{\nLeftarrow}
+% ⇎ LEFT RIGHT DOUBLE ARROW WITH STROKE
+\DeclareUnicodeCharacter{21CE}{\nLeftrightarrow}
+% ⇏ RIGHTWARDS DOUBLE ARROW WITH STROKE
+\DeclareUnicodeCharacter{21CF}{\nRightarrow}
+% ⇐ LEFTWARDS DOUBLE ARROW
+\DeclareUnicodeCharacter{21D0}{\Leftarrow}
+% ⇑ UPWARDS DOUBLE ARROW
+\DeclareUnicodeCharacter{21D1}{\Uparrow}
+% ⇒ RIGHTWARDS DOUBLE ARROW
+\DeclareUnicodeCharacter{21D2}{\Rightarrow}
+% ⇓ DOWNWARDS DOUBLE ARROW
+\DeclareUnicodeCharacter{21D3}{\Downarrow}
+% ⇔ LEFT RIGHT DOUBLE ARROW
+\DeclareUnicodeCharacter{21D4}{\Leftrightarrow}
+% ⇕ UP DOWN DOUBLE ARROW
+\DeclareUnicodeCharacter{21D5}{\Updownarrow}
+% ⇖ NORTH WEST DOUBLE ARROW
+\DeclareUnicodeCharacter{21D6}{\Nwarrow}
+% ⇗ NORTH EAST DOUBLE ARROW
+\DeclareUnicodeCharacter{21D7}{\Nearrow}
+% ⇘ SOUTH EAST DOUBLE ARROW
+\DeclareUnicodeCharacter{21D8}{\Searrow}
+% ⇙ SOUTH WEST DOUBLE ARROW
+\DeclareUnicodeCharacter{21D9}{\Swarrow}
+% ⇚ LEFTWARDS TRIPLE ARROW
+\DeclareUnicodeCharacter{21DA}{\Lleftarrow}
+% ⇛ RIGHTWARDS TRIPLE ARROW
+\DeclareUnicodeCharacter{21DB}{\Rrightarrow}
+% ⇜ LEFTWARDS SQUIGGLE ARROW
+\DeclareUnicodeCharacter{21DC}{\leftsquigarrow}
+% ⇝ RIGHTWARDS SQUIGGLE ARROW
+\DeclareUnicodeCharacter{21DD}{\rightsquigarrow}
+% ⇠ LEFTWARDS DASHED ARROW
+\DeclareUnicodeCharacter{21E0}{\dashleftarrow}
+% ⇢ RIGHTWARDS DASHED ARROW
+\DeclareUnicodeCharacter{21E2}{\dashrightarrow}
+% ⇤ LEFTWARDS ARROW TO BAR
+\DeclareUnicodeCharacter{21E4}{\LeftArrowBar}
+% ⇥ RIGHTWARDS ARROW TO BAR
+\DeclareUnicodeCharacter{21E5}{\RightArrowBar}
+% ⇰ RIGHTWARDS WHITE ARROW FROM WALL
+\DeclareUnicodeCharacter{21F0}{\Mapsto}
+% ⇽ LEFTWARDS OPEN-HEADED ARROW
+\DeclareUnicodeCharacter{21FD}{\leftarrowtriangle}
+% ⇾ RIGHTWARDS OPEN-HEADED ARROW
+\DeclareUnicodeCharacter{21FE}{\rightarrowtriangle}
+% ⇿ LEFT RIGHT OPEN-HEADED ARROW
+\DeclareUnicodeCharacter{21FF}{\leftrightarrowtriangle}
+% ∀ FOR ALL
+\DeclareUnicodeCharacter{2200}{\forall}
+% ∁ COMPLEMENT
+\DeclareUnicodeCharacter{2201}{\complement}
+% ∂ PARTIAL DIFFERENTIAL
+\DeclareUnicodeCharacter{2202}{\partial}
+% ∃ THERE EXISTS
+\DeclareUnicodeCharacter{2203}{\exists}
+% ∄ THERE DOES NOT EXIST
+\DeclareUnicodeCharacter{2204}{\nexists}
+% ∅ EMPTY SET
+\DeclareUnicodeCharacter{2205}{\varnothing}
+% ∇ NABLA
+\DeclareUnicodeCharacter{2207}{\nabla}
+% ∈ ELEMENT OF
+\DeclareUnicodeCharacter{2208}{\in}
+% ∉ NOT AN ELEMENT OF
+\DeclareUnicodeCharacter{2209}{\notin}
+% ∋ CONTAINS AS MEMBER
+\DeclareUnicodeCharacter{220B}{\ni}
+% ∌ DOES NOT CONTAIN AS MEMBER
+\DeclareUnicodeCharacter{220C}{\notni}
+% ∍ SMALL CONTAINS AS MEMBER
+\DeclareUnicodeCharacter{220D}{\sqbullet}
+% ∏ N-ARY PRODUCT
+\DeclareUnicodeCharacter{220F}{\prod}
+% ∐ N-ARY COPRODUCT
+\DeclareUnicodeCharacter{2210}{\coprod}
+% ∑ N-ARY SUMMATION
+\DeclareUnicodeCharacter{2211}{\sum}
+% ∓ MINUS-OR-PLUS SIGN
+\DeclareUnicodeCharacter{2213}{\mp}
+% ∔ DOT PLUS
+\DeclareUnicodeCharacter{2214}{\dotplus}
+% ∖ SET MINUS
+\DeclareUnicodeCharacter{2216}{\smallsetminus}
+% ∗ ASTERISK OPERATOR
+\DeclareUnicodeCharacter{2217}{\ast}
+% ∘ RING OPERATOR
+\DeclareUnicodeCharacter{2218}{\circ}
+% ∙ BULLET OPERATOR
+\DeclareUnicodeCharacter{2219}{\bullet}
+% √ SQUARE ROOT
+\DeclareUnicodeCharacter{221A}{\sqrt}
+% ∛ CUBE ROOT
+\DeclareUnicodeCharacter{221B}{\sqrt[3]}
+% ∜ FOURTH ROOT
+\DeclareUnicodeCharacter{221C}{\sqrt[4]}
+% ∝ PROPORTIONAL TO
+\DeclareUnicodeCharacter{221D}{\propto}
+% ∞ INFINITY
+\DeclareUnicodeCharacter{221E}{\infty}
+% ∠ ANGLE
+\DeclareUnicodeCharacter{2220}{\angle}
+% ∡ MEASURED ANGLE
+\DeclareUnicodeCharacter{2221}{\measuredangle}
+% ∢ SPHERICAL ANGLE
+\DeclareUnicodeCharacter{2222}{\sphericalangle}
+% ∣ DIVIDES
+\DeclareUnicodeCharacter{2223}{\mid}
+% ∤ DOES NOT DIVIDE
+\DeclareUnicodeCharacter{2224}{\nmid}
+% ∥ PARALLEL TO
+\DeclareUnicodeCharacter{2225}{\parallel}
+% ∦ NOT PARALLEL TO
+\DeclareUnicodeCharacter{2226}{\nparallel}
+% ∧ LOGICAL AND
+\DeclareUnicodeCharacter{2227}{\wedge}
+% ∨ LOGICAL OR
+\DeclareUnicodeCharacter{2228}{\vee}
+% ∩ INTERSECTION
+\DeclareUnicodeCharacter{2229}{\cap}
+% ∪ UNION
+\DeclareUnicodeCharacter{222A}{\cup}
+% ∫ INTEGRAL
+\DeclareUnicodeCharacter{222B}{\int}
+% ∬ DOUBLE INTEGRAL
+\DeclareUnicodeCharacter{222C}{\iint}
+% ∭ TRIPLE INTEGRAL
+\DeclareUnicodeCharacter{222D}{\iiint}
+% ∮ CONTOUR INTEGRAL
+\DeclareUnicodeCharacter{222E}{\oint}
+% ∯ SURFACE INTEGRAL
+\DeclareUnicodeCharacter{222F}{\oiint}
+% ∰ VOLUME INTEGRAL
+\DeclareUnicodeCharacter{2230}{\oiiint}
+% ∲ CLOCKWISE CONTOUR INTEGRAL
+\DeclareUnicodeCharacter{2232}{\ointclockwise}
+% ∳ ANTICLOCKWISE CONTOUR INTEGRAL
+\DeclareUnicodeCharacter{2233}{\oiintctrclockwise}
+% ∴ THEREFORE
+\DeclareUnicodeCharacter{2234}{\therefore}
+% ∵ BECAUSE
+\DeclareUnicodeCharacter{2235}{\because}
+% ∶ RATIO
+\DeclareUnicodeCharacter{2236}{:}
+% ∷ PROPORTION
+\DeclareUnicodeCharacter{2237}{\Proportion}
+% ∸ DOT MINUS
+\DeclareUnicodeCharacter{2238}{\dotminus}
+% ∹ EXCESS
+\DeclareUnicodeCharacter{2239}{\eqcolon}
+% ∼ TILDE OPERATOR
+\DeclareUnicodeCharacter{223C}{\sim}
+% ∽ REVERSED TILDE
+\DeclareUnicodeCharacter{223D}{\backsim}
+% ∿ SINE WAVE
+\DeclareUnicodeCharacter{223F}{\AC}
+% ≀ WREATH PRODUCT
+\DeclareUnicodeCharacter{2240}{\wr}
+% ≁ NOT TILDE
+\DeclareUnicodeCharacter{2241}{\nsim}
+% ≃ ASYMPTOTICALLY EQUAL TO
+\DeclareUnicodeCharacter{2243}{\simeq}
+% ≄ NOT ASYMPTOTICALLY EQUAL TO
+\DeclareUnicodeCharacter{2244}{\nsimeq}
+% ≅ APPROXIMATELY EQUAL TO
+\DeclareUnicodeCharacter{2245}{\cong}
+% ≇ NEITHER APPROXIMATELY NOR ACTUALLY EQUAL TO
+\DeclareUnicodeCharacter{2247}{\ncong}
+% ≈ ALMOST EQUAL TO
+\DeclareUnicodeCharacter{2248}{\approx}
+% ≉ NOT ALMOST EQUAL TO
+\DeclareUnicodeCharacter{2249}{\napprox}
+% ≊ ALMOST EQUAL OR EQUAL TO
+\DeclareUnicodeCharacter{224A}{\approxeq}
+% ≍ EQUIVALENT TO
+\DeclareUnicodeCharacter{224D}{\asymp}
+% ≎ GEOMETRICALLY EQUIVALENT TO
+\DeclareUnicodeCharacter{224E}{\Bumpeq}
+% ≏ DIFFERENCE BETWEEN
+\DeclareUnicodeCharacter{224F}{\bumpeq}
+% ≐ APPROACHES THE LIMIT
+\DeclareUnicodeCharacter{2250}{\doteq}
+% ≑ GEOMETRICALLY EQUAL TO
+\DeclareUnicodeCharacter{2251}{\doteqdot}
+% ≒ APPROXIMATELY EQUAL TO OR THE IMAGE OF
+\DeclareUnicodeCharacter{2252}{\fallingdotseq}
+% ≓ IMAGE OF OR APPROXIMATELY EQUAL TO
+\DeclareUnicodeCharacter{2253}{\risingdotseq}
+% ≔ COLON EQUALS
+\DeclareUnicodeCharacter{2254}{\coloneqq}
+% ≕ EQUALS COLON
+\DeclareUnicodeCharacter{2255}{\eqqcolon}
+% ≖ RING IN EQUAL TO
+\DeclareUnicodeCharacter{2256}{\eqcirc}
+% ≗ RING EQUAL TO
+\DeclareUnicodeCharacter{2257}{\circeq}
+% ≘ CORRESPONDS TO
+\DeclareUnicodeCharacter{2258}{\stackrel{\frown}{=}}
+% ≙ ESTIMATES
+\DeclareUnicodeCharacter{2259}{\stackrel{\wedge}{=}}
+% ≚ EQUIANGULAR TO
+\DeclareUnicodeCharacter{225A}{\stackrel{\vee}{=}}
+% ≛ STAR EQUALS
+\DeclareUnicodeCharacter{225B}{\stackrel{\star}{=}}
+% ≜ DELTA EQUAL TO
+\DeclareUnicodeCharacter{225C}{\triangleq}
+% ≝ EQUAL TO BY DEFINITION
+\DeclareUnicodeCharacter{225D}{\stackrel{\text{\tiny def}}{=}}
+% ≟ QUESTIONED EQUAL TO
+\DeclareUnicodeCharacter{225F}{\stackrel{\text{\tiny ?}}{=}}
+% ≠ NOT EQUAL TO
+\DeclareUnicodeCharacter{2260}{\neq}
+% ≡ IDENTICAL TO
+\DeclareUnicodeCharacter{2261}{\equiv}
+% ≢ NOT IDENTICAL TO
+\DeclareUnicodeCharacter{2262}{\not\equiv}
+% ≣ STRICTLY EQUIVALENT TO
+\DeclareUnicodeCharacter{2263}{\stackrel{=}{=}}
+% ≤ LESS-THAN OR EQUAL TO
+\DeclareUnicodeCharacter{2264}{\leq}
+% ≥ GREATER-THAN OR EQUAL TO
+\DeclareUnicodeCharacter{2265}{\geq}
+% ≦ LESS-THAN OVER EQUAL TO
+\DeclareUnicodeCharacter{2266}{\leqq}
+% ≧ GREATER-THAN OVER EQUAL TO
+\DeclareUnicodeCharacter{2267}{\geqq}
+% ≨ LESS-THAN BUT NOT EQUAL TO
+\DeclareUnicodeCharacter{2268}{\lneqq}
+% ≩ GREATER-THAN BUT NOT EQUAL TO
+\DeclareUnicodeCharacter{2269}{\gneqq}
+% ≪ MUCH LESS-THAN
+\DeclareUnicodeCharacter{226A}{\ll}
+% ≫ MUCH GREATER-THAN
+\DeclareUnicodeCharacter{226B}{\gg}
+% ≬ BETWEEN
+\DeclareUnicodeCharacter{226C}{\between}
+% ≭ NOT EQUIVALENT TO
+\DeclareUnicodeCharacter{226D}{\nasymp}
+% ≮ NOT LESS-THAN
+\DeclareUnicodeCharacter{226E}{\nless}
+% ≯ NOT GREATER-THAN
+\DeclareUnicodeCharacter{226F}{\ngtr}
+% ≰ NEITHER LESS-THAN NOR EQUAL TO
+\DeclareUnicodeCharacter{2270}{\nleq}
+% ≱ NEITHER GREATER-THAN NOR EQUAL TO
+\DeclareUnicodeCharacter{2271}{\ngeq}
+% ≲ LESS-THAN OR EQUIVALENT TO
+\DeclareUnicodeCharacter{2272}{\lesssim}
+% ≳ GREATER-THAN OR EQUIVALENT TO
+\DeclareUnicodeCharacter{2273}{\gtrsim}
+% ≴ NEITHER LESS-THAN NOR EQUIVALENT TO
+\DeclareUnicodeCharacter{2274}{\nlesssim}
+% ≵ NEITHER GREATER-THAN NOR EQUIVALENT TO
+\DeclareUnicodeCharacter{2275}{\ngtrsim}
+% ≶ LESS-THAN OR GREATER-THAN
+\DeclareUnicodeCharacter{2276}{\lessgtr}
+% ≷ GREATER-THAN OR LESS-THAN
+\DeclareUnicodeCharacter{2277}{\gtrless}
+% ≸ NEITHER LESS-THAN NOR GREATER-THAN
+\DeclareUnicodeCharacter{2278}{\nlessgtr}
+% ≹ NEITHER GREATER-THAN NOR LESS-THAN
+\DeclareUnicodeCharacter{2279}{\ngtrless}
+% ≺ PRECEDES
+\DeclareUnicodeCharacter{227A}{\prec}
+% ≻ SUCCEEDS
+\DeclareUnicodeCharacter{227B}{\succ}
+% ≼ PRECEDES OR EQUAL TO
+\DeclareUnicodeCharacter{227C}{\preccurlyeq}
+% ≽ SUCCEEDS OR EQUAL TO
+\DeclareUnicodeCharacter{227D}{\succccurlyeq}
+% ≾ PRECEDES OR EQUIVALENT TO
+\DeclareUnicodeCharacter{227E}{\precsim}
+% ≿ SUCCEEDS OR EQUIVALENT TO
+\DeclareUnicodeCharacter{227F}{\succsim}
+% ⊀ DOES NOT PRECEDE
+\DeclareUnicodeCharacter{2280}{\nprec}
+% ⊁ DOES NOT SUCCEED
+\DeclareUnicodeCharacter{2281}{\nsucc}
+% ⊂ SUBSET OF
+\DeclareUnicodeCharacter{2282}{\subset}
+% ⊃ SUPERSET OF
+\DeclareUnicodeCharacter{2283}{\supset}
+% ⊄ NOT A SUBSET OF
+\DeclareUnicodeCharacter{2284}{\nsubset}
+% ⊅ NOT A SUPERSET OF
+\DeclareUnicodeCharacter{2285}{\nsupset}
+% ⊆ SUBSET OF OR EQUAL TO
+\DeclareUnicodeCharacter{2286}{\subseteq}
+% ⊇ SUPERSET OF OR EQUAL TO
+\DeclareUnicodeCharacter{2287}{\supseteq}
+% ⊈ NEITHER A SUBSET OF NOR EQUAL TO
+\DeclareUnicodeCharacter{2288}{\nsubseteq}
+% ⊉ NEITHER A SUPERSET OF NOR EQUAL TO
+\DeclareUnicodeCharacter{2289}{\nsupseteq}
+% ⊊ SUBSET OF WITH NOT EQUAL TO
+\DeclareUnicodeCharacter{228A}{\subsetneq}
+% ⊋ SUPERSET OF WITH NOT EQUAL TO
+\DeclareUnicodeCharacter{228B}{\supsetneq}
+% ⊎ MULTISET UNION
+\DeclareUnicodeCharacter{228E}{\uplus}
+% ⊏ SQUARE IMAGE OF
+\DeclareUnicodeCharacter{228F}{\sqsubset}
+% ⊐ SQUARE ORIGINAL OF
+\DeclareUnicodeCharacter{2290}{\sqsupset}
+% ⊑ SQUARE IMAGE OF OR EQUAL TO
+\DeclareUnicodeCharacter{2291}{\sqsubseteq}
+% ⊒ SQUARE ORIGINAL OF OR EQUAL TO
+\DeclareUnicodeCharacter{2292}{\sqsupseteq}
+% ⊓ SQUARE CAP
+\DeclareUnicodeCharacter{2293}{\sqcap}
+% ⊔ SQUARE CUP
+\DeclareUnicodeCharacter{2294}{\sqcup}
+% ⊕ CIRCLED PLUS
+\DeclareUnicodeCharacter{2295}{\oplus}
+% ⊖ CIRCLED MINUS
+\DeclareUnicodeCharacter{2296}{\ominus}
+% ⊗ CIRCLED TIMES
+\DeclareUnicodeCharacter{2297}{\otimes}
+% ⊘ CIRCLED DIVISION SLASH
+\DeclareUnicodeCharacter{2298}{\oslash}
+% ⊙ CIRCLED DOT OPERATOR
+\DeclareUnicodeCharacter{2299}{\odot}
+% ⊚ CIRCLED RING OPERATOR
+\DeclareUnicodeCharacter{229A}{\circledcirc}
+% ⊛ CIRCLED ASTERISK OPERATOR
+\DeclareUnicodeCharacter{229B}{\circledast}
+% ⊝ CIRCLED DASH
+\DeclareUnicodeCharacter{229D}{\circleddash}
+% ⊞ SQUARED PLUS
+\DeclareUnicodeCharacter{229E}{\boxplus}
+% ⊟ SQUARED MINUS
+\DeclareUnicodeCharacter{229F}{\boxminus}
+% ⊠ SQUARED TIMES
+\DeclareUnicodeCharacter{22A0}{\boxtimes}
+% ⊡ SQUARED DOT OPERATOR
+\DeclareUnicodeCharacter{22A1}{\boxdot}
+% ⊢ RIGHT TACK
+\DeclareUnicodeCharacter{22A2}{\vdash}
+% ⊣ LEFT TACK
+\DeclareUnicodeCharacter{22A3}{\dashv}
+% ⊤ DOWN TACK
+\DeclareUnicodeCharacter{22A4}{\top}
+% ⊥ UP TACK
+\DeclareUnicodeCharacter{22A5}{\bot}
+% ⊦ ASSERTION
+\DeclareUnicodeCharacter{22A6}{\vdash}
+% ⊧ MODELS
+\DeclareUnicodeCharacter{22A7}{\models}
+% ⊩ FORCES
+\DeclareUnicodeCharacter{22A9}{\Vdash}
+% ⊪ TRIPLE VERTICAL BAR RIGHT TURNSTILE
+\DeclareUnicodeCharacter{22AA}{\Vvdash}
+% ⊫ DOUBLE VERTICAL BAR DOUBLE RIGHT TURNSTILE
+\DeclareUnicodeCharacter{22AB}{\VDash}
+% ⊬ DOES NOT PROVE
+\DeclareUnicodeCharacter{22AC}{\nvdash}
+% ⊭ NOT TRUE
+\DeclareUnicodeCharacter{22AD}{\nvDash}
+% ⊮ DOES NOT FORCE
+\DeclareUnicodeCharacter{22AE}{\nVdash}
+% ⊯ NEGATED DOUBLE VERTICAL BAR DOUBLE RIGHT TURNSTILE
+\DeclareUnicodeCharacter{22AF}{\nVDash}
+% ⊲ NORMAL SUBGROUP OF
+\DeclareUnicodeCharacter{22B2}{\triangleleft}
+% ⊳ CONTAINS AS NORMAL SUBGROUP
+\DeclareUnicodeCharacter{22B3}{\triangleright}
+% ⊴ NORMAL SUBGROUP OF OR EQUAL TO
+\DeclareUnicodeCharacter{22B4}{\unlhd}
+% ⊸ MULTIMAP
+\DeclareUnicodeCharacter{22B8}{\multimap}
+% ⊺ INTERCALATE
+\DeclareUnicodeCharacter{22BA}{\intercal}
+% ⊻ XOR
+\DeclareUnicodeCharacter{22BB}{\veebar}
+% ⊼ NAND
+\DeclareUnicodeCharacter{22BC}{\barwedge}
+% ⊵ CONTAINS AS NORMAL SUBGROUP OR EQUAL TO
+\DeclareUnicodeCharacter{22B5}{\unrhd}
+% ⋀ N-ARY LOGICAL AND
+\DeclareUnicodeCharacter{22C0}{\bigwedge}
+% ⋁ N-ARY LOGICAL OR
+\DeclareUnicodeCharacter{22C1}{\bigvee}
+% ⋂ N-ARY INTERSECTION
+\DeclareUnicodeCharacter{22C2}{\bigcap}
+% ⋃ N-ARY UNION
+\DeclareUnicodeCharacter{22C3}{\bigcup}
+% ⋄ DIAMOND OPERATOR
+\DeclareUnicodeCharacter{22C4}{\diamond}
+% ⋅ DOT OPERATOR
+\DeclareUnicodeCharacter{22C5}{\cdot}
+% ⋆ STAR OPERATOR
+\DeclareUnicodeCharacter{22C6}{\star}
+% ⋇ DIVISION TIMES
+\DeclareUnicodeCharacter{22C7}{\divideontimes}
+% ⋈ BOWTIE
+\DeclareUnicodeCharacter{22C8}{\bowtie}
+% ⋉ LEFT NORMAL FACTOR SEMIDIRECT PRODUCT
+\DeclareUnicodeCharacter{22C9}{\ltimes}
+% ⋊ RIGHT NORMAL FACTOR SEMIDIRECT PRODUCT
+\DeclareUnicodeCharacter{22CA}{\rtimes}
+% ⋋ LEFT SEMIDIRECT PRODUCT
+\DeclareUnicodeCharacter{22CB}{\leftthreetimes}
+% ⋌ RIGHT SEMIDIRECT PRODUCT
+\DeclareUnicodeCharacter{22CC}{\rightthreetimes}
+% ⋍ REVERSED TILDE EQUALS
+\DeclareUnicodeCharacter{22CD}{\backsimeq}
+% ⋎ CURLY LOGICAL OR
+\DeclareUnicodeCharacter{22CE}{\curlyvee}
+% ⋏ CURLY LOGICAL AND
+\DeclareUnicodeCharacter{22CF}{\curlywedge}
+% ⋐ DOUBLE SUBSET
+\DeclareUnicodeCharacter{22D0}{\Subset}
+% ⋑ DOUBLE SUPERSET
+\DeclareUnicodeCharacter{22D1}{\Supset}
+% ⋒ DOUBLE INTERSECTION
+\DeclareUnicodeCharacter{22D2}{\Cap}
+% ⋓ DOUBLE UNION
+\DeclareUnicodeCharacter{22D3}{\Cup}
+% ⋔ PITCHFORK
+\DeclareUnicodeCharacter{22D4}{\pitchfork}
+% ⋖ LESS-THAN WITH DOT
+\DeclareUnicodeCharacter{22D6}{\lessdot}
+% ⋗ GREATER-THAN WITH DOT
+\DeclareUnicodeCharacter{22D7}{\gtrdot}
+% ⋘ VERY MUCH LESS-THAN
+\DeclareUnicodeCharacter{22D8}{\lll}
+% ⋙ VERY MUCH GREATER-THAN
+\DeclareUnicodeCharacter{22D9}{\ggg}
+% ⋚ LESS-THAN EQUAL TO OR GREATER-THAN
+\DeclareUnicodeCharacter{22DA}{\lesseqgtr}
+% ⋛ GREATER-THAN EQUAL TO OR LESS-THAN
+\DeclareUnicodeCharacter{22DB}{\gtreqless}
+% ⋞ EQUAL TO OR PRECEDES
+\DeclareUnicodeCharacter{22DE}{\curlyeqprec}
+% ⋟ EQUAL TO OR SUCCEEDS
+\DeclareUnicodeCharacter{22DF}{\curlyeqsucc}
+% ⋠ DOES NOT PRECEDE OR EQUAL
+\DeclareUnicodeCharacter{22E0}{\npreceq}
+% ⋡ DOES NOT SUCCEED OR EQUAL
+\DeclareUnicodeCharacter{22E1}{\nsucceq}
+% ⋢ NOT SQUARE IMAGE OF OR EQUAL TO
+\DeclareUnicodeCharacter{22E2}{\nsqsubseteq}
+% ⋣ NOT SQUARE ORIGINAL OF OR EQUAL TO
+\DeclareUnicodeCharacter{22E3}{\nsqsupseteq}
+% ⋤ SQUARE IMAGE OF OR NOT EQUAL TO
+\DeclareUnicodeCharacter{22E4}{\sqsubsetneq}
+% ⋥ SQUARE ORIGINAL OF OR NOT EQUAL TO
+\DeclareUnicodeCharacter{22E5}{\sqsupsetneq}
+% ⋦ LESS-THAN BUT NOT EQUIVALENT TO
+\DeclareUnicodeCharacter{22E6}{\lnsim}
+% ⋧ GREATER-THAN BUT NOT EQUIVALENT TO
+\DeclareUnicodeCharacter{22E7}{\gnsim}
+% ⋨ PRECEDES BUT NOT EQUIVALENT TO
+\DeclareUnicodeCharacter{22E8}{\precnsim}
+% ⋩ SUCCEEDS BUT NOT EQUIVALENT TO
+\DeclareUnicodeCharacter{22E9}{\succnsim}
+% ⋪ NOT NORMAL SUBGROUP OF
+\DeclareUnicodeCharacter{22EA}{\ntriangleleft}
+% ⋫ DOES NOT CONTAIN AS NORMAL SUBGROUP
+\DeclareUnicodeCharacter{22EB}{\ntriangleright}
+% ⋬ NOT NORMAL SUBGROUP OF OR EQUAL TO
+\DeclareUnicodeCharacter{22EC}{\ntrianglelefteq}
+% ⋭ DOES NOT CONTAIN AS NORMAL SUBGROUP OR EQUAL
+\DeclareUnicodeCharacter{22ED}{\ntrianglerighteq}
+% ⋮ VERTICAL ELLIPSIS
+\DeclareUnicodeCharacter{22EE}{\vdots}
+% ⋯ MIDLINE HORIZONTAL ELLIPSIS
+\DeclareUnicodeCharacter{22EF}{\ldots}
+% ⋰ UP RIGHT DIAGONAL ELLIPSIS
+\DeclareUnicodeCharacter{22F0}{\iddots}
+% ⋱ DOWN RIGHT DIAGONAL ELLIPSIS
+\DeclareUnicodeCharacter{22F1}{\ddots}
+% ⌀ DIAMETER SIGN
+\DeclareUnicodeCharacter{2300}{\diameter}
+% ⌈ LEFT CEILING
+\DeclareUnicodeCharacter{2308}{\lceil}
+% ⌉ RIGHT CEILING
+\DeclareUnicodeCharacter{2309}{\rceil}
+% ⌊ LEFT FLOOR
+\DeclareUnicodeCharacter{230A}{\lfloor}
+% ⌋ RIGHT FLOOR
+\DeclareUnicodeCharacter{230B}{\rfloor}
+% ⌢ FROWN
+\DeclareUnicodeCharacter{2322}{\frown}
+% ⌣ SMILE
+\DeclareUnicodeCharacter{2323}{\smile}
+% ☡ CAUTION SIGN
+\DeclareUnicodeCharacter{2621}{\dbend}
+% ♠ BLACK SPADE SUIT
+\DeclareUnicodeCharacter{2660}{\spadesuit}
+% ♡ WHITE HEART SUIT
+\DeclareUnicodeCharacter{2661}{\heartsuit}
+% ♢ WHITE DIAMOND SUIT
+\DeclareUnicodeCharacter{2662}{\diamondsuit}
+% ♣ BLACK CLUB SUIT
+\DeclareUnicodeCharacter{2663}{\clubsuit}
+% ♭ MUSIC FLAT SIGN
+\DeclareUnicodeCharacter{266D}{\flat}
+% ♮ MUSIC NATURAL SIGN
+\DeclareUnicodeCharacter{266E}{\natural}
+% ♯ MUSIC SHARP SIGN
+\DeclareUnicodeCharacter{266F}{\sharp}
+% ⟂ PERPENDICULAR
+\DeclareUnicodeCharacter{27C2}{\perp}
+% ⨀ N-ARY CIRCLED DOT OPERATOR
+\DeclareUnicodeCharacter{2A00}{\bigodot}
+% ⨁ N-ARY CIRCLED PLUS OPERATOR
+\DeclareUnicodeCharacter{2A01}{\bigoplus}
+% ⨂ N-ARY CIRCLED TIMES OPERATOR
+\DeclareUnicodeCharacter{2A02}{\bigotimes}
+% ⨅ N-ARY SQUARE INTERSECTION OPERATOR
+\DeclareUnicodeCharacter{2A05}{\bigsqcap}
+% ⨆ N-ARY SQUARE UNION OPERATOR
+\DeclareUnicodeCharacter{2A06}{\bigsqcup}
+% ⨝ JOIN
+\DeclareUnicodeCharacter{2A1D}{\join}
+% ⨿ AMALGAMATION OR COPRODUCT
+\DeclareUnicodeCharacter{2A3F}{\amalg}
+% ⸘ INVERTED INTERROBANG
+\DeclareUnicodeCharacter{2E18}{\textinterrobangdown}
