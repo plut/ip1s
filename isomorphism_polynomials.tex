@@ -13,7 +13,7 @@
 \let\old@proof\proof \let\old@eproof\endproof
 \newif\ifqed
 \def\proof{\qedtrue\old@proof}
-\def\endproof{\ifqed\unskip~\qed\fi}
+\def\endproof{\ifqed\leavevmode\unskip~\qed\fi}
 \newif\ifqed@math
 \def\endmathdisplay#1{%
   \ifmmode \else \@badmath \fi
@@ -119,15 +119,34 @@ of~$(b_{λ})$, which contradicts the minimality of~$(e)$.
 Let~$n = n'+d+1$ where $d$~is the minimal index, and let~$e = ∑ ± λ^i
 e_i$ be a minimal relation for~$(b_{λ})$. In any basis of~$V$
 completing~$(e_i)$, the pencil~$(b_{λ})$ has the matrix
-\begin{equation}
-B_{∞} = \mat{0 & \transpose{C}\\ C & B'_{∞}}, \quad
-B_{0} = \mat{0 & \transpose{S} \transpose{C}\\ CS & B'_{0}}.
+\begin{equation}\label{eq:minimal-matrix}
+B_{0} = \mat{0 & \transpose{C}\\ C & B'_{0}}, \quad
+B_{∞} = \mat{0 & \transpose{S} \transpose{C}\\ CS & B'_{∞}}.
 \end{equation}
 where $0$~is a square block of size~$(d+1)$, $C$~is a matrix of size~$n'
-× (d+1)$ with null last column and rank~$d$, $S$~is the left-shift
+× (d+1)$ with null first column and rank~$d$, $S$~is the right-shift
 matrix of size~$d+1$, and $B'_{∞}, B'_0$~are symmetric matrices of
 size~$n'$.
 \end{prop}
+
+\begin{proof}
+Let~$B_{0} = (a_{i,j})$ and~$B_{∞} = (b_{i,j})$ for~$0 ≤ i,j ≤ n-1$. The
+relation~$B_{0} e_{i+1} = B_{∞} e_{i}$ imply that $a_{i,j+1} = b_{i,j}$.
+Since both matrices are symmetric, we may write
+\begin{equation}\label{eq:zero-bij}
+b_{i,j} = a_{i,j+1} = a_{j+1, i} = b_{j+1, i-1} = b_{i-1, j+1}.
+\end{equation}
+From this and the fact that~$a_{i,0} = a_{0,i} = 0$ and~$b_{i, d} =
+b_{d,i} = 0$, we deduce that~$a_{i,j} = b_{i,j} = 0$ for all~$0 ≤ i, j ≤
+d$.
+
+This means that both matrices~$B_{0}$ and~$B_{∞}$ may be written as
+in~\ref{eq:minimal-matrix}, where it only remains to prove that $C$~has
+rank~$d$.
+
+\medskip
+
+\end{proof}
 
 
 %>>>
