@@ -6,6 +6,29 @@
 \newtheorem{prop}{Proposition}
 \newtheorem{thm}{Theorem}
 \newtheorem{lem}{Lemma}
+
+\makeatletter
+% <<< Put \qed where it belongs
+\def\qed{~\ensuremath{\square}}
+\let\old@proof\proof \let\old@eproof\endproof
+\newif\ifqed
+\def\proof{\qedtrue\old@proof}
+\def\endproof{\ifqed\unskip~\qed\fi}
+\newif\ifqed@math
+\def\endmathdisplay#1{%
+  \ifmmode \else \@badmath \fi
+  \endmathdisplay@a
+  $$%
+  \ifqed@math \vadjust{\vbox to 0pt{\vskip -1.7\baselineskip
+  \llap{\qed\hskip 2.2em \hskip -\hsize}\vss}}\global\qed@mathfalse \fi
+  \global\let\df@label\@empty \global\let\df@tag\@empty
+  \global\tag@false \global\let\alt@tag\@empty
+  \global\@eqnswfalse
+}
+\def\qedhere{\ifmmode\global\qed@mathtrue\else\qed\fi\global\qedfalse}
+%>>>
+\makeatother
+
 \def\labelenumi{(\roman{enumi})}
 \def\itemref#1{\expandafter\ifx\csname r@#1\endcsname\relax
   {\bfseries ??}\else{\setcounter{enumi}{\ref{#1}}\labelenumi}\fi}
@@ -28,11 +51,86 @@
 %>>>
 
 \begin{document}
-\title{Solving the ``isomorphism of polynomials'' problem with pencils of
+\title{Solving some ``isomorphism of polynomials'' problems with pencils of
 bilinear forms}
 \author{Pierre-Alain Fouque \and Gilles Macario-Rat \and Jérôme Plût}
 \maketitle
 
+\section{Pencils of symmetric bilinear forms}%<<<
+
+Throughout this document, $k$~is a field such that~$2 ∈ k^{×}$. Let~$V$
+be a vector space. An \emph{(affine) pencil of symmetric bilinear forms}
+over~$V$, or a \emph{symmetric pencil} in shorthand, is an affine map
+from~$k$ to the space of symmetric bilinear forms over~$V$. We may write
+it as~$b_{λ} = b_{0} + λ b_{∞}$, where~$λ ∈ k$ and~$b_{0}, b_{∞}$ are
+symmetric bilinear forms.
+
+The \emph{characteristic polynomial} of the symmetric pencil~$(b_{λ})$ is
+the determinant~$\det b_{λ}$, as a polynomial in~$λ$. The
+pencil~$(b_{λ})$ is called \emph{regular} if its characteristic
+polynomial is not identically zero, and \emph{singular} otherwise. We
+solve the isomorphism problem for regular pencils in section 2 below. We
+reduce to this case by proving that the singular part of a symmetric
+pencil is reducible to canonical form of Kronecker, described for pencils
+over the complex numbers in~\cite[XII(56)]{Gantmacher2}. We give here a
+proof that applies to any field where~$2 ≠ 0$ and which is algorithmic.
+
+\bigskip
+
+The pencil~$(b_{λ})$ defines a symmetric bilinear form on the
+module~$V_{∞} = V ⊗_{k} k[λ]$; if $(b_{λ})$~is bilinear, then this form
+has a non-trivial kernel~$W$. Elements of~$W$ are called \emph{relations}
+of~$(b_{λ})$. An element~$x = x_0 - λ x_1 ± … + (-1)^d λ^d x_d$ is a
+relation iff
+\begin{equation}\label{eq:relation}
+b_0 x_0 = 0, \quad
+b_0 x_1 = b_{∞} x_0, \quad …
+b_0 x_d = b_{∞} x_{d-1}, \quad
+b_{∞} x_{d} = 0.
+\end{equation}
+A \emph{minimal relation} for~$(b_{λ})$ is one with minimal degree~$d$;
+this degree is the \emph{minimal index} of~$(b_{λ})$. A basis
+of~$W$ adapted to the filtration of~$V_{∞}$ by the degree of polynomials,
+we see that $W$~as a basis~$(w_1,…,w_r)$ such that, if $d_i$~is the
+degree of the relation~$w_i$, then $(w_i,…,w_r)$~generate no relation of
+degree~$< d_i$. The degree~$d_i$ are called the \emph{minimal indices} of
+the pencil~$(b_{λ})$.
+
+\begin{prop}\label{prop:minimal-indep}
+Let~$e = ∑ ± λ^i e_i$ be a minimal relation for~$(b_{λ})$. Then the
+vectors~$e_0,…,e_{d}$ are $k$-linearly independent.
+\end{prop}
+
+\begin{proof}
+Assume that~$∑ α_i e_i = 0$ is a non-zero relation between the~$e_i$.
+Then the family~$(e'_i)$ defined by~$e'_i = α_{m-i} e_0 + … + α_m
+e_{i}$ for~$i = 0, …, m-1$ satisfies the relations
+\begin{equation}\label{eq:relation-e'}
+b_0 e'_0 = α_0 b_0 e_0 = 0, \quad
+b_0 e'_{i} = α_{m-i+1} b_0 e_1 + … + α_{m} b_0 e_{i+1} = b_{∞} e'_{i-1}, \quad
+b_{∞} e'_{m-1} = b_0(∑ α_i e_i) = 0.
+\end{equation}
+In other words, $(e'_0,…, e'_{m-1})$~is a relation of degree~$(m-1)$
+of~$(b_{λ})$, which contradicts the minimality of~$(e)$.
+\end{proof}
+
+
+\begin{prop}\label{prop:minimal-matrix}
+Let~$n = n'+d+1$ where $d$~is the minimal index, and let~$e = ∑ ± λ^i
+e_i$ be a minimal relation for~$(b_{λ})$. In any basis of~$V$
+completing~$(e_i)$, the pencil~$(b_{λ})$ has the matrix
+\begin{equation}
+B_{∞} = \mat{0 & \transpose{C}\\ C & B'_{∞}}, \quad
+B_{0} = \mat{0 & \transpose{S} \transpose{C}\\ CS & B'_{0}}.
+\end{equation}
+where $0$~is a square block of size~$(d+1)$, $C$~is a matrix of size~$n'
+× (d+1)$ with null last column and rank~$d$, $S$~is the left-shift
+matrix of size~$d+1$, and $B'_{∞}, B'_0$~are symmetric matrices of
+size~$n'$.
+\end{prop}
+
+
+%>>>
 \section{Local structure of symmetric pencils}%<<<1
 \subsection{From symmetric to commuting matrices}%<<<2
 
@@ -47,8 +145,8 @@ may therefore write the pencil~$(S_{λ})$ as
 \begin{equation}
 S_{λ} = S_{∞} (λ + M),
 \end{equation}
-where $S_{∞}$ and~$S_{∞} M$ are symmetric matrices. We say that
-$(S_{λ})$ is \emph{regular} if $S_{∞}$~is invertible. The matrix $M$~is the
+where $S_{∞}$ and~$S_{∞} M$ are symmetric matrices. We say that $(S_{λ})$
+is \emph{regular} if $S_{∞}$~is invertible. The matrix $M$~is the
 \emph{characteristic endomorphism} of the pencil~$(S_{λ})$.
 
 The image of the pencil~$(S_{λ})$ by a linear change of basis~$X$
