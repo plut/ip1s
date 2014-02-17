@@ -62,7 +62,7 @@ Throughout this document, $k$~is a field such that~$2 ∈ k^{×}$. Let~$V$
 be a vector space. An \emph{(affine) pencil of symmetric bilinear forms}
 over~$V$, or a \emph{symmetric pencil} in shorthand, is an affine map
 from~$k$ to the space of symmetric bilinear forms over~$V$. We may write
-it as~$b_{λ} = b_{0} + λ b_{∞}$, where~$λ ∈ k$ and~$b_{0}, b_{∞}$ are
+it as~$b_{λ} = b_{0} - λ b_{∞}$, where~$λ ∈ k$ and~$b_{0}, b_{∞}$ are
 symmetric bilinear forms.
 
 The \emph{characteristic polynomial} of the symmetric pencil~$(b_{λ})$ is
@@ -80,7 +80,7 @@ proof that applies to any field where~$2 ≠ 0$ and which is algorithmic.
 The pencil~$(b_{λ})$ defines a symmetric bilinear form on the
 module~$V_{∞} = V ⊗_{k} k[λ]$; if $(b_{λ})$~is bilinear, then this form
 has a non-trivial kernel~$W$. Elements of~$W$ are called \emph{relations}
-of~$(b_{λ})$. An element~$x = x_0 - λ x_1 ± … + (-1)^d λ^d x_d$ is a
+of~$(b_{λ})$. An element~$x = x_0 + λ x_1 + … + λ^d x_d$ is a
 relation iff
 \begin{equation}\label{eq:relation}
 b_0 x_0 = 0, \quad
@@ -97,7 +97,7 @@ degree~$< d_i$. The degree~$d_i$ are called the \emph{minimal indices} of
 the pencil~$(b_{λ})$.
 
 \begin{prop}\label{prop:minimal-indep}
-Let~$e = ∑ ± λ^i e_i$ be a minimal relation for~$(b_{λ})$. Then the
+Let~$e = ∑ λ^i e_i$ be a minimal relation for~$(b_{λ})$. Then the
 vectors~$e_0,…,e_{d}$ are $k$-linearly independent.
 \end{prop}
 
@@ -116,7 +116,7 @@ of~$(b_{λ})$, which contradicts the minimality of~$(e)$.
 
 
 \begin{prop}\label{prop:minimal-matrix}
-Let~$n = n'+d+1$ where $d$~is the minimal index, and let~$e = ∑ ± λ^i
+Let~$n = n'+d+1$ where $d$~is the minimal index, and let~$e = ∑ λ^i
 e_i$ be a minimal relation for~$(b_{λ})$. In any basis of~$V$
 completing~$(e_i)$, the pencil~$(b_{λ})$ has the matrix
 \begin{equation}\label{eq:minimal-matrix}
@@ -146,6 +146,25 @@ rank~$d$.
 
 \medskip
 
+Since $d$~is minimal, this means that there exist no non-trivial
+relation~$(B_0 - λ B_{∞}) (x_0 + … + λ^{d-1} x_{d-1}) = 0$. In other
+words, the block-matrix
+\begin{equation}
+\def\arraystretch{.8}
+B^{(d-1)} = \mat{B_0\\-B_{∞} & B_0\\ & -B_{∞} & \smash{\ddots}\\
+& & \smash{\ddots} \\ & & & B_0\\ & & & -B_{∞}}
+\end{equation}
+is injective. Since $B^{(d-1)}$ has as a sub-matrix the matrix
+\begin{equation}
+\def\arraystretch{.8}
+C^{(d-1)} = \mat{C\\-CS & C\\ & -CS & \smash{\ddots}\\
+& & \smash{\ddots} \\ & & & C\\ & & & -CS},
+\end{equation}
+the matrix~$C^{(d-1)}$ is also injective. This matrix has~$(d+1) × d$
+blocks of size~$n' × (d+1)$, and its rank is thus~$d(d+1)$. Since the
+block-diagonal matrix with its~$(d+1)$ diagonal blocks equal to~$C$ is a
+left factor of~$C^{(d-1)}$, the rank of~$C$ must therefore be at
+least~$d$.
 \end{proof}
 
 
