@@ -80,8 +80,6 @@ time.
 \end{abstract}
 
 \section{Introduction}
-Ceci est un test.
-
 The Isomorphism of polynomial problem has been introduced by Patarin in~\cite{DBLP:conf/eurocrypt/Patarin96} to construct an efficient authentication scheme as an alternative to the Graph Isomorphism Problem used by . 
 
 parler du problem IP Patarin et lien avec la crypto
@@ -167,10 +165,10 @@ Let~$n = n'+d+1$ where $d$~is the minimal index, and let~$e = ∑ λ^i
 e_i$ be a minimal relation for~$(b_{λ})$. In any basis of~$V$
 completing~$(e_i)$, the pencil~$(b_{λ})$ has the matrix
 \begin{equation}\label{eq:minimal-matrix}
-B_{0} = \mat{0 & \transpose{C}\\ C & B'_{0}}, \quad
-B_{∞} = \mat{0 & \transpose{S} \transpose{C}\\ CS & B'_{∞}}.
+B_{0} = \mat{0 & \transpose{C_0}\\ C_0 & B'_{0}}, \quad
+B_{∞} = \mat{0 & \transpose{S} \transpose{C_0}\\ CS & B'_{∞}}.
 \end{equation}
-where $0$~is a square block of size~$(d+1)$, $C$~is a matrix of size~$n'
+where $0$~is a square block of size~$(d+1)$, $C_0$~is a matrix of size~$n'
 × (d+1)$ with null first column and rank~$d$, $S$~is the right-shift
 matrix of size~$d+1$, and $B'_{∞}, B'_0$~are symmetric matrices of
 size~$n'$.
@@ -188,7 +186,7 @@ b_{d,i} = 0$, we deduce that~$a_{i,j} = b_{i,j} = 0$ for all~$0 ≤ i, j ≤
 d$.
 
 This means that both matrices~$B_{0}$ and~$B_{∞}$ may be written as
-in~\ref{eq:minimal-matrix}, where it only remains to prove that $C$~has
+in~\ref{eq:minimal-matrix}, where it only remains to prove that $C_0$~has
 rank~$d$.
 
 \medskip
@@ -198,27 +196,72 @@ relation~$(B_0 - λ B_{∞}) (x_0 + … + λ^{d-1} x_{d-1}) = 0$. In other
 words, the block-matrix
 \begin{equation}
 \def\arraystretch{.8}
-\ro B = \mat{B_0\\-B_{∞} & B_0\\ & -B_{∞} & \smash{\ddots}\\
-& & \smash{\ddots} \\ & & & B_0\\ & & & -B_{∞}}
+\ro B = \mat{B_0\\-B_{∞} & B_0\\ & -B_{∞} & \smash{⋱}\\
+& & \smash{⋱} \\ & & & B_0\\ & & & -B_{∞}}
 \end{equation}
 is injective. Since $\ro B$~has as a sub-matrix the matrix
 \begin{equation}
 \def\arraystretch{.8}
-\ro C = \mat{C\\-CS & C\\ & -CS & \smash{\ddots}\\
-& & \smash{\ddots} \\ & & & C\\ & & & -CS},
+\ro C = \mat{C_0\\-C_0 S & C_0\\ & -C_0 S & \smash{⋱}\\
+& & \smash{⋱} \\ & & & C_0\\ & & & -C_0 S},
 \end{equation}
 the matrix~$\ro C$ is also injective. This matrix has~$(d+1) × d$
 blocks of size~$n' × (d+1)$, and its rank is thus~$d(d+1)$. The
 matrix~$\ro C$ has as a left factor the
-block-diagonal matrix with its~$(d+1)$ diagonal blocks equal to~$C$;
-therefore, the rank of~$C$ must be at least~$d$.
+block-diagonal matrix with its~$(d+1)$ diagonal blocks equal to~$C_0$;
+therefore, the rank of~$C_0$ must be at least~$d$.
 \end{proof}%>>>
 
-\begin{prop}
+From Prop.~\ref{prop:minimal-matrix}, using a change of basis, we deduce
+that there exists a basis in which the pencil~$(b_{λ})$ has the matrix
+\begin{equation}
+B_0 = \mat{0 & \transpose{C_0} & 0 \\ C_0 & 0 & 0 \\ 0 & 0 & B'_0},\qquad
+B_{∞} = \mat{0 & \transpose{S} \transpose{C_0} & 0 \\
+  C_0 S_0 & 0 & 0 \\ 0 & 0 & B'_0}.
+\end{equation}
 
-\end{prop}
+\begin{thm}[(Kronecker form)]
+Let~$(b_{λ})$ be a symmetric pencil on~$V$. There exists a basis of~$V$
+in which the pencil has a block-diagonal matrix with diagonal
+blocks~$(L_{d_1}, …, L_{d_r}, B')$, where $L_d$~is the square matrix of
+size~$2d+1$ defined by
+\begin{equation}
+\def\arraystretch{.7} L_{d} = \mat{
+ & & & &λ& &0\\
+ &0& & &1&⋱& \\
+ & & & & &⋱&λ\\
+ & & & &0& &1\\
+λ&1& &0& & & \\
+ &⋱&⋱& & &0& \\
+0& &λ&1& & & \\
+},
+\end{equation}
+the integers~$d_1 ≤ … ≤ d_r$ are the minimal indices of~$(b_{λ})$, and
+$B'$~is the matrix of a regular pencil.
+\end{thm}
+Note that in particular, the matrix~$L_{0}$ is the zero matrix of
+size~$1×1$. The appearances of~$L_0$ in the Kronecker form correspond to
+the constant vectors in the kernel of~$B_{λ}$.
 
 \section{IP1S for regular pencils}%<<<1
+\subsection{Localization of regular pencils}%<<<2
+
+
+\begin{prop}\label{prop:decomp-bezout}
+Let~$S$ be a regular symmetric pencil on the vector space~$V$.
+Let~$f(λ)$~be the characteristic polynomial of~$S$, and let~$f = ∏
+g_i$ be a factorization of~$f$ in mutually coprime factors.
+
+Then there exists a unique decomposition~$V = ⨁ V_i$ such that the
+spaces~$V_i$ are pairwise orthogonal for each form of~$S$ and the
+restriction~$S|_{V_i}$ has characteristic polynomial~$g_i$.
+\end{prop}
+
+\begin{proof}
+It is enough to prove this when $f$~is the product of two factors~$f =
+gh$. Let~$x,y ∈ V$ such that~$
+\end{proof}
+
 \subsection{From symmetric to commuting matrices}%<<<2
 \subsection{The adjunction involution}%<<<2
 \subsection{Classification of local symmetric pencils}%<<<2
