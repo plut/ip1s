@@ -1,7 +1,9 @@
-\documentclass{article}%<<<
-\usepackage[margin=20mm]{geometry}
+\documentclass{lms}%<<<
+%\usepackage[margin=30mm]{geometry}
+%\usepackage[letterpaper,hmargin=1.4in,vmargin=1.4in]{geometry}
 \usepackage{unicode}
-\usepackage{amsmath,amssymb,amsthm,mathrsfs}
+\usepackage{amsmath,amssymb,mathrsfs}
+\usepackage{bm}
 
 \newtheorem{prop}{Proposition}
 \newtheorem{thm}{Theorem}
@@ -30,8 +32,12 @@
 \makeatother
 
 \def\labelenumi{(\roman{enumi})}
-\def\itemref#1{\expandafter\ifx\csname r@#1\endcsname\relax
-  {\bfseries ??}\else{\setcounter{enumi}{\ref{#1}}\labelenumi}\fi}
+\let\itemref\ref
+% \def\itemref#1{%
+% \message{^^J^^JITEMREF(#1)^^J^^J}%
+% \message{^^J^^J\expandafter\meaning\csname r@#1\endcsname^^J}%
+% \expandafter\ifx\csname r@#1\endcsname\relax
+%   {\bfseries ??}\else{unter{enumi}{\ref{#1}}\labelenumi}\fi}
 \def\linkcounter#1#2{\edef\magic{\noexpand\let
   \expandafter\noexpand\csname c@#1\endcsname
   \expandafter\noexpand\csname c@#2\endcsname}\magic}
@@ -51,12 +57,56 @@
 %>>>
 
 \begin{document}
-\title{Solving some ``isomorphism of polynomials'' problems with pencils of
-bilinear forms}
-\author{Pierre-Alain Fouque \and Gilles Macario-Rat \and Jérôme Plût}
+\title{Isomorphism of Polynomials Problem with two equations}%<<<1
+%\author{Pierre-Alain Fouque \and Gilles Macario-Rat \and Jérôme Plût}
+\author{Submission to ANTS 2014}
 \maketitle
 
-\section{Pencils of symmetric bilinear forms}%<<<
+\begin{abstract}
+In this paper, we study the Isomorphism of Polynomial (IP) problem on
+quadratic polynomials with $n$ variables over a finite field of odd
+characteristic and two equations, \textit{i.e.} given two quadratic
+polynomials $(\bm{a},\bm{b})$ on $n$ variables, find two bijective linear
+maps $(s,t)$ such that $\bm{a}=t\circ \bm{b}\circ s$. We show a
+polynomial-time algorithm that allows to recover $s$ and $t$ in $O(n^3)$.
+This problem has been introduced in cryptography by Patarin back in 1996.
+One special instance of this problem when $t$ is not present is called
+the IP1S problem. At ASIACRYPT 2013, Macario-Rat, Pl\^ut and Gilbert
+explained well behavior of generic solvers, such as Gr\"obner basis, to
+solve the IP1S problem in general by describing a polynomial-time
+algorithm for solving "cyclic instances" of this problem using pencil of
+quadratic forms in all finite fields. They show that this problem is
+reducible to computing a square root of a matrix in the commuting space,
+which is a commutative algebra for "cyclic" instances. Here, we solve all
+instances of the problem by describing a new reduction algorithm for
+pencils of bilinear forms in a non-commutative algebra. Finally, we show
+that the general IP problem, a.k.a. IP2S problem is solvable in cubic
+time.
+\end{abstract}
+
+\section{Introduction}
+The Isomorphism of polynomial problem has been introduced by Patarin in~\cite{DBLP:conf/eurocrypt/Patarin96} to construct an efficient authentication scheme as an alternative to the Graph Isomorphism Problem used by . 
+
+parler du problem IP Patarin et lien avec la crypto
+Cas difficile $m=2$
+
+\paragraph{Previous Work.}
+1. parler du travail de Gilles + Henri et Jerome a Asiacrypt cas cyclic
+
+2. parler du travail de Jeremy + Faugere et Ludovic
+
+\paragraph{Our contributions.}
+
+\section{The Isomorphism of Polynomial Problem with One Secret}
+Voir avec Jerome ce qu'on met ici en fonction du niveau des personnes
+
+\subsection{Notations and definitions}
+
+\subsection{The quadratic IP1S problem}
+
+\subsection{Mathematical Background}
+%>>>1
+\section{Pencils of symmetric bilinear forms}%<<<1
 
 Throughout this document, $k$~is a field such that~$2 ∈ k^{×}$. Let~$V$
 be a vector space. An \emph{(affine) pencil of symmetric bilinear forms}
@@ -168,7 +218,7 @@ least~$d$.
 \end{proof}
 
 
-%>>>
+\end{document}
 \section{Local structure of symmetric pencils}%<<<1
 \subsection{From symmetric to commuting matrices}%<<<2
 
@@ -497,6 +547,7 @@ Use propositions~\ref{prop:bb-diag} and~\ref{prop:local-diag}.
 \end{proof}
 
 
+
 % \section{In characteristic two}%<<<1
 % \subsection{Action of the commutant on diagonal matrices}
 % 
@@ -662,12 +713,13 @@ using estimates given above depending on~$d$ and~$\card{S_{d,e}}$. In
 total, we find a bounded number of candidate homographies using no more
 than~$O(n^3)$ operations in~$k$.
 
+\section{Algorithms and Complexity}
+Voir avec Jerome ce qu'on met ici en fonction des connaissances ou si on le met a la fin de chaque section
 
-\begin{thebibliography}{99}%<<<1
-\bibitem{omeara} Timothy O'Meara, \emph{Introduction to quadratic forms}.
-\bibitem{milnorhusemoller} H. Milnor, D. Husemoller, \emph{Symmetric
-bilinear forms}. \bibitem{MPG2013} G. Macario-Rat, J. Plût, H. Gilbert,
-\emph{New Insight into the Isomorphism of Polynomial Problem IP1S and its
-Use in Cryptography}, ASIACRYPT 2013.
-\end{thebibliography}%>>>1
+
+\bibliographystyle{plain} 
+\bibliography{biblio} 
+
+%\begin{thebibliography}{99}%<<<1
+%\end{thebibliography}%>>>1
 \end{document}
