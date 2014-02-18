@@ -58,32 +58,44 @@
 \maketitle
 
 \begin{abstract}
-In this paper, we study the Isomorphism of Polynomial (IP) problem on
-quadratic polynomials with $n$ variables over a finite field of odd
-characteristic and two equations, \textit{i.e.} given two quadratic
-polynomials $(\bm{a},\bm{b})$ on $n$ variables, find two bijective linear
-maps $(s,t)$ such that $\bm{a}=t\circ \bm{b}\circ s$. We show a
-polynomial-time algorithm that allows to recover $s$ and $t$ in $O(n^3)$.
+In this paper, we study the Isomorphism of Polynomial (IP) problem with two
+quadratic polynomials on $n$ variables over a finite field of odd
+characteristic, \textit{i.e.} given two quadratic polynomials $(\bm{a},\bm{b})$ 
+on $n$ variables, find two bijective linear maps $(s,t)$ such that 
+$\bm{a}=t\circ \bm{b}\circ s$. We show a
+polynomial-time algorithm to recover $s$ and $t$ in time complexity $\widetilde{O}(n^3)$.
 This problem has been introduced in cryptography by Patarin back in 1996.
-One special instance of this problem when $t$ is not present is called
+One special instance of this problem when $t$ is the identity is called
 the IP1S problem. At ASIACRYPT 2013, Macario-Rat, Pl\^ut and Gilbert
 explained well behavior of generic solvers, such as Gr\"obner basis, to
-solve the IP1S problem in general by describing a polynomial-time
-algorithm for solving "cyclic instances" of this problem using pencil of
-quadratic forms in all finite fields. They show that this problem is
-reducible to computing a square root of a matrix in the commuting space,
-which is a commutative algebra for "cyclic" instances. Here, we solve all
+solve the IP1S problem on random instances by describing a polynomial-time
+algorithm for solving \textit{cyclic instances} using pencil of quadratic forms 
+in \textit{all} finite fields. They show that this problem is
+reducible to computing a square root of a matrix in the commuting space of 
+some matrix, which is a commutative algebra for \textit{cyclic} matrices. Here, we solve all
 instances of the problem by describing a new reduction algorithm for
 pencils of bilinear forms in a non-commutative algebra. Finally, we show
 that the general IP problem, a.k.a. IP2S problem is solvable in cubic
 time.
 \end{abstract}
+% j'ai mis un tilde sur le big0 pour les termes en log(q) car il faut manipuler les scalaires de F_q
 
 \section{Introduction}
-The Isomorphism of polynomial problem has been introduced by Patarin in~\cite{DBLP:conf/eurocrypt/Patarin96} to construct an efficient authentication scheme as an alternative to the Graph Isomorphism Problem used by . 
+The Isomorphism of polynomial problem has been introduced in cryptography by Patarin in~\cite{DBLP:conf/eurocrypt/Patarin96} to construct an efficient authentication scheme 
+as an alternative to the Graph Isomorphism Problem proposed by Goldreich, Micali and Wigderson~\cite{DBLP:journals/jacm/GoldreichMW91}. This problem was appealing since 
+it seems more difficult than the Graph Isomorphism problem. A reduction between these
+two problems has been formally proved by Agrawal and Saxena in~\cite{DBLP:conf/stacs/AgrawalS06}, 
+using two polynomials. One of them is a quadratic polynomials and captures the adjacency 
+matrix of the graphs and the other is cubic of the special form $\sum_{i} x_i^3$ over a 
+finite field of odd characteristic. 
+For the case of quadratic polynomials, the status of this problem is unclear despite recent 
+intensive research in the cryptographic community since this case is the most interesting 
+for practical schemes. 
+Here, we are interested in the special case of two equations with homogeneous composants only 
+since it seems to be the most difficult cases according~\cite{DBLP:conf/eurocrypt/Perret05,DBLP:conf/eurocrypt/FaugereP06,DBLP:conf/pkc/BouillaguetFFP11,DBLP:conf/eurocrypt/BouillaguetFV13}. 
 
-parler du problem IP Patarin et lien avec la crypto
-Cas difficile $m=2$
+The case with one equation is the equivalence problem between two quadratic forms which 
+is a classical result of classification of quadratic forms~\cite{lidl1997finite}.
 
 \paragraph{Previous Work.}
 1. parler du travail de Gilles + Henri et Jerome a Asiacrypt cas cyclic
@@ -114,7 +126,7 @@ The \emph{characteristic polynomial} of the symmetric pencil~$(b_{λ})$ is
 the determinant~$\det b_{λ}$, as a polynomial in~$λ$. The
 pencil~$(b_{λ})$ is called \emph{regular} if its characteristic
 polynomial is not identically zero, and \emph{singular} otherwise. We
-solve the isomorphism problem for regular pencils in section 2 below. We
+solve the isomorphism problem for regular pencils in section 2 below. We
 reduce to this case by proving that the singular part of a symmetric
 pencil is reducible to canonical form of Kronecker, described for pencils
 over the complex numbers in~\cite[XII(56)]{Gantmacher2}. We give here a
@@ -259,7 +271,7 @@ restriction~$S|_{V_i}$ has characteristic polynomial~$g_i$.
 
 \begin{proof}
 It is enough to prove this when $f$~is the product of two factors~$f =
-gh$. Let~$x,y ∈ V$ such that~$
+gh$. Let~$x,y ∈ V$ such that.
 \end{proof}
 
 \subsection{From symmetric to commuting matrices}%<<<2
