@@ -2,9 +2,13 @@
 %\usepackage[margin=30mm]{geometry}
 %\usepackage[letterpaper,hmargin=1.4in,vmargin=1.4in]{geometry}
 \usepackage{unicode}
+\DeclareUnicodeCharacter{22F1}{\smash\ddots}
+\DeclareUnicodeCharacter{22F0}{\smash\iddots}
 \usepackage{amsmath,amssymb,mathrsfs}
 \usepackage{bm}
+\usepackage{mathdots}
 
+\newnumbered{definition}{Definition}
 
 % Theorems, equations, counters%<<<
 \def\linkcounter#1#2{\edef\magic{\noexpand\let
@@ -17,27 +21,6 @@
 
 \def\labelenumi{(\roman{enumi})} \let\itemref\ref
 %>>>
-% <<< Put \qed where it belongs
-\makeatletter
-\def\qed{~\ensuremath{\square}}
-\let\old@proof\proof \let\old@eproof\endproof
-\newif\ifqed
-\def\proof{\qedtrue\old@proof}
-\def\endproof{\ifqed\leavevmode\unskip~\qed\fi}
-\newif\ifqed@math
-\def\endmathdisplay#1{%
-  \ifmmode \else \@badmath \fi
-  \endmathdisplay@a
-  $$%
-  \ifqed@math \vadjust{\vbox to 0pt{\vskip -1.7\baselineskip
-  \llap{\qed\hskip 2.2em \hskip -\hsize}\vss}}\global\qed@mathfalse \fi
-  \global\let\df@label\@empty \global\let\df@tag\@empty
-  \global\tag@false \global\let\alt@tag\@empty
-  \global\@eqnswfalse
-}
-\def\qedhere{\ifmmode\global\qed@mathtrue\else\qed\fi\global\qedfalse}
-\makeatother
-%>>>
 % Misc. math stuff%<<<
 \def\bigperp{\mathop{\vcenter{\hbox{\scalebox{2}{\ensuremath{\perp}}}}}%
   \displaylimits}
@@ -48,11 +31,17 @@
 \def\abs#1{\left|#1\right|}
 \def\mat#1{\begin{pmatrix}#1\end{pmatrix}}
 \def\card#1{\abs{#1}}
+\DeclareMathOperator\Ker{Ker}
+\DeclareMathOperator\End{End}
+\def\F{\mathbb{F}}
 %>>>
+\usepackage{color}
+\def\commentaire#1{{\bfseries\textcolor{red}{#1}}}
 %>>>1
 
 \begin{document}
-\title{Isomorphism of Polynomials Problem with two equations}%<<<1
+\title[Solving ``Isomorphism of Polynomials with Two Secrets'']%
+{Solving the ``Isomorphism of Polynomials with Two Secrets'' Problem}%<<<1
 %\author{Pierre-Alain Fouque \and Gilles Macario-Rat \and Jérôme Plût}
 \author{Submission to ANTS 2014}
 \maketitle
@@ -62,11 +51,11 @@ In this paper, we study the Isomorphism of Polynomial (IP) problem with two
 quadratic polynomials on $n$ variables over a finite field of odd
 characteristic, \textit{i.e.} given two quadratic polynomials $(\bm{a},\bm{b})$ 
 on $n$ variables, find two bijective linear maps $(s,t)$ such that 
-$\bm{a}=t\circ \bm{b}\circ s$. We show a
+$\bm{b}=t\circ \bm{a}\circ s$. We show a
 polynomial-time algorithm to recover $s$ and $t$ in time complexity $\widetilde{O}(n^3)$.
 This problem has been introduced in cryptography by Patarin back in 1996.
 One special instance of this problem when $t$ is the identity is called
-the IP1S problem. At ASIACRYPT 2013, Macario-Rat, Pl\^ut and Gilbert
+the isomorphism with one secret (IP1S) problem. At ASIACRYPT 2013, Macario-Rat, Pl\^ut and Gilbert
 explained well behavior of generic solvers, such as Gr\"obner basis, to
 solve the IP1S problem on random instances by describing a polynomial-time
 algorithm for solving \textit{cyclic instances} using pencil of quadratic forms 
@@ -81,56 +70,139 @@ time.
 % j'ai mis un tilde sur le big0 pour les termes en log(q) car il faut manipuler les scalaires de F_q
 
 \section{Introduction}
-The Isomorphism of polynomial problem has been introduced in cryptography by Patarin in~\cite{DBLP:conf/eurocrypt/Patarin96} to construct an efficient authentication scheme 
-as an alternative to the Graph Isomorphism Problem proposed by Goldreich, Micali and Wigderson~\cite{DBLP:journals/jacm/GoldreichMW91}. This problem was appealing since 
-it seems more difficult than the Graph Isomorphism problem. A reduction between these
+The Isomorphism of Polynomial problem (IP) has been introduced in cryptography by Patarin in~\cite{DBLP:conf/eurocrypt/Patarin96} to construct an efficient authentication scheme 
+as an alternative to the Graph Isomorphism Problem (GI) proposed by Goldreich, Micali and Wigderson~\cite{DBLP:journals/jacm/GoldreichMW91}. The IP problem was appealing since 
+it seems more difficult than the Graph Isomorphism problem~\cite{DBLP:conf/eurocrypt/PatarinGC98}. 
+A reduction between these
 two problems has been formally proved by Agrawal and Saxena in~\cite{DBLP:conf/stacs/AgrawalS06}, 
 using two polynomials. One of them is a quadratic polynomials and captures the adjacency 
-matrix of the graphs and the other is cubic of the special form $\sum_{i} x_i^3$ over a 
+matrices of the graphs and the other is cubic of the special form $\sum_{i} x_i^3$ over a 
 finite field of odd characteristic. 
 For the case of quadratic polynomials, the status of this problem is unclear despite recent 
 intensive research in the cryptographic community since this case is the most interesting 
-for practical schemes. 
+for practical schemes. There exists a claimed reduction between the quadratic IP1S problem and the GI
+problem~\cite{DBLP:conf/eurocrypt/PatarinGC98}, but we realized that this proof is incomplete. 
 Here, we are interested in the special case of two equations with homogeneous composants only 
 since it seems to be the most difficult cases according~\cite{DBLP:conf/eurocrypt/Perret05,DBLP:conf/eurocrypt/FaugereP06,DBLP:conf/pkc/BouillaguetFFP11,DBLP:conf/eurocrypt/BouillaguetFV13}. 
 
-The case with one equation is the equivalence problem between two quadratic forms which 
-is a classical result of classification of quadratic forms~\cite{lidl1997finite}.
 
 \paragraph{Previous Work.}
-1. parler du travail de Gilles + Henri et Jerome a Asiacrypt cas cyclic
+The case with one equation is the equivalence problem between two quadratic forms which 
+is a classical result of classification of quadratic forms~\cite{lidl1997finite}. The case with 
+affine terms is easier since it is possible to obtain linear relations between the secret unknowns
+for the IP1S problem and for the IP problem since $t$ is bijective~\cite{DBLP:conf/eurocrypt/PatarinGC98} 
+and such information helps generic solvers, such as Gröbner basis algorithm, as it is shown in~\cite{DBLP:conf/eurocrypt/FaugereP06}.  
+The case with more than two equations is easier since we can relinearized the 
+systems~\cite{DBLP:conf/pkc/BouillaguetFFP11}. Consequently, the main difficult case is when the 
+number of equations is two and the equations are homogeneous, \textit{i.e.} contain only quadratic terms. 
 
-2. parler du travail de Jeremy + Faugere et Ludovic
+At Asiacrypt 2011, Bouillaguet, Fouque and Macario-Rat in~\cite{DBLP:conf/asiacrypt/BouillaguetFM11} 
+use pencil of quadratic forms to recover the secret mappings $s$ and $t$ when $3$ equations are available
+and one of the quadratic equations $\bm{a}$ comes from a special mapping $X\mapsto X^{q^\theta+1}$ 
+over $\F_q$. In the case of the IP problem, this is optimal using an information theoretic arguments. 
+At Asiacrypt 2013, Macario-Rat, Plût and Gilbert explained in~\cite{MPG2013}, how to
+solve cyclic instances of the IP1S problem over finite fields of any characteristic. Cyclic instances are 
+instances~$\bm{b} = (b_{∞}, b_{0})$ such that $b_{∞}$~is invertible and~$b_{∞}^{-1} b_{0}$ is cyclic.
+Although the cyclic case is generic in the geometric sense (\emph{i.e.}
+defined by the non-cancellation of some polynomial functions of the
+coefficients of~$\bm{b}$), it is not the general case in a practical
+sense.
 
-\paragraph{Our contributions.}
+%\commentaire{2. parler du travail de Jeremy + Faugere et Ludovic}
+Finally, very recently Berthomieu, Faugère and Perret in~\cite{DBLP:journals/corr/BerthomieuFP13}
+proposed an algorithm to solve the IP1S problem for any number of equations and claim that the 
+time complexity is polynomial. However, some inconsistancies are present in this work and mismatches 
+come from some parts of their algorithms work in zero characteristic fields while other parts are for 
+finite fields. First of all, 
+they solved the problem in an extension field of the base field. They turn the congruence problem, 
+\textit{i.e.} given two systems of matrices $\{H_i\}_{1\leq i \leq m}$ and $\{H'_i\}_{1\leq i \leq m}$, 
+find an invertible matrix $P$ such that $H'_i=\transpose{P}H_iP$ into a conjugaison problem, 
+\textit{i.e.} given two systems of matrices $\{H_i\}_{1\leq i \leq m}$ and $\{H'_i\}_{1\leq i \leq m}$, 
+find an invertible matrix $P$ such that $H'_i=P^{-1}H_iP$. Using a result proved in~\cite{dSP10} concerning 
+the conjugaison problem, they
+consider that it is equivalent to solve the problem in an extension field. However, there is cases where
+the congruence problem has a solution in the extension but not in the base field. They assume that 
+the two systems can always been transformed into two systems such that the first is the identity and 
+this is the case if we can always find a square root, but this is not always possible. Then, their deterministic
+algorithm relies on a result of~\cite{DBLP:conf/issac/ChistovIK97} and this work only deals with 
+the field of real algebraic number or the field of algebraic number. Finally, the authors claim that their 
+algorithm solves the decisional problem and not the computational problem.  
 
-\section{The Isomorphism of Polynomial Problem with One Secret}
-Voir avec Jerome ce qu'on met ici en fonction du niveau des personnes
+\paragraph*{Our contributions.}%<<<2
+We first reduce the general IP1S problem to the \emph{regular case},
+which is the case where $b_{∞}$~is invertible. This is the object of
+section~\ref{S:IP1S-singular} of this document and uses the Kronecker
+classification of pencils of quadratic forms.
 
-\subsection{Notations and definitions}
+We then prove that the regular case of the IP1S problem simplifies to a
+reduction problem for some quadratic forms over a local algebra. As this
+is a well-understood theory (in odd characteristic), we are able to give
+a polynomial-time answer to all instances of IP1S in
+section~\ref{S:IP1S-regular}.
 
-\subsection{The quadratic IP1S problem}
+The last section explains how we recover the second (``outer'') secret in
+the two-secret problem.
+\commentaire{ ? la partie singulière n'intervient pas et donc tout
+secret~$h$ possible sur la partie régulière est bon ?}
 
-\subsection{Mathematical Background}
+\section{Mathematical Background}%<<<2
+Let~$V$ be a $n$-dimensional vector space over the field~$k$. We study
+the IP1S and IP2S problems for \emph{quadratic forms} on~$V$, which are
+homogeneous polynomials of degree~$2$ in some coordinates on~$V$. To a
+quadratic form~$q$, one may associate the \emph{polar form}~$b$ defined
+by
+\begin{equation*}\label{eq:polar}
+b(x,y) = q(x+y) - q(x) - q(y);
+\end{equation*}
+this is a symmetric bilinear forms, and it satisfies the \emph{polarity
+identity}
+\begin{equation*}\label{eq:polarity}
+b(x,x) = 2q(x).
+\end{equation*}
+If~$2 ≠ 0$ in~$k$, then the polarity identity is a bijection between
+quadratic forms and bilinear forms. Therefore, instead of quadratic
+forms, we shall study directly bilinear forms.
+
+We note that, if~$2 = 0$ in~$k$, the situation is much more complicated;
+the polarity identity is no longer a bijection, but polar forms are
+instead alternate bilinear forms. This means that their classification is
+very different from the odd-characteristic case, and relies on symplectic
+groups and Artin-Schreier type equations, \emph{i.e.} of the
+type~$x^2+x+C = 0$.
+
+
+\begin{definition}%\textbf{[Quadratic IP1S]}% \\
+The IP1S problem is the following. 
+Given two $m$-tuples $\bm{a} = (a_1, \ldots, a_{m})$ and {$\bm{b} = (b_1, \ldots, b_{m})$}  of quadratic homogeneous forms in $n$ variables over $k$, find a non-singular linear mapping $s \in \mathrm{GL}_n(k)$ (if any) such that $\bm{b} = \bm{a} \circ s$, i.e. $a_i = b_i \circ s$ for $i= 1, \ldots, m$.  
+\end{definition}
+
 %>>>1
 \section{IP1S in the possibly singular case}%<<<1
-
+\label{S:IP1S-singular}
+\subsection{Regular and singular pencils}%<<<2
 Throughout this document, $k$~is a field such that~$2 ∈ k^{×}$. Let~$V$
 be a vector space. An \emph{(affine) pencil of symmetric bilinear forms}
-over~$V$, or a \emph{symmetric pencil} in shorthand, is an affine map
-from~$k$ to the space of symmetric bilinear forms over~$V$. We may write
-it as~$b_{λ} = b_{0} - λ b_{∞}$, where~$λ ∈ k$ and~$b_{0}, b_{∞}$ are
-symmetric bilinear forms.
+over~$V$, or a \emph{symmetric pencil} in short, is the data of a pair of
+symmetric bilinear forms~$\bm{b} = (b_{∞}, b_{0})$ over~$V$. We write
+this pencil in affine form as~$b_{λ} = -λ b_{∞} + b_{0}$, and in
+projective form as~$b_{λ:μ} = -λ b_{∞} + μ b_{0}$, where $b_{0}$
+and~$b_{∞}$ are symmetric bilinear forms.
 
 The \emph{characteristic polynomial} of the symmetric pencil~$(b_{λ})$ is
-the determinant~$\det b_{λ}$, as a polynomial in~$λ$. The
-pencil~$(b_{λ})$ is called \emph{regular} if its characteristic
-polynomial is not identically zero, and \emph{singular} otherwise. We
-solve the isomorphism problem for regular pencils in section 2 below. We
-reduce to this case by proving that the singular part of a symmetric
-pencil is reducible to canonical form of Kronecker, described for pencils
-over the complex numbers in~\cite[XII(56)]{Gantmacher2}. We give here a
-proof that applies to any field where~$2 ≠ 0$ and which is algorithmic.
+either the polynomial~$f(λ) = \det (λ b_{∞} + b_{0})$, or its homogeneous
+form~$f(λ: μ) = \det (λ b_{∞} + μ b_{0})$. If $\dim_{k} V = n$, then
+$f(λ: μ)$~is homogeneous of degree~$n$. The pencil~$(b_{λ})$ is called
+\emph{regular} if the characteristic polynomial is not zero, and
+\emph{singular} otherwise. We solve the isomorphism problem for regular
+pencils in section~\ref{S:IP1S-regular} below.
+
+We reduce to the regular case by proving that the singular part of a
+symmetric pencil is reducible to the canonical form of Kronecker. This
+form is described in~\cite[XII(56)]{Gantmacher2}; however, the proof
+given there only applies to pencils over~$ℂ$, as its uses the computation
+of square roots of matrices via interpolation on the spectrum. We give
+here a proof that is true over any field~$k$ such that~$2 ≠ 0$ and which
+is algorithmic.
 
 \subsection{Reduction of (possibly singular) pencils to the Kronecker form} %<<<2
 % Définition: indice minimal%<<<
@@ -232,217 +304,318 @@ B_{∞} = \mat{0 & \transpose{S} \transpose{C_0} & 0 \\
   C_0 S_0 & 0 & 0 \\ 0 & 0 & B'_0}.
 \end{equation}
 
-\begin{thm}[(Kronecker form)]
+\commentaire{Un lecteur attentif verra que l'argument ci-dessus est
+bidon. Je ne sais pas prouver exactement le résultat que je veux (mais
+expérimentalement ça marche, il n'y a pas d'arnaque avec des non-carrés
+par exemple). Je vais essayer d'avoir une preuve avant la deadline.}
+
+\begin{thm}[(Kronecker form)]%<<<
 Let~$(b_{λ})$ be a symmetric pencil on~$V$. There exists a basis of~$V$
 in which the pencil has a block-diagonal matrix with diagonal
-blocks~$(L_{d_1}, …, L_{d_r}, B')$, where $L_d$~is the square matrix of
+blocks~$(K_{d_1}, …, K_{d_r}, B')$, where $K_d$~is the square matrix of
 size~$2d+1$ defined by
 \begin{equation}
-\def\arraystretch{.7} L_{d} = \mat{
- & & & &λ& &0\\
- &0& & &1&⋱& \\
- & & & & &⋱&λ\\
- & & & &0& &1\\
-λ&1& &0& & & \\
- &⋱&⋱& & &0& \\
-0& &λ&1& & & \\
-},
+\def\arraystretch{.7}
+K_d = \mat{0 & K'_d\\\transpose{K'_d} & 0}, \quad
+K'_d = \mat{ λ& &0\\ 1&⋱& \\ &⋱&λ\\ 0& &1}_{d×(d+1)},
+% L_{d} = \mat{
+%  & & & &λ& &0\\
+%  &0& & &1&⋱& \\
+%  & & & & &⋱&λ\\
+%  & & & &0& &1\\
+% λ&1& &0& & & \\
+%  &⋱&⋱& & &0& \\
+% 0& &λ&1& & & \\
+% },
 \end{equation}
 the integers~$d_1 ≤ … ≤ d_r$ are the minimal indices of~$(b_{λ})$, and
 $B'$~is the matrix of a regular pencil.
 \end{thm}
-Note that in particular, the matrix~$L_{0}$ is the zero matrix of
-size~$1×1$. The appearances of~$L_0$ in the Kronecker form correspond to
+Note that in particular, the matrix~$K_{0}$ is the zero matrix of
+size~$1×1$. The appearances of~$K_0$ in the Kronecker form correspond to
 the constant vectors in the kernel of~$B_{λ}$.
-
+%>>>
 \section{IP1S for regular pencils}%<<<1
-\subsection{Localization of regular pencils}%<<<2
+\label{S:IP1S-regular}
 
+We give here an algorithm for solving the IP1S problem in the case of two
+regular pencils. Assume that $\bm{b} = (b_{λ})$~is regular, and let~$f ≠ 0$
+be its characteristic polynomial. Then, for any~$λ$ such that~$f(λ) ≠ 0$,
+the bilinear form~$b_{λ}$ is regular.
 
-\begin{prop}\label{prop:decomp-bezout}
-Let~$S$ be a regular symmetric pencil on the vector space~$V$.
-Let~$f(λ)$~be the characteristic polynomial of~$S$, and let~$f = ∏
-g_i$ be a factorization of~$f$ in mutually coprime factors.
+\subsection{Localisation of the IP1S problem}%<<<2
+
+\begin{lem}\label{lem:decomp-bezout}%<<<
+Let~$\bm{b}$ be a regular symmetric pencil on the vector space~$V$. Let~$f(λ:
+μ)$~be the homogeneous characteristic polynomial of~$S$, and let~$f = ∏
+g_i$ be a factorisation of~$f$ in mutually coprime factors.
 
 Then there exists a unique decomposition~$V = ⨁ V_i$ such that the
-spaces~$V_i$ are pairwise orthogonal for each form of~$S$ and the
+spaces~$V_i$ are pairwise orthogonal for all forms of~$\bm{b}$ and the
 restriction~$S|_{V_i}$ has characteristic polynomial~$g_i$.
-\end{prop}
+\end{lem}
 
 \begin{proof}
-It is enough to prove this when $f$~is the product of two factors~$f =
-gh$. Let~$x,y ∈ V$ such that.
-\end{proof}
+Let~$V_{∞} = \Ker b_{∞}$ and $V'$ be the orthogonal of~$b_{∞}$ relatively
+to the bilinear form~$b_{0}$. Then the decomposition~$V = V' ⊕ V_{∞}$ is
+orthogonal for all forms~$b_{λ}$; replacing~$V$ by~$V'$, we may assume
+that $b_{∞}$~is a regular bilinear form. This implies that $b_0$~has an
+adjoint endomorphism~$m = b_{∞}^{-1} b_0$ such that~$b_0(x,y) = b_{∞}(x,
+ay) = b_{∞}(ax, y)$; in particular, all elements of the algebra~$k[m]$
+are self-adjoint with respect to~$b_{∞}$.
 
-\subsection{From symmetric to commuting matrices}%<<<2
-\subsection{The adjunction involution}%<<<2
-\subsection{Classification of local symmetric pencils}%<<<2
-%>>>1
-% Biblio<<<1
-\bibliographystyle{plain}
-\bibliography{biblio}
-\end{document}%<<<1
-\section{Local structure of symmetric pencils}%<<<1
-\subsection{From symmetric to commuting matrices}%<<<2
-
-Let~$k$ be a field. A \emph{symmetric pencil} is an affine line in the
-space of symmetric bilinear forms with coefficients in~$k$:
-\begin{equation}
-b_{λ} = λ S_{∞} + S_0.
+Let~$f(λ) = f(λ: 1)$ be the affine characteristic polynomial. It is
+enough to prove the result for the decomposition~$f = gh$ where $g, h$
+are mutually prime. Let~$u, v$ be polynomials such that~$ug + vh = 1$ and
+$x, y ∈ V$ such that~$g(m)(x) = 0$ and~$h(m)(y) = 0$; we may then write
+\begin{equation}\label{eq:bezout}
+\begin{split}
+b_{∞} (x, y) & = b_{∞} (x,\: u(m) g(m) y + v(m) h(m) y ) \\
+&= b_{∞} (u(m) g(m) x, y) \,+\, b_{∞} (x, v(m) h(m) y) \\
+&= 0.
+\end{split}
 \end{equation}
-Up to a change of the basis~$(S_{∞}, S_{0})$ of~$S$, we may assume that
-$S_{∞}$ divides~$S_0$ on the left. Defining~$M = S_{∞}^{-1} S_0^{}$, we
-may therefore write the pencil~$(S_{λ})$ as
-\begin{equation}
-S_{λ} = S_{∞} (λ + M),
+Since~$y' = ay$ also verifies~$h(m)(y') = 0$, equation~\eqref{eq:bezout}
+also proves that~$b_{0}(x,y) = b_{∞}(x,y') = 0$, and hence~$x, y$ are
+orthogonal for all forms~$b_{λ}$.
+\end{proof}%>>>
+
+The decomposition of~$V$ obtained by applying
+Lemma~\ref{lem:decomp-bezout} to the full factorisation of~$f$
+over~$k[x]$ is the \emph{primary decomposition} of the pencil~$(b_{λ})$.
+The restriction of the pencil to each summand~$V_i$ has as its
+characteristic polynomial a power of a prime polynomial; such a pencil is
+called \emph{local}.
+
+If two regular pencils~$\bm{b}, \bm{b}'$ are isomorphic (in the IP1S sense), then
+they have the same characteristic polynomial, and computing an
+isomorphism between~$\bm{b}$ and~$\bm{b}'$ is the same as computing it on each
+factor of the primary decomposition. Therefore, in what follows, we shall
+assume that both pencils are local.
+
+\medskip
+
+Note that when $k = \F_q$~is a finite field, it may happen that $λ^q μ -
+λ μ^q$ divides~$f(λ:μ) ≠ 0$, so that~$f(λ) = 0$ for all~$λ ∈ ℙ^1(k)$. In
+this case, although $(b_{λ})$~is a regular pencil, all forms~$b_{λ}$ are
+degenerate. However, the decomposition given by
+Lemma~\ref{lem:decomp-bezout} still applies, and all the local pencils
+given by this decomposition contain at least one non-degenerate form,
+namely~$b_{0}$ on~$V_{∞}$ and~$b_{∞}$ in all other cases.
+Swapping~$b_{∞}$ and~$b_{0}$ when required, we may assume that all local
+pencils are \emph{finite}, \emph{i.e.} that $b_{∞}$~is a regular bilinear
+form.
+
+\bigskip
+
+Let~$b_{λ} = λ b_{∞} + b_0$ be a finite pencil. We may use the
+characteristic endomorphism~$m = b_{∞}^{-1}b_0$ to write~$\bm{b}$ in the form
+\begin{equation}\label{eq:adjoint}
+b_{λ} = b_{∞}\;(λ + m).
 \end{equation}
-where $S_{∞}$ and~$S_{∞} M$ are symmetric matrices. We say that $(S_{λ})$
-is \emph{regular} if $S_{∞}$~is invertible. The matrix $M$~is the
-\emph{characteristic endomorphism} of the pencil~$(S_{λ})$.
+The image of~$\bm{b}$ by a linear change of variables~$s$ is then
+\begin{equation}\label{eq:adjoint-change}
+\transpose{s} · b_{λ} · s = 
+  \transpose{s} · b_{∞} · s\; ( λ + s^{-1} · m · s).
+\end{equation}
+Let~$b'_{λ} = b'_{∞} (λ + m')$ be a pencil isomorphic to~$\bm{b}$; then there
+exists a change of variables~$t$ such that~$t^{-1} · m' · t = m$, and the
+pencil~$\transpose{t} · b'_{λ} · t$ is of the form $b'_{∞} (λ + m)$, so
+that we may assume that~$m' = m$. Computing the isomorphism
+between~$b_{λ}$ and~$b'_{λ}$ then amounts to computing~$s$ such that
+\begin{equation}
+\transpose{s} · b_{λ} · s = b'_{λ}, \qquad s · m = m · s.
+\end{equation}
 
-The image of the pencil~$(S_{λ})$ by a linear change of basis~$X$
-is~$(S'_{λ}) = (\transpose{X} S_{λ} X)$; its characteristic endomorphism
-is~$M' = X^{-1} M X$. In particular, $M = M'$ exactly when~$X$ and~$M$
-commute.
-
-
-For any matrix~$M$, we define the \emph{symmetrizing space}~$\ro S(M)$
-and the \emph{commutant}~$\ro C(M)$ as
-\begin{gather}
-\ro S(M) = \acco{\text{$S$ symmetric such that $SM$~is symmetric} },\\
-\ro C(M) = \text{\text{$X$ such that~$XM = MX$}}.
-\end{gather}
-The invertible elements of~$\ro C(M)$ form the \emph{commutant
-group}~$\ro C(M)^{×}$.
-
-In the particular case where $M$~is cyclic, the commutant~$\ro C(M)$ is
-the (commutative) polynomial algebra~$k[M]$. In this case, the IP1S
-problem may be solved in a straightforward way~\cite{MPG2013}. We are
-interested here in the general case, where $\ro C(M)$~is usually not a
-commutative algebra.
+We define the \emph{symmetrizing
+space}~$\ro S(m)$ and the \emph{commutant}~$\ro C(m)$ as
+\begin{equation}\begin{split}
+\ro S(m) &= \acco{\text{$b$ symmetric bilinear such that $bm$~is symmetric} },\\
+\ro C(m) &= \acco{\text{$a ∈ \End V$ such that~$am = ma$}}.
+\end{split}\end{equation}
+The invertible elements of~$\ro C(m)$ form the \emph{commutant
+group}~$\ro C(m)^{×}$.
 
 \begin{prop}\label{prop:structure-sym}
-Let~$M$ be any matrix.
+Let~$m$ be an endomorphism of~$V$.
 \begin{enumerate}
-\item \label{it:sym-inv} The set~$\ro S(M)$ contains an invertible
-matrix~$T$.
-\item \label{it:sym-comm} For any invertible~$T ∈ \ro S(M)$ and any~$A$,
-the matrix $TA$~belongs to~$\ro S(M)$ if and only if $TA$~is symmetric
-and $A ∈ \ro C(M)$.
-\item Any symmetric pencil with characteristic endomorphism~$M$ is of the
-form~$S_{λ} = TA (λ + M)$ where $A ∈ \ro C(M)$. Moreover, it is regular
-if and only if $A$~is invertible.
-\item Let~$S_{λ} = TA (λ + M)$ be a symmetric pencil and~$X ∈ \ro C(M)$.
-Then
-\begin{equation*}
-\transpose{X} S_{λ} X = T \:(X^{⋆} A X)\: (λ + M), \quad
-\text{where $X^{⋆} = T^{-1} \transpose{X} T ∈ \ro C(M)$.}
-\end{equation*}
-\item Let~$A ∈ \ro C(M)$. Then $\transpose{(TA)} = TA^{⋆}$. In
-particular, $TA$~is symmetric if, and only if, $A = A^{⋆}$.
+\item \label{it:sym-inv} The set~$\ro S(m)$ contains a regular bilinear
+form.
+\item \label{it:sym-comm} For any regular bilinear form~$t ∈ \ro S(m)$
+and any endomorphism~$a$ of~$V$, the bilinear form~$ta$ belongs to~$\ro
+S(m)$ if and only if $a$~is self-adjoint with respect to~$t$ and $a ∈ \ro
+C(m)$.
+\item Any finite pencil with characteristic endomorphism~$m$ is of the
+form $b_{λ} = ta (λ+m)$ where~$a ∈ \ro C(m)^{×}$.
+\item Let~$b_{λ} = ta(λ+m)$ be a finite pencil and~$s ∈ \ro C(m)$.
+Let~$s^{⋆} = t^{-1} · \transpose{s} · t$ be the adjoint of~$s$
+relatively to the bilinear form~$t$. Then
+\begin{equation}
+\transpose{s} · b_{λ} · s = t\: (s^{⋆} a s)\: (λ + m).
+\end{equation}
+% \item Let~$a ∈ \ro C(m)$. Then $\transpose{(t·a)} = t·a^{⋆}$. In
+% particular, $t·a$~is symmetric if, and only if, $a = a^{⋆}$.
 \end{enumerate}
 \end{prop}
 
 \begin{proof}
 Point~\itemref{it:sym-inv} is explicitly proven in Prop.~\ref{prop:big-T}
-below. Assuming that $TA$~is symmetric, point~\itemref{it:sym-comm}
-follows from
+below. Assuming that $a$~is self-adjoint with respect to~$t$,
+point~\itemref{it:sym-comm} follows from
 \begin{equation}
-\transpose{(TAM)} \;=\; \transpose{M}\, \transpose{(TA)}
- \;=\; \transpose{M}\,TA = TMA;
+\transpose{(tam)} \;=\; \transpose{m}\, \transpose{(ta)}
+ \;=\; \transpose{m}\,ta = tma;
 \end{equation}
-since $T$~is invertible, it is cancellable in the resulting equation~$TMA
-= TAM$.
+since $t$~is regular, it is cancellable in the resulting equation~$tma
+= tam$.
 \end{proof}
 
-We call~$A^{⋆}$ the \emph{adjoint} of~$A$ and say that $A$~is
-\emph{self-adjoint} if~$A^{⋆} = A$. (Since we don't plan to equip the
-field~$k$ with an involution, no confusion with the usual meaning is
-possible).
+\begin{prop}\label{prop:IP1S-congruence}
+The congruence problem for finite symmetric pencils is equivalent to the
+following: given an endomorphism~$m$ of~$V$ and two invertible
+self-adjoint matrices~$a, a' ∈ \ro C(m)$, compute a matrix~$x ∈ \ro
+C(m)^{×}$ such that~$x^{⋆} a x = a'$.
+\end{prop}
 
-\begin{thm}\label{thm:IP1S-congruence}
-The congruence problem for regular symmetric pencils is equivalent to the
-following: given two invertible self-adjoint matrices~$A, A' ∈ \ro C(M)$,
-compute a matrix~$X ∈ \ro C(M)$ such that~$X^{⋆} A X = A'$.
-\end{thm}
+In the particular case where $m$~is cyclic, the commutant~$\ro C(m)$ is
+the (commutative) polynomial algebra~$k[m]$. In this case, solving the
+IP1S problem is straightforward~\cite{MPG2013}. The proof given here
+specializes in the cyclic case to the proof of~\cite{MPG2013}. Namely, if
+$m$~is cyclic, then Prop.~\ref{prop:IP1S-congruence} amounts to
+equivalence of 1-dimensional quadratic forms over~$k[m]$, which is simply
+a square root computation.
 
-\subsection{The commuting space of a Jordan matrix}%<<<2
+\subsection{The local IP1S problem in matrix form}%<<<2
 
-By using the primary decomposition of~$M$ (= Chinese remainders) as well
-as an extension of scalars, we may assume that the minimal polynomial
-of~$M$ is a power of a prime polynomial. Using an extension of scalars, we
-assume that it is a power of~$x$.
+Assume that $b_{λ}$~is a finite local pencil with characteristic
+endomorphism~$m$ and characteristic polynomial~$p^d$, where $p$~is an
+irreducible polynomial of degree~$e$. Let~$M_p$ be the companion matrix
+of~$p$; then $k[M_p]$~is isomorphic to the extension field~$K =
+k[μ]/(p(μ))$. For any matrix~$A = (a_{i,j})$ of size~$u × v$ with
+coefficients in~$K$, let~$A^{♭}$ be the (``flattened'') matrix of
+size~$eu × ev$ with blocks of size~$e × e$ given by~$a_{i,j}(M_p)$. We
+have~$1^{♭} = 1$ and~$(AB)^{♭} = A^{♭} B^{♭}$ whenever the product
+exists. We write~$A ↦ A^{♯}$ for the inverse map where it is defined.
 
-In this case, $M$~decomposes as Jordan blocks as follows: for each
-integer~$u$, let~$H_u$ be the companion matrix of the polynomial~$x^u$.
-Then there exists a decreasing sequence of integers~$n_1 ≥ … ≥ n_r$ such
-that~$∑ n_i = n$ and $M$~is block-diagonal, with the $i$-th block being
-equal to~$H_{n_i}$.
+For any integer~$u$, let~$H_u$ be the companion matrix of the
+polynomial~$x^u$. Then there exists a basis of~$V$ in which the
+matrix~$M$ of~$m$ is block-diagonal, with diagonal blocks~$M_{n_i} =
+(H_{n_i} + μ)^{♭}$, for integers~$n_1 ≥ … ≥ n_r$.
 
-For each integers~$u ≥ v$, define matrices~$J_{u,v}$ and~$J_{v,u}$, of
-respective sizes~$u × v$ and~$v × u$, by the block decompositions:
+
+\begin{lem}\label{lem:commute-jordan}%<<<
+For all integers~$u, v$, define a matrix~$J_{u,v}$ of size~$u × v$ as
 \begin{equation}
-J_{u,v} = \mat{ \mathrm{id}(v) \\ 0^{v ×(u-v)}},\quad
-J_{v,u} = \mat{ 0^{(u-v)× v } & \mathrm{id}(v)}.
+\def\arraystretch{.9}
+J_{u,v} = \mat{1& &0\\&⋱&\\0&&1\\0&⋯&0\\⋮&&⋮\\0&⋯&0} \text{ if~$u ≥
+v$,}\quad
+J_{u,v} = \mat{0&⋯&0&1&&0\\⋮&&⋮&&⋱&\\0&⋯&0&0&&1} \text{ if $u ≤ v$.}
 \end{equation}
-
-\begin{prop}\label{prop:rel-HJ}
-Let~$u, v, w$ be three integers.
 \begin{enumerate}
-\item $H_{u} J_{u,v} = J_{u,v} H_{v}$.
+\item For all integers~$u, v$, $H_{u} J_{u,v} = J_{u,v} H_{v}$.
 \item The space of all matrices~$A$ of size~$u × v$ such that~$H_u A = A
 H_v$ is exactly $k[H_u] J_{u,v}$.
 \item \label{it:Juw} $J_{u,v} J_{v,w} = H_v^{d} J_{v,w}^{}$ where $d$~is
 the distance between~$v$ and the interval~$[u,w]$. In particular,
 $J_{u,v} J_{v,u} = H_{u}^{\abs{u-v}}$.
 \end{enumerate}
+\end{lem}
+%>>>
+\begin{prop}\label{prop:structure-commutant}%<<<
+Let~$M$ be the block-diagonal matrix with diagonal blocks~$(H_{n_i} +
+μ)^{♭}$. The commuting space of~$M$ is the space of all matrices~$A^{♭}$,
+where $A$~is a block matrix~$A = (A_{i,j})$, with $A_{i,j} ∈
+ k[H_{n_i}] J_{n_{i}, n_{j}} = J_{n_i, n_j} k[H_{n_j}]$.
 \end{prop}
+%>>>
+According to Prop.~\ref{prop:structure-commutant}, we may replace all
+elements~$A$ of~$\ro C(M)$ by their images~$A^{♯}$ in~$\ro C(M^{♯})$. We
+may therefore assume that~$e = 1$, which means that~$K = k$. In this
+case, as~$\ro C(M) = \ro C(M-μ)$, we may further assume that~$μ = 0$.
+This means that  $M$~is the block-diagonal matrix with diagonal
+blocks~$H_{n_i}$ for integers~$n_1 ≥ … ≥ n_r$.
 
-\begin{prop}\label{prop:structure-commutant}
-Let~$M$ be the block-diagonal matrix with diagonal blocks~$H_{n_i}$.
-The commuting space of~$M$ is the space of
-all block matrices~$A = (A_{i,j})$, where $A_{i,j}$~belongs
-to~$k[H_{n_i}] J_{n_{i}, n_{j}} = J_{n_i, n_j} k[H_{n_j}]$.
-\end{prop}
-
-Each entry~$A_{i,j}$ may be written as a polynomial
+Let~$A ∈ \ro C(M)$. Each entry~$A_{i,j}$ may be written as a polynomial
 \begin{equation}
 A_{i,j} = a_{i,j} (H_{n_i}) J_{n_i,n_j} = J_{n_i,n_j} a_{i,j} (H_{n_j})
 \end{equation}
 where $a_{i,j}(H) ∈ k[H]/H^{n_j}$.
+
 We simplify the notation and write~$A = (a_{i,j})$ where~$a_{i,j} ∈
 k[H]$. We note however that elements of~$\ro C(M)$ do not multiply as
 matrices with coefficients in~$k[H]$, due to the relations
-of Prop.~\ref{prop:rel-HJ}. An easy way to perform the computations is
+of Lemma~\ref{lem:commute-jordan}. An easy way to perform the computations is
 given in Prop.~\ref{prop:phantom} below.
 
-\subsection{The adjunction involution}%<<<2
+\begin{prop}\label{prop:phantom}%<<<
+Let~$R = k[H]/H^{n_1}$. For all~$i, j$, let~$e_{i,j} = \max (0, n_i -
+n_j)$. For any matrix~$A = (A_{i,j}) ∈ \ro C(M)$, where $A_{i,j} =
+a_{i,j}(H_{n_i}) J_{n_i, n_j}$, define
+\begin{equation}
+ψ(A) = (H^{e_{i,j}}\; a_{i,j}(H)) \; ∈ \; R^{r×r}.
+\end{equation}
+Then $ψ$~is a $k$-algebra morphism from~$\ro C(M)$ to~$R^{r×r}$.
+\end{prop}
 
-We now describe the involution~$A ↦ A^{⋆}$ of the commuting space~$\ro
-C(M)$.
+\begin{proof}
+The matrices of~$\ro C(M)$ multiply according to the relations of
+Lemma~\ref{lem:commute-jordan}. We only need to prove that the
+integers~$e_{i,j}$ are an integral of the exponents~$\mathrm{distance}
+(n_k, [n_i, n_j])$ of Lemma~\ref{lem:commute-jordan}:
+\begin{equation}\label{eq:integral}
+e_{i,k} - e_{i,j} + e_{k,j} = \mathrm{distance} (n_k, [n_i, n_j]).
+\end{equation}
+This can be verified by checking for all orderings of the
+triple~$(i,j,k)$.
+\end{proof}%>>>
 
-\begin{prop}\label{prop:big-T}
+\paragraph{The adjunction involution.}
+We now describe the adjunction involution~$A ↦ A^{⋆}$ of the commuting
+space~$\ro C(M)$.
+
+\begin{prop}\label{prop:big-T}%<<<
 For each integer~$u$, write~$T_u$ for the anti-identity matrix of
 size~$u$.
 \begin{enumerate}
 \item $T_u$~is invertible and both~$T_u$ and~$T_u H_u$ are symmetric.
 \item $\transpose{J_{u,v}} T_u = T_v J_{v,u}$.
-\item Let~$T$ be the block-diagonal matrix with diagonal blocks equal
-to~$T_{n_i}$. Then $T ∈ \ro S(M)^{×}$.
+\item Let~$T$ be the block-diagonal matrix with diagonal
+blocks~$T_{n_i}$. Then $T ∈ \ro S(M)^{×}$.
 \end{enumerate}
 \end{prop}
-
-
-\begin{prop}
+%>>>
+\begin{prop}\label{prop:adjoint}%<<<
 Let~$A = (a_{i,j}(H)) ∈ \ro C(M)$. Then \[ A^{⋆} = (a_{ji}(H)). \]
 In particular, $TA$~is symmetric if, and only if, $a_{i,j} = a_{ji}$
 in~$k[H]/H^{\min (n_i, n_j)}$.
 \end{prop}
+%>>>
 
-\subsection{Structure of the commutant group}%<<<2
+As a corollary of Prop.~\ref{prop:phantom} and~\ref{prop:adjoint}, we get
+the following. Let~$D$ be the diagonal matrix~$(H^{n_1-n_i}) ∈ R^{r×r}$.
+For any~$A = (a_{i,j}∈ \ro C(M)$, let
+\begin{equation}
+φ(A) = D · ψ(A) = (H^{\max (n_1-n_i,n_1-n_j)}a_{i,j}) ∈ R^{r×r}.
+\end{equation}
+We then have~$φ(A^{⋆}) = \transpose{φ(A)}$. This implies that, for
+all~$A, X ∈ \ro C(M)$:
+\begin{equation}\label{eq:phi-psi}
+φ(X^{⋆}\,A\,X) = \transpose{ψ(X)}\, φ(A)\, ψ(X).
+\end{equation}
 
+\paragraph{Structure of the commutant group.}%<<<
 
-\begin{lem}\label{lem:det-1block}
+We show here how to compute in the commutant group~$\ro C(M)^{×}$. The
+main result can be stated in two equivalent ways, as a formula to compute
+the determinant of elements of~$\ro C(M)^{×}$, or as a Gaussian
+elimination algorithm in the commutant group. For~$A ∈ \ro C(M)$, we
+define the \emph{big block} of index~$(u,v)$ of~$A$ as the
+sub-matrix~$(a_{i,j})$, where $i,j$~run over the range where~$n_i = u$
+and~$n_j = v$. Prop.~\ref{prop:det-bigblock} states that $A$~is
+invertible if and only if all its diagonal big blocks are invertible as
+matrices with coefficients in~$k[H]/H^{n_i}$.
+
+\begin{lem}\label{lem:det-1block}%<<<
 Let~$s$ be such that~$n_1 = … = n_s > n_{s+1}$.
 Define~$n'_i = n_i - 1$ if~$i ≤ s$, and~$n'_i = n_i$ if~$i > s$.
 
@@ -450,10 +623,8 @@ For any matrix~$A ∈ \ro C(M)$ given by the block decomposition~$A =
 (a_{i,j}(H_{n_i}) J_{n_i,n_j})$, define~$A'$ as the square matrix of
 size~$n - s$ given by the blocks~$(a_{i,j}(H_{n'_i}) J_{n'_i,
 n'_j})$.
-
 Then \[ \det A \;=\; \det (a_{i,j}(0))_{1 ≤ i,j ≤ s} · \det A'. \]
 \end{lem}
-
 
 \begin{proof}
 Let~$σ$ the unique permutation of~$[1,n]$ such that~$σ(n_i) = i$ for~$i =
@@ -463,14 +634,8 @@ columns of~$A$ is lower block-triangular, with two diagonal blocks
 respectively equal to the matrix~$(a_{i,j}(0))_{i,j ≤ s}$ and to~$A'$.
 Since~$\det A = \det A^{σ}$, this proves the lemma.
 \end{proof}
-
-For each $u, v$, the \emph{big block} of index~$(u, v)$ of~$A$ is the
-matrix~$(a_{i,j})$, where $i,j$~run over the range where~$n_i = u$
-and~$n_j = v$. The next proposition states that $A$~is invertible if and
-only if all its diagonal big blocks are invertible as matrices with
-coefficients in~$k[H]/H^{n_i}$.
-
-\begin{prop}\label{prop:det-bigblock}
+%>>>
+\begin{prop}\label{prop:det-bigblock}%<<<
 Let~$A = (a_{i,j}(H)) ∈ \ro C(M)$. Then
 \[ \det A \;=\; ∏_{d ≥ 1} \det (a_{i,j}(0) | n_{i} = n_j = d)^{d} \]
 where $a_{i,j}(0)$~is the image modulo~$H$ of~$a_{i,j} ∈ k[H]$.
@@ -481,8 +646,8 @@ By induction on~$n_1$, with Lemma~\ref{lem:det-1block} providing the
 induction step. The base case~$n_1 = 1$ corresponds to~$k[H] = k$ and
 therefore~$A = (a_{i,j}(0))$.
 \end{proof}
-
-\begin{prop}\label{prop:structure-gl}
+%>>>
+\begin{prop}\label{prop:structure-gl}%<<<
 The commutant group~$\ro C(M)^{×}$ is
 generated by the following matrices:
 \begin{enumerate}
@@ -498,63 +663,19 @@ all its diagonal big blocks invertible. Therefore we may apply the
 Gaussian elimination algorithm to factor $A$~as a product~$A = LU$, where
 $L$~is lower triangular with diagonal elements~$1$, and $U$~is upper
 triangular.
-\end{proof}
+\end{proof}%>>>
+%>>>
 
-\section{Classification of local symmetric pencils}%<<<1
-\subsection{Symmetric pencils as symmetric bilinear forms}%<<<2
+\subsection{Classification of local symmetric pencils}%<<<2
 
-As in the previous section, we assume that $M$~is a Jordan matrix
-determined by integers~$n_1 ≥ … ≥ n_r$. Let~$R = k[H]/H^{n_1}$.
+We shall need the following classical result about bilinear forms over
+local algebras.
 
-The next proposition gives an easy way to compute the congruence action
-of the commutant group~$\ro C(M)^{×}$ on self-adjoint matrices, by way of
-ordinary matrix multiplication in the matrix algebra~$R^{r×r}$.
-
-\begin{prop}\label{prop:phantom}
-For any self-adjoint matrix~$A ∈ \ro C(M)$, define the symmetric
-matrix~$Φ(A)$ with coefficients in~$R$ by
-\[ Φ(A) = (a_{i,j} H^{n_1 - n_j}) ∈ \ro S_r(R). \]
-Likewise, for any invertible~$X ∈ \ro C(M)^{×}$, define
-\[ Ψ(X) = (x_{i,j} H^{\max (n_1-n_j, 0)}) ∈ GL_r(R). \]
-Then, for all~$A$ and~$X$, the following relation holds (as matrices with
-coefficients in~$R$):
-\[ Φ(X^{⋆}\:A\:X) = \transpose{Ψ(X)}\: Φ(A)\: Ψ(X) ∈ \ro S_r(R). \]
-\end{prop}
-
-\begin{proof}
-We first note that the diagonal big blocks of~$Ψ(X)$ are equal to those
-of~$X$, which are invertible. Since the big blocks above the diagonal
-of~$Ψ(X)$ are all divisible by~$H$, this proves that $Ψ(X)$~is
-invertible.
-
-By Prop.~\ref{prop:structure-gl}, it is enough to check
-Prop.~\ref{prop:phantom} when $X$~is big-block-diagonal or a transvection
-matrix. The first case is obvious, and the second one
-follows from the multiplication relations of the matrices~$J_{u,v}$
-given in Prop.~\ref{prop:rel-HJ}~\itemref{it:Juw}.
-\end{proof}
-
-For example in the case of two big blocks: assume~$n_1 > n_2$, $e = n_1 -
-n_2$, and let
-\[ A = \mat{A_{11} & A_{12}\\ \transpose{A_{12}} & A_{22}}, \quad
-X = \mat{X_{11} & X_{12}\\ X_{21} & X_{22}}. \]
-According to Prop.~\ref{prop:phantom}, $Φ(A)$ and~$Ψ(X)$ are defined as
-\[ Φ(A) = \mat{A_{11} & H^e A_{12}\\ H^e \transpose{A_{12}} & H^e A_{22}},
-\quad
-Ψ(X) = \mat{X_{11} & H^e X_{12}\\ X_{21} & X_{22}}. \]
-and $X^{⋆} A X$~may be easily computed as the symmetric matrix such
-that~$Φ(X^{⋆}AX) = \transpose{Ψ(X)} Φ(A) Ψ(X)$.
-
-\subsection{Classical results on symmetric bilinear forms}%<<<2
-
-In this paragraph, $R$~is the local ring~$R = k[H]/H^n$.
-Let~$\acco{1, δ}$ be a set of representatives for the
-quotient~$R^{×}/(R^{×})^2$.
-
-\begin{prop}\label{prop:local-diag}
-Let~$A$ be a regular symmetric matrix with entries in~$R$. Then $A$~is
-congruent over~$R$ to either the identity matrix or the diagonal
-matrix~$(1, …, 1, δ)$.
+\begin{prop}\label{prop:local-diag}%<<<
+Let~$R$ be a local ring with residue field~$k$ and let~$\acco{δ_i}$ be a
+set of representatives for~$k^{×}$ modulo squares. Then any regular
+symmetric matrix with entries in~$R$ is congruent over~$R$ to a
+diagonal matrix~$(1, …, 1, δ_i)$ for some~$i$.
 \end{prop}
 
 \begin{proof}
@@ -562,22 +683,21 @@ The Gram orthogonalization algorithm works; cf.
 \cite[I(3.4)]{milnorhusemoller} or \cite[92:1]{omeara}.
 \end{proof}
 
-\subsection{Classification of regular symmetric pencils}%<<<2
-
-
-\begin{prop}\label{prop:bb-diag}
+In the present case, since $k$~is a finite field, we have $k^{×} /
+(k^{×})^2 = \acco {1, δ}$ for some element~$δ$.
+%>>>
+\begin{prop}\label{prop:bb-diag}%<<<
 Let~$A$ be an invertible, self-adjoint element of~$\ro C(M)$. Then there
 exists $X ∈ \ro C(M)^{×}$ such that $X^{*} A X$~is big-block-diagonal.
 \end{prop}
 
-
 \begin{proof}
 We prove this by induction on the number of big blocks of~$A$, using Gram
 orthogonalization on the big blocks of~$A$. Let~$B$ be the first diagonal
-big block of~$A$ and~$e$ be the first non-zero element~$n_1 - n_i$. We
-may then write $A$~as a block matrix
+big block of~$A$ and~$d$ be the size of the first big block of~$a$.
+We may then write $A$~as a block matrix
 \begin{equation}
-Φ(A) = \mat{B & H^{e} C\\ H^e\transpose{C} & H^e A'}.
+A = \mat{B & C \\ \transpose{C} & A'}, B ∈ R^{d×d}.
 \end{equation}
 Since $A$~is invertible, all its diagonal big blocks are invertible; in
 particular the matrices~$B$ and $A'$~are invertible. By the induction
@@ -586,8 +706,8 @@ big-block diagonal.
 
 We then define
 \begin{equation}
-Ψ(X) = \mat{1 & -H^e B^{-1} C\\0 & X'}\quad\text{and see that}\quad
-Φ(X^{⋆} A X) = \transpose{Ψ(X)} Φ(A) Ψ(X) = \mat{B & 0\\0 & H^e Δ}.
+X = \mat{1 & -B^{-1} C\\0 & X'}\quad\text{and see that}\quad
+X^{⋆} A X = \mat{B & 0\\0 & Δ}.
 \end{equation}
 \end{proof}
 
@@ -595,21 +715,189 @@ We note that the regularity hypothesis on~$A$ is essential for
 Prop.~\ref{prop:bb-diag}. As a counter-example, assume that the Jordan
 sequence is~$n_1 > n_2$ with~$n_2 ≥ 2$, and let~$A = \mat{H_{n_1} &
 J_{n_1,n_2} \\ J_{n_2,n_1} & H_{n_2}} = \mat{H&1\\1&H}$.
-Then no matrix of the form~$Ψ(X)$ diagonalizes~$Φ(A) = \mat{H&H\\H&H^2}$
-in~$R^{2×2}$, and therefore $A$~is not not big-block diagonalizable by a
-matrix commuting with~$M$.
-
-\begin{thm}\label{thm:diag}
+Then, using the notations from~\eqref{eq:phi-psi}, no matrix of the
+form~$ψ(X) = \mat{x_1&H x_2\\x_3&x_4}$ diagonalizes~$φ(A) =
+\mat{H&H\\H&H^2}$ in~$R^{2×2}$, and therefore $A$~is not not big-block
+diagonalizable by a matrix commuting with~$M$.
+%>>>
+\begin{prop}\label{prop:diag}%<<<
 Let~$A$ be an invertible, self-adjoint element of~$\ro C(M)$. Then $A$~is
 congruent to a diagonal matrix, where each diagonal big block is either
 the identity matrix, or the diagonal matrix~$(1, …, 1, δ)$.
-\end{thm}
+\end{prop}
 
 \begin{proof}
 Use propositions~\ref{prop:bb-diag} and~\ref{prop:local-diag}.
-\end{proof}
+\end{proof}%>>>
 
 
+\begin{thm}\label{thm:IP1S}
+Let~$k$ be a finite field of characteristic~$≠2$ and~$(b_{λ})$ be a
+pencil of $n$-dimensional symmetric bilinear forms over~$k$.
+It is possible, using no more than~$O(n^3)$ operations in~$k$, to compute
+an isomorphism between~$(b_{λ})$ and a (unique) block-diagonal pencil
+with diagonal blocks of the following form:
+\begin{itemize}
+\item Kronecker blocks~$K_{d} = \mat{0&K'_{d}\\\transpose{K'_d}&0}$
+for integers~$d ≥ 0$;
+\item local blocks~$L_{p,d,u}$, where $p$~is an irreducible polynomial,
+$d ≥ 1$, and $u$~is either~$1$ or a fixed non-square element
+of~$k[μ]/p(μ)$, of the form
+\[ L_{p,d,u} \;= \; \mat{ & & &uλ\\ & &λ&μ\\ &⋰&⋰& \\ λ&μ& & \\}^{♭} \;=\;
+\mat{ & & &uλ1_e\\ & &λ1_e&M_p\\ &⋰&⋰& \\ λ1_e&M_p& & \\}. \]
+\end{itemize}
+\end{thm}
+
+The only place where the finiteness of~$k$ is required for this theorem
+to hold is for the computation of square roots.
+
+\commentaire{Algorithme + complexité ?}
+
+%>>>1
+\section{IP2S in the regular case}%<<<1
+\label{S:IP2S-regular}
+Two families of polynomials~$(a_1,…,a_m)$ and~$(b_1,…,b_m)$ are
+\emph{isomorphic with two secrets} if there exist bijective linear
+transformations~$s$ of the $n$~variables and~$h$ of the $m$~polynomials
+such that $h ∘ \bm{a} ∘ s = \bm{b}$.
+
+Assume that $m = 2$. Then the second secret~$h$ is a homography in two
+variables. Assume moreover that $a_{λ} = λ a_∞ + a_0$ and~$b_{λ} = λ
+b_{∞} + b_0$ are regular pencils of quadratic forms and that $2≠ 0$
+in~$k$. Then the homography~$h$ maps the characteristic polynomial~$f(λ)
+= \det (a_{λ})$ to~$g(λ) = \det (b_{λ})$. In particular, it maps the
+prime factors of~$f$ to those of~$g$, respecting both their degree and
+their exponent as a factor of the characteristic polynomial.
+
+Let the factors of~$f$ and~$g$ be grouped as sets~$S_{d,e}$ and~$T_{d,e}$
+of factors of degree~$d$ and exponent~$e$. Then any homography~$h$
+mapping all the elements of~$S_{d,e}$ to~$T_{d,e}$ for each pair~$(d,e)$
+is a possible second secret in the IP2S problem. We compute the
+intersection for~$(d,e)$ of the set~$H_{d,e}$ of homographies mapping the
+prime polynomials of~$S_{d,e}$ to~$T_{d,e}$. In most cases, the first
+set~$H_{d,e}$ already contains only one candidate, which is therefore the
+second secret~$h$. The discussion depends on the degree~$d$ of the
+polynomials. We note that the sum of the size of the sets~$S_{d,e}$ is
+the number of variables~$n$; therefore, we may use the worst-case
+estimate~$\card{S_{d,e}} = O(n)$ for each~$(d,e)$.
+
+We shall use the following classic results.
+\begin{prop}\label{prop:homography}
+\begin{enumerate}
+\item Let~$(x_1, x_2, x_3)$ and~$(y_1, y_2, y_3)$ be two (ordered)
+triples of distinct points of~$ℙ^1(k)$. There exists a unique
+homography~$h ∈ \mathrm{PGL}_2(k)$ such that~$h(x_i) = y_i$.
+\item Let~$(x_1, x_2, x_3, x_4)$ and~$(y_1, y_2, y_3, y_4)$ be two
+(ordered) quadruplets of distinct points. They are homographic iff they
+have the same cross-ratio~$B(x) = B(y)$, where
+\begin{equation}
+B(x) = \frac{(x_1-x_3)(x_2-x_4)}{(x_1-x_4)(x_2-x_3)}.
+\end{equation}
+\item Let~$\acco{x_1, x_2, x_3, x_4}$ and~$\acco{y_1, y_2, y_3, y_4}$ be
+two (unordered) sets of four points. They are homographic iff they have
+the same $j$-invariant~$j(x) = j(y)$, where
+\begin{equation}\label{eq:j-invariant}
+j(x) = \frac{(B(x)^2-B(x)+1)^3}{B(x)^2(1-B(x))^2}.
+\end{equation}
+\item Let~$u(x) = ∑ u_i x^i$ and~$v(x)$ be two monic polynomials
+of degree four. They are homographic iff they have the same $j$-invariant,
+where $j(u)$~is a polynomial of degree~$6$ in the coefficients of~$u$.
+\end{enumerate}
+\end{prop}
+
+We note that the formula for the $j$-invariant given
+in~\eqref{eq:j-invariant} is, up to a constant factor, the formula for
+the $j$-invariant of an elliptic curve. Namely, two elliptic curves with
+equations~$y^2 = f(x)$ and~$y^2 = g(x)$, where $f, g$ are separable
+polynomials of degree~$≤ 4$, are isomorphic iff the polynomials~$f$
+and~$g$ are homographic.
+
+\bigbreak
+We now explain how we compute the set~$H_{d,e}$ for each pair~$(d,e)$.
+
+\paragraph{Case~$d = 1$.}
+If $\card{S_{1,e}} ≥ 3$, then we may immediately recover the
+homography~$h$: namely, fix a triple~$(x_1,x_2,x_3)$ in~$S_{1,e}$, and
+iterate over the triples in~$T_{1,e}$. For each such triple, there exists
+a unique homography~$h$ such that~$h(x_i) = y_i$. This homography belongs
+to~$H_{1,e}$ iff the images of all the other points of~$S_{1,e}$ belong
+to~$T_{1,e}$. Since there are~$3!\binom{\card{S_{1,e}}}{3} = O(n^3)$
+triples~$(y_i)$, this computation requires~$O(n^3)$ field operations.
+
+If $1 ≤ \card{S_{1,e}} ≤ 2$, then $H_{1,e}$~may be explicitly computed as
+the union of the set of homographies mapping the elements of~$S_{1,e}$ to
+those of~$T_{1,e}$ for all permutations of~$T_{1,e}$.
+
+\paragraph{Case~$d = 2$.}
+Assume $\card{S_{2,e}} ≥ 2$. Let~$u_1, u_2 ∈ S_{2,e}$ and~$v_1, v_2 ∈
+T_{2,e}$ be monic polynomials of degree~two. Any homography between the
+sets~$\acco{u_1, u_2}$ and~$\acco{v_1, v_2}$ will map~$u_1 u_2$ to~$v_1
+v_2$. By Prop.~\ref{prop:homography}(iv), there exists at most a bounded
+number of such homographies. Since there are~$\binom{\card{S_{2,e}}}{2} =
+O(n^2)$ pairs~$(v_1, v_2)$, this requires~$O(n^2)$ field operations.
+
+If~$\card{S_{2,e}} = 1$, then $H_{2,e}$~is the set of all homographies
+mapping the unique element of~$S_{2,e}$ to the unique element
+of~$T_{2,e}$.
+
+\paragraph{Case~$d = 3$.}
+Fix an element~$u ∈ S_{3,e}$. For all~$v ∈ T_{3,e}$, there exist at
+most~$3! = 6$ homographies~$h$ mapping~$u$ to~$v$. Each candidate belongs
+to~$H_{3,e}$ iff it maps all other elements of~$S_{3,e}$ to elements
+of~$T_{3,e}$. There are~$\card{S_{3,e}} = O(n)$ candidates~$u$ and
+therefore~$O(n)$ candidate homographies~$h$.
+
+\paragraph{Case~$d = 4$.}
+Fix an element~$u ∈ S_{4,e}$. The candidates as homographic images of~$u$
+in~$T_{4,e}$ are the~$v$ such that~$j(v) = j(u)$. Each candidate
+polynomial~$v$ gives at most $4! = 24$~candidates homographies~$h$. This
+allows to compute~$H_{4,e}$ in~$O(n)$ field operations.
+
+\paragraph{Case~$d ≥ 5$.} The naïve method is to derive~$(d-4)$ times the
+elements of~$S_{d,e}$ to reduce to the case where~$d = 4$. However, as
+this uses only the five leading coefficients, if the polynomials are
+specially chosen we may find too many homographies; for example, although
+the polynomials~$x^d-1$ and~$x^d$ are not homographic, all their
+derivatives are. Instead, we first compose all the elements of~$S_{d,e}$
+and~$T_{d,e}$ by a known, randomly chosen homography~$r$. In general, for
+any two non-homographic elements~$u_1, u_2 ∈ S_{d,e}$, the
+derivatives~$(r ∘ u_i)^{(d-4)}$ are non-homographic. In the improbable
+case where they are homographic, we only need to change the random
+homography~$r$. In this way, we may compute the set~$H_{d,e}$ in at
+most~$O(n)$ field operations.
+
+\paragraph{Computing the hidden homography.}
+
+The hidden homography~$h$ lies in the intersection of all sets~$H_{d,e}$.
+As each one of these sets is likely to be extremely small or even reduced
+to~$\acco{h}$, we compute them in increasing order of assumed complexity.
+We use the above estimates: for each~$(d,e)$, we use the assumed complexity
+\begin{equation}
+C_{d,e} = \begin{cases}
+\card{S_{d,e}}^3,& d = 1;\\
+\card{S_{d,e}}^2,& d = 2;\\
+\card{S_{d,e}},& d≥ 3,
+\end{cases}
+\end{equation}
+and sort the pairs~$(d,e)$ by increasing values of~$C_{d,e}$. We finally
+find a bounded number of candidate homographies using no more
+than~$O(n^3)$ operations in~$k$.
+
+% Conclusion
+\section*{Conclusion}
+In this paper, we show that we can solve in polynomial-time the IP problem with two quadratic forms in a finite field 
+of odd characteristic. The case of even characteristic is also very important in cryptography, but it seems more difficult
+to solve it. The more general problem with arbitrary number of equations $m ≥3$ is also interesting to study. 
+
+
+\commentaire{reste à faire : $p = 2$ mais probablement pénible}
+
+\commentaire{reste à faire aussi $m ≥ 3$}
+
+% Biblio<<<1
+\bibliographystyle{plain}
+\bibliography{biblio}
+\end{document}%<<<1
 
 % \section{In characteristic two}%<<<1
 % \subsection{Action of the commutant on diagonal matrices}
@@ -621,7 +909,6 @@ Use propositions~\ref{prop:bb-diag} and~\ref{prop:local-diag}.
 % \end{equation}
 % 
 % \begin{prop}
-% Let~$φ: R → R$ be the Frobenius map, defined by~$φ(∑ x_i H^i) = ∑
 % x_i^2 H^i$. Then for all~$x ∈ k[H_u]$,
 % \begin{equation}
 % λ_u (\transpose{x} \, A\, x) = φ(x)\, λ_u(A).
@@ -667,117 +954,9 @@ Use propositions~\ref{prop:bb-diag} and~\ref{prop:local-diag}.
 %   Λ(\transpose{X_{1,i}} TM X_{2,i}))_{i=1,2}. \]
 % \end{prop}
 % 
-\section{Recovering the second secret}
-
-Two families of polynomials~$(a_1,…,a_m)$ and~$(b_1,…,b_m)$ are
-\emph{isomorphic with two secrets} if there exist bijective linear
-transformations~$s$ of the $n$~variables and~$h$ of the $m$~polynomials
-such that $h ∘ a ∘ s = b$.
-
-Assume that $m = 2$. Then the second secret~$t$ is a homography in two
-variables. Assume moreover that $a_{λ} = λ a_∞ + a_0$ and~$b_{λ} = λ
-b_{∞} + b_0$ are regular pencils of quadratic forms and that $2≠ 0$
-in~$k$. Then the homography~$h$ maps the characteristic polynomial~$f(λ)
-= \det (a_{λ})$ to~$g(λ) = \det (b_{λ})$. In particular, it maps the
-prime factors of~$f$ to those of~$g$, respecting both their degree and
-their exponent as a factor of the characteristic polynomial.
-
-Arrange the factors of~$f$ and~$g$ by sets~$S_{i,j}$ and~$T_{i,j}$ of
-factors of degree~$i$ and exponent~$j$. Then $h$~is the unique homography
-mapping all the elements of~$S_{d,e}$ to~$T_{d,e}$ for each pair~$(d,e)$.
-We compute the intersection for~$(d,e)$ of the set~$H_{d,e}$ of
-homographies mapping the prime polynomials of~$S_{d,e}$ to~$T_{d,e}$. In
-most cases, the first set~$H_{d,e}$ already has only one candidate, which
-is therefore the second secret. The discussion depends on the degree~$d$
-of the polynomials. We note that the sum of the size of the
-sets~$S_{d,e}$ is the number of variables~$n$; therefore, we may use the
-worst-case estimate~$\card{S_{d,e}} = O(n)$ for each~$(d,e)$.
-
-We shall use the following classic results.
-\begin{prop}\label{prop:homography}
-\begin{enumerate}
-\item Let~$(x_1, x_2, x_3)$ and~$(y_1, y_2, y_3)$ be two (ordered)
-triples of distinct points of~$ℙ^1(k)$. There exists a unique
-homography~$h ∈ \mathrm{PGL}_2(k)$ such that~$h(x_i) = y_i$.
-\item Let~$(x_1, x_2, x_3, x_4)$ and~$(y_1, y_2, y_3, y_4)$ be two
-(ordered) quadruplets of distinct points. They are homographic iff they
-have the same cross-ratio~$B(x) = B(y)$, where
-\begin{equation}
-B(x) = \frac{(x_1-x_3)(x_2-x_4)}{(x_1-x_4)(x_2-x_3)}.
-\end{equation}
-\item Let~$\acco{x_1, x_2, x_3, x_4}$ and~$\acco{y_1, y_2, y_3, y_4}$ be
-two (unordered) sets of four points. They are homographic iff they have
-the same $j$-invariant~$j(x) = j(y)$, where
-\begin{equation}
-j(x) = \frac{(B(x)^2-B(x)+1)^3}{B(x)^2(1-B(x))^2}.
-\end{equation}
-\item Let~$u(x) = ∑ u_i x^i$ and~$v(x)$ be two monic polynomials
-of degree four. They are homographic iff they have the same $j$-invariant,
-where $j(u)$~is a polynomial of degree~$6$ in the coefficients of~$u$.
-\end{enumerate}
-\end{prop}
-
-
-\paragraph{Case~$d = 1$.}
-If $\card{S_{1,e}} ≥ 3$, then we may immediately recover the
-homography~$h$: namely, fix a triple~$(x_1,x_2,x_3)$ in~$S_{1,e}$, and
-iterate over the triples in~$T_{1,e}$. For each such triple, there exists
-a unique homography~$h$ such that~$h(x_i) = y_i$. This homography belongs
-to~$H_{1,e}$ iff the images of all the other points of~$S_{1,e}$ belong
-to~$T_{1,e}$. Since there are~$3!\binom{\card{S_{1,e}}}{3} = O(n^3)$
-triples~$(y_i)$, this computation requires~$O(n^3)$ field operations.
-
-If $1 ≤ \card{S_{1,e}} ≤ 2$, then $H_{1,e}$~may be explicitly computed as
-the union of the set of homographies mapping the elements of~$S_{1,e}$ to
-those of~$T_{1,e}$ for all permutations of~$T_{1,e}$.
-
-\paragraph{Case~$d = 2$.}
-Assume $\card{S_{2,e}} ≥ 2$. Let~$u_1, u_2 ∈ S_{2,e}$ and~$v_1, v_2 ∈
-T_{2,e}$ be monic polynomials of degree~two. Any homography between the
-sets~$\acco{u_1, u_2}$ and~$\acco{v_1, v_2}$ will map~$u_1 u_2$ to~$v_1
-v_2$. By Prop.~\ref{prop:homography}(iv), there exists at most a bounded
-number of such homographies. Since there are~$\binom{\card{S_{2,e}}}{2} =
-O(n^2)$ pairs~$(v_1, v_2)$, this requires~$O(n^2)$ field operations.
-
-If~$\card{S_{2,e}} = 1$, then $H_{2,e}$~is the set of all homographies
-mapping the unique element of~$S_{2,e}$ to the unique element
-of~$T_{2,e}$.
-
-\paragraph{Case~$d = 3$.}
-Fix an element~$u ∈ S_{3,e}$. For all~$v ∈ T_{3,e}$, there exist at
-most~$3! = 6$ homographies~$h$ mapping~$u$ to~$v$. Each candidate belongs
-to~$H_{3,e}$ iff it maps all other elements of~$S_{3,e}$ to elements
-of~$T_{3,e}$. There are~$\card{S_{3,e}} = O(n)$ candidates~$u$ and
-therefore~$O(n)$ candidate homographies~$h$.
-
-\paragraph{Case~$d = 4$.}
-Fix an element~$u ∈ S_{4,e}$. The candidates as homographic images of~$u$
-in~$T_{4,e}$ are the~$v$ such that~$j(v) = j(u)$. Each candidate
-polynomial~$v$ gives at most $4! = 24$~candidates homographies~$h$. This
-allows to compute~$H_{4,e}$ in~$O(n)$ field operations.
-
-\paragraph{Case~$d ≥ 5$.} The naïve method is to derive~$(d-4)$ times the
-elements of~$S_{d,e}$ to reduce to the case where~$d = 4$. However, as
-this uses only the five leading coefficients, if the polynomials are
-specially chosen we may find too many homographies. Instead, we first
-compose all the elements of~$S_{d,e}$ and~$T_{d,e}$ by a known, randomly
-chosen homography~$r$. If it still happens that there are two
-non-homographic elements~$u_1, u_2 ∈ S_{d,e}$ such that~$(r ∘
-u_i)^{(d-4)}$ are homographic, we only need to change the random
-homography~$r$. In this way, we may compute the set~$H_{d,e}$ in at
-most~$O(n)$ field operations.
-
-\paragraph{Computing the hidden homography.}
-
-The hidden homography~$h$ lies in the intersection of all sets~$H_{d,e}$.
-As each one of these sets is likely to be extremely small or even reduced
-to~$\acco{h}$, we compute them in increasing order of assumed complexity,
-using estimates given above depending on~$d$ and~$\card{S_{d,e}}$. In
-total, we find a bounded number of candidate homographies using no more
-than~$O(n^3)$ operations in~$k$.
-
 \section{Algorithms and Complexity}
 Voir avec Jerome ce qu'on met ici en fonction des connaissances ou si on le met a la fin de chaque section
 
 
 \end{document}
+% vim: fdm=marker fmr=<<<,>>>:
