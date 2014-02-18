@@ -34,6 +34,7 @@
 \DeclareMathOperator\Ker{Ker}
 \DeclareMathOperator\End{End}
 \def\F{\mathbb{F}}
+\def\Id{\mathrm{Id}}
 %>>>
 \usepackage{color}
 \def\commentaire#1{{\bfseries\textcolor{red}{#1}}}
@@ -226,83 +227,58 @@ degree~$< d_i$. The degree~$d_i$ are called the \emph{minimal indices} of
 the pencil~$(b_{λ})$.
 %>>>
 \begin{prop}\label{prop:minimal-indep}%<<<
-Let~$e = ∑ λ^i e_i$ be a minimal relation for~$(b_{λ})$. Then the
-vectors~$e_0,…,e_{d}$ are $k$-linearly independent.
+Let~$e = ∑ λ^i e_i$ be a minimal relation for~$(b_{λ})$. Then
+\begin{enumerate}
+\item The~$d+1$ vectors~$e_0, …, e_d$ are $k$-linearly independent.
+\item The~$d$ linear forms~$b_{0} e_1, …, b_{0} e_d$ are $k$-linearly
+independent.
+\end{enumerate}
 \end{prop}
 
 \begin{proof}
-Assume that~$∑ α_i e_i = 0$ is a non-zero relation between the~$e_i$.
-Then the family~$(e'_i)$ defined by~$e'_i = α_{m-i} e_0 + … + α_m
-e_{i}$ for~$i = 0, …, m-1$ satisfies the relations
+We first prove~(ii). Assume that there exists a non-trivial linear
+relation~$α_1 e_0 + … + α_d e_{i}$ satisfies the relations
 \begin{equation}\label{eq:relation-e'}
 \begin{split}
-b_0 e'_{i} = α_{m-i+1} b_0 e_1 + … + α_{m} b_0 e_{i+1} = b_{∞} e'_{i-1},
-\\
-b_0 e'_0 = α_0 b_0 e_0 = 0,
-\quad b_{∞} e'_{m-1} = b_0(α_0 e_0 + … + α_m e_m) = 0.
-\end{split}\end{equation}
-In other words, $(e'_0,…, e'_{m-1})$~is a relation of degree~$(m-1)$
-of~$(b_{λ})$, which contradicts the minimality of~$e$.
-\end{proof}%>>>
-\begin{prop}\label{prop:minimal-matrix}%<<<
-Let~$n = n'+d+1$ where $d$~is the minimal index, and let~$e = ∑ λ^i
-e_i$ be a minimal relation for~$(b_{λ})$. In any basis of~$V$
-completing~$(e_i)$, the pencil~$(b_{λ})$ has the matrix
+b_0 e'_0 &= α_d b_0 e_0 = 0, \\
+b_0 e'_i &= α_{d-i+1} b_0 e_1 + … + α_m b_0 e_{i-1} = b_{∞} e'_{i-1}, \\
+b_{∞} e'_{d-1} &= b_{∞} (α_1 e_{0} + … + α_{d} e_{d-1}) \\
+ &= b_{0} (α_1 e_{1} + … + α_{d} e_{d}) \\
+ &= 0.
+\end{split}
+\end{equation}
+This means that~$(e'_0,…,e'_{d-1})$ is a relation of degree~$≤ d-1$
+for~$(b_{λ})$, which contradicts the minimality of~$e$.
+
+To prove~(i), let~$α_0 e_0 + … + α_d e_d = 0$ be a non-trivial linear
+relation. Then since $α_1 b_0(e_1) + … + α_d b_0(e_d) = 0$, by~(ii) we
+must have~$α_1 = … = α_d = 0$, which in turn implies~$e_0 = 0$. However,
+in this case we see that~$(e_1,…,e_d)$ is a relation of degree~$≤ d-1$
+for~$(b_{λ})$.
+\end{proof}
+
+This means that there exists a basis of~$V$ in which the pencil~$(b_{λ})$
+has the matrix
 \begin{equation}\label{eq:minimal-matrix}
 B_{0} = \mat{0 & \transpose{C_0}\\ C_0 & B'_{0}}, \quad
-B_{∞} = \mat{0 & \transpose{S} \transpose{C_0}\\ CS & B'_{∞}}.
+B_{∞} = \mat{0 & \transpose{S} \transpose{C_0}\\ C_0S & B'_{∞}}.
 \end{equation}
 where $0$~is a square block of size~$(d+1)$, $C_0$~is a matrix of size~$n'
-× (d+1)$ with null first column and rank~$d$, $S$~is the right-shift
+× (d+1)$ with null first column and rank~$d$, $S$~is the left-shift
 matrix of size~$d+1$, and $B'_{∞}, B'_0$~are symmetric matrices of
 size~$n'$.
-\end{prop}
 
-\begin{proof}
-Let~$B_{0} = (a_{i,j})$ and~$B_{∞} = (b_{i,j})$ for~$0 ≤ i,j ≤ n-1$. The
-relation~$B_{0} e_{i+1} = B_{∞} e_{i}$ imply that $a_{i,j+1} = b_{i,j}$.
-Since both matrices are symmetric, we may write
-\begin{equation}\label{eq:zero-bij}
-b_{i,j} = a_{i,j+1} = a_{j+1, i} = b_{j+1, i-1} = b_{i-1, j+1}.
-\end{equation}
-From this and the fact that~$a_{i,0} = a_{0,i} = 0$ and~$b_{i, d} =
-b_{d,i} = 0$, we deduce that~$a_{i,j} = b_{i,j} = 0$ for all~$0 ≤ i, j ≤
-d$.
+%>>>
 
-This means that both matrices~$B_{0}$ and~$B_{∞}$ may be written as
-in~\ref{eq:minimal-matrix}, where it only remains to prove that $C_0$~has
-rank~$d$.
-
-\medskip
-
-Since $d$~is minimal, this means that there exist no non-trivial
-relation~$(B_0 - λ B_{∞}) (x_0 + … + λ^{d-1} x_{d-1}) = 0$. In other
-words, the block-matrix
-\begin{equation}
-\def\arraystretch{.8}
-\ro B = \mat{B_0\\-B_{∞} & B_0\\ & -B_{∞} & \smash{⋱}\\
-& & \smash{⋱} \\ & & & B_0\\ & & & -B_{∞}}
-\end{equation}
-is injective. Since $\ro B$~has as a sub-matrix the matrix
-\begin{equation}
-\def\arraystretch{.8}
-\ro C = \mat{C_0\\-C_0 S & C_0\\ & -C_0 S & \smash{⋱}\\
-& & \smash{⋱} \\ & & & C_0\\ & & & -C_0 S},
-\end{equation}
-the matrix~$\ro C$ is also injective. This matrix has~$(d+1) × d$
-blocks of size~$n' × (d+1)$, and its rank is thus~$d(d+1)$. The
-matrix~$\ro C$ has as a left factor the
-block-diagonal matrix with its~$(d+1)$ diagonal blocks equal to~$C_0$;
-therefore, the rank of~$C_0$ must be at least~$d$.
-\end{proof}%>>>
-
-From Prop.~\ref{prop:minimal-matrix}, using a change of basis, we deduce
+From~\eqref{eq:minimal-matrix}, using a change of basis, we deduce
 that there exists a basis in which the pencil~$(b_{λ})$ has the matrix
 \begin{equation}
 B_0 = \mat{0 & \transpose{C_0} & 0 \\ C_0 & 0 & 0 \\ 0 & 0 & B'_0},\qquad
 B_{∞} = \mat{0 & \transpose{S} \transpose{C_0} & 0 \\
   C_0 S_0 & 0 & 0 \\ 0 & 0 & B'_0}.
 \end{equation}
+where $C_0 = \mat{0 & 1 & & \\⋮& &⋱&\\0&&&1\\}_{d×(d+1)}$ and $S =
+\mat{0&&&0\\ 1&⋱&&\\&⋱&⋱&\\0&&1&0}_{(d+1)}$~is the left-shift matrix.
 
 \commentaire{Un lecteur attentif verra que l'argument ci-dessus est
 bidon. Je ne sais pas prouver exactement le résultat que je veux (mais
@@ -315,9 +291,10 @@ in which the pencil has a block-diagonal matrix with diagonal
 blocks~$(K_{d_1}, …, K_{d_r}, B')$, where $K_d$~is the square matrix of
 size~$2d+1$ defined by
 \begin{equation}
-\def\arraystretch{.7}
-K_d = \mat{0 & K'_d\\\transpose{K'_d} & 0}, \quad
-K'_d = \mat{ λ& &0\\ 1&⋱& \\ &⋱&λ\\ 0& &1}_{d×(d+1)},
+\def\arraystretch{.9}
+K_d = \mat{0 & \transpose{K'_d}\\K'_d & 0}, \quad
+% K'_d = \mat{ λ& &0\\ 1&⋱& \\ &⋱&λ\\ 0& &1}_{d×(d+1)},
+K'_d = \mat{λ&1& &0\\ &⋱&⋱& \\0& &λ&1\\}_{d×(d+1)},
 % L_{d} = \mat{
 %  & & & &λ& &0\\
 %  &0& & &1&⋱& \\
@@ -743,8 +720,9 @@ for integers~$d ≥ 0$;
 \item local blocks~$L_{p,d,u}$, where $p$~is an irreducible polynomial,
 $d ≥ 1$, and $u$~is either~$1$ or a fixed non-square element
 of~$k[μ]/p(μ)$, of the form
-\[ L_{p,d,u} \;= \; \mat{ & & &uλ\\ & &λ&μ\\ &⋰&⋰& \\ λ&μ& & \\}^{♭} \;=\;
-\mat{ & & &uλ1_e\\ & &λ1_e&M_p\\ &⋰&⋰& \\ λ1_e&M_p& & \\}. \]
+\[ L_{p,d,u} \;= \; \mat{ & & &uλ\\ & &λ&μ\\ &⋰&⋰& \\ λ&μ& & \\}_{(d×d)}^{♭}
+\;=\;
+\mat{ & & &uλ\,\Id_e\\ & &λ\,\Id_e&M_p\\ &⋰&⋰& \\ λ\,\Id_e&M_p& & \\}. \]
 \end{itemize}
 \end{thm}
 
@@ -960,3 +938,4 @@ Voir avec Jerome ce qu'on met ici en fonction des connaissances ou si on le met 
 
 \end{document}
 % vim: fdm=marker fmr=<<<,>>>:
+
