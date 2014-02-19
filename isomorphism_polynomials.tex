@@ -220,12 +220,13 @@ b_0 x_d = b_{∞} x_{d-1}, \quad
 b_{∞} x_{d} = 0.
 \end{equation}
 A \emph{minimal relation} for~$(b_{λ})$ is one with minimal degree~$d$;
-this degree is the \emph{minimal index} of~$(b_{λ})$. A basis
-of~$W$ adapted to the filtration of~$V_{∞}$ by the degree of polynomials,
-we see that $W$~as a basis~$(w_1,…,w_r)$ such that, if $d_i$~is the
-degree of the relation~$w_i$, then $(w_i,…,w_r)$~generate no relation of
-degree~$< d_i$. The degree~$d_i$ are called the \emph{minimal indices} of
-the pencil~$(b_{λ})$.
+this degree is the \emph{minimal index} of~$(b_{λ})$. If $(b_{λ})$~is
+regular, then the minimal index is~$+∞$. A basis of~$W$ adapted to the
+filtration of~$V_{∞}$ by the degree of polynomials, we see that $W$~as a
+basis~$(w_1,…,w_r)$ such that, if $d_i$~is the degree of the
+relation~$w_i$, then $(w_i,…,w_r)$~generate no relation of degree~$<
+d_i$. The degree~$d_i$ are called the \emph{minimal indices} of the
+pencil~$(b_{λ})$.
 %>>>
 \begin{prop}\label{prop:minimal-indep}%<<<
 Let~$e = ∑ λ^i e_i$ be a minimal relation for~$(b_{λ})$. Then
@@ -257,26 +258,69 @@ must have~$α_1 = … = α_d = 0$, which in turn implies~$e_0 = 0$. However,
 in this case we see that~$(e_1,…,e_d)$ is a relation of degree~$≤ d-1$
 for~$(b_{λ})$.
 \end{proof}
-
-This means that there exists a basis of~$V$ in which the pencil~$(b_{λ})$
-has the matrix
-\begin{equation}\label{eq:minimal-matrix}
-B_{0} = \mat{0 & \transpose{C_0}\\ C_0 & B'_{0}}, \quad
-B_{∞} = \mat{0 & \transpose{S} \transpose{C_0}\\ C_0S & B'_{∞}}.
-\end{equation}
-where $0$~is a square block of size~$(d+1)$, $C_0$~is a matrix of size~$n'
-× (d+1)$ with null first column and rank~$d$, $S$~is the left-shift
-matrix of size~$d+1$, and $B'_{∞}, B'_0$~are symmetric matrices of
-size~$n'$.
-
 %>>>
+
+Define matrices~$K'_0, K'_{∞}$ of size~$(d+1)×d$ by
+\begin{equation}\label{eq:def-K}
+K'_0 = \mat{0&&0\\1&⋱&\\&⋱&0\\0&&1}, \quad
+K'_{∞} = \mat{1&&0\\0&⋱&\\&⋱&1\\0&&0},
+\end{equation}
+and square matrices~$K_{0}, K_{∞}$ of size~$(2d+1)$ by~$K_{λ} = 
+\mat{0&K'_{λ}\\\transpose{K'_{λ}}&0}$.
+
+\begin{prop}\label{prop:kronecker-1block}
+Let~$(b_{λ})$ be a symmetric pencil with minimal index~$d$. There exists
+a basis of~$V$ in which the pencil~$(b_{λ})$ has the matrix 
+\[ B_{λ} = \mat{K_λ&0\\0&B'_{λ}}, \]
+where $B'_{λ}$ is a symmetric pencil with minimal index~$≥ d$.
+\end{prop}
+
+
+\begin{proof}
+By Prop.~\ref{prop:minimal-indep}, there exists a basis of~$V$ in which
+the pencil~$(b_{λ})$ has the matrix
+\begin{equation}\label{eq:matrix-b1}
+B_{λ} = \mat{0 & K'_{λ} & 0\\\transpose{K'_{λ}} & A_{λ}&\transpose{C_{λ}}\\
+  0 & C_{λ} & B'_{λ}},
+\end{equation}
+We first prove that we may assume that~$C_{λ} = 0$, using a change of
+coordinates of the form
+\begin{equation}\label{eq:p1}
+P = \mat{1 & 0 & X\\0&1&0\\0&Y&1}.
+\end{equation}
+The action of~$P$ on the sub-matrix~$C_{λ}$ of~$B_{λ}$ is given by $C_{λ}
+← C_{λ} + \transpose{X} K'_{λ} + B_{λ} Y$. Now let~$x_0,…,x_{d};\;
+y_1,…,y_d;\; c_1,…,c_d;\; c'_1,…,c'_d$ be the columns of~$\transpose{X}, Y,
+C_0$ and~$C_{∞}$. We then have to
+solve the equations
+\begin{equation}\label{eq:chvar-x}
+\begin{cases} c'_i + x_i + B'_0 y_i = 0\\ i = 1,…,d\end{cases};\quad
+\begin{cases} c'_i + x_{i-1} + B'_∞ y_i = 0\\i=1,…,d\end{cases}.
+\end{equation}
+This determines uniquely the values~$x_0$ and~$x_{d}$. The equations
+for~$x_1,…,x_{d-1}$ have solutions iff the values~$y_1,…,y_d$ satisfy
+the relations
+$B'_0 y_i - B'_{∞} y_{i+1} = c'_{i+1} - c_i$ for~$i = 1,…,d-1$. This
+translates into matrix form as
+\begin{equation}\label{eq:chvar-y}
+\mat{B'_0&-B'_{∞}&&0\\&⋱&⋱&\\0&&B'_0&-B'_{∞}} ·
+  \mat{y_1\\⋮\\y_d} = \mat{c'_2-c_1\\⋮\\c'_d-c_{d-1}}.
+\end{equation}
+Let~$\ro B$ be the left-side matrix. Then any element of the kernel
+of~$\transpose{\ro B}$ defines a relation of degree~$≤ d-1$ on~$(b_{λ})$.
+This proves that $\transpose{\ro B}$~is injective and hence that $\ro
+B$~is surjective. Therefore, equations~\eqref{eq:chvar-y}
+and~\eqref{eq:chvar-x} have solutions.
+
+We now have to prove that we can
+\end{proof}
 
 From~\eqref{eq:minimal-matrix}, using a change of basis, we deduce
 that there exists a basis in which the pencil~$(b_{λ})$ has the matrix
 \begin{equation}
 B_0 = \mat{0 & \transpose{C_0} & 0 \\ C_0 & 0 & 0 \\ 0 & 0 & B'_0},\qquad
 B_{∞} = \mat{0 & \transpose{S} \transpose{C_0} & 0 \\
-  C_0 S_0 & 0 & 0 \\ 0 & 0 & B'_0}.
+  C_0 S & 0 & 0 \\ 0 & 0 & B'_0}.
 \end{equation}
 where $C_0 = \mat{0 & 1 & & \\⋮& &⋱&\\0&&&1\\}_{d×(d+1)}$ and $S =
 \mat{0&&&0\\ 1&⋱&&\\&⋱&⋱&\\0&&1&0}_{(d+1)}$~is the left-shift matrix.
