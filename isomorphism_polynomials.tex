@@ -265,21 +265,24 @@ for~$(b_{λ})$.
 \end{proof}
 %>>>
 
-Define matrices~$K'_0, K'_{∞}$ of size~$(d+1)×d$ by
+Define matrices~$K'_0, K'_{∞}$ of size~$(d+1)×d$ and $K_{0}, K_{∞}$ of
+size~$(2d+1)×(2d+1)$ by
 \begin{equation}\label{eq:def-K}
 K'_0 = \mat{0&&0\\1&⋱&\\&⋱&0\\0&&1}, \quad
-K'_{∞} = \mat{1&&0\\0&⋱&\\&⋱&1\\0&&0},
+K'_{∞} = \mat{1&&0\\0&⋱&\\&⋱&1\\0&&0}, \qquad
+K_{λ} = \mat{0&K'_{λ}\\\transpose{K'_{λ}}&0}.
 \end{equation}
-and square matrices~$K_{0}, K_{∞}$ of size~$(2d+1)$ by~$K_{λ} = 
-\mat{0&K'_{λ}\\\transpose{K'_{λ}}&0}$.
 
-\begin{prop}\label{prop:kronecker-1block}
+\begin{prop}\label{prop:kronecker1}%<<<
 Let~$(b_{λ})$ be a symmetric pencil with minimal index~$d$. There exists
 a basis of~$V$ in which the pencil~$(b_{λ})$ has the matrix 
 \[ B_{λ} = \mat{K_λ&0\\0&B'_{λ}}, \]
-where $B'_{λ}$ is a symmetric pencil with minimal index~$≥ d$.
+where $B'_{λ}$ is a symmetric pencil with minimal index at least~$d$.
 \end{prop}
 
+Note in particular that the case~$d = 0$ corresponds to the matrix~$K_0$,
+which is the zero matrix of size~$1 × 1$, and to a vector belonging to
+all the kernels of~$b_{λ}$.
 
 \begin{proof}
 By Prop.~\ref{prop:minimal-indep}, there exists a basis of~$V$ in which
@@ -317,50 +320,34 @@ This proves that $\transpose{\ro B}$~is injective and hence that $\ro
 B$~is surjective. Therefore, equations~\eqref{eq:chvar-y}
 and~\eqref{eq:chvar-x} have solutions.
 
-We now have to prove that we can
-\end{proof}
-
-From~\eqref{eq:minimal-matrix}, using a change of basis, we deduce
-that there exists a basis in which the pencil~$(b_{λ})$ has the matrix
-\begin{equation}
-B_0 = \mat{0 & \transpose{C_0} & 0 \\ C_0 & 0 & 0 \\ 0 & 0 & B'_0},\qquad
-B_{∞} = \mat{0 & \transpose{S} \transpose{C_0} & 0 \\
-  C_0 S & 0 & 0 \\ 0 & 0 & B'_0}.
+We now prove that we may also assume~$A_{λ} = 0$ in~\eqref{eq:matrix-b1}.
+The action of a coordinate change~$Q$ of the form
+\begin{equation}\label{eq:chvar-q}
+\def\arraystretch{.7}
+Q = \mat{1&Z&\\&1\\&&1}
 \end{equation}
-where $C_0 = \mat{0 & 1 & & \\⋮& &⋱&\\0&&&1\\}_{d×(d+1)}$ and $S =
-\mat{0&&&0\\ 1&⋱&&\\&⋱&⋱&\\0&&1&0}_{(d+1)}$~is the left-shift matrix.
+on~$A_{λ}$ is given by~$A_{λ} ← A_{λ} + \transpose{Z} K_{λ} +
+\transpose{K_{λ}} Z$. Let~$Z = (z_{i,j})$, $A_0 = (a_{i,j})$ and~$A_{∞} =
+a'_{i,j}$; the equations to solve are then
+\begin{equation}
+z_{i,j} + z_{j,i} = a_{i,j}, \quad z_{i-1,j} + z_{j-1,i} = a'_{i,j}
+\quad \text{for~$i,j = 1,…,d$}.
+\end{equation}
+Since the matrices~$A_{0}$ and~$A_{∞}$ are symmetric, only the
+equations for~$i ≥ j$ are relevant. We then check that, since~$2 ≠ 0$
+in~$k$, this is a regular system of~$d(d+1)$ equations in the~$d(d+1)$
+unknowns~$z_{i,j}$. Therefore, there exists a unique solution matrix~$Z$.
+This concludes the proof of Prop.~\ref{prop:kronecker1}.
+\end{proof}%>>>
 
-\commentaire{Un lecteur attentif verra que l'argument ci-dessus est
-bidon. Je ne sais pas prouver exactement le résultat que je veux (mais
-expérimentalement ça marche, il n'y a pas d'arnaque avec des non-carrés
-par exemple). Je vais essayer d'avoir une preuve avant la deadline.}
-
-\begin{thm}[(Kronecker form)]%<<<
+\begin{prop}[(Kronecker form)]%<<<
 Let~$(b_{λ})$ be a symmetric pencil on~$V$. There exists a basis of~$V$
 in which the pencil has a block-diagonal matrix with diagonal
-blocks~$(K_{d_1}, …, K_{d_r}, B')$, where $K_d$~is the square matrix of
-size~$2d+1$ defined by
-\begin{equation}
-\def\arraystretch{.9}
-K_d = \mat{0 & \transpose{K'_d}\\K'_d & 0}, \quad
-% K'_d = \mat{ λ& &0\\ 1&⋱& \\ &⋱&λ\\ 0& &1}_{d×(d+1)},
-K'_d = \mat{λ&1& &0\\ &⋱&⋱& \\0& &λ&1\\}_{d×(d+1)},
-% L_{d} = \mat{
-%  & & & &λ& &0\\
-%  &0& & &1&⋱& \\
-%  & & & & &⋱&λ\\
-%  & & & &0& &1\\
-% λ&1& &0& & & \\
-%  &⋱&⋱& & &0& \\
-% 0& &λ&1& & & \\
-% },
-\end{equation}
+blocks~$(K_{d_1}, …, K_{d_r}, B')$, where $K_d = K_{d,0} + λ K_{d,∞}$~is
+the square matrix of size~$2d+1$ defined by equation~\eqref{eq:def-K},
 the integers~$d_1 ≤ … ≤ d_r$ are the minimal indices of~$(b_{λ})$, and
 $B'$~is the matrix of a regular pencil.
-\end{thm}
-Note that in particular, the matrix~$K_{0}$ is the zero matrix of
-size~$1×1$. The appearances of~$K_0$ in the Kronecker form correspond to
-the constant vectors in the kernel of~$B_{λ}$.
+\end{prop}
 %>>>
 \section{IP1S for regular pencils}%<<<1
 \label{S:IP1S-regular}
@@ -881,15 +868,15 @@ in~$T_{4,e}$ are the~$v$ such that~$j(v) = j(u)$. Each candidate
 polynomial~$v$ gives at most $4! = 24$~candidates homographies~$h$. This
 allows to compute~$H_{4,e}$ in~$O(n)$ field operations.
 
-\paragraph{Case~$d ≥ 5$.} The naïve method is to derive~$(d-4)$ times the
-elements of~$S_{d,e}$ to reduce to the case where~$d = 4$. However, as
-this uses only the five leading coefficients, if the polynomials are
-specially chosen we may find too many homographies; for example, although
-the polynomials~$x^d-1$ and~$x^d$ are not homographic, all their
-derivatives are. Instead, we first compose all the elements of~$S_{d,e}$
-and~$T_{d,e}$ by a known, randomly chosen homography~$r$. In general, for
-any two non-homographic elements~$u_1, u_2 ∈ S_{d,e}$, the
-derivatives~$(r ∘ u_i)^{(d-4)}$ are non-homographic. In the improbable
+\paragraph{Case~$d ≥ 5$.} The naïve method is to differentiate~$(d-4)$
+times the elements of~$S_{d,e}$ to reduce to the case where~$d = 4$.
+However, as this uses only the five leading coefficients, if the
+polynomials are specially chosen we may find too many homographies; for
+example, although the polynomials~$x^d-1$ and~$x^d$ are not homographic,
+all their derivatives are. Instead, we first compose all the elements
+of~$S_{d,e}$ and~$T_{d,e}$ by a known, randomly chosen homography~$r$. In
+general, for any two non-homographic elements~$u_1, u_2 ∈ S_{d,e}$, the
+derivatives~$(∂/∂x)^4\, (u_i ∘ r)$ are non-homographic. In the improbable
 case where they are homographic, we only need to change the random
 homography~$r$. In this way, we may compute the set~$H_{d,e}$ in at
 most~$O(n)$ field operations.
