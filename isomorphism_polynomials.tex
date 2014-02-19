@@ -47,7 +47,7 @@
 \author{Submission to ANTS 2014}
 \maketitle
 
-\commentaire{deuxième essai avec mise en ligne du PDF}
+%\commentaire{deuxième essai avec mise en ligne du PDF}
 \begin{abstract}
 In this paper, we study the Isomorphism of Polynomial (IP) problem with two
 quadratic polynomials on $n$ variables over a finite field of odd
@@ -84,11 +84,16 @@ For the case of quadratic polynomials, the status of this problem is unclear des
 intensive research in the cryptographic community since this case is the most interesting 
 for practical schemes. There exists a claimed reduction between the quadratic IP1S problem and the GI
 problem~\cite{DBLP:conf/eurocrypt/PatarinGC98}, but we realized that this proof is incomplete. 
-Here, we are interested in the special case of two equations with homogeneous composants only 
-since it seems to be the most difficult cases according~\cite{DBLP:conf/eurocrypt/Perret05,DBLP:conf/eurocrypt/FaugereP06,DBLP:conf/pkc/BouillaguetFFP11,DBLP:conf/eurocrypt/BouillaguetFV13}. 
+Indeed, the proof works by induction and decompose any permutation as the composition of 
+transpositions. It is possible to write a system of quadratic polynomials such that the only solutions 
+of the IP1S problem will be the identity or a transposition by modifying a bit the systems proposed 
+in~\cite{DBLP:conf/eurocrypt/PatarinGC98}. However, it is not obvious how we can compose the systems 
+of equations such that the solutions will be the composition of the solutions. 
 
 
 \paragraph{Previous Work.}
+Here, we are interested in the special case of two equations with homogeneous composants only 
+since it seems to be the most difficult cases according~\cite{DBLP:conf/eurocrypt/Perret05,DBLP:conf/eurocrypt/FaugereP06,DBLP:conf/pkc/BouillaguetFFP11,DBLP:conf/eurocrypt/BouillaguetFV13}. 
 The case with one equation is the equivalence problem between two quadratic forms which 
 is a classical result of classification of quadratic forms~\cite{lidl1997finite}. The case with 
 affine terms is easier since it is possible to obtain linear relations between the secret unknowns
