@@ -72,14 +72,28 @@ time.
 % j'ai mis un tilde sur le big0 pour les termes en log(q) car il faut manipuler les scalaires de F_q
 
 \section{Introduction}
-The Isomorphism of Polynomial problem (IP) has been introduced in cryptography by Patarin in~\cite{DBLP:conf/eurocrypt/Patarin96} to construct an efficient authentication scheme 
-as an alternative to the Graph Isomorphism Problem (GI) proposed by Goldreich, Micali and Wigderson~\cite{DBLP:journals/jacm/GoldreichMW91}. The IP problem was appealing since 
+The \emph{Isomorphism of Polynomial with Two Secrets} (IP2S) problem is
+the following. Given a field~$k$ and two $m$-uples $\bm{a} = (a_1, …,
+a_m)$ and~$\bm{b} = (b_1, …, b_m)$ in $n$~variables~$(x_1, …, x_m)$, compute
+two invertible linear maps~$s ∈ GL_n(k)$ of the variables~$x_i$
+and~$t ∈ GL_m(k)$ of the polynomials~$a_i$ such that
+\begin{equation*}
+b = t ∘ a ∘ s.
+\end{equation*}
+The particular case where we restrict~$t$ to the identity transformation
+is also known as the \emph{Isomorphism of Polynomials with One Secret}
+(IP1S). Both these problems have been introduced in cryptography by
+Patarin in~\cite{DBLP:conf/eurocrypt/Patarin96} to construct an efficient
+authentication scheme, 
+as an alternative to the Graph Isomorphism Problem (GI) proposed by Goldreich, Micali and Wigderson~\cite{DBLP:journals/jacm/GoldreichMW91}.
+
+The IP problem was appealing since 
 it seems more difficult than the Graph Isomorphism problem~\cite{DBLP:conf/eurocrypt/PatarinGC98}. 
-A reduction between these
-two problems has been formally proved by Agrawal and Saxena in~\cite{DBLP:conf/stacs/AgrawalS06}, 
-using two polynomials. One of them is a quadratic polynomials and captures the adjacency 
-matrices of the graphs and the other is cubic of the special form $\sum_{i} x_i^3$ over a 
-finite field of odd characteristic. 
+Agrawal and Saxena reduced~\cite{DBLP:conf/stacs/AgrawalS06} the Graph
+Isomorphism problem to the particular case of IP1S using two polynomials,
+one of them being a quadratic form encoding the adjacency matrix of the
+graph, and the other one being the cubic~$\sum x_i^3$, over a finite field of
+odd characteristic.
 For the case of quadratic polynomials, the status of this problem is unclear despite recent 
 intensive research in the cryptographic community since this case is the most interesting 
 for practical schemes. There exists a claimed reduction between the quadratic IP1S problem and the GI
@@ -91,34 +105,54 @@ in~\cite{DBLP:conf/eurocrypt/PatarinGC98}. However, it is not obvious how we can
 of equations such that the solutions will be the composition of the solutions. 
 
 
-\paragraph{Previous Work.}
-Here, we are interested in the special case of two equations with homogeneous composants only 
-since it seems to be the most difficult cases according~\cite{DBLP:conf/eurocrypt/Perret05,DBLP:conf/eurocrypt/FaugereP06,DBLP:conf/pkc/BouillaguetFFP11,DBLP:conf/eurocrypt/BouillaguetFV13}. 
-The case with one equation is the equivalence problem between two quadratic forms which 
-is a classical result of classification of quadratic forms~\cite{lidl1997finite}. The case with 
-affine terms is easier since it is possible to obtain linear relations between the secret unknowns
-for the IP1S problem and for the IP problem since $t$ is bijective~\cite{DBLP:conf/eurocrypt/PatarinGC98} 
-and such information helps generic solvers, such as Gröbner basis algorithm, as it is shown in~\cite{DBLP:conf/eurocrypt/FaugereP06}.  
-The case with more than two equations is easier since we can relinearized the 
-systems~\cite{DBLP:conf/pkc/BouillaguetFFP11}. Consequently, the main difficult case is when the 
-number of equations is two and the equations are homogeneous, \textit{i.e.} contain only quadratic terms. 
+The defining parameters of the IP problems are the number~$n$ of
+variables, the number~$n$ of polynomials, and their degree. For
+efficiency reasons, the degree is generally small, involving only
+quadratic and cubic equations. To our knowledge, no significant progress
+has been done on the cubic case.
 
-At Asiacrypt 2011, Bouillaguet, Fouque and Macario-Rat in~\cite{DBLP:conf/asiacrypt/BouillaguetFM11} 
-use pencil of quadratic forms to recover the secret mappings $s$ and $t$ when $3$ equations are available
+We limit ourselves to the special case of two equations, both of which
+being homogeneous polynomials of degree~two. According to previous
+literature~\cite{DBLP:conf/eurocrypt/Perret05,DBLP:conf/eurocrypt/FaugereP06,DBLP:conf/pkc/BouillaguetFFP11,DBLP:conf/eurocrypt/BouillaguetFV13},
+this is the most difficult case.
+
+The case with only one homogeneous quadratic equation amounts to
+reduction of quadratic forms, which has been known for
+centuries~\cite{lidl1997finite}. In the non-homogeneous case, the
+presence of affine terms gives linear relations between the secret
+unknowns~\cite{DBLP:conf/eurocrypt/PatarinGC98}, and this extra
+information actually helps generic solvers, for example those using
+Gröbner bases, as shown in~\cite{DBLP:conf/eurocrypt/FaugereP06}.
+The case with more than two equations is easier since we can relinearize
+the systems~\cite{DBLP:conf/pkc/BouillaguetFFP11}.
+
+\paragraph{Previous Work.}
+
+Some recent advances have been made on the IP1S problem in the case of
+two
+homogeneous quadratic equations.
+
+
+Bouillaguet, Fouque and Macario-Rat in 2011~\cite{DBLP:conf/asiacrypt/BouillaguetFM11} 
+used pencil of quadratic forms to recover the secret mappings $s$ and $t$
+when three equations are available
 and one of the quadratic equations $\bm{a}$ comes from a special mapping $X\mapsto X^{q^\theta+1}$ 
-over $\F_q$. In the case of the IP problem, this is optimal using an information theoretic arguments. 
-At Asiacrypt 2013, Macario-Rat, Plût and Gilbert explained in~\cite{MPG2013}, how to
-solve cyclic instances of the IP1S problem over finite fields of any characteristic. Cyclic instances are 
-instances~$\bm{b} = (b_{∞}, b_{0})$ such that $b_{∞}$~is invertible and~$b_{∞}^{-1} b_{0}$ is cyclic.
+over $\F_q$. In the case of the IP problem, this is optimal using an information theoretic argument.
+
+Macario-Rat, Plût and Gilbert in 2013~\cite{MPG2013} how to solve cyclic
+instances of the IP1S problem for~$m=2$ over finite fields of any
+characteristic. Cyclic instances are instances~$\bm{b} = (b_{∞}, b_{0})$
+such that $b_{∞}$~is invertible and~$b_{∞}^{-1} b_{0}$ is cyclic.
 Although the cyclic case is generic in the geometric sense (\emph{i.e.}
 defined by the non-cancellation of some polynomial functions of the
 coefficients of~$\bm{b}$), it is not the general case in a practical
 sense.
 
 %\commentaire{2. parler du travail de Jeremy + Faugere et Ludovic}
-Finally, very recently Berthomieu, Faugère and Perret in~\cite{DBLP:journals/corr/BerthomieuFP13}
-proposed an algorithm to solve the IP1S problem for any number of equations and claim that the 
-time complexity is polynomial. However, some inconsistancies are present in this work and mismatches 
+Finally, Berthomieu, Faugère and Perret very recently
+proposed~\cite{DBLP:journals/corr/BerthomieuFP13} a polynomial algorithm
+solving the \emph{decisional} IP1S problem for any number of equations.
+However, some inconsistancies are present in this work and mismatches 
 come from some parts of their algorithms work in zero characteristic fields while other parts are for 
 finite fields. First of all, 
 they solved the problem in an extension field of the base field. They turn the congruence problem, 
@@ -152,7 +186,7 @@ the two-secret problem.
 \commentaire{ ? la partie singulière n'intervient pas et donc tout
 secret~$h$ possible sur la partie régulière est bon ?}
 
-\section{Mathematical Background}%<<<2
+\subsection{Mathematical Background and notations}%<<<2
 Let~$V$ be a $n$-dimensional vector space over the field~$k$. We study
 the IP1S and IP2S problems for \emph{quadratic forms} on~$V$, which are
 homogeneous polynomials of degree~$2$ in some coordinates on~$V$. To a
@@ -173,15 +207,35 @@ forms, we shall study directly bilinear forms.
 We note that, if~$2 = 0$ in~$k$, the situation is much more complicated;
 the polarity identity is no longer a bijection, but polar forms are
 instead alternate bilinear forms. This means that their classification is
-very different from the odd-characteristic case, and relies on symplectic
-groups and Artin-Schreier type equations, \emph{i.e.} of the
-type~$x^2+x+C = 0$.
+very different from the odd-characteristic
+case~\cite{milnor1973symmetric}, and relies on symplectic groups and
+Artin-Schreier type equations, \emph{i.e.} of the type~$x^2+x+C = 0$.
 
+Let~$V^{∨}$ be the dual of the vector space~$V$. A bilinear form~$b$
+on~$V$ is the same as a linear map~$b: V → V^{∨}$. The bilinear form is
+\emph{regular} if it defines an invertible linear map~$V → V^{∨}$. In
+this case, to for any endomorphism~$u$ of~$V$, there exists a unique
+endomorphism~$u^{⋆}$ of~$V$ such that~$b(x,u(y)) = b(u^{⋆}(x), y)$; the
+endomorphism~$u^{⋆}$ is called the \emph{left-adjoint} of~$u$. If $b$~is
+symmetric then left- and right-adjoints coincide.
 
-\begin{definition}%\textbf{[Quadratic IP1S]}% \\
-The IP1S problem is the following. 
-Given two $m$-tuples $\bm{a} = (a_1, \ldots, a_{m})$ and {$\bm{b} = (b_1, \ldots, b_{m})$}  of quadratic homogeneous forms in $n$ variables over $k$, find a non-singular linear mapping $s \in \mathrm{GL}_n(k)$ (if any) such that $\bm{b} = \bm{a} \circ s$, i.e. $a_i = b_i \circ s$ for $i= 1, \ldots, m$.  
-\end{definition}
+A bilinear form~$b$ on~$V$ is \emph{regular} if the associated We
+write~$\transpose{A}$ for the transpose of a matrix~$A$. A
+\emph{symmetric} matrix is a matrix such that~$A = \transpose{A}$.
+Symmetric bilinear forms~$b$ correspond to symmetric matrices~$B$.
+A bilinear form is regular iff its matrix is invertible. For any
+endomorphism~$u$ with matrix~$U$, the adjoint endomorphism has
+matrix~$U^{⋆} = B^{-1} · \transpose{U} · B$.
+
+% \begin{definition}%\textbf{[Quadratic IP1S]}% \\
+% The homogeneous quadratic IP1S problem is the following. Given two
+% $m$-uples $\bm{a} = (a_1, \ldots, a_{m})$ and {$\bm{b} = (b_1, \ldots,
+% b_{m})$}  of quadratic forms in $n$ variables over $k$, find a
+% non-singular linear mapping $s \in \mathrm{GL}_n(k)$ (if any) such that
+% $\bm{b} = \bm{a} \circ s$, i.e. $a_i = b_i \circ s$ for $i= 1, \ldots,
+% m$.
+% \end{definition}
+
 
 %>>>1
 \section{IP1S in the possibly singular case}%<<<1
@@ -330,7 +384,7 @@ on~$A_{λ}$ is given by~$A_{λ} ← A_{λ} + \transpose{Z} K_{λ} +
 \transpose{K_{λ}} Z$. Let~$Z = (z_{i,j})$, $A_0 = (a_{i,j})$ and~$A_{∞} =
 a'_{i,j}$; the equations to solve are then
 \begin{equation}
-z_{i,j} + z_{j,i} = a_{i,j}, \quad z_{i-1,j} + z_{j-1,i} = a'_{i,j}
+z_{i,j} + z_{j,i} = a_{i,j}, \quad z_{i-1,j} + z_{j-1,i} = a'_{i,j},
 \quad \text{for~$i,j = 1,…,d$}.
 \end{equation}
 Since the matrices~$A_{0}$ and~$A_{∞}$ are symmetric, only the
@@ -340,7 +394,7 @@ unknowns~$z_{i,j}$. Therefore, there exists a unique solution matrix~$Z$.
 This concludes the proof of Prop.~\ref{prop:kronecker1}.
 \end{proof}%>>>
 
-\begin{prop}[(Kronecker form)]%<<<
+\begin{prop}[(Kronecker form)]\label{prop:kronecker}%<<<
 Let~$(b_{λ})$ be a symmetric pencil on~$V$. There exists a basis of~$V$
 in which the pencil has a block-diagonal matrix with diagonal
 blocks~$(K_{d_1}, …, K_{d_r}, B')$, where $K_d = K_{d,0} + λ K_{d,∞}$~is
@@ -753,13 +807,16 @@ an isomorphism between~$(b_{λ})$ and a (unique) block-diagonal pencil
 with diagonal blocks of the following form:
 \begin{itemize}
 \item Kronecker blocks~$K_{d} = \mat{0&K'_{d}\\\transpose{K'_d}&0}$
-for integers~$d ≥ 0$;
-\item local blocks~$L_{p,d,u}$, where $p$~is an irreducible polynomial,
-$d ≥ 1$, and $u$~is either~$1$ or a fixed non-square element
-of~$k[μ]/p(μ)$, of the form
-\[ L_{p,d,u} \;= \; \mat{ & & &uλ\\ & &λ&μ\\ &⋰&⋰& \\ λ&μ& & \\}_{(d×d)}^{♭}
-\;=\;
-\mat{ & & &uλ\,\Id_e\\ & &λ\,\Id_e&M_p\\ &⋰&⋰& \\ λ\,\Id_e&M_p& & \\}. \]
+for integers~$d ≥ 0$, as defined in Prop.~\ref{prop:kronecker};
+\item local blocks~$L_{p,d,u}$, defined as the~$d × d$-block matrix
+\[ L_{p,d,u} \;=\; \mat{0&&&T_p u (λ + M_p)\\&&⋰&T_p u\\
+  &⋰&⋰&\\T_pu(λ+M_p)&T_p u&&0}, \]
+where $p$~is an irreducible polynomial, $M_p$~is the companion matrix
+of~$p$, $T_p$~is a prescribed invertible matrix such that both~$T_p$
+and~$T_p M_p$~are symmetric, $d$~is an integer, and $u$~is either the
+identity matrix or a prescribed non-square element of the field~$k[M_p]$,
+with the extra condition that for fixed~$(p, d)$, only one of the
+values~$u$ may be different from~$1$.
 \end{itemize}
 \end{thm}
 
@@ -900,10 +957,29 @@ than~$O(n^3)$ operations in~$k$.
 
 % Conclusion
 \section*{Conclusion}
-In this paper, we show that we can solve in polynomial-time the IP problem with two quadratic forms in a finite field 
-of odd characteristic. The case of even characteristic is also very important in cryptography, but it seems more difficult
-to solve it. The more general problem with arbitrary number of equations $m ≥3$ is also interesting to study. 
 
+In this paper, we show that we can solve in polynomial-time the IP
+problem with two quadratic forms in a finite field of odd characteristic.
+The obvious questions are whether it is possible to generalize this to
+fields of characteristic two and to more than two equations.
+
+The case of a binary base field is very important for cryptographical
+applications. The cyclic case has been solved in~\cite{MPG2013}. To solve
+the general case, several roadblocks remain: the Kronecker form for the
+singular part of a bilinear pencil does not apply, as the proof of
+Prop.~\ref{prop:kronecker1} above requires that~$2 ≠ 0$; quadratic forms
+over a local algebra behave differently~\cite[§93]{omeara}; finally,
+extending from bilinear to quadratic forms requires a study of the action
+of a symplectic group on the diagonal coefficients, and this group
+becomes quite impractical in the non-cyclic case.
+
+On the other hand, studying the general problem with $m ≥ 3$~quadratic
+equations departs from the classical results about pencils of quadratic
+forms; therefore, there are less tools available. Even in the regular
+case, our work heavily uses the factorization of the characteristic
+polynomial. The analogous case for~$m ≥ 3$ requires working in
+homogeneous polynomials in~$m$ variables, which is a less pleasant
+algebra.
 
 \commentaire{reste à faire : $p = 2$ mais probablement pénible}
 
