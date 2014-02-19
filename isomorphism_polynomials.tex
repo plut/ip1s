@@ -118,22 +118,24 @@ sense.
 %\commentaire{2. parler du travail de Jeremy + Faugere et Ludovic}
 Finally, very recently Berthomieu, Faugère and Perret in~\cite{DBLP:journals/corr/BerthomieuFP13}
 proposed an algorithm to solve the IP1S problem for any number of equations and claim that the 
-time complexity is polynomial. However, some inconsistancies are present in this work and mismatches 
-come from some parts of their algorithms work in zero characteristic fields while other parts are for 
-finite fields. First of all, 
-they solved the problem in an extension field of the base field. They turn the congruence problem, 
-\textit{i.e.} given two systems of matrices $\{H_i\}_{1\leq i \leq m}$ and $\{H'_i\}_{1\leq i \leq m}$, 
-find an invertible matrix $P$ such that $H'_i=\transpose{P}H_iP$ into a conjugaison problem, 
-\textit{i.e.} given two systems of matrices $\{H_i\}_{1\leq i \leq m}$ and $\{H'_i\}_{1\leq i \leq m}$, 
-find an invertible matrix $P$ such that $H'_i=P^{-1}H_iP$. Using a result proved in~\cite{dSP10} concerning 
-the conjugaison problem, they
-consider that it is equivalent to solve the problem in an extension field. However, there is cases where
-the congruence problem has a solution in the extension but not in the base field. They assume that 
-the two systems can always been transformed into two systems such that the first is the identity and 
-this is the case if we can always find a square root, but this is not always possible. Then, their deterministic
-algorithm relies on a result of~\cite{DBLP:conf/issac/ChistovIK97} and this work only deals with 
-the field of real algebraic number or the field of algebraic number. Finally, the authors claim that their 
-algorithm solves the decisional problem and not the computational problem.  
+time complexity is polynomial. 
+%However, some inconsistancies are present in this work and mismatches 
+%come from some parts of their algorithms work in zero characteristic fields while other parts are for 
+%finite fields. First of all, 
+%they solved the problem in an extension field of the base field. They turn the congruence problem, 
+%\textit{i.e.} given two systems of matrices $\{H_i\}_{1\leq i \leq m}$ and $\{H'_i\}_{1\leq i \leq m}$, 
+%find an invertible matrix $P$ such that $H'_i=\transpose{P}H_iP$ into a conjugaison problem, 
+%\textit{i.e.} given two systems of matrices $\{H_i\}_{1\leq i \leq m}$ and $\{H'_i\}_{1\leq i \leq m}$, 
+%find an invertible matrix $P$ such that $H'_i=P^{-1}H_iP$. Using a result proved in~\cite{dSP10} concerning 
+%the conjugaison problem, they
+%consider that it is equivalent to solve the problem in an extension field. However, there is cases where
+%the congruence problem has a solution in the extension but not in the base field. They assume that 
+%the two systems can always been transformed into two systems such that the first is the identity and 
+%this is the case if we can always find a square root, but this is not always possible. 
+Their deterministic algorithm works in in the field of real algebraic number or the field of algebraic number, 
+since they use some results of~\cite{DBLP:conf/issac/ChistovIK97} which work in such fields. The also
+claim that their algorithm solves the decisional problem and not the computational problem, which is not 
+really interesting in cryptography.  
 
 \paragraph*{Our contributions.}%<<<2
 We first reduce the general IP1S problem to the \emph{regular case},
