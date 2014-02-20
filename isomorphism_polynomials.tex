@@ -54,7 +54,7 @@
 \maketitle
 
 %\commentaire{deuxième essai avec mise en ligne du PDF}
-\begin{abstract}
+\begin{abstract}%<<<
 In this paper, we study the Isomorphism of Polynomial (IP) problem
 with~$m=2$ homogeneous quadratic polynomials of $n$ variables over a finite field of odd
 characteristic: given two quadratic polynomials $(\bm{a},\bm{b})$ 
@@ -76,9 +76,10 @@ characteristic using two new tools, the Kronecker form for a singular
 quadratic pencils, and reduction bilinear forms over a non-commutative
 algebra. Finally, we show that the second secret in the IP2S problem may
 be recovered in cubic time.
-\end{abstract}
+\end{abstract}%>>>
+\section*{Introduction}%<<<1
+\subsection*{The IP1S and IP2S problems}%<<<2
 
-\section{Introduction}
 The \emph{Isomorphism of Polynomial with Two Secrets} (IP2S) problem is
 the following. Given a field~$k$ and two $m$-uples $\bm{a} = (a_1, …,
 a_m)$ and~$\bm{b} = (b_1, …, b_m)$ in $n$~variables~$(x_1, …, x_m)$, compute
@@ -110,6 +111,7 @@ of the IP1S problem will be the identity or a transposition by modifying a bit t
 in~\cite{DBLP:conf/eurocrypt/PatarinGC98}. However, it is not obvious how we can compose the systems 
 of equations such that the solutions will be the composition of the solutions. 
 
+\bigbreak
 
 The defining parameters of the IP problems are the number~$n$ of
 variables, the number~$m$ of polynomials, and their degree. For
@@ -132,7 +134,7 @@ Gröbner bases, as shown in~\cite{DBLP:conf/eurocrypt/FaugereP06}.
 The case with more than two equations is easier since we can relinearize
 the systems~\cite{DBLP:conf/pkc/BouillaguetFFP11}.
 
-\paragraph{Previous Work.}
+\subsection*{Previous Work}%<<<2
 
 Some recent advances have been made on the IP1S problem in the case of
 two
@@ -179,11 +181,13 @@ polynomials; this problem does not have many cryptographic applications.
 Their deterministic algorithm works in in the field of real algebraic number or the field of algebraic number, 
 since they use some results of~\cite{DBLP:conf/issac/ChistovIK97} which work in such fields.
 
-\paragraph*{Our contributions.}%<<<2
+\subsection*{Our contributions}%<<<2
 We first reduce the general IP1S problem to the \emph{regular case},
 which is the case where $b_{∞}$~is invertible. This is the object of
 section~\ref{S:IP1S-singular} of this document and uses the Kronecker
-classification of pencils of quadratic forms.
+classification of pencils of quadratic forms. Although this dates back to
+Kronecker, the classic proof uses complex analysis; we give a proof over
+any field where~$2 ≠ 0$.
 
 We then prove that the regular case of the IP1S problem simplifies to a
 reduction problem for some quadratic forms over a local algebra. As this
@@ -192,9 +196,13 @@ a polynomial-time answer to all instances of IP1S in
 section~\ref{S:IP1S-regular}.
 
 The last section explains how we recover the second (``outer'') secret in
-the two-secret problem.
+the two-secret problem. As applying an outer linear combination to a
+pencil leaves the singular part of the pencil unchanged (up to
+isomorphism), we can use the regular part alone to recover the inner
+secret. This is done using the factorization of the characteristic
+polynomial.
 
-\subsection{Mathematical Background and notations}%<<<2
+\subsection*{Mathematical Background and notations}%<<<2
 Let~$V$ be a $n$-dimensional vector space over the field~$k$. We study
 the IP1S and IP2S problems for \emph{quadratic forms} on~$V$, which are
 homogeneous polynomials of degree~$2$ in some coordinates on~$V$. To a
@@ -227,13 +235,13 @@ endomorphism~$u^{⋆}$ of~$V$ such that~$b(x,u(y)) = b(u^{⋆}(x), y)$; the
 endomorphism~$u^{⋆}$ is called the \emph{left-adjoint} of~$u$. If $b$~is
 symmetric then left- and right-adjoints coincide.
 
-A bilinear form~$b$ on~$V$ is \emph{regular} if the associated We
-write~$\transpose{A}$ for the transpose of a matrix~$A$. A
-\emph{symmetric} matrix is a matrix such that~$A = \transpose{A}$.
-Symmetric bilinear forms~$b$ correspond to symmetric matrices~$B$.
-A bilinear form is regular iff its matrix is invertible. For any
-endomorphism~$u$ with matrix~$U$, the adjoint endomorphism has
-matrix~$U^{⋆} = B^{-1} · \transpose{U} · B$.
+We write~$R^{m×n}$ for the vector space of matrices with entries in~$R$
+having $m$~lines and $n$~columns, and $\transpose{A}$~for the transpose
+of a matrix~$A$. A \emph{symmetric} matrix is a matrix such that~$A =
+\transpose{A}$. Symmetric bilinear forms~$b$ correspond to symmetric
+matrices~$B$. A bilinear form is regular iff its matrix is invertible.
+For any endomorphism~$u$ with matrix~$U$, the adjoint endomorphism
+(relatively to~$B$) has matrix~$U^{⋆} = B^{-1} · \transpose{U} · B$.
 
 % \begin{definition}%\textbf{[Quadratic IP1S]}% \\
 % The homogeneous quadratic IP1S problem is the following. Given two
