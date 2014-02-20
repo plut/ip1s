@@ -37,6 +37,7 @@
 \DeclareMathOperator\End{End}
 \def\F{\mathbb{F}}
 \def\Id{\mathrm{Id}}
+\def\Ot{\widetilde{O}}
 %>>>
 \usepackage{color}
 \def\commentaire#1{{\bfseries\textcolor{red}{#1}}}
@@ -51,27 +52,28 @@
 
 %\commentaire{deuxième essai avec mise en ligne du PDF}
 \begin{abstract}
-In this paper, we study the Isomorphism of Polynomial (IP) problem with two
-quadratic polynomials on $n$ variables over a finite field of odd
-characteristic, \textit{i.e.} given two quadratic polynomials $(\bm{a},\bm{b})$ 
-on $n$ variables, find two bijective linear maps $(s,t)$ such that 
-$\bm{b}=t\circ \bm{a}\circ s$. We show a
-polynomial-time algorithm to recover $s$ and $t$ in time complexity $\widetilde{O}(n^3)$.
+In this paper, we study the Isomorphism of Polynomial (IP) problem
+with~$m=2$ homogeneous quadratic polynomials of $n$ variables over a finite field of odd
+characteristic: given two quadratic polynomials $(\bm{a},\bm{b})$ 
+on $n$ variables, we find two bijective linear maps $(s,t)$ such that
+$\bm{b}=t\circ \bm{a}\circ s$. We give an algorithm computing~$s$ and~$t$
+in time complexity~$\Ot(n^4)$.
 This problem has been introduced in cryptography by Patarin back in 1996.
 One special instance of this problem when $t$ is the identity is called
-the isomorphism with one secret (IP1S) problem. At ASIACRYPT 2013, Macario-Rat, Pl\^ut and Gilbert
-explained well behavior of generic solvers, such as Gr\"obner basis, to
-solve the IP1S problem on random instances by describing a polynomial-time
-algorithm for solving \textit{cyclic instances} using pencil of quadratic forms 
-in \textit{all} finite fields. They show that this problem is
-reducible to computing a square root of a matrix in the commuting space of 
-some matrix, which is a commutative algebra for \textit{cyclic} matrices. Here, we solve all
-instances of the problem by describing a new reduction algorithm for
-pencils of bilinear forms in a non-commutative algebra. Finally, we show
-that the general IP problem, a.k.a. IP2S problem is solvable in cubic
-time.
+the isomorphism with one secret (IP1S) problem.
+Generic algebraic equation solvers (for example using Gröbner bases)
+solve quite well random instances of the IP1S problem. For the particlar
+\emph{cyclic} instances of IP1S, a cubic-time algorithm was later
+given~\cite{MPG2013} and explained in terms of pencils of quadratic forms
+over all finite fields; in particular, the cyclic IP1S problem in odd
+characteristic reduces to the computation of the square root of a matrix.
+
+We give here an algorithm solving all cases of the IP1S problem in odd
+characteristic using two new tools, the Kronecker form for a singular
+quadratic pencils, and reduction bilinear forms over a non-commutative
+algebra. Finally, we show that the second secret in the IP2S problem may
+be recovered in cubic time.
 \end{abstract}
-% j'ai mis un tilde sur le big0 pour les termes en log(q) car il faut manipuler les scalaires de F_q
 
 \section{Introduction}
 The \emph{Isomorphism of Polynomial with Two Secrets} (IP2S) problem is
@@ -119,7 +121,7 @@ this is the most difficult case.
 
 The case with only one homogeneous quadratic equation amounts to
 reduction of quadratic forms, which has been known for
-centuries~\cite{lidl1997finite}. In the non-homogeneous case, the
+centuries~\cite{gauss,lidl1997finite}. In the non-homogeneous case, the
 presence of affine terms gives linear relations between the secret
 unknowns~\cite{DBLP:conf/eurocrypt/PatarinGC98}, and this extra
 information actually helps generic solvers, for example those using
@@ -275,57 +277,57 @@ is algorithmic.
 The pencil~$(b_{λ})$ defines a symmetric bilinear form on the
 module~$V_{∞} = V ⊗_{k} k[λ]$; if $(b_{λ})$~is singular, then this form
 has a non-trivial kernel~$W$. Elements of~$W$ are called \emph{relations}
-of~$(b_{λ})$. An element~$x = x_0 + λ x_1 + … + λ^d x_d$ is a
+of~$(b_{λ})$. An element~$x = x_0 + λ x_1 + … + λ^h x_h$ is a
 relation iff
 \begin{equation}\label{eq:relation}
 b_0 x_0 = 0, \quad
 b_0 x_1 = b_{∞} x_0, \quad …
-b_0 x_d = b_{∞} x_{d-1}, \quad
-b_{∞} x_{d} = 0.
+b_0 x_h = b_{∞} x_{h-1}, \quad
+b_{∞} x_{h} = 0.
 \end{equation}
-A \emph{minimal relation} for~$(b_{λ})$ is one with minimal degree~$d$;
+A \emph{minimal relation} for~$(b_{λ})$ is one with minimal degree~$h$;
 this degree is the \emph{minimal index} of~$(b_{λ})$. If $(b_{λ})$~is
 regular, then the minimal index is~$+∞$. A basis of~$W$ adapted to the
 filtration of~$V_{∞}$ by the degree of polynomials, we see that $W$~as a
-basis~$(w_1,…,w_r)$ such that, if $d_i$~is the degree of the
+basis~$(w_1,…,w_r)$ such that, if $h_i$~is the degree of the
 relation~$w_i$, then $(w_i,…,w_r)$~generate no relation of degree~$<
-d_i$. The degree~$d_i$ are called the \emph{minimal indices} of the
+h_i$. The degree~$h_i$ are called the \emph{minimal indices} of the
 pencil~$(b_{λ})$.
 %>>>
 \begin{prop}\label{prop:minimal-indep}%<<<
 Let~$e = ∑ λ^i e_i$ be a minimal relation for~$(b_{λ})$. Then
 \begin{enumerate}
-\item The~$d+1$ vectors~$e_0, …, e_d$ are $k$-linearly independent.
-\item The~$d$ linear forms~$b_{0} e_1, …, b_{0} e_d$ are $k$-linearly
+\item The~$h+1$ vectors~$e_0, …, e_h$ are $k$-linearly independent.
+\item The~$h$ linear forms~$b_{0} e_1, …, b_{0} e_h$ are $k$-linearly
 independent.
 \end{enumerate}
 \end{prop}
 
 \begin{proof}
 We first prove~(ii). Assume that there exists a non-trivial linear
-relation~$α_1 e_0 + … + α_d e_{i}$ satisfies the relations
+relation~$α_1 e_0 + … + α_h e_{i}$ satisfies the relations
 \begin{equation}\label{eq:relation-e'}
 \begin{split}
-b_0 e'_0 &= α_d b_0 e_0 = 0, \\
-b_0 e'_i &= α_{d-i+1} b_0 e_1 + … + α_m b_0 e_{i-1} = b_{∞} e'_{i-1}, \\
-b_{∞} e'_{d-1} &= b_{∞} (α_1 e_{0} + … + α_{d} e_{d-1}) \\
- &= b_{0} (α_1 e_{1} + … + α_{d} e_{d}) \\
+b_0 e'_0 &= α_h b_0 e_0 = 0, \\
+b_0 e'_i &= α_{h-i+1} b_0 e_1 + … + α_m b_0 e_{i-1} = b_{∞} e'_{i-1}, \\
+b_{∞} e'_{h-1} &= b_{∞} (α_1 e_{0} + … + α_{h} e_{h-1}) \\
+ &= b_{0} (α_1 e_{1} + … + α_{h} e_{h}) \\
  &= 0.
 \end{split}
 \end{equation}
-This means that~$(e'_0,…,e'_{d-1})$ is a relation of degree~$≤ d-1$
+This means that~$(e'_0,…,e'_{h-1})$ is a relation of degree~$≤ h-1$
 for~$(b_{λ})$, which contradicts the minimality of~$e$.
 
-To prove~(i), let~$α_0 e_0 + … + α_d e_d = 0$ be a non-trivial linear
-relation. Then since $α_1 b_0(e_1) + … + α_d b_0(e_d) = 0$, by~(ii) we
-must have~$α_1 = … = α_d = 0$, which in turn implies~$e_0 = 0$. However,
-in this case we see that~$(e_1,…,e_d)$ is a relation of degree~$≤ d-1$
+To prove~(i), let~$α_0 e_0 + … + α_h e_h = 0$ be a non-trivial linear
+relation. Then since $α_1 b_0(e_1) + … + α_h b_0(e_h) = 0$, by~(ii) we
+must have~$α_1 = … = α_h = 0$, which in turn implies~$e_0 = 0$. However,
+in this case we see that~$(e_1,…,e_h)$ is a relation of degree~$≤ h-1$
 for~$(b_{λ})$.
 \end{proof}
 %>>>
 
-Define matrices~$K'_0, K'_{∞}$ of size~$(d+1)×d$ and $K_{0}, K_{∞}$ of
-size~$(2d+1)×(2d+1)$ by
+Define matrices~$K'_0, K'_{∞}$ of size~$(h+1)×d$ and $K_{0}, K_{∞}$ of
+size~$(2h+1)×(2h+1)$ by
 \begin{equation}\label{eq:def-K}
 K'_0 = \mat{0&&0\\1&⋱&\\&⋱&0\\0&&1}, \quad
 K'_{∞} = \mat{1&&0\\0&⋱&\\&⋱&1\\0&&0}, \qquad
@@ -333,48 +335,53 @@ K_{λ} = \mat{0&K'_{λ}\\\transpose{K'_{λ}}&0}.
 \end{equation}
 
 \begin{prop}\label{prop:kronecker1}%<<<
-Let~$(b_{λ})$ be a symmetric pencil with minimal index~$d$. There exists
+Let~$(b_{λ})$ be a symmetric pencil with minimal index~$h$. There exists
 a basis of~$V$ in which the pencil~$(b_{λ})$ has the matrix 
 \[ B_{λ} = \mat{K_λ&0\\0&B'_{λ}}, \]
-where $B'_{λ}$ is a symmetric pencil with minimal index at least~$d$.
+where $B'_{λ}$ is a symmetric pencil with minimal index at least~$h$.
 \end{prop}
 
-Note in particular that the case~$d = 0$ corresponds to the matrix~$K_0$,
+Note in particular that the case~$h = 0$ corresponds to the matrix~$K_0$,
 which is the zero matrix of size~$1 × 1$, and to a vector belonging to
 all the kernels of~$b_{λ}$.
 
 \begin{proof}
-By Prop.~\ref{prop:minimal-indep}, there exists a basis of~$V$ in which
-the pencil~$(b_{λ})$ has the matrix
+Let~$(e_0, …, e_d)$ be a minimal relation. By
+Prop.~\ref{prop:minimal-indep}, there exist vectors~$f_1,…,f_d$ such
+that~$b_0(e_i, f_j) = 1$ when~$i = j$ and~$0$ otherwise, and the
+family~$(e_0,…, e_d, f_1, …, f_d)$ is free. In any basis completing this
+family, the pencil~$(b_{λ})$ has the symmetric matrix
 \begin{equation}\label{eq:matrix-b1}
 B_{λ} = \mat{0 & K'_{λ} & 0\\\transpose{K'_{λ}} & A_{λ}&\transpose{C_{λ}}\\
   0 & C_{λ} & B'_{λ}},
 \end{equation}
+where the blocks have size~$d+1$, $d$ and~$n-(2d+1)$.
 We first prove that we may assume that~$C_{λ} = 0$, using a change of
 coordinates of the form
 \begin{equation}\label{eq:p1}
 P = \mat{1 & 0 & X\\0&1&0\\0&Y&1}.
 \end{equation}
 The action of~$P$ on the sub-matrix~$C_{λ}$ of~$B_{λ}$ is given by $C_{λ}
-← C_{λ} + \transpose{X} K'_{λ} + B_{λ} Y$. Now let~$x_0,…,x_{d};\;
-y_1,…,y_d;\; c_1,…,c_d;\; c'_1,…,c'_d$ be the columns of~$\transpose{X}, Y,
+← C_{λ} + \transpose{X} K'_{λ} + B_{λ} Y$. Now let~$x_0,…,x_{h};\;
+y_1,…,y_h;\; c_1,…,c_h;\; c'_1,…,c'_h$ be the columns of~$\transpose{X}, Y,
 C_0$ and~$C_{∞}$. We then have to
 solve the equations
 \begin{equation}\label{eq:chvar-x}
-\begin{cases} c'_i + x_i + B'_0 y_i = 0\\ i = 1,…,d\end{cases};\quad
-\begin{cases} c'_i + x_{i-1} + B'_∞ y_i = 0\\i=1,…,d\end{cases}.
+\begin{cases} c'_i + x_i + B'_0 y_i = 0\\ i = 1,…,h\end{cases};\quad
+\begin{cases} c'_i + x_{i-1} + B'_∞ y_i = 0\\i=1,…,h\end{cases}.
 \end{equation}
-This determines uniquely the values~$x_0$ and~$x_{d}$. The equations
-for~$x_1,…,x_{d-1}$ have solutions iff the values~$y_1,…,y_d$ satisfy
+This determines uniquely the values~$x_0$ and~$x_{h}$. The equations
+for~$x_1,…,x_{h-1}$ have solutions iff the values~$y_1,…,y_h$ satisfy
 the relations
-$B'_0 y_i - B'_{∞} y_{i+1} = c'_{i+1} - c_i$ for~$i = 1,…,d-1$. This
+$B'_0 y_i - B'_{∞} y_{i+1} = c'_{i+1} - c_i$ for~$i = 1,…,h-1$. This
 translates into matrix form as
 \begin{equation}\label{eq:chvar-y}
 \mat{B'_0&-B'_{∞}&&0\\&⋱&⋱&\\0&&B'_0&-B'_{∞}} ·
-  \mat{y_1\\⋮\\y_d} = \mat{c'_2-c_1\\⋮\\c'_d-c_{d-1}}.
+  \mat{y_1\\⋮\\y_h} = \mat{c'_2-c_1\\⋮\\c'_h-c_{h-1}}.
 \end{equation}
 Let~$\ro B$ be the left-side matrix. Then any element of the kernel
-of~$\transpose{\ro B}$ defines a relation of degree~$≤ d-1$ on~$(b_{λ})$.
+of~$\transpose{\ro B}$ defines a relation of degree~$≤ h-1$
+on~$(b_{λ})$~\cite[XII(10)]{Gantmacher2}.
 This proves that $\transpose{\ro B}$~is injective and hence that $\ro
 B$~is surjective. Therefore, equations~\eqref{eq:chvar-y}
 and~\eqref{eq:chvar-x} have solutions.
@@ -390,11 +397,11 @@ on~$A_{λ}$ is given by~$A_{λ} ← A_{λ} + \transpose{Z} K_{λ} +
 a'_{i,j}$; the equations to solve are then
 \begin{equation}
 z_{i,j} + z_{j,i} = a_{i,j}, \quad z_{i-1,j} + z_{j-1,i} = a'_{i,j},
-\quad \text{for~$i,j = 1,…,d$}.
+\quad \text{for~$i,j = 1,…,h$}.
 \end{equation}
 Since the matrices~$A_{0}$ and~$A_{∞}$ are symmetric, only the
 equations for~$i ≥ j$ are relevant. We then check that, since~$2 ≠ 0$
-in~$k$, this is a regular system of~$d(d+1)$ equations in the~$d(d+1)$
+in~$k$, this is a regular system of~$h(h+1)$ equations in the~$h(h+1)$
 unknowns~$z_{i,j}$. Therefore, there exists a unique solution matrix~$Z$.
 This concludes the proof of Prop.~\ref{prop:kronecker1}.
 \end{proof}%>>>
@@ -402,9 +409,9 @@ This concludes the proof of Prop.~\ref{prop:kronecker1}.
 \begin{prop}[(Kronecker form)]\label{prop:kronecker}%<<<
 Let~$(b_{λ})$ be a symmetric pencil on~$V$. There exists a basis of~$V$
 in which the pencil has a block-diagonal matrix with diagonal
-blocks~$(K_{d_1}, …, K_{d_r}, B')$, where $K_d = K_{d,0} + λ K_{d,∞}$~is
-the square matrix of size~$2d+1$ defined by equation~\eqref{eq:def-K},
-the integers~$d_1 ≤ … ≤ d_r$ are the minimal indices of~$(b_{λ})$, and
+blocks~$(K_{h_1}, …, K_{h_r}, B')$, where $K_h = K_{h,0} + λ K_{h,∞}$~is
+the square matrix of size~$2h+1$ defined by equation~\eqref{eq:def-K},
+the integers~$h_1 ≤ … ≤ h_r$ are the minimal indices of~$(b_{λ})$, and
 $B'$~is the matrix of a regular pencil.
 \end{prop}
 %>>>
@@ -575,7 +582,6 @@ polynomial~$x^u$. Then there exists a basis of~$V$ in which the
 matrix~$M$ of~$m$ is block-diagonal, with diagonal blocks~$M_{n_i} =
 (H_{n_i} + μ)^{♭}$, for integers~$n_1 ≥ … ≥ n_r$.
 
-
 \begin{lem}\label{lem:commute-jordan}%<<<
 For all integers~$u, v$, define a matrix~$J_{u,v}$ of size~$u × v$ as
 \begin{equation}
@@ -741,7 +747,7 @@ triangular.
 
 \subsection{Classification of local symmetric pencils}%<<<2
 
-We shall need the following classical result about bilinear forms over
+We shall need the following classic result about bilinear forms over
 local algebras.
 
 \begin{prop}\label{prop:local-diag}%<<<
@@ -767,8 +773,7 @@ exists $X ∈ \ro C(M)^{×}$ such that $X^{*} A X$~is big-block-diagonal.
 \begin{proof}
 We prove this by induction on the number of big blocks of~$A$, using Gram
 orthogonalization on the big blocks of~$A$. Let~$B$ be the first diagonal
-big block of~$A$ and~$d$ be the size of the first big block of~$a$.
-We may then write $A$~as a block matrix
+big block of~$A$. We may then write $A$~as a block matrix
 \begin{equation}
 A = \mat{B & C \\ \transpose{C} & A'}, B ∈ R^{d×d}.
 \end{equation}
@@ -803,17 +808,17 @@ the identity matrix, or the diagonal matrix~$(1, …, 1, δ)$.
 Use propositions~\ref{prop:bb-diag} and~\ref{prop:local-diag}.
 \end{proof}%>>>
 
-
+\subsection{Solving the general case of IP1S}
 \begin{thm}\label{thm:IP1S}
 Let~$k$ be a finite field of characteristic~$≠2$ and~$(b_{λ})$ be a
 pencil of $n$-dimensional symmetric bilinear forms over~$k$.
-It is possible, using no more than~$O(n^3)$ operations in~$k$, to compute
+It is possible, using no more than~$\Ot(n^3)$ operations in~$k$, to compute
 an isomorphism between~$(b_{λ})$ and a (unique) block-diagonal pencil
 with diagonal blocks of the following form:
 \begin{itemize}
-\item Kronecker blocks~$K_{d} = \mat{0&K'_{d}\\\transpose{K'_d}&0}$
-for integers~$d ≥ 0$, as defined in Prop.~\ref{prop:kronecker};
-\item local blocks~$L_{p,d,u}$, defined as the~$d × d$-block matrix
+\item Kronecker blocks~$K_{h} = \mat{0&K'_{h}\\\transpose{K'_h}&0}$
+for integers~$h ≥ 0$, as defined in Prop.~\ref{prop:kronecker};
+\item finite local blocks~$L_{p,d,u}$, defined as the~$d × d$-block matrix
 \[ L_{p,d,u} \;=\; \mat{0&&&T_p u (λ + M_p)\\&&⋰&T_p u\\
   &⋰&⋰&\\T_pu(λ+M_p)&T_p u&&0}, \]
 where $p$~is an irreducible polynomial, $M_p$~is the companion matrix
@@ -821,29 +826,69 @@ of~$p$, $T_p$~is a prescribed invertible matrix such that both~$T_p$
 and~$T_p M_p$~are symmetric, $d$~is an integer, and $u$~is either the
 identity matrix or a prescribed non-square element of the field~$k[M_p]$,
 with the extra condition that for fixed~$(p, d)$, only one of the
-values~$u$ may be different from~$1$.
+values~$u$ may be different from~$1$;
+\item infinite local blocks~$L_{1,d,u}$, defined as the~$d×d$-matrix
+\[ L_{1,d,u} \;=\; u\mat{0&&&λ\\&&⋰&1\\&⋰&⋰&\\λ&1&&0}, \]
+where $d$~is an integer, $u$~is either 1 or a prescribed non-square
+element of~$k$, and for fixed~$d$, only one of the values~$u$ may be
+different from~$1$.
 \end{itemize}
 \end{thm}
 
 The only place where the finiteness of~$k$ is required for this theorem
-to hold is for the computation of square roots.
+to hold is for the computation of square roots, needed for
+Prop.~\ref{prop:local-diag}. This theorem solves the IP1S problem in
+cubic time: given two pencils~$\bm{a}$ and~$\bm{b}$, we only have to
+transform both of them to the canonical form above. This form will be the
+same iff the two pencils are isomorphic in the IP1S sense, and in this
+case, composing the two transformations gives an answer to the
+computational IP1S problem.
 
-\subsection{Algorithm and Complexity}
-First of all, we need to compute the Kronecker form of the two pencils $a_{\lambda}=\lambda a_{\infty}+a_0$
-and $b_{\lambda}=\lambda b_{\infty}+b_0$. This part is essentially a gaussian elimination as it is explained in section 2. 
-Now, we concentrate on the regular part of the pencils or assume that pencils are regular and 
-can be written as $a_{\infty}(\lambda+m)$ and $b_{\infty}(\lambda+m)$ with $m={b_{\infty}}^{-1}b_0$ up to a change of variables on $a_{\infty}$ as it is explained in equation (3.4). Then, we compute the invariant factors of $m$ to find the block decomposition of $a_{\infty}$ and $b_{\infty}$ into a canonical form. Next, we compute the normal form of the two pencils using local block $L_{p,d,u}$ as described in section 3 using Proposition~3.26 and Theorem~3.30. All in all, every step has a 
-complexity $O(n^3)$ since they require elementary operations on the matrices.
+\paragraph{Algorithm and Complexity}
 
-\begin{algorithmic}[1]
-\Function{IP1SAlgo}{$a_{\lambda}$, $b_{\lambda}$ pencils}
-  \State Compute Kronecker decomposition
-  \State Write the regular parts as $a_{\infty}(\lambda+M)$ and $b_{\infty}(\lambda+M)$ using a change of variables
-  \State Compute the invariant factors $p^d$ of the characteristic endomorphism $M$
-  \State Compute the decomposition of regular pencils using the local block $L_{p,d,u}$ for each factor 
-\EndFunction
-\end{algorithmic}
+The algorithm of Theorem~\ref{thm:IP1S} for a pencil~$\bm{b}$ decomposes
+in the three following steps.
+\begin{enumerate}
+\item \label{it:alg-kronecker} Compute the Kronecker decomposition:
+as long as the kernel of the matrix~$b_{λ}$ is not trivial, compute a
+minimal relation~$e = ∑ λ^i e_i$ and the according Kronecker block.
+\item \label{it:alg-factor} Now~$\bm{b}$~is regular. Compute and factor
+its characteristic polynomial~$f(λ)$ and split~$V$ as a orthogonal direct
+sum of primary components~$V_p$ for each prime divisor~$p$.
+\item \label{it:alg-local} For each prime divisor~$p$, write the local
+pencil~$\bm{b}_p$ at~$p$ as a matrix with entries in~$K = k[μ]/p(μ)$.
+Perform big-block reduction to write~$\bm{b}_p$ as a orthogonal direct
+sum of quadratic forms over~$K[H]/H^{n_i}$, and then reduce
+each of these forms to one of the two canonical diagonal forms.
+\end{enumerate}
 
+Most of the linear algebra steps, including computing the Frobenius
+rational normal form of the regular part of the pencil, may be done
+in~$\Ot(n^3)$ field operations~\cite{kaltoffen11compute}. In particular,
+the Frobenius rational normal form covers the factoring of the
+characteristic polynomial. This may also be done, again in cubic time,
+using a dedicated factoring algorithm. The reduction of quadratic forms
+over the local algebras is just the reduction over the residual field
+(which uses a square root computation in said finite field), followed by
+a Hensel lift.
+
+The only part not covered by classic algorithms is the reduction to
+Kronecker normal form performed in Step~\ref{it:alg-kronecker}. The
+computation of minimal relation~$e = ∑ λ^i e_i$ amounts to a kernel
+computation over the polynomial ring~$k[λ]$. This requires handling
+polynomials of degree up to the minimal index~$h_1$ of~$(b_{λ})$ and
+therefore has complexity~$\Ot(h_1 n^3)$. As this is performed for all
+minimal indices~$h_i$, the total complexity is~$\Ot(n^4)$.
+
+There exist cubic algorithms computing the Kronecker kernel of pencils of
+linear maps over a characteristic zero field~\cite{beelen1988improved}.
+These algorithms are not directly applicable over a finite field as they
+use some rotations over the real numbers and are mostly concerned with
+numerical stability; more importantly, they work with matrices up to
+equivalence, whereas we need matrices up to congruence. However, as the
+corresponding problem over a finite field has not been much studied, the
+existence of a faster algorithm for computing the Kronecker kernel is not
+unlikely.
 
 %>>>1
 \section{IP2S in the regular case}%<<<1
@@ -994,7 +1039,7 @@ of a symplectic group on the diagonal coefficients, and this group
 becomes quite impractical in the non-cyclic case.
 
 On the other hand, studying the general problem with $m ≥ 3$~quadratic
-equations departs from the classical results about pencils of quadratic
+equations departs from the classic results about pencils of quadratic
 forms; therefore, there are less tools available. Even in the regular
 case, our work heavily uses the factorization of the characteristic
 polynomial. The analogous case for~$m ≥ 3$ requires working in
