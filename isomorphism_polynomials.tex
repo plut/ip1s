@@ -29,12 +29,15 @@
 \let\fr\mathfrak
 \let\ro\mathscr
 \def\transpose{\,{}^{\mathrm{t}\!}}
+\def\pa#1{\left(\right)}
 \def\acco#1{\left\{#1\right\}}
 \def\abs#1{\left|#1\right|}
 \def\mat#1{\begin{pmatrix}#1\end{pmatrix}}
+\def\smat{\def\arraystretch{.66}\mat}
 \def\card#1{\abs{#1}}
 \DeclareMathOperator\Ker{Ker}
 \DeclareMathOperator\End{End}
+\DeclareMathOperator\GL{GL}
 \def\F{\mathbb{F}}
 \def\Id{\mathrm{Id}}
 \def\Ot{\widetilde{O}}
@@ -79,8 +82,8 @@ be recovered in cubic time.
 The \emph{Isomorphism of Polynomial with Two Secrets} (IP2S) problem is
 the following. Given a field~$k$ and two $m$-uples $\bm{a} = (a_1, …,
 a_m)$ and~$\bm{b} = (b_1, …, b_m)$ in $n$~variables~$(x_1, …, x_m)$, compute
-two invertible linear maps~$s ∈ GL_n(k)$ of the variables~$x_i$
-and~$t ∈ GL_m(k)$ of the polynomials~$a_i$ such that
+two invertible linear maps~$s ∈ \GL_n(k)$ of the variables~$x_i$
+and~$t ∈ \GL_m(k)$ of the polynomials~$a_i$ such that
 \begin{equation*}
 b = t ∘ a ∘ s.
 \end{equation*}
@@ -276,26 +279,26 @@ is algorithmic.
 % Définition: indice minimal%<<<
 The pencil~$(b_{λ})$ defines a symmetric bilinear form on the
 module~$V_{∞} = V ⊗_{k} k[λ]$; if $(b_{λ})$~is singular, then this form
-has a non-trivial kernel~$W$. Elements of~$W$ are called \emph{relations}
-of~$(b_{λ})$. An element~$x = x_0 + λ x_1 + … + λ^h x_h$ is a
-relation iff
-\begin{equation}\label{eq:relation}
+has a non-trivial kernel~$W$. Elements of~$W$ are called \emph{isotropic}
+for~$(b_{λ})$. An element~$x = x_0 + λ x_1 + … + λ^h x_h$ is isotropic iff
+\begin{equation}\label{eq:isotropic}
 b_0 x_0 = 0, \quad
 b_0 x_1 = b_{∞} x_0, \quad …
 b_0 x_h = b_{∞} x_{h-1}, \quad
 b_{∞} x_{h} = 0.
 \end{equation}
-A \emph{minimal relation} for~$(b_{λ})$ is one with minimal degree~$h$;
-this degree is the \emph{minimal index} of~$(b_{λ})$. If $(b_{λ})$~is
-regular, then the minimal index is~$+∞$. A basis of~$W$ adapted to the
-filtration of~$V_{∞}$ by the degree of polynomials, we see that $W$~as a
-basis~$(w_1,…,w_r)$ such that, if $h_i$~is the degree of the
-relation~$w_i$, then $(w_i,…,w_r)$~generate no relation of degree~$<
-h_i$. The degree~$h_i$ are called the \emph{minimal indices} of the
-pencil~$(b_{λ})$.
+A \emph{minimal isotropic vector} for~$(b_{λ})$ is one with minimal
+degree~$h$; this degree is the \emph{minimal index} of~$(b_{λ})$. If
+$(b_{λ})$~is regular, then the minimal index is~$+∞$.
+By choosing a basis of~$W$
+adapted to the filtration of~$V_{∞}$ by the degree of polynomials, we see
+that $W$~as a basis~$(w_1,…,w_r)$ such that, if $h_i$~is the degree of
+the isotropic vectol~$w_i$, then $(w_i,…,w_r)$~generate no isotropic
+vector of degree~$< h_i$. The degree~$h_i$ are called the \emph{minimal
+indices} of the pencil~$(b_{λ})$.
 %>>>
 \begin{prop}\label{prop:minimal-indep}%<<<
-Let~$e = ∑ λ^i e_i$ be a minimal relation for~$(b_{λ})$. Then
+Let~$e = ∑ λ^i e_i$ be a minimal isotropic vector for~$(b_{λ})$. Then
 \begin{enumerate}
 \item The~$h+1$ vectors~$e_0, …, e_h$ are $k$-linearly independent.
 \item The~$h$ linear forms~$b_{0} e_1, …, b_{0} e_h$ are $k$-linearly
@@ -315,14 +318,14 @@ b_{∞} e'_{h-1} &= b_{∞} (α_1 e_{0} + … + α_{h} e_{h-1}) \\
  &= 0.
 \end{split}
 \end{equation}
-This means that~$(e'_0,…,e'_{h-1})$ is a relation of degree~$≤ h-1$
-for~$(b_{λ})$, which contradicts the minimality of~$e$.
+This means that~$(e'_0+…+λ^{h-1} e'_{h-1})$ is isotropic and of degree~$≤
+h-1$ for~$b_{λ}$, which contradicts the minimality of~$e$.
 
 To prove~(i), let~$α_0 e_0 + … + α_h e_h = 0$ be a non-trivial linear
 relation. Then since $α_1 b_0(e_1) + … + α_h b_0(e_h) = 0$, by~(ii) we
 must have~$α_1 = … = α_h = 0$, which in turn implies~$e_0 = 0$. However,
-in this case we see that~$(e_1,…,e_h)$ is a relation of degree~$≤ h-1$
-for~$(b_{λ})$.
+in this case we see that~$e_1+…+ λ^{h-1} e_h$ is isotropic of degree~$≤
+h-1$.
 \end{proof}
 %>>>
 
@@ -346,10 +349,10 @@ which is the zero matrix of size~$1 × 1$, and to a vector belonging to
 all the kernels of~$b_{λ}$.
 
 \begin{proof}
-Let~$(e_0, …, e_d)$ be a minimal relation. By
-Prop.~\ref{prop:minimal-indep}, there exist vectors~$f_1,…,f_d$ such
+Let~$(e_0, …, e_h)$ be a minimal isotropic vector. By
+Prop.~\ref{prop:minimal-indep}, there exist vectors~$f_1,…,f_h$ such
 that~$b_0(e_i, f_j) = 1$ when~$i = j$ and~$0$ otherwise, and the
-family~$(e_0,…, e_d, f_1, …, f_d)$ is free. In any basis completing this
+family~$(e_0,…, e_h, f_1, …, f_h)$ is free. In any basis completing this
 family, the pencil~$(b_{λ})$ has the symmetric matrix
 \begin{equation}\label{eq:matrix-b1}
 B_{λ} = \mat{0 & K'_{λ} & 0\\\transpose{K'_{λ}} & A_{λ}&\transpose{C_{λ}}\\
@@ -380,8 +383,8 @@ translates into matrix form as
   \mat{y_1\\⋮\\y_h} = \mat{c'_2-c_1\\⋮\\c'_h-c_{h-1}}.
 \end{equation}
 Let~$\ro B$ be the left-side matrix. Then any element of the kernel
-of~$\transpose{\ro B}$ defines a relation of degree~$≤ h-1$
-on~$(b_{λ})$~\cite[XII(10)]{Gantmacher2}.
+of~$\transpose{\ro B}$ defines an isotropic vector of degree~$≤ h-1$
+for~$(b_{λ})$~\cite[XII(10)]{Gantmacher2}.
 This proves that $\transpose{\ro B}$~is injective and hence that $\ro
 B$~is surjective. Therefore, equations~\eqref{eq:chvar-y}
 and~\eqref{eq:chvar-x} have solutions.
@@ -891,29 +894,80 @@ existence of a faster algorithm for computing the Kronecker kernel is not
 unlikely.
 
 %>>>1
-\section{IP2S in the regular case}%<<<1
-\label{S:IP2S-regular}
+\section{Computation of the second secret for IP2S}%<<<1
+\label{S:IP2S}
+
+\subsection{Reduction to the regular case}
 Two families of polynomials~$(a_1,…,a_m)$ and~$(b_1,…,b_m)$ are
 \emph{isomorphic with two secrets} if there exist bijective linear
-transformations~$s$ of the $n$~variables and~$h$ of the $m$~polynomials
-such that $h ∘ \bm{a} ∘ s = \bm{b}$.
+transformations~$s$ of the $n$~variables and~$t$ of the $m$~polynomials
+such that $t ∘ \bm{a} ∘ s = \bm{b}$. Assume that $m = 2$. Then the second
+secret~$t$ is a homography in two variables, which we write~$γ ∈
+\GL_2(k)$.
 
-Assume that $m = 2$. Then the second secret~$h$ is a homography in two
-variables. Assume moreover that $a_{λ} = λ a_∞ + a_0$ and~$b_{λ} = λ
-b_{∞} + b_0$ are regular pencils of quadratic forms and that $2≠ 0$
-in~$k$. Then the homography~$h$ maps the characteristic polynomial~$f(λ)
+\begin{prop}
+Two pencils~$\bm{a} = (a_{λ})$ and~$\bm{b} = (b_{λ})$ are isomorphic with
+two secrets if, and only if, the regular part of both pencils are
+isomorphic with two secrets.
+\end{prop}
+
+\begin{proof}
+The minimal index of the pencil~$\bm{b}$ is the minimal degree of an
+isotropic vector~$e_0 + … +λ^h e_h$ for~$b_{λ}$; such a vector may be
+written in homogeneous form in~$(λ:μ)$ as~$e(λ:μ) = ∑ λ^i μ^{h-i} e_i$,
+which is isotropic for the quadratic form~$b(λ:μ) = μ b_0 + λ b_{∞}$. Now
+let~$γ = \smat{a&b\\c&d} ∈ \GL_2(k)$ be a homography. Then the
+vector~$e^{γ}$ defined by~$e^{γ}(λ:μ) = e(aλ+bμ:cλ+dμ)$~is isotropic
+for~$b_{γ(λ)}$ iff $e$~is isotropic for~$b$. This proves that the pencils
+$(b_{γ(λ)}$ and~$(b_{λ})$ have the same minimal index. Therefore, all
+their Kronecker blocks coincide.
+\end{proof}
+
+% \begin{prop}
+% Let~$K_{λ}$ be a Kronecker block of dimension~$2h+1$ as in
+% Prop.~\ref{prop:kronecker1}. Then for all~$γ ∈ \GL_2(k)$, the pencils
+% with matrix~$K_{λ}$ and~$K_{γ(λ)}$ are isomorphic in the IP1S sense.
+% \end{prop}
+% 
+% \begin{proof}
+% Let~$(e_0,…,e_h; f_1,…,f_h)$ be the basis in which the pencil~$(b_{λ})$
+% has the Kronecker-block matrix. Let~$e(x) = ∑ x^i e_i$ and~$f(y) = ∑
+% y^{i-1} e_i$. The pencil~$(b_{λ})$ is then defined by the relation
+% \begin{equation}\label{eq:def-b-intr}
+% b_{λ} (e(x), f(y)) \;=\; (x+λ) F(xy), \quad F(t) = 1 + … + t^{h-1}.
+% \end{equation}
+% For any homography~$γ = \smat{a&b\\c&d} ∈ \GL_2(k)$, define a
+% basis~$(e_i^{γ}, f_i^{γ})$ by the relations
+% \begin{equation}\label{eq:def-ei-gamma}
+% ∑ (a λ + b μ)^i (c λ + d μ)^{h-i} e_i = ∑ λ^i μ^{h-i} e_i^{γ}.
+% \end{equation}
+% We then find that in the basis 
+% 
+% ; then the only relation is~$b_{λ} · ∑ λ^i
+% e_i = 0$, which we write as a homogeneous polynomial
+% in~$(λ:μ)$ as $(λ b_{∞} + μ b_{0}) (∑ λ^i μ^{h-i} e_i) = 0$.
+% Let~$γ = \smat{a&b\\c&d}$ and define a basis~$(e_i^{γ}, f_i^{γ})$ by
+% Then in the basis
+% \end{proof}
+
+
+\subsection{IP2S in the regular case}
+
+Let~$(a_{λ})$ and~$(b_{λ})$ be two \emph{regular} pencils of bilinear
+forms such that $a_{γ(λ)}$~is isomorphic, in the IP1S sense, to~$b_{λ}$.
+Then the homography~$γ$ maps the characteristic polynomial~$f(λ)
 = \det (a_{λ})$ to~$g(λ) = \det (b_{λ})$. In particular, it maps the
 prime factors of~$f$ to those of~$g$, respecting both their degree and
 their exponent as a factor of the characteristic polynomial.
 
-Let the factors of~$f$ and~$g$ be grouped as sets~$S_{d,e}$ and~$T_{d,e}$
-of factors of degree~$d$ and exponent~$e$. Then any homography~$h$
+Let~$S_{d,e}$~and~$T_{d,e}$ be the set of factors of degree~$d$ and
+exponent~$e$ of the polynomials~$f$ and~$g$. Then any homography~$γ$
 mapping all the elements of~$S_{d,e}$ to~$T_{d,e}$ for each pair~$(d,e)$
 is a possible second secret in the IP2S problem. We compute the
-intersection for~$(d,e)$ of the set~$H_{d,e}$ of homographies mapping the
+intersection for~$(d,e)$ of the set~$Γ_{d,e}$ of homographies mapping the
 prime polynomials of~$S_{d,e}$ to~$T_{d,e}$. In most cases, the first
-set~$H_{d,e}$ already contains only one candidate, which is therefore the
-second secret~$h$. The discussion depends on the degree~$d$ of the
+set~$Γ_{d,e}$ already contains only one candidate, which is therefore the
+second secret~$γ$. The discussion depends on the degree~$d$ of the
 polynomials. We note that the sum of the size of the sets~$S_{d,e}$ is
 the number of variables~$n$; therefore, we may use the worst-case
 estimate~$\card{S_{d,e}} = O(n)$ for each~$(d,e)$.
@@ -923,7 +977,7 @@ We shall use the following classic results.
 \begin{enumerate}
 \item Let~$(x_1, x_2, x_3)$ and~$(y_1, y_2, y_3)$ be two (ordered)
 triples of distinct points of~$ℙ^1(k)$. There exists a unique
-homography~$h ∈ \mathrm{PGL}_2(k)$ such that~$h(x_i) = y_i$.
+homography~$γ ∈ \mathrm{PGL}_2(k)$ such that~$γ(x_i) = y_i$.
 \item Let~$(x_1, x_2, x_3, x_4)$ and~$(y_1, y_2, y_3, y_4)$ be two
 (ordered) quadruplets of distinct points. They are homographic iff they
 have the same cross-ratio~$B(x) = B(y)$, where
@@ -950,13 +1004,13 @@ polynomials of degree~$≤ 4$, are isomorphic iff the polynomials~$f$
 and~$g$ are homographic.
 
 \bigbreak
-We now explain how we compute the set~$H_{d,e}$ for each pair~$(d,e)$.
+We now explain how we compute the set~$Γ_{d,e}$ for each pair~$(d,e)$.
 
 \paragraph{Case~$d = 1$.}
 If $\card{S_{1,e}} ≥ 3$, then we may immediately recover the
-homography~$h$: namely, fix a triple~$(x_1,x_2,x_3)$ in~$S_{1,e}$, and
+homography~$γ$: namely, fix a triple~$(x_1,x_2,x_3)$ in~$S_{1,e}$, and
 iterate over the triples in~$T_{1,e}$. For each such triple, there exists
-a unique homography~$h$ such that~$h(x_i) = y_i$. This homography belongs
+a unique homography~$γ$ such that~$γ(x_i) = y_i$. This homography belongs
 to~$H_{1,e}$ iff the images of all the other points of~$S_{1,e}$ belong
 to~$T_{1,e}$. Since there are~$3!\binom{\card{S_{1,e}}}{3} = O(n^3)$
 triples~$(y_i)$, this computation requires~$O(n^3)$ field operations.
@@ -979,15 +1033,15 @@ of~$T_{2,e}$.
 
 \paragraph{Case~$d = 3$.}
 Fix an element~$u ∈ S_{3,e}$. For all~$v ∈ T_{3,e}$, there exist at
-most~$3! = 6$ homographies~$h$ mapping~$u$ to~$v$. Each candidate belongs
+most~$3! = 6$ homographies~$γ$ mapping~$u$ to~$v$. Each candidate belongs
 to~$H_{3,e}$ iff it maps all other elements of~$S_{3,e}$ to elements
 of~$T_{3,e}$. There are~$\card{S_{3,e}} = O(n)$ candidates~$u$ and
-therefore~$O(n)$ candidate homographies~$h$.
+therefore~$O(n)$ candidate homographies~$γ$.
 
 \paragraph{Case~$d = 4$.}
 Fix an element~$u ∈ S_{4,e}$. The candidates as homographic images of~$u$
 in~$T_{4,e}$ are the~$v$ such that~$j(v) = j(u)$. Each candidate
-polynomial~$v$ gives at most $4! = 24$~candidates homographies~$h$. This
+polynomial~$v$ gives at most $4! = 24$~candidates homographies~$γ$. This
 allows to compute~$H_{4,e}$ in~$O(n)$ field operations.
 
 \paragraph{Case~$d ≥ 5$.} The naïve method is to differentiate~$(d-4)$
@@ -1000,14 +1054,14 @@ of~$S_{d,e}$ and~$T_{d,e}$ by a known, randomly chosen homography~$r$. In
 general, for any two non-homographic elements~$u_1, u_2 ∈ S_{d,e}$, the
 derivatives~$(∂/∂x)^4\, (u_i ∘ r)$ are non-homographic. In the improbable
 case where they are homographic, we only need to change the random
-homography~$r$. In this way, we may compute the set~$H_{d,e}$ in at
+homography~$r$. In this way, we may compute the set~$Γ_{d,e}$ in at
 most~$O(n)$ field operations.
 
 \paragraph{Computing the hidden homography.}
 
-The hidden homography~$h$ lies in the intersection of all sets~$H_{d,e}$.
+The hidden homography~$γ$ lies in the intersection of all sets~$Γ_{d,e}$.
 As each one of these sets is likely to be extremely small or even reduced
-to~$\acco{h}$, we compute them in increasing order of assumed complexity.
+to~$\acco{γ}$, we compute them in increasing order of assumed complexity.
 We use the above estimates: for each~$(d,e)$, we use the assumed complexity
 \begin{equation}
 C_{d,e} = \begin{cases}
@@ -1030,13 +1084,13 @@ fields of characteristic two and to more than two equations.
 
 The case of a binary base field is very important for cryptographical
 applications. The cyclic case has been solved in~\cite{MPG2013}. To solve
-the general case, several roadblocks remain: the Kronecker form for the
-singular part of a bilinear pencil does not apply, as the proof of
-Prop.~\ref{prop:kronecker1} above requires that~$2 ≠ 0$; quadratic forms
-over a local algebra behave differently~\cite[§93]{omeara}; finally,
-extending from bilinear to quadratic forms requires a study of the action
-of a symplectic group on the diagonal coefficients, and this group
-becomes quite impractical in the non-cyclic case.
+the general case, at least three roadblocks remain: the Kronecker form
+for the singular part of a bilinear pencil does not apply, as the proof
+of Prop.~\ref{prop:kronecker1} above requires that~$2 ≠ 0$; quadratic
+forms over a local algebra behave differently~\cite[§93]{omeara};
+finally, extending from bilinear to quadratic forms requires a study of
+the action of a symplectic group on the diagonal coefficients, and this
+group becomes quite impractical in the non-cyclic case.
 
 On the other hand, studying the general problem with $m ≥ 3$~quadratic
 equations departs from the classic results about pencils of quadratic
