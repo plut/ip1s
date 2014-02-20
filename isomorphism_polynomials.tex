@@ -7,6 +7,8 @@
 \usepackage{amsmath,amssymb,mathrsfs}
 \usepackage{bm}
 \usepackage{mathdots}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
 
 \newnumbered{definition}{Definition}
 
@@ -86,7 +88,6 @@ is also known as the \emph{Isomorphism of Polynomials with One Secret}
 Patarin in~\cite{DBLP:conf/eurocrypt/Patarin96} to construct an efficient
 authentication scheme, 
 as an alternative to the Graph Isomorphism Problem (GI) proposed by Goldreich, Micali and Wigderson~\cite{DBLP:journals/jacm/GoldreichMW91}.
-
 The IP problem was appealing since 
 it seems more difficult than the Graph Isomorphism problem~\cite{DBLP:conf/eurocrypt/PatarinGC98}. 
 Agrawal and Saxena reduced~\cite{DBLP:conf/stacs/AgrawalS06} the Graph
@@ -146,7 +147,9 @@ such that $b_{∞}$~is invertible and~$b_{∞}^{-1} b_{0}$ is cyclic.
 Although the cyclic case is generic in the geometric sense (\emph{i.e.}
 defined by the non-cancellation of some polynomial functions of the
 coefficients of~$\bm{b}$), it is not the general case in a practical
-sense.
+sense. In the cyclic instances, Gröbner basis works well~\cite{DBLP:conf/pkc/BouillaguetFFP11} 
+since in this case, the number of solutions is small. For all other instances, the number of 
+solutions is large, and it is well-known that in this case, such algorithms are less efficient. 
 
 %\commentaire{2. parler du travail de Jeremy + Faugere et Ludovic}
 Finally, very recently Berthomieu, Faugère and Perret in~\cite{DBLP:journals/corr/BerthomieuFP13}
@@ -210,7 +213,7 @@ We note that, if~$2 = 0$ in~$k$, the situation is much more complicated;
 the polarity identity is no longer a bijection, but polar forms are
 instead alternate bilinear forms. This means that their classification is
 very different from the odd-characteristic
-case~\cite{milnor1973symmetric}, and relies on symplectic groups and
+case~\cite{milnorhusemoller}, and relies on symplectic groups and
 Artin-Schreier type equations, \emph{i.e.} of the type~$x^2+x+C = 0$.
 
 Let~$V^{∨}$ be the dual of the vector space~$V$. A bilinear form~$b$
@@ -825,7 +828,22 @@ values~$u$ may be different from~$1$.
 The only place where the finiteness of~$k$ is required for this theorem
 to hold is for the computation of square roots.
 
-\commentaire{Algorithme + complexité ?}
+\subsection{Algorithm and Complexity}
+First of all, we need to compute the Kronecker form of the two pencils $a_{\lambda}=\lambda a_{\infty}+a_0$
+and $b_{\lambda}=\lambda b_{\infty}+b_0$. This part is essentially a gaussian elimination as it is explained in section 2. 
+Now, we concentrate on the regular part of the pencils or assume that pencils are regular and 
+can be written as $a_{\infty}(\lambda+m)$ and $b_{\infty}(\lambda+m)$ with $m={b_{\infty}}^{-1}b_0$ up to a change of variables on $a_{\infty}$ as it is explained in equation (3.4). Then, we compute the invariant factors of $m$ to find the block decomposition of $a_{\infty}$ and $b_{\infty}$ into a canonical form. Next, we compute the normal form of the two pencils using local block $L_{p,d,u}$ as described in section 3 using Proposition~3.26 and Theorem~3.30. All in all, every step has a 
+complexity $O(n^3)$ since they require elementary operations on the matrices.
+
+\begin{algorithmic}[1]
+\Function{IP1SAlgo}{$a_{\lambda}$, $b_{\lambda}$ pencils}
+  \State Compute Kronecker decomposition
+  \State Write the regular parts as $a_{\infty}(\lambda+M)$ and $b_{\infty}(\lambda+M)$ using a change of variables
+  \State Compute the invariant factors $p^d$ of the characteristic endomorphism $M$
+  \State Compute the decomposition of regular pencils using the local block $L_{p,d,u}$ for each factor 
+\EndFunction
+\end{algorithmic}
+
 
 %>>>1
 \section{IP2S in the regular case}%<<<1
@@ -983,13 +1001,79 @@ polynomial. The analogous case for~$m ≥ 3$ requires working in
 homogeneous polynomials in~$m$ variables, which is a less pleasant
 algebra.
 
-\commentaire{reste à faire : $p = 2$ mais probablement pénible}
-
-\commentaire{reste à faire aussi $m ≥ 3$}
-
 % Biblio<<<1
 \bibliographystyle{plain}
 \bibliography{biblio}
+
+\iffalse
+\appendix
+\section{Canonical pencil in normal form}
+We first would like to introduce and define a canonical representative $L_\lambda$ of the class of all symmetric pencils that are equivalent to $A_\lambda$, which depends only on the set of elementary divisors of $A_{\lambda}$. We require that the symmetric pencil $L_\lambda$ be block-diagonal and that each diagonal block has only one elementary divisor. 
+Let $p^d$ be one of the elementary divisors of $A_{\lambda}$. We may require that the corresponding expected block in $L_\lambda$ has the following expression: $T(\lambda +M)$ with $M$ and $T$ expressed as $d^2$-block matrices:
+\begin{equation}
+\label{eq:canonical}
+M=\begin{pmatrix}
+M_p & I & & 0\\
+ & \ddots & \ddots & \\
+ & & \ddots & I \\
+0 & & & M_p\\
+\end{pmatrix}
+,\quad 
+T =\begin{pmatrix}
+0& & & T_p\\
+& & \iddots & \\
+& \iddots & & \\
+T_p & & & 0\\	
+\end{pmatrix},
+\end{equation}
+where $M_p$ is the companion matrix of $p$ and $T_p$ as defined in \eqref{eq:companion}.
+%, $N$ being the companion matrix of $p$. 
+One can easily check that $M$ and $T$ have the following properties: $M$ has $p^d$ as its only elementary divisor, $T$ is non singular symmetric and satisfies $\transpose{M}T=TM$.
+
+From now, $L_\lambda=T(\lambda + M)$ refers to the whole block-diagonal pencil and is so by construction symmetric, equivalent to $A_\lambda$ representing the pencil, and uniquely defined except for the order of the elementary divisors.
+\begin{prop}
+\label{transpose-symmetric}
+For any matrix $M$, 
+%matrices $M$ and $\transpose{M}$ are similar and 
+there exists a non singular symmetric matrix $T$ such that $\transpose{M}T = TM$.
+\end{prop}
+
+\begin{proof}%[of Th.~\ref{transpose-symmetric}]
+Given $p=\lambda^n+\sum_{i=0}^{n-1}{p_i\lambda^i}$ a polynomial of degree $n$ over $k$, we define the two 
+$n\times n$ matrices $M_p$ (the companion matrix of the polynomial $p$) and $T_p$ as:
+\begin{equation}
+\label{eq:companion}
+M_p = \begin{pmatrix}
+0 & 1 & & 0\\
+\vdots & \ddots & \ddots & \\
+0 & \cdots & 0 & 1 \\
+-p_0 & \cdots & -p_{n-2} & -p_{n-1}\\
+%
+%	0 & \cdots & 0 & -p_0\\
+%	1 &\ddots &\vdots & \vdots \\
+%	  & \ddots & 0 & -p_{n-2}\\
+%	  & & 1 & -p_{n-1}
+\end{pmatrix}
+, \quad T_p = \begin{pmatrix}
+	p_1 & \cdots & p_{n-1} & 1 \\
+	\vdots	& \iddots & \iddots & \\
+	p_{n-1} & \iddots & & \\
+	1 & & & 0
+\end{pmatrix}
+\end{equation}
+One can easily verify that for any polynomial $p$, $M=M_p$ and $T=T_p$
+satisfy the relation $\transpose{M}T = TM$ and $T$ is obviously non singular and symmetric. Therefore the theorem is proven for any companion matrix. The result can easily be generalized when $A_\lambda$ is in a normal form: since $M$ is block-diagonal and each block is the companion matrix of some elementary divisor, $T$ can also be built up as block-diagonal, each block being non singular symmetric. Then the result can be generalized to all matrices: for any matrix $N$ there exist a matrix $M$ in a normal form and a non singular matrix $P$ such as $N=P^{-1}MP$.  Since we have from previous step: $\transpose{M} = TMT^{-1}$ for some symmetric non-singular matrix $T$, we easily get $\transpose{N}=(\transpose{P}TP)N(\transpose{P}TP)^{-1}$ and $\transpose{P}TP$ is obviously non singular symmetric.
+%\qed
+\end{proof}
+
+We easily get the following results.
+
+\begin{prop}
+\label{cor:symmetric-similar-pencil}
+Let $M$ and $T$ be matrices as in Prop~\ref{transpose-symmetric}. Then $T(\lambda I+M)$ is obviously a symmetric pencil with the same invariant polynomials as $M$.
+\end{prop}
+\fi
+
 \end{document}%<<<1
 
 % \section{In characteristic two}%<<<1
@@ -1047,8 +1131,6 @@ algebra.
 %   Λ(\transpose{X_{1,i}} TM X_{2,i}))_{i=1,2}. \]
 % \end{prop}
 % 
-\section{Algorithms and Complexity}
-Voir avec Jerome ce qu'on met ici en fonction des connaissances ou si on le met a la fin de chaque section
 
 
 \end{document}
