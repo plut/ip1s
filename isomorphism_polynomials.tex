@@ -51,6 +51,7 @@
 {Solving the ``Isomorphism of Polynomials with Two Secrets'' Problem}%<<<1
 %\author{Pierre-Alain Fouque \and Gilles Macario-Rat \and Jérôme Plût}
 \author{Submission to ANTS 2014}
+\classno{15A21,15A22,15A63,11T71}
 \maketitle
 
 %\commentaire{deuxième essai avec mise en ligne du PDF}
@@ -60,9 +61,9 @@ with~$m=2$ homogeneous quadratic polynomials of $n$ variables over a finite fiel
 characteristic: given two quadratic polynomials $(\bm{a},\bm{b})$ 
 on $n$ variables, we find two bijective linear maps $(s,t)$ such that
 $\bm{b}=t\circ \bm{a}\circ s$. We give an algorithm computing~$s$ and~$t$
-in time complexity~$\Ot(n^4)$.
-This problem has been introduced in cryptography by Patarin back in 1996.
-One special instance of this problem when $t$ is the identity is called
+in time complexity~$\Ot(n^4)$ for all instances.
+This problem was introduced in cryptography by Patarin back in 1996.
+The special case of this problem when $t$ is the identity is called
 the isomorphism with one secret (IP1S) problem.
 Generic algebraic equation solvers (for example using Gröbner bases)
 solve quite well random instances of the IP1S problem. For the particlar
@@ -134,7 +135,7 @@ Gröbner bases, as shown in~\cite{DBLP:conf/eurocrypt/FaugereP06}.
 The case with more than two equations is easier since we can relinearize
 the systems~\cite{DBLP:conf/pkc/BouillaguetFFP11}.
 
-\subsection*{Previous Work}%<<<2
+\subsection*{Previous work}%<<<2
 
 Some recent advances have been made on the IP1S problem in the case of
 two
@@ -164,17 +165,22 @@ less efficient.
 %\commentaire{2. parler du travail de Jeremy + Faugere et Ludovic}
 Finally, very recently Berthomieu, Faugère and Perret
 in~\cite{DBLP:journals/corr/BerthomieuFP13} proposed a polynomial
-algorithm for IP1S with any number of equations when~$2 ≠ 0$.
-Given two families of polynomials over a field~$k$, they
-give a solution to the IP1S problem over a tower~$k'$ of real quadratic
-extension (a \emph{real quadratic extension} being
-obtained by adjoining the square root of a sum of squares) of~$k$. This
-solves the IP1S problem over the original field~$k$ when $k$~is
-\emph{Euclidean}, \emph{i.e.} has no real quadratic extension (for
-example for~$ℝ$, $ℂ$, or the field of real algebraic numbers). Over the
-original field, this solves the \emph{decisional} IP1S problem:
-determining whether two families of polynomials are isomorphic. This
-latter problem does not have many cryptographic applications.
+algorithm for IP1S with any number of equations when~$2 ≠ 0$. Given two
+families of polynomials over a field~$k$, they give a solution to the
+IP1S problem over a tower~$k'$ of real quadratic extension (a \emph{real
+quadratic extension} being obtained by adjoining the square root of a sum
+of squares) of~$k$. This solves the IP1S problem over the original
+field~$k$ only if $k$~is \emph{Euclidean}, \emph{i.e.} has no real
+quadratic extension. This is the case for example if $k$~is a closed real
+field such as~$ℝ$ or the field~$ℝ_{\mathrm{alg}}$ of real algebraic
+numbers, or an algebraically closed field; since any quadratic extension
+of a finite field is real, no finite field is Euclidean.
+
+% Effectivement, leur travail ne résout pas IP1S-décisionnel...
+% Over the
+% original field, this solves the \emph{decisional} IP1S problem:
+% determining whether two families of polynomials are isomorphic. This
+% latter problem does not have many cryptographic applications.
 
 %However, some inconsistancies are present in this work and mismatches 
 %come from some parts of their algorithms work in zero characteristic fields while other parts are for 
@@ -191,6 +197,10 @@ latter problem does not have many cryptographic applications.
 %this is the case if we can always find a square root, but this is not always possible. 
 
 \subsection*{Our contributions}%<<<2
+This work covers the IP1S and IP2S problems for~$m = 2$ equations over a
+non-binary field, although the complexity estimate depends on
+computing square roots and thus only applies to finite fields.
+
 We first reduce the general IP1S problem to the \emph{regular case},
 which is the case where $b_{∞}$~is invertible. This is the object of
 section~\ref{S:IP1S-singular} of this document and uses the Kronecker
@@ -205,13 +215,13 @@ a polynomial-time answer to all instances of IP1S in
 section~\ref{S:IP1S-regular}.
 
 The last section explains how we recover the second (``outer'') secret in
-the two-secret problem. As applying an outer linear combination to a
+the two-secret IP2S problem. As applying an outer linear combination to a
 pencil leaves the singular part of the pencil unchanged (up to
 isomorphism), we can use the regular part alone to recover the inner
 secret. This is done using the factorization of the characteristic
 polynomial.
 
-\subsection*{Mathematical Background and notations}%<<<2
+\subsection*{Mathematical background and notations}%<<<2
 Let~$V$ be a $n$-dimensional vector space over the field~$k$. We study
 the IP1S and IP2S problems for \emph{quadratic forms} on~$V$, which are
 homogeneous polynomials of degree~$2$ in some coordinates on~$V$. To a
@@ -245,16 +255,17 @@ endomorphism~$u^{⋆}$ is called the \emph{left-adjoint} of~$u$. If $b$~is
 symmetric then left- and right-adjoints coincide.
 
 \medbreak
+
 We write~$R^{m×n}$ for the vector space of matrices with entries in~$R$
 having $m$~lines and $n$~columns, and $\transpose{A}$~for the transpose
 of a matrix~$A$. A \emph{symmetric} matrix is a matrix such that~$A =
 \transpose{A}$. Symmetric bilinear forms~$b$ correspond to symmetric
 matrices~$B$. A bilinear form is regular iff its matrix is invertible.
 For any endomorphism~$u$ with matrix~$U$, the adjoint endomorphism
-(relatively to~$B$) has matrix~$U^{⋆} = B^{-1} · \transpose{U} · B$.
-The \emph{companion matrix} of a polynomial~$p$ is the matrix of
-multiplication by~$p$ in the basis~$\acco{1,x,…,x^{d}}$ of polynomials
-with degree~$< \deg p$.
+(relatively to~$B$) has matrix~$U^{⋆} = B^{-1} · \transpose{U} · B$. The
+\emph{companion matrix} of a polynomial~$p$ is the matrix of
+multiplication by~$p$ in the basis~$\acco{1,x,…,x^{\deg p-1}}$ of
+polynomials with degree~$< \deg p$.
 
 % \begin{definition}%\textbf{[Quadratic IP1S]}% \\
 % The homogeneous quadratic IP1S problem is the following. Given two
@@ -851,9 +862,10 @@ Use propositions~\ref{prop:bb-diag} and~\ref{prop:local-diag}.
 \begin{thm}\label{thm:IP1S}
 Let~$k$ be a finite field of characteristic~$≠2$ and~$(b_{λ})$ be a
 pencil of $n$-dimensional symmetric bilinear forms over~$k$.
-It is possible, using no more than~$\Ot(n^3)$ operations in~$k$, to compute
-an isomorphism between~$(b_{λ})$ and a (unique) block-diagonal pencil
-with diagonal blocks of the following form:
+It is possible, using no more than~$\Ot(hn^3) ≤ \Ot(n^4)$ operations
+in~$k$, where $h ≤ n$~is the largest of the minimal indices of~$(b_{λ})$,
+to compute an isomorphism between~$(b_{λ})$ and a (unique) block-diagonal
+pencil with diagonal blocks of the following form:
 \begin{enumerate}
 \item \emph{Kronecker blocks}~$K_{h} =
 \mat{0&K'_{h}\\\transpose{K'_h}&0}$ for integers~$h ≥ 0$, as defined in
@@ -890,9 +902,11 @@ computational IP1S problem.
 The algorithm of Theorem~\ref{thm:IP1S} for a pencil~$\bm{b}$ decomposes
 in the three following steps.
 \begin{enumerate}
-\item \label{it:alg-kronecker} Compute the Kronecker decomposition:
-as long as the kernel of the matrix~$b_{λ}$ is not trivial, compute a
-minimal relation~$e = ∑ λ^i e_i$ and the according Kronecker block.
+\item \label{it:alg-kronecker} Compute the Kronecker decomposition: as
+long as the kernel of the matrix~$b_{λ}$ is not trivial, compute a
+minimal isotropic vector~$e = ∑ λ^i e_i$ and the according Kronecker
+block according to the linear algebra described in
+Prop.~\ref{prop:kronecker1}.
 \item \label{it:alg-factor} Now~$\bm{b}$~is regular. Compute and factor
 its characteristic polynomial~$f(λ)$ and split~$V$ as a orthogonal direct
 sum of primary components~$V_p$ for each prime divisor~$p$.
@@ -915,18 +929,18 @@ a Hensel lift.
 
 The only part not covered by classic algorithms is the reduction to
 Kronecker normal form performed in Step~\ref{it:alg-kronecker}. The
-computation of minimal relation~$e = ∑ λ^i e_i$ amounts to a kernel
-computation over the polynomial ring~$k[λ]$. This requires handling
-polynomials of degree up to the minimal index~$h_1$ of~$(b_{λ})$ and
-therefore has complexity~$\Ot(h_1 n^3)$. As this is performed for all
+computation of a minimal isotropic vector~$e = ∑ λ^i e_i$ amounts to a
+kernel computation over the polynomial ring~$k[λ]$. This requires
+handling polynomials of degree up to the minimal index~$h_1$ of~$(b_{λ})$
+and therefore has complexity~$\Ot(h_1 n^3)$. As this is performed for all
 minimal indices~$h_i$, the total complexity is~$\Ot(n^4)$.
 
 There exist cubic algorithms computing the Kronecker kernel of pencils of
 linear maps over a characteristic zero field~\cite{beelen1988improved}.
 These algorithms are not directly applicable over a finite field as they
 use some rotations over the real numbers and are mostly concerned with
-numerical stability; more importantly, they work with matrices up to
-equivalence, whereas we need matrices up to congruence. However, as the
+numerical stability; more importantly, they work with linear maps up to
+equivalence, whereas we need quadratic forms up to congruence. However, as the
 corresponding problem over a finite field has not been much studied, the
 existence of a faster algorithm for computing the Kronecker kernel is not
 unlikely.
@@ -945,7 +959,7 @@ secret~$t$ is a homography in two variables, which we write~$γ ∈
 
 \begin{prop}
 Two pencils~$\bm{a} = (a_{λ})$ and~$\bm{b} = (b_{λ})$ are isomorphic with
-two secrets if, and only if, the regular part of both pencils are
+two secrets if, and only if, the regular parts of both pencils are
 isomorphic with two secrets.
 \end{prop}
 
@@ -1121,7 +1135,7 @@ The obvious questions are whether it is possible to generalize this to
 fields of characteristic two and to more than two equations.
 
 The case of a binary base field is very important for cryptographical
-applications. The cyclic case has been solved in~\cite{MPG2013}. To solve
+applications. The cyclic case was solved in~\cite{MPG2013}. To solve
 the general case, at least three roadblocks remain: the Kronecker form
 for the singular part of a bilinear pencil does not apply, as the proof
 of Prop.~\ref{prop:kronecker1} above requires that~$2 ≠ 0$; quadratic
