@@ -147,23 +147,34 @@ when three equations are available
 and one of the quadratic equations $\bm{a}$ comes from a special mapping $X\mapsto X^{q^\theta+1}$ 
 over $\F_q$. In the case of the IP problem, this is optimal using an information theoretic argument.
 
-Macario-Rat, Plût and Gilbert in 2013~\cite{MPG2013} how to solve cyclic
-instances of the IP1S problem for~$m=2$ over finite fields of any
-characteristic. Cyclic instances are instances~$\bm{b} = (b_{∞}, b_{0})$
-such that $b_{∞}$~is invertible and~$b_{∞}^{-1} b_{0}$ is cyclic.
-Although the cyclic case is generic in the geometric sense (\emph{i.e.}
-defined by the non-cancellation of some polynomial functions of the
-coefficients of~$\bm{b}$), it is not the general case in a practical
-sense. In the cyclic instances, Gröbner basis works well~\cite{DBLP:conf/pkc/BouillaguetFFP11} 
-since in this case, the number of solutions is small. For all other instances, the number of 
-solutions is large, and it is well-known that in this case, such algorithms are less efficient. 
+Macario-Rat, Plût and Gilbert explained in 2013~\cite{MPG2013} how to
+solve cyclic instances of the IP1S problem for~$m=2$ over finite fields
+of any characteristic. A pencil~$\bm{b} = (b_{∞}, b_0)$ is \emph{cyclic}
+if $b_{∞}$~is invertible and~$b_{∞}^{-1} b_{0}$ is a cyclic matrix,
+\emph{i.e.} its characteristic polynomial is equal to its minimal
+polynomial. Although the cyclic case is generic in the geometric sense
+(\emph{i.e.} defined by the non-cancellation of some polynomial functions
+of the coefficients of~$\bm{b}$), it is not the general case in a
+practical sense. In the cyclic instances, Gröbner basis works
+well~\cite{DBLP:conf/pkc/BouillaguetFFP11} since in this case, the number
+of solutions is small. For all other instances, the number of solutions
+is large, and it is well-known that in this case, such algorithms are
+less efficient.
 
 %\commentaire{2. parler du travail de Jeremy + Faugere et Ludovic}
-Finally, very recently Berthomieu, Faugère and Perret in~\cite{DBLP:journals/corr/BerthomieuFP13}
-proposed a polynomial algorithm solving the \emph{decisional} IP1S
-problem for any number of equations. The decisional problem requires to
-determine whether an isomorphism exists between two given families of
-polynomials; this problem does not have many cryptographic applications.
+Finally, very recently Berthomieu, Faugère and Perret
+in~\cite{DBLP:journals/corr/BerthomieuFP13} proposed a polynomial
+algorithm for IP1S with any number of equations when~$2 ≠ 0$.
+Given two families of polynomials over a field~$k$, they
+give a solution to the IP1S problem over a tower~$k'$ of real quadratic
+extension (a \emph{real quadratic extension} being
+obtained by adjoining the square root of a sum of squares) of~$k$. This
+solves the IP1S problem over the original field~$k$ when $k$~is
+\emph{Euclidean}, \emph{i.e.} has no real quadratic extension (for
+example for~$ℝ$, $ℂ$, or the field of real algebraic numbers). Over the
+original field, this solves the \emph{decisional} IP1S problem:
+determining whether two families of polynomials are isomorphic. This
+latter problem does not have many cryptographic applications.
 
 %However, some inconsistancies are present in this work and mismatches 
 %come from some parts of their algorithms work in zero characteristic fields while other parts are for 
@@ -178,8 +189,6 @@ polynomials; this problem does not have many cryptographic applications.
 %the congruence problem has a solution in the extension but not in the base field. They assume that 
 %the two systems can always been transformed into two systems such that the first is the identity and 
 %this is the case if we can always find a square root, but this is not always possible. 
-Their deterministic algorithm works in in the field of real algebraic number or the field of algebraic number, 
-since they use some results of~\cite{DBLP:conf/issac/ChistovIK97} which work in such fields.
 
 \subsection*{Our contributions}%<<<2
 We first reduce the general IP1S problem to the \emph{regular case},
@@ -235,6 +244,7 @@ endomorphism~$u^{⋆}$ of~$V$ such that~$b(x,u(y)) = b(u^{⋆}(x), y)$; the
 endomorphism~$u^{⋆}$ is called the \emph{left-adjoint} of~$u$. If $b$~is
 symmetric then left- and right-adjoints coincide.
 
+\medbreak
 We write~$R^{m×n}$ for the vector space of matrices with entries in~$R$
 having $m$~lines and $n$~columns, and $\transpose{A}$~for the transpose
 of a matrix~$A$. A \emph{symmetric} matrix is a matrix such that~$A =
@@ -242,6 +252,9 @@ of a matrix~$A$. A \emph{symmetric} matrix is a matrix such that~$A =
 matrices~$B$. A bilinear form is regular iff its matrix is invertible.
 For any endomorphism~$u$ with matrix~$U$, the adjoint endomorphism
 (relatively to~$B$) has matrix~$U^{⋆} = B^{-1} · \transpose{U} · B$.
+The \emph{companion matrix} of a polynomial~$p$ is the matrix of
+multiplication by~$p$ in the basis~$\acco{1,x,…,x^{d}}$ of polynomials
+with degree~$< \deg p$.
 
 % \begin{definition}%\textbf{[Quadratic IP1S]}% \\
 % The homogeneous quadratic IP1S problem is the following. Given two
@@ -278,8 +291,8 @@ symmetric pencil is reducible to the canonical form of Kronecker. This
 form is described in~\cite[XII(56)]{Gantmacher2}; however, the proof
 given there only applies to pencils over~$ℂ$, as its uses the computation
 of square roots of matrices via interpolation on the spectrum. We give
-here a proof that is true over any field~$k$ such that~$2 ≠ 0$ and which
-is algorithmic.
+here an algorithmic proof that applies to any field~$k$ such that~$2 ≠
+0$.
 
 \subsection{Reduction of (possibly singular) pencils to the Kronecker form} %<<<2
 % Définition: indice minimal%<<<
@@ -358,8 +371,16 @@ all the kernels of~$b_{λ}$.
 Let~$(e_0, …, e_h)$ be a minimal isotropic vector. By
 Prop.~\ref{prop:minimal-indep}, there exist vectors~$f_1,…,f_h$ such
 that~$b_0(e_i, f_j) = 1$ when~$i = j$ and~$0$ otherwise, and the
-family~$(e_0,…, e_h, f_1, …, f_h)$ is free. In any basis completing this
-family, the pencil~$(b_{λ})$ has the symmetric matrix
+family~$(e_0,…, e_h, f_1, …, f_h)$ is free. For all~$i, j$, note that we have
+\begin{equation}\label{eq:zero-bij}
+b_{∞}(e_i,e_j) = b_0(e_i, e_{j+1}) = b_0(e_{j+1}, e_i) =
+  b_{∞} (e_{j+1}, e_{i-1}) = b_{∞} (e_{i-1}, e_{j+1}).
+\end{equation}
+From this and the fact that~$b_{∞} (e_i, e_d) = b_{∞} (e_d, e_i)$
+and~$b_0 (e_i, e_0) = b_0 (e_0, e_i) = 0$, we deduce that for all~$0 ≤
+i,j ≤ d$, we have~$b_{∞} (e_i, e_j) = b_0 (e_i, e_j) = 0$. Therefore,
+in any basis completing the family~$(e_0, …, e_h; f_1, …, f_h)$,
+the pencil~$(b_{λ})$ has the symmetric matrix
 \begin{equation}\label{eq:matrix-b1}
 B_{λ} = \mat{0 & K'_{λ} & 0\\\transpose{K'_{λ}} & A_{λ}&\transpose{C_{λ}}\\
   0 & C_{λ} & B'_{λ}},
@@ -379,7 +400,7 @@ solve the equations
 \begin{cases} c'_i + x_i + B'_0 y_i = 0\\ i = 1,…,h\end{cases};\quad
 \begin{cases} c'_i + x_{i-1} + B'_∞ y_i = 0\\i=1,…,h\end{cases}.
 \end{equation}
-This determines uniquely the values~$x_0$ and~$x_{h}$. The equations
+This uniquely determines the values~$x_0$ and~$x_{h}$. The equations
 for~$x_1,…,x_{h-1}$ have solutions iff the values~$y_1,…,y_h$ satisfy
 the relations
 $B'_0 y_i - B'_{∞} y_{i+1} = c'_{i+1} - c_i$ for~$i = 1,…,h-1$. This
@@ -415,6 +436,14 @@ unknowns~$z_{i,j}$. Therefore, there exists a unique solution matrix~$Z$.
 This concludes the proof of Prop.~\ref{prop:kronecker1}.
 \end{proof}%>>>
 
+Note that the Kronecker block~$K_{λ}$ of size~$2h+1$ has the following
+intrinsic definition: define~$e(x) = ∑ x^i e_i$ and~$f(y) = ∑ y^{i-1}
+f_i$. Then the bilinear pencil~$b_{λ}$ is defined by
+\begin{equation}\label{eq:def-intr-b}
+b_{λ}\,(e(x),\, f(y)) \;=\; (x+λ) F(xy), \quad \text{where $F(t) = 1 + … +
+t^{h-1}$}.
+\end{equation}
+
 \begin{prop}[(Kronecker form)]\label{prop:kronecker}%<<<
 Let~$(b_{λ})$ be a symmetric pencil on~$V$. There exists a basis of~$V$
 in which the pencil has a block-diagonal matrix with diagonal
@@ -435,9 +464,10 @@ the bilinear form~$b_{λ}$ is regular.
 \subsection{Localisation of the IP1S problem}%<<<2
 
 \begin{lem}\label{lem:decomp-bezout}%<<<
-Let~$\bm{b}$ be a regular symmetric pencil on the vector space~$V$. Let~$f(λ:
-μ)$~be the homogeneous characteristic polynomial of~$S$, and let~$f = ∏
-g_i$ be a factorisation of~$f$ in mutually coprime factors.
+Let~$\bm{b}$ be a regular symmetric pencil on the vector space~$V$.
+Let~$f(λ: μ) = \det (λ b_{∞} + μ b_0)$~be the homogeneous characteristic
+polynomial of~$S$, and let~$f = ∏ g_i$ be a factorisation of~$f$ in
+mutually coprime factors.
 
 Then there exists a unique decomposition~$V = ⨁ V_i$ such that the
 spaces~$V_i$ are pairwise orthogonal for all forms of~$\bm{b}$ and the
@@ -824,10 +854,12 @@ pencil of $n$-dimensional symmetric bilinear forms over~$k$.
 It is possible, using no more than~$\Ot(n^3)$ operations in~$k$, to compute
 an isomorphism between~$(b_{λ})$ and a (unique) block-diagonal pencil
 with diagonal blocks of the following form:
-\begin{itemize}
-\item Kronecker blocks~$K_{h} = \mat{0&K'_{h}\\\transpose{K'_h}&0}$
-for integers~$h ≥ 0$, as defined in Prop.~\ref{prop:kronecker};
-\item finite local blocks~$L_{p,d,u}$, defined as the~$d × d$-block matrix
+\begin{enumerate}
+\item \emph{Kronecker blocks}~$K_{h} =
+\mat{0&K'_{h}\\\transpose{K'_h}&0}$ for integers~$h ≥ 0$, as defined in
+Prop.~\ref{prop:kronecker};
+\item \emph{finite local blocks}~$L_{p,d,u}$, defined as the~$d ×
+d$-block matrix
 \[ L_{p,d,u} \;=\; \mat{0&&&T_p u (λ + M_p)\\&&⋰&T_p u\\
   &⋰&⋰&\\T_pu(λ+M_p)&T_p u&&0}, \]
 where $p$~is an irreducible polynomial, $M_p$~is the companion matrix
@@ -836,12 +868,13 @@ and~$T_p M_p$~are symmetric, $d$~is an integer, and $u$~is either the
 identity matrix or a prescribed non-square element of the field~$k[M_p]$,
 with the extra condition that for fixed~$(p, d)$, only one of the
 values~$u$ may be different from~$1$;
-\item infinite local blocks~$L_{1,d,u}$, defined as the~$d×d$-matrix
+\item \emph{infinite local blocks}~$L_{1,d,u}$, defined as
+the~$d×d$-matrix
 \[ L_{1,d,u} \;=\; u\mat{0&&&λ\\&&⋰&1\\&⋰&⋰&\\λ&1&&0}, \]
 where $d$~is an integer, $u$~is either 1 or a prescribed non-square
 element of~$k$, and for fixed~$d$, only one of the values~$u$ may be
 different from~$1$.
-\end{itemize}
+\end{enumerate}
 \end{thm}
 
 The only place where the finiteness of~$k$ is required for this theorem
@@ -853,8 +886,7 @@ same iff the two pencils are isomorphic in the IP1S sense, and in this
 case, composing the two transformations gives an answer to the
 computational IP1S problem.
 
-\paragraph{Algorithm and Complexity}
-
+\paragraph{Algorithm and Complexity.}
 The algorithm of Theorem~\ref{thm:IP1S} for a pencil~$\bm{b}$ decomposes
 in the three following steps.
 \begin{enumerate}
@@ -925,7 +957,7 @@ which is isotropic for the quadratic form~$b(λ:μ) = μ b_0 + λ b_{∞}$. Now
 let~$γ = \smat{a&b\\c&d} ∈ \GL_2(k)$ be a homography. Then the
 vector~$e^{γ}$ defined by~$e^{γ}(λ:μ) = e(aλ+bμ:cλ+dμ)$~is isotropic
 for~$b_{γ(λ)}$ iff $e$~is isotropic for~$b$. This proves that the pencils
-$(b_{γ(λ)}$ and~$(b_{λ})$ have the same minimal index. Therefore, all
+$(b_{γ(λ)})$ and~$(b_{λ})$ have the same minimal index. Therefore, all
 their Kronecker blocks coincide.
 \end{proof}
 
