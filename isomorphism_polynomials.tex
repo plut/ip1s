@@ -9,6 +9,7 @@
 \usepackage{mathdots}
 \usepackage{algorithm}
 \usepackage{algpseudocode}
+\usepackage[all]{xy}
 
 \newnumbered{definition}{Definition}
 
@@ -41,9 +42,12 @@
 \def\F{\mathbb{F}}
 \def\Id{\mathrm{Id}}
 \def\Ot{\widetilde{O}}
+\def\plusort{\stackrel{⟂}{⊕}}
 %>>>
 \usepackage{color}
-\def\commentaire#1{{\bfseries\textcolor{red}{#1}}}
+\definecolor{nouveau}{rgb}{.05,.5,.1}
+\long\def\commentaire#1{{\bfseries\textcolor{red}{#1}}}
+\long\def\nouveau#1{{\color{nouveau}#1}}
 %>>>1
 
 \begin{document}
@@ -254,6 +258,10 @@ endomorphism~$u^{⋆}$ of~$V$ such that~$b(x,u(y)) = b(u^{⋆}(x), y)$; the
 endomorphism~$u^{⋆}$ is called the \emph{left-adjoint} of~$u$. If $b$~is
 symmetric then left- and right-adjoints coincide.
 
+\nouveau{Two elements~$x$ and~$y$ of~$V$ are \emph{orthogonal} for~$b$
+if~$b(x,y) = 0$; we write~$x ⟂ y$. The orthogonal of a sub-space~$W ⊂ V$
+is~$W^{⟂}$.}
+
 \medbreak
 
 We write~$R^{m×n}$ for the vector space of matrices with entries in~$R$
@@ -333,6 +341,9 @@ Let~$e = ∑ λ^i e_i$ be a minimal isotropic vector for~$(b_{λ})$. Then
 \item The~$h+1$ vectors~$e_0, …, e_h$ are $k$-linearly independent.
 \item The~$h$ linear forms~$b_{0} e_1, …, b_{0} e_h$ are $k$-linearly
 independent.
+\nouveau{%
+\item For all~$i, j$, $b_{0}(e_i, e_j) = b_{∞}(e_i, e_j) = 0$.
+}
 \end{enumerate}
 \end{prop}
 
@@ -378,6 +389,60 @@ Note in particular that the case~$h = 0$ corresponds to the matrix~$K_0$,
 which is the zero matrix of size~$1 × 1$, and to a vector belonging to
 all the kernels of~$b_{λ}$.
 
+
+\nouveau{\begin{proof}
+Let~$∑ λ^i e_i$ be a minimal isotropic vector, $h$~its degree, $E ⊂ V$
+the sub-space spanned by the vectors~$e_i$, and~$E^{⟂}$ the orthogonal
+of~$E$. By Prop.~\ref{prop:minimal-indep}, we know that $\dim E = h+1$,
+$\dim V/E^{⟂} = h$, and~$E ⊂ E^{⟂}$. Morevoer, $(b_{λ})$~restricts to a
+bilinear pencil on~$E^{⟂}/E$, whose minimal degree is at least~$≥ h$.
+\begin{equation}\label{eq:diagram}
+\xymatrix@R-=3ex{
+E\ar[r]\ar@{=}[d] \ar@<1ex>@/^/@{<.}[r]^{u} & E^{⟂}\ar[r]\ar[d]
+  & E^{⟂}/E \ar[d] \\
+E\ar[r] & V\ar[r]\ar[d] & V/E\ar[d]\\
+ & V/E^{⟂} \ar@{=}[r] \ar@<1ex>@/^/@{.>}[u]^{v} & V/E^{⟂} \\
+}\end{equation}
+We first prove that there exists an orthogonal decomposition~$V =
+V' ⊕ (E^{⟂}/E)$, where $V'$~is an extension of~$V/E^{⟂}$ by~$E$.
+Such a decomposition amounts to a retraction~$u$ of the injection~$E ↪
+E^{⟂}$ and a section~$v$ of the projection~$V → V/E^{⟂}$, such that for
+all~$x ∈ E^{⟂}, y ∈ V/E^{⟂}$ and for all~$λ$, the relation~$b_{λ}(u(x),
+v(y)) = b_{λ}(x, v(y))$ holds.
+
+Write~$u(x) = ∑ u_i(x) e_i$ where~$u_0,…,u_h ∈ (E^{⟂})^{∨}$ and let the
+section~$v$ be defined by elements~$v_1,…,v_h ∈ V$ such that~$b_0(e_i,
+v_j) = 1$ if~$i = j$ and~$0$ otherwise.
+The orthogonality condition then becomes
+\begin{equation}\label{eq:orth2}
+b_0 (v_j,x) = u_j(x), \quad b_{∞} (v_j,x) = u_{j-1}(x), \qquad
+\text{for all~$x ∈ E^{⟂}$, $j = 1,…,h$.}
+% \text{(as elements of~$(E^{⟂})^{∨}$) for~$i=1,…,d$.}
+\end{equation}
+These relations uniquely determine~$u_0$ and~$u_h$, and
+solutions~$(u_1,…,u_{h-1})$ exist iff the values~$v_i$ also satisfy the
+relations~$b_{0} (v_{j},x) = b_{∞} (v_{j+1},x)$ for~$j = 1,…,h-1$ and~$x
+∈ E^{⟂}$.
+
+Define a map~$∂_h: (E^{⟂})^h → ((E^{⟂})^{∨})^{h-1}$ by
+\begin{equation}
+∂_h (v_1,…,v_h) = (b_{0}(v_1) - b_{∞}(v_2),…,b_{0} (v_h) - b_{∞}
+(v_{h-1})).
+\end{equation}
+Elements of the cokernel of~$∂_h$ are exactly isotropic vectors of
+degree~$≤ h-1$ in~$E^{⟂}$; since $b$~has minimal index~$≥ h$, the
+map~$∂_h$ is surjective. This proves that the map $V^h → (V/E^{⟂})^h ⊕
+((E^{⟂})^{∨})^{h-1}$ defined by the relations between the~$v_j$ is
+surjective, and therefore that suitable~$v_j$ exist. This proves the
+orthogonal decomposition~$V = V' ⊕ (E^{⟂}/E)$.
+
+It remains to prove that $V'$~has a basis in which $(b_{λ})$~has
+matrix~$K_{λ}$. This amounts to finding, when~$E = E^{⟂}$, a
+retraction~$w$ of~$E ↪ V$ such that, for all~$x, y ∈ V$, $b_{λ} (x-w(x),
+y-w(y)) = 0$, or in other words~$b_{λ} (x, y) = b_{λ} (x, w(y)) + b_{λ}
+(w(x), y)$.
+\end{proof}}
+
 \begin{proof}
 Let~$(e_0, …, e_h)$ be a minimal isotropic vector. By
 Prop.~\ref{prop:minimal-indep}, there exist vectors~$f_1,…,f_h$ such
@@ -387,9 +452,9 @@ family~$(e_0,…, e_h, f_1, …, f_h)$ is free. For all~$i, j$, note that we hav
 b_{∞}(e_i,e_j) = b_0(e_i, e_{j+1}) = b_0(e_{j+1}, e_i) =
   b_{∞} (e_{j+1}, e_{i-1}) = b_{∞} (e_{i-1}, e_{j+1}).
 \end{equation}
-From this and the fact that~$b_{∞} (e_i, e_d) = b_{∞} (e_d, e_i)$
+From this and the fact that~$b_{∞} (e_i, e_h) = b_{∞} (e_h, e_i)$
 and~$b_0 (e_i, e_0) = b_0 (e_0, e_i) = 0$, we deduce that for all~$0 ≤
-i,j ≤ d$, we have~$b_{∞} (e_i, e_j) = b_0 (e_i, e_j) = 0$. Therefore,
+i,j ≤ h$, we have~$b_{∞} (e_i, e_j) = b_0 (e_i, e_j) = 0$. Therefore,
 in any basis completing the family~$(e_0, …, e_h; f_1, …, f_h)$,
 the pencil~$(b_{λ})$ has the symmetric matrix
 \begin{equation}\label{eq:matrix-b1}
