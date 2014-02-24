@@ -44,10 +44,27 @@
 \def\Ot{\widetilde{O}}
 \def\plusort{\stackrel{⟂}{⊕}}
 %>>>
+% Stretching diagonal dots%<<<
+\makeatletter
+\def\clap #1{\hbox to 0pt{\hss#1\hss}}
+\def\stretchdots#1#2#3#4{
+  \setbox0=\hbox{$#4$}\dimen0= \wd0 \advance \dimen0 2\arraycolsep
+  \rlap{\kern -\arraycolsep \hbox to \dimen0 {%
+  \hss \raise #1 \clap{$.$}\hss
+  \hss \raise #2 \clap{$\m@th.$}\hss
+  \hss \raise #3 \clap{$\m@th.$}\hss}}%
+  \kern \wd0
+}
+\def\siddots{\stretchdots{0pt}{4pt}{8pt}}
+\def\sddots{\stretchdots{8pt}{4pt}{0pt}}
+\makeatother%>>>
 \usepackage{color}
 \definecolor{nouveau}{rgb}{.05,.5,.1}
+\definecolor{ancien}{rgb}{.5,.1,.05}
 \long\def\commentaire#1{{\bfseries\textcolor{red}{#1}}}
 \long\def\nouveau#1{{\color{nouveau}#1}}
+\long\def\ancien#1{{\color{ancien}#1}}
+
 %>>>1
 
 \begin{document}
@@ -84,6 +101,7 @@ be recovered in cubic time.
 \end{abstract}%>>>
 \section*{Introduction}%<<<1
 \subsection*{The IP1S and IP2S problems}%<<<2
+
 
 The \emph{Isomorphism of Polynomial with Two Secrets} (IP2S) problem is
 the following. Given a field~$k$ and two $m$-uples $\bm{a} = (a_1, …,
@@ -171,7 +189,7 @@ Finally, very recently Berthomieu, Faugère and Perret
 in~\cite{DBLP:journals/corr/BerthomieuFP13} proposed a polynomial
 algorithm for IP1S with any number of equations when~$2 ≠ 0$. Given two
 families of polynomials over a field~$k$, they give a solution to the
-IP1S problem over a tower~$k'$ of real quadratic extension (a \emph{real
+IP1S problem over a tower~$k'$ of real quadratic extensions (a \emph{real
 quadratic extension} being obtained by adjoining the square root of a sum
 of squares) of~$k$. This solves the IP1S problem over the original
 field~$k$ only if $k$~is \emph{Euclidean}, \emph{i.e.} has no real
@@ -226,6 +244,7 @@ secret. This is done using the factorization of the characteristic
 polynomial.
 
 \subsection*{Mathematical background and notations}%<<<2
+Throughout this document, $k$~is a field such that~$2 ∈ k^{×}$.
 Let~$V$ be a $n$-dimensional vector space over the field~$k$. We study
 the IP1S and IP2S problems for \emph{quadratic forms} on~$V$, which are
 homogeneous polynomials of degree~$2$ in some coordinates on~$V$. To a
@@ -239,16 +258,16 @@ identity}
 \begin{equation*}\label{eq:polarity}
 b(x,x) = 2q(x).
 \end{equation*}
-If~$2 ≠ 0$ in~$k$, then the polarity identity is a bijection between
+~$2 ≠ 0$ in~$k$, then the polarity identity is a bijection between
 quadratic forms and bilinear forms. Therefore, instead of quadratic
 forms, we shall study directly bilinear forms.
 
-We note that, if~$2 = 0$ in~$k$, the situation is much more complicated;
+In the case where~$2 = 0$ in~$k$, the situation is much more complicated;
 the polarity identity is no longer a bijection, but polar forms are
 instead alternate bilinear forms. This means that their classification is
-very different from the odd-characteristic
-case~\cite{milnorhusemoller}, and relies on symplectic groups and
-Artin-Schreier type equations, \emph{i.e.} of the type~$x^2+x+C = 0$.
+very different from the odd-characteristic case~\cite{milnorhusemoller},
+and relies on symplectic groups and Artin-Schreier type equations,
+\emph{i.e.} of the type~$x^2+x+C = 0$.
 
 Let~$V^{∨}$ be the dual of the vector space~$V$. A bilinear form~$b$
 on~$V$ is the same as a linear map~$b: V → V^{∨}$. The bilinear form is
@@ -258,9 +277,19 @@ endomorphism~$u^{⋆}$ of~$V$ such that~$b(x,u(y)) = b(u^{⋆}(x), y)$; the
 endomorphism~$u^{⋆}$ is called the \emph{left-adjoint} of~$u$. If $b$~is
 symmetric then left- and right-adjoints coincide.
 
-\nouveau{Two elements~$x$ and~$y$ of~$V$ are \emph{orthogonal} for~$b$
-if~$b(x,y) = 0$; we write~$x ⟂ y$. The orthogonal of a sub-space~$W ⊂ V$
-is~$W^{⟂}$.}
+An \emph{(affine) pencil of symmetric bilinear
+forms} over~$V$, or a \emph{symmetric pencil} in short, is the data of a
+pair of symmetric bilinear forms~$\bm{b} = (b_{∞}, b_{0})$ over~$V$. We
+write this pencil in affine form as~$b_{λ} = -λ b_{∞} + b_{0}$, and in
+projective form as~$b_{λ:μ} = -λ b_{∞} + μ b_{0}$, where $b_{0}$
+and~$b_{∞}$ are symmetric bilinear forms.
+
+\nouveau{Two elements~$x$ and~$y$ of~$V$ are \emph{orthogonal} for a
+bilinear form~$b$ if~$b(x,y) = 0$. They are orthogonal
+for a pencil~$(b_{λ})$ if, for all~$λ$, $b_{λ}(x,y) = 0$. We write~$x
+⟂_{b} y$, or $x ⟂ y$ when the bilinear form or pencil is clear from
+context. The orthogonal of a sub-space~$W ⊂ V$ is~$W^{⟂}$. A space~$W$
+\emph{self-orthogonal} if~$W ⊂ W^{⟂}$.}
 
 \medbreak
 
@@ -289,15 +318,8 @@ polynomials with degree~$< \deg p$.
 \section{IP1S in the possibly singular case}%<<<1
 \label{S:IP1S-singular}
 \subsection{Regular and singular pencils}%<<<2
-Throughout this document, $k$~is a field such that~$2 ∈ k^{×}$. Let~$V$
-be a vector space. An \emph{(affine) pencil of symmetric bilinear forms}
-over~$V$, or a \emph{symmetric pencil} in short, is the data of a pair of
-symmetric bilinear forms~$\bm{b} = (b_{∞}, b_{0})$ over~$V$. We write
-this pencil in affine form as~$b_{λ} = -λ b_{∞} + b_{0}$, and in
-projective form as~$b_{λ:μ} = -λ b_{∞} + μ b_{0}$, where $b_{0}$
-and~$b_{∞}$ are symmetric bilinear forms.
-
-The \emph{characteristic polynomial} of the symmetric pencil~$(b_{λ})$ is
+Let~$b = (b_{λ})$ be a bilinear pencil over the space~$V$. The
+\emph{characteristic polynomial} of the symmetric pencil~$(b_{λ})$ is
 either the polynomial~$f(λ) = \det (λ b_{∞} + b_{0})$, or its homogeneous
 form~$f(λ: μ) = \det (λ b_{∞} + μ b_{0})$. If $\dim_{k} V = n$, then
 $f(λ: μ)$~is homogeneous of degree~$n$. The pencil~$(b_{λ})$ is called
@@ -349,7 +371,9 @@ independent.
 
 \begin{proof}
 We first prove~(ii). Assume that there exists a non-trivial linear
-relation~$α_1 e_0 + … + α_h e_{i}$ satisfies the relations
+relation~$α_1 b_0 e_1 + … + α_h b_0 e_{h} = 0$ and define
+vectors~$e'_0.…,e'_{h-1}$ by $e'_i = α_{h-i} e_0 + … + α_{h} e_i$. These
+vectors satisfy the relations
 \begin{equation}\label{eq:relation-e'}
 \begin{split}
 b_0 e'_0 &= α_h b_0 e_0 = 0, \\
@@ -367,35 +391,37 @@ relation. Then since $α_1 b_0(e_1) + … + α_h b_0(e_h) = 0$, by~(ii) we
 must have~$α_1 = … = α_h = 0$, which in turn implies~$e_0 = 0$. However,
 in this case we see that~$e_1+…+ λ^{h-1} e_h$ is isotropic of degree~$≤
 h-1$.
+
+\nouveau{%
+We now prove~(iii). For all~$i, j$, note that we have
+\begin{equation}\label{eq:zero-bij}
+b_{∞}(e_i,e_j) = b_0(e_i, e_{j+1}) = b_0(e_{j+1}, e_i) =
+  b_{∞} (e_{j+1}, e_{i-1}) = b_{∞} (e_{i-1}, e_{j+1}).
+\end{equation}
+From this and the fact that~$b_{∞} (e_i, e_h) = b_{∞} (e_h, e_i)$
+and~$b_0 (e_i, e_0) = b_0 (e_0, e_i) = 0$, we deduce that for all~$0 ≤
+i,j ≤ h$, we have~$b_{∞} (e_i, e_j) = b_0 (e_i, e_j) = 0$.
+}
 \end{proof}
 %>>>
 
-Define matrices~$K'_0, K'_{∞}$ of size~$(h+1)×d$ and $K_{0}, K_{∞}$ of
-size~$(2h+1)×(2h+1)$ by
-\begin{equation}\label{eq:def-K}
-K'_0 = \mat{0&&0\\1&⋱&\\&⋱&0\\0&&1}, \quad
-K'_{∞} = \mat{1&&0\\0&⋱&\\&⋱&1\\0&&0}, \qquad
-K_{λ} = \mat{0&K'_{λ}\\\transpose{K'_{λ}}&0}.
-\end{equation}
+\nouveau{%
+A \emph{Kronecker module} is a vector space~$V$ with a symmetric
+pencil~$(b_{λ})$ such that the coordinates~$e_i$ of a minimal isotropic
+vector~$∑ λ^i e_i$ span a space~$E$ satisfying~$E = E^{⟂}$.
 
-\begin{prop}\label{prop:kronecker1}%<<<
-Let~$(b_{λ})$ be a symmetric pencil with minimal index~$h$. There exists
-a basis of~$V$ in which the pencil~$(b_{λ})$ has the matrix 
-\[ B_{λ} = \mat{K_λ&0\\0&B'_{λ}}, \]
-where $B'_{λ}$ is a symmetric pencil with minimal index at least~$h$.
+\begin{prop}\label{prop:kronecker-split}
+Let~$(b_{λ})$ be a symmetric pencil with minimal isotropic vector~$e =
+e_0 + … + λ^h e_h$. Then $V$~has, as an orthogonal direct factor,
+a Kronecker module~$K_E$ containing the vectors~$e_i$.
 \end{prop}
 
-Note in particular that the case~$h = 0$ corresponds to the matrix~$K_0$,
-which is the zero matrix of size~$1 × 1$, and to a vector belonging to
-all the kernels of~$b_{λ}$.
-
-
-\nouveau{\begin{proof}
-Let~$∑ λ^i e_i$ be a minimal isotropic vector, $h$~its degree, $E ⊂ V$
-the sub-space spanned by the vectors~$e_i$, and~$E^{⟂}$ the orthogonal
-of~$E$. By Prop.~\ref{prop:minimal-indep}, we know that $\dim E = h+1$,
-$\dim V/E^{⟂} = h$, and~$E ⊂ E^{⟂}$. Morevoer, $(b_{λ})$~restricts to a
-bilinear pencil on~$E^{⟂}/E$, whose minimal degree is at least~$≥ h$.
+\begin{proof}
+Let $E ⊂ V$~be the sub-space spanned by the vectors~$e_i$ and~$E^{⟂}$ be
+its orthogonal. Prop.~\ref{prop:minimal-indep} shows that
+$\dim E = h+1$, $\dim V/E^{⟂} = h$, and~$E ⊂ E^{⟂}$. We show
+that~$E^{⟂}/E$~is an orthogonal direct factor of~$V$; its orthogonal
+supplement will be the required Kronecker module.
 \begin{equation}\label{eq:diagram}
 \xymatrix@R-=3ex{
 E\ar[r]\ar@{=}[d] \ar@<1ex>@/^/@{<.}[r]^{u} & E^{⟂}\ar[r]\ar[d]
@@ -403,12 +429,10 @@ E\ar[r]\ar@{=}[d] \ar@<1ex>@/^/@{<.}[r]^{u} & E^{⟂}\ar[r]\ar[d]
 E\ar[r] & V\ar[r]\ar[d] & V/E\ar[d]\\
  & V/E^{⟂} \ar@{=}[r] \ar@<1ex>@/^/@{.>}[u]^{v} & V/E^{⟂} \\
 }\end{equation}
-We first prove that there exists an orthogonal decomposition~$V =
-V' ⊕ (E^{⟂}/E)$, where $V'$~is an extension of~$V/E^{⟂}$ by~$E$.
-Such a decomposition amounts to a retraction~$u$ of the injection~$E ↪
-E^{⟂}$ and a section~$v$ of the projection~$V → V/E^{⟂}$, such that for
-all~$x ∈ E^{⟂}, y ∈ V/E^{⟂}$ and for all~$λ$, the relation~$b_{λ}(u(x),
-v(y)) = b_{λ}(x, v(y))$ holds.
+A split extension~$0 → K_E → V → E^{⟂}/E → 0$ is given by a
+retraction~$u$ of the injection~$E ↪ E^{⟂}$ and a section~$v$ of the
+projection~$V → V/E^{⟂}$; this extension is orthogonal if, for
+all~$x ∈ E^{⟂}, y ∈ V/E^{⟂}$, $(x-u(x)) ⟂ v(y)$.
 
 Write~$u(x) = ∑ u_i(x) e_i$ where~$u_0,…,u_h ∈ (E^{⟂})^{∨}$ and let the
 section~$v$ be defined by elements~$v_1,…,v_h ∈ V$ such that~$b_0(e_i,
@@ -434,20 +458,80 @@ degree~$≤ h-1$ in~$E^{⟂}$; since $b$~has minimal index~$≥ h$, the
 map~$∂_h$ is surjective. This proves that the map $V^h → (V/E^{⟂})^h ⊕
 ((E^{⟂})^{∨})^{h-1}$ defined by the relations between the~$v_j$ is
 surjective, and therefore that suitable~$v_j$ exist. This proves the
-orthogonal decomposition~$V = V' ⊕ (E^{⟂}/E)$.
+orthogonality of the  decomposition~$V = K_E ⊕ (E^{⟂}/E)$.
+\end{proof}
 
-It remains to prove that $V'$~has a basis in which $(b_{λ})$~has
-matrix~$K_{λ}$. This amounts to finding, when~$E = E^{⟂}$, a
-retraction~$w$ of~$E ↪ V$ such that, for all~$x, y ∈ V$, $b_{λ} (x-w(x),
-y-w(y)) = 0$, or in other words~$b_{λ} (x, y) = b_{λ} (x, w(y)) + b_{λ}
-(w(x), y)$.
-\end{proof}}
+Define matrices~$K'_{h}$ of size~$(h+1) × h$
+and~$K_{h}$ of size~$(2h+1) × (2h+1)$ by
+\begin{equation}\label{eq:def-K}
+{\def\arraystretch{.9}
+K'_h = \mat{λ&&0\\1&\sddots{λ}&\\&\sddots{λ}&λ\\0&&1}}, \quad
+K_{h} = \mat{0&K'_{h}\\\transpose{K'_{h}}&0}.
+\end{equation}
+
+\begin{prop}\label{prop:kronecker-matrix}
+Let~$(V, b_{λ})$ be a Kronecker module with minimal index~$h$. There
+exists a basis of~$V$ in which the pencil~$(b_{λ})$ has the
+matrix~$K_{h}$.
+\end{prop}
+
+Note in particular that the case~$h = 0$ corresponds to the matrix~$K_0$,
+which is the zero matrix of size~$1 × 1$, and to a vector belonging to
+all the kernels of~$b_{λ}$.
+
+\begin{proof}
+Let~$e_0 + … + λ^{h} e_h$ be a minimal isotropic vector for~$(b_{λ})$ and
+$E$~be the span of the~$e_i$; we need to prove that $E$~has a supplement
+which is self-orthogonal for the pencil~$(b_{λ})$. Such a supplement
+corresponds to a retraction~$w$ of~$V ↪ E$ such that, for all~$x,y ∈ V$,
+$(x - w(x)) ⟂ (y-w(y))$, or:
+\begin{equation}\label{eq:kro-self-orth}
+b_{λ} (x, y) = b_{λ} (x, w(y)) + b_{λ} (w(x), y)
+\quad \text{for all~$λ$ and for $x,y ∈ V$.}
+\end{equation}
+A basis of~$V/E^{⟂}$ is given by vectors~$f_1,…,f_d ∈ V$ such that
+$b_0(e_i, f_j) = 1$ if~$i = j$ and $0$~otherwise. Since $E = E^{⟂}$, the
+family~$e_0,…,e_h;f_1,…,f_h$ is a basis of~$V$. Write~$w(f_j) = ∑ w_{ij}
+e_i$. The equations~\eqref{eq:kro-self-orth} then amount to
+\begin{equation}\label{eq:wij}
+w_{i,j} + w_{j,i} = b_{0} (f_i, f_j);\quad
+w_{i-1,j} + w_{j-1,i} = b_{∞} (f_i, f_j).
+\end{equation}
+This defines the values~$w_{i,i} = \frac{1}{2} b_{0} (f_i, f_i)$
+and~$w_{i-1,i} = \frac{1}{2} b_{∞} (f_i, f_i)$, which is possible
+since~$2 ∈ k^{×}$. All other values follow
+from the relation~$w_{i,j} - w_{i-1,j+1} = b_{0} (f_i, f_j) - b_{∞} (f_i,
+f_{j+1})$.
+\end{proof}
+}%
+
+\ancien{%
+Define matrices~$K'_0, K'_{∞}$ of size~$(h+1)×d$ and $K_{0}, K_{∞}$ of
+size~$(2h+1)×(2h+1)$ by
+\begin{equation}\label{eq:def-K}
+K'_0 = \mat{0&&0\\1&⋱&\\&⋱&0\\0&&1}, \quad
+K'_{∞} = \mat{1&&0\\0&⋱&\\&⋱&1\\0&&0}, \qquad
+K_{λ} = \mat{0&K'_{λ}\\\transpose{K'_{λ}}&0}.
+\end{equation}
+
+\begin{prop}\label{prop:kronecker1}%<<<
+Let~$(b_{λ})$ be a symmetric pencil with minimal index~$h$. There exists
+a basis of~$V$ in which the pencil~$(b_{λ})$ has the matrix 
+\[ B_{λ} = \mat{K_λ&0\\0&B'_{λ}}, \]
+where $B'_{λ}$ is a symmetric pencil with minimal index at least~$h$.
+\end{prop}
+
+Note in particular that the case~$h = 0$ corresponds to the matrix~$K_0$,
+which is the zero matrix of size~$1 × 1$, and to a vector belonging to
+all the kernels of~$b_{λ}$.
+
 
 \begin{proof}
 Let~$(e_0, …, e_h)$ be a minimal isotropic vector. By
 Prop.~\ref{prop:minimal-indep}, there exist vectors~$f_1,…,f_h$ such
 that~$b_0(e_i, f_j) = 1$ when~$i = j$ and~$0$ otherwise, and the
-family~$(e_0,…, e_h, f_1, …, f_h)$ is free. For all~$i, j$, note that we have
+family~$(e_0,…, e_h, f_1, …, f_h)$ is free.
+For all~$i, j$, note that we have
 \begin{equation}\label{eq:zero-bij}
 b_{∞}(e_i,e_j) = b_0(e_i, e_{j+1}) = b_0(e_{j+1}, e_i) =
   b_{∞} (e_{j+1}, e_{i-1}) = b_{∞} (e_{i-1}, e_{j+1}).
@@ -482,7 +566,7 @@ the relations
 $B'_0 y_i - B'_{∞} y_{i+1} = c'_{i+1} - c_i$ for~$i = 1,…,h-1$. This
 translates into matrix form as
 \begin{equation}\label{eq:chvar-y}
-\mat{B'_0&-B'_{∞}&&0\\&⋱&⋱&\\0&&B'_0&-B'_{∞}} ·
+\mat{B'_0&-B'_{∞}&&0\\&\;\sddots{-B'_{∞}}&\sddots{-B'_{∞}}&\\0&&B'_0&-B'_{∞}} ·
   \mat{y_1\\⋮\\y_h} = \mat{c'_2-c_1\\⋮\\c'_h-c_{h-1}}.
 \end{equation}
 Let~$\ro B$ be the left-side matrix. Then any element of the kernel
@@ -519,6 +603,7 @@ f_i$. Then the bilinear pencil~$b_{λ}$ is defined by
 b_{λ}\,(e(x),\, f(y)) \;=\; (x+λ) F(xy), \quad \text{where $F(t) = 1 + … +
 t^{h-1}$}.
 \end{equation}
+}
 
 \begin{prop}[(Kronecker form)]\label{prop:kronecker}%<<<
 Let~$(b_{λ})$ be a symmetric pencil on~$V$. There exists a basis of~$V$
@@ -923,7 +1008,7 @@ the identity matrix, or the diagonal matrix~$(1, …, 1, δ)$.
 Use propositions~\ref{prop:bb-diag} and~\ref{prop:local-diag}.
 \end{proof}%>>>
 
-\subsection{Solving the general case of IP1S}
+\subsection{Solving the general case of IP1S}%<<<2
 \begin{thm}\label{thm:IP1S}
 Let~$k$ be a finite field of characteristic~$≠2$ and~$(b_{λ})$ be a
 pencil of $n$-dimensional symmetric bilinear forms over~$k$.
@@ -937,19 +1022,20 @@ pencil with diagonal blocks of the following form:
 Prop.~\ref{prop:kronecker};
 \item \emph{finite local blocks}~$L_{p,d,u}$, defined as the~$d ×
 d$-block matrix
-\[ L_{p,d,u} \;=\; \mat{0&&&T_p u (λ + M_p)\\&&⋰&T_p u\\
-  &⋰&⋰&\\T_pu(λ+M_p)&T_p u&&0}, \]
+\[ L_{p,d,u} \;=\; \mat{0&&&T_p u (λ + M_p)\\&&\siddots{T_pu}&T_p u\\
+  &\siddots{T_pu}&\siddots{T_pu}&\\T_pu(λ+M_p)&T_p u&&0}, \]
 where $p$~is an irreducible polynomial, $M_p$~is the companion matrix
 of~$p$, $T_p$~is a prescribed invertible matrix such that both~$T_p$
 and~$T_p M_p$~are symmetric, $d$~is an integer, and $u$~is either the
 identity matrix or a prescribed non-square element of the field~$k[M_p]$,
-with the extra condition that for fixed~$(p, d)$, only one of the
+with the extra condition that for fixed~$(p, d)$, at most one of the
 values~$u$ may be different from~$1$;
 \item \emph{infinite local blocks}~$L_{1,d,u}$, defined as
 the~$d×d$-matrix
-\[ L_{1,d,u} \;=\; u\mat{0&&&λ\\&&⋰&1\\&⋰&⋰&\\λ&1&&0}, \]
+\[ L_{1,d,u} \;=\; u\mat{0&&&1\\&&\siddots{λ}&λ\\
+  &\siddots{λ}&\siddots{λ}&\\1&λ&&0}, \]
 where $d$~is an integer, $u$~is either 1 or a prescribed non-square
-element of~$k$, and for fixed~$d$, only one of the values~$u$ may be
+element of~$k$, and for fixed~$d$, at most one of the values~$u$ may be
 different from~$1$.
 \end{enumerate}
 \end{thm}
@@ -1009,6 +1095,45 @@ equivalence, whereas we need quadratic forms up to congruence. However, as the
 corresponding problem over a finite field has not been much studied, the
 existence of a faster algorithm for computing the Kronecker kernel is not
 unlikely.
+
+\nouveau{
+\paragraph{Decisional IP1S and extensions of scalars.}
+
+The solution of IP1S over an extension field
+in~\cite{DBLP:journals/corr/BerthomieuFP13} raises the following
+question: given two pencils~$\bm{a}$, $\bm{b}$ which are IP1S-equivalent
+over an extension~$k'$ of the field~$k$, are they always equivalent over
+the field~$k$?
+
+The structure given by theorem~\ref{thm:IP1S} gives an easy answer
+to this question. As the Kronecker blocks are invariant by extension of
+scalars, the problem reduces to the finite and infinite local
+blocks~$L_{p,d,u}$. For an irreducible polynomial~$p$, we have
+\begin{equation}\label{local-extension}
+L_{p,d,u} ⊗_{k} k' = \begin{cases}
+L_{p,d,u'},&\text{if $p$~is irreducible over~$k'$;}\\
+⨁ L_{X-μ,d,u'},&\text{if $p$~splits as~$∏_μ(X-μ)$ over~$k'$,}
+\end{cases}
+\end{equation}
+where $u'$~is the image in~$k'^{×}/(k'^{×})^2$ of~$u$. The
+map~$k^{×}/(k^{×})^2 → k'^{×}/(k'^{×})^2$ is bijective when $[k':k]$~is
+odd and zero when it is even. From this we deduce:
+
+\begin{prop}\label{prop:IP1S-extension}
+Let~$\bm{a}, \bm{b}$ be two pencils which are IP1S-equivalent over a
+field extension~$k'$ of the finite field~$k$.
+\begin{enumerate}
+\item If the degree~$[k':k]$~is odd, then $\bm{a}$ and~$\bm{b}$ are
+equivalent over~$k$.
+\item If the degree~$[k':k]$~is even, them $\bm{a}$ and~$\bm{b}$ are
+equivalent over~$k$ iff, for all local factors~$L_{p,d,u}$, they have the
+same value~$u(p,d) ∈ k^{×}/(k^{×})^2$.
+\end{enumerate}
+\end{prop}
+
+In particular, when $k → k'$~is a quadratic tower, solving the IP1S
+problem over~$k'$ does not solve the decisional form of IP1S over~$k$.
+}
 
 %>>>1
 \section{Computation of the second secret for IP2S}%<<<1
@@ -1201,21 +1326,27 @@ fields of characteristic two and to more than two equations.
 
 The case of a binary base field is very important for cryptographical
 applications. The cyclic case was solved in~\cite{MPG2013}. To solve
-the general case, at least three roadblocks remain: the Kronecker form
-for the singular part of a bilinear pencil does not apply, as the proof
-of Prop.~\ref{prop:kronecker1} above requires that~$2 ≠ 0$; quadratic
+the general case, at least two roadblocks remain:
+% the Kronecker form
+% for the singular part of a bilinear pencil does not apply, as the proof
+% of Prop.~\ref{prop:kronecker1} above requires that~$2 ≠ 0$;
+quadratic
 forms over a local algebra behave differently~\cite[§93]{omeara};
 finally, extending from bilinear to quadratic forms requires a study of
 the action of a symplectic group on the diagonal coefficients, and this
-group becomes quite impractical in the non-cyclic case.
+group becomes quite impractical in the non-cyclic case. We note however
+that the Kronecker decomposition works, with minimal changes in the
+proof, when~$2 = 0$: namely, solving~\eqref{eq:wij} is still possible, as
+in this case the polar form~$b_{λ}$ is an \emph{alternate} symmetric
+form.
 
 On the other hand, studying the general problem with $m ≥ 3$~quadratic
 equations departs from the classic results about pencils of quadratic
-forms; therefore, there are less tools available. Even in the regular
+forms; therefore, less tools are available. Even in the regular
 case, our work heavily uses the factorization of the characteristic
-polynomial. The analogous case for~$m ≥ 3$ requires working in
-homogeneous polynomials in~$m$ variables, which is a less pleasant
-algebra.
+polynomial. An analogous strategy for~$m ≥ 3$ would require working in
+homogeneous polynomials in~$m$ variables and doing some serious algebraic
+geometry.
 
 % Biblio<<<1
 \bibliographystyle{plain}
