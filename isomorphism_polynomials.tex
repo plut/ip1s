@@ -62,6 +62,7 @@
 \long\def\commentaire#1{{\bfseries\textcolor{red}{#1}}}
 
 %>>>1
+%commentaire
 
 \begin{document}
 \title[Solving ``Isomorphism of Polynomials with Two Secrets'']%
@@ -285,7 +286,7 @@ bilinear form~$b$ if~$b(x,y) = 0$. They are orthogonal
 for a pencil~$(b_{λ})$ if, for all~$λ$, $b_{λ}(x,y) = 0$. We write~$x
 ⟂_{b} y$, or $x ⟂ y$ when the bilinear form or pencil is clear from
 context. The orthogonal of a sub-space~$W ⊂ V$ is~$W^{⟂}$. A space~$W$
-\emph{self-orthogonal} if~$W ⊂ W^{⟂}$.
+is \emph{self-orthogonal} if~$W ⊂ W^{⟂}$.}
 
 \medbreak
 
@@ -411,7 +412,9 @@ a Kronecker module~$K_E$ containing the vectors~$e_i$.
 \begin{proof}
 Let $E ⊂ V$~be the sub-space spanned by the vectors~$e_i$ and~$E^{⟂}$ be
 its orthogonal. Prop.~\ref{prop:minimal-indep} shows that
-$\dim E = h+1$, $\dim V/E^{⟂} = h$, and~$E ⊂ E^{⟂}$. We show
+$\dim E = h+1$, 
+$\dim V/E^{⟂} = h$, %ce point n'est pas immédiat pour moi. Gilles
+ and~$E ⊂ E^{⟂}$. We show
 that~$E^{⟂}/E$~is an orthogonal direct factor of~$V$; its orthogonal
 supplement will be the required Kronecker module.
 \begin{equation}\label{eq:diagram}
@@ -1007,10 +1010,11 @@ to this question. As the Kronecker blocks are invariant by extension of
 scalars, the problem reduces to the finite and infinite local
 blocks~$L_{p,d,u}$. For an irreducible polynomial~$p$, we have
 \begin{equation}\label{local-extension}
-L_{p,d,u} ⊗_{k} k' = \begin{cases}
-L_{p,d,u'},&\text{if $p$~is irreducible over~$k'$;}\\
-⨁ L_{X-μ,d,u'},&\text{if $p$~splits as~$∏_μ(X-μ)$ over~$k'$,}
-\end{cases}
+L_{p,d,u} ⊗_{k} k' = %\begin{cases}
+%L_{p,d,u'},&\text{if $p$~is irreducible over~$k'$;}\\
+⨁ L_{p_i,d,u'}, %&
+\text{if $p$~splits as~$∏_ip_i$ over~$k'$,}
+%\end{cases}
 \end{equation}
 where $u'$~is the image in~$k'^{×}/(k'^{×})^2$ of~$u$. The
 map~$k^{×}/(k^{×})^2 → k'^{×}/(k'^{×})^2$ is bijective when $[k':k]$~is
@@ -1240,7 +1244,7 @@ On the other hand, studying the general problem with $m ≥ 3$~quadratic
 equations departs from the classic results about pencils of quadratic
 forms; therefore, less tools are available. Even in the regular
 case, our work heavily uses the factorization of the characteristic
-polynomial. An analogous strategy for~$m ≥ 3$ would require a fine
+polynomial. An analogous strategy for~$m ≥ 3$ would require a detailed
 geometric study of the hypersurface defined by this characteristic
 polynomial.
 
@@ -1394,65 +1398,3 @@ Let $M$ and $T$ be matrices as in Prop~\ref{transpose-symmetric}. Then $T(\lambd
 \fi
 
 \end{document}%<<<1
-
-
-% \section{In characteristic two}%<<<1
-% \subsection{Action of the commutant on diagonal matrices}
-% 
-% Let~$u$ be an integer. We define a $k-$linear map~$λ_u$ from $u ×
-% u$-matrices to~$R_u = k[H]/H^u$ in the following way:
-% \begin{equation}
-% λ_u((a_{i,j})_{i,j=1,…,u}) = ∑_{i=1}^{u} a_{i,i} H^{i-1}.
-% \end{equation}
-% 
-% \begin{prop}
-% x_i^2 H^i$. Then for all~$x ∈ k[H_u]$,
-% \begin{equation}
-% λ_u (\transpose{x} \, A\, x) = φ(x)\, λ_u(A).
-% \end{equation}
-% \end{prop}
-% 
-% 
-% \begin{proof}
-% Given that $λ_u$~is $k$-linear, it is enough to prove that
-% $λ_u(\transpose{H_u} \, A\, H_u) = H λ_u(A)$.
-% \end{proof}
-% 
-% 
-% \begin{lem}
-% Let~$u, v$ be two integers and~$A ∈ R^{u × u}$.
-% \begin{equation}
-% λ_v ( \transpose{J_{u,v}}\, A\, J_{u,v}) \;=\;
-% H^{\max (v-u, 0)}\,λ_u(A).
-% \end{equation}
-% \end{lem}
-% 
-% 
-% \begin{prop}
-% Let~$n_1 ≥ … ≥ n_r$. For any symmetric matrix~$A$ written as
-% blocks~$A_{i,j}$ of size~$n_i × n_j$, define~$Λ(A)$ as the line matrix of
-% length~$r$ with coefficients in~$R_1 = k[H]/H^{n_1}$:
-% \begin{equation*}
-% Λ(A) = ( H^{n_1 - n_i}\, λ_{n_i} (A_{i,i}))_{i=1,…, r}.
-% \end{equation*}
-% Then, for any~$X ∈ \ro C(M)$:
-% \begin{equation}
-% Λ(\transpose{X}\,A\,X) = Λ(A)\, φ(Ψ(X)).
-% \end{equation}
-% \end{prop}
-% 
-% 
-% \begin{prop}
-% Let~$A = \mat{Δ_1 & TM \\ 0 & Δ_2}$ and~$X = \mat{X_{1,1} & X_{1,2}\\
-% X_{2,1} & X_{2,2}}$, where~$X_i ∈ \ro C(M)$ and~$Δ_i$ are diagonal.
-% 
-% Then $\transpose{X} A X$ has diagonal
-% \[ Λ(\transpose{X} A X) = ( Λ(Δ_1) φΨ(X{1,i}) + Λ(Δ_2) φψ(X_{2,i}) +
-%   Λ(\transpose{X_{1,i}} TM X_{2,i}))_{i=1,2}. \]
-% \end{prop}
-% 
-
-
-\end{document}
-% vim: fdm=marker fmr=<<<,>>>:
-
