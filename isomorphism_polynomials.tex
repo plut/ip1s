@@ -58,11 +58,8 @@
 \def\siddots{\stretchdots{0pt}{4pt}{8pt}}
 \def\sddots{\stretchdots{8pt}{4pt}{0pt}}
 \makeatother%>>>
-\usepackage{color}
-\long\def\commentaire#1{{\bfseries\textcolor{red}{#1}}}
 
 %>>>1
-%commentaire
 
 \begin{document}
 \title[Solving ``Isomorphism of Polynomials with Two Secrets'']%
@@ -72,7 +69,6 @@
 \classno{15A21,15A22,15A63,11T71}
 \maketitle
 
-%\commentaire{deuxième essai avec mise en ligne du PDF}
 \begin{abstract}%<<<
 In this paper, we study the Isomorphism of Polynomial (IP) problem
 with~$m=2$ homogeneous quadratic polynomials of $n$ variables over a finite field of odd
@@ -181,7 +177,6 @@ of solutions is small. For all other instances, the number of solutions
 is large, and it is well-known that in this case, such algorithms are
 less efficient.
 
-%\commentaire{2. parler du travail de Jeremy + Faugere et Ludovic}
 Finally, very recently Berthomieu, Faugère and Perret
 in~\cite{DBLP:journals/corr/BerthomieuFP13} proposed a polynomial
 algorithm for IP1S with any number of equations when~$2 ≠ 0$. Given two
@@ -1257,14 +1252,53 @@ polynomial.
 \section{Matrix reduction algorithm to Kronecker normal form}
 
 We explain how, given a pencil~$B = (B_{0}, B_{∞})$ in matrix form, we
-can compute the first Kronecker block of~$B$. This algorithm is a direct
+can compute the Kronecker blocks of~$B$. This algorithm is a direct
 translation of part~\ref{SS:Kronecker-reduction}.
 \newcounter{step}
 \def\step#1{\paragraph{Step \arabic{step}: #1.}\stepcounter{step}}
 
-\step{Compute a minimal isotropic vector~$(e_1,…,e_h)$}
+\step{Compute the minimal isotropic vectors~$(e_1,…,e_h)$}
 
-\commentaire{XXX}
+Define a \emph{chain} of length~$h$ to be a $h+1$-uple~$(e_0, …, e_h)$ of
+vectors of~$V$ such that the relations~$b_0 e_i = b_{∞} e_{i-1}$ hold for
+all~$i$.
+We can recursively compute a ``lower triangular'' basis for the space of
+$h$-chains in the following way: we determine vector spaces~$U_i$ and a
+linear map~$f: V → V$ such that the space of $h$-chains is defined by
+\begin{equation}\label{eq:echelon}
+e_0 ∈ U_h, \quad e_{i} ∈ f(e_{i-1}) + U_{h-i}.
+\end{equation}
+By putting the $n × (2n)$-matrix $(-B_{∞} | B_0)$ in lower row echelon
+form, we may compute a map~$f: V → V$ such that $b_{∞} x = b_{0} y$ iff
+$y ∈ f(x) + \Ker b_{0}$. This proves that the
+definition~\eqref{eq:echelon} is satisfied with~$U_0 = \Ker B_0$.
+
+A $(h+1)$-chain is a $(h+2)$-uple~$(e_0,…,e_{h+1})$ such that
+$(e_1,…,e_{h+1})$~is a $h$-chain and $b_{0} e_1 = b_{∞} e_0$.
+From this we see that~$e_1 ∈ U_h$ and~$e_i ∈ f(e_{i-1}) + U_{h-i}$ for
+all~$i ≥ 2$. This proves that $U_{h+1} = B_∞^{-1} (B_0 (U_{h}))$
+satisfies the relation~\eqref{eq:echelon}. Computing~$U_{h+1}$ from~$U_h$
+has a complexity of~$O(n^3)$ operations in the base field using Gaussian
+elimination, therefore computing~$U_h$ has a total complexity of~$O(n^3
+h)$.
+
+Isotropic vectors with degree~$≤ h$ correspond to $h$-chains satisfying
+the extra relations~$b_0(e_0) = 0$ and~$b_∞(e_h) = 0$. Only one of these
+need be considered since we can compute the other one by using an ``upper
+triangular'' basis for the space of $h$-chains and then taking the
+intersection, which will not change the overall complexity. The space of
+$h$-chains satisfying the first relation~$b_0(e_0) = 0$ is given by the
+extra relation $e_0 ∈ U_h ∩ \Ker B_0$; computing all the images~$e_i ∈
+f(e_{i-1}) + U_{h-i}$ has total complexity~$O(n^2 h)$.
+
+We can thus compute the space of isotropic vectors of degree~$≤ h$ with
+total complexity~$O(n^3 h)$; moreover, as this computation is triangular,
+it also gives the space of isotropic vectors of degree~$≤ h'$ for all~$h'
+≤ h$, so that we only need to perform one run of this algorithm for
+$h$~running up to the maximal value of~$(n-1)/2$, for a total cost
+of~$O(n^4)$. Once we have isolated the minimal Kronecker module~$K$
+of~$V$ in Step 2, we may then project this basis on the quotient~$V/K$ to
+directly obtain a (sorted) basis of the isotropic vectors of~$V/K$.
 
 \step{Compute a Kronecker module as a direct factor}
 Define vectors~$f_i$ such that~$b_0(e_i, f_j) = 1$ if~$i = j$ and
@@ -1298,10 +1332,10 @@ translates into matrix form as
 \mat{B'_0&-B'_{∞}&&0\\&\;\sddots{-B'_{∞}}&\sddots{-B'_{∞}}&\\0&&B'_0&-B'_{∞}} ·
   \mat{y_1\\⋮\\y_h} = \mat{c'_2-c_1\\⋮\\c'_h-c_{h-1}}.
 \end{equation}
+We may solve this equation using the same technique as that of Step~1,
+for a total cost of~$O(n^3 h)$. Computing the values~$(x_i)$ is then
+straightforward.
 
-\commentaire{XXX justifier pourquoi on s'en sort en~$O(n^3h)$ ? En
-principe il faudrait utiliser le même algorithme qu'à l'étape
-précédente...}
 
 \step{Put the Kronecker module in canonical form}
 We now compute a coordinate change
