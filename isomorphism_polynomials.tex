@@ -12,6 +12,7 @@
 \usepackage[all]{xy}
 
 \newnumbered{definition}{Definition}
+\newif\ifappendix \appendixtrue
 
 % Theorems, equations, counters%<<<
 \def\linkcounter#1#2{\edef\magic{\noexpand\let
@@ -220,7 +221,7 @@ which is the case where $b_{∞}$~is invertible. This is the object of
 section~\ref{S:IP1S-singular} of this document and uses the Kronecker
 classification of pencils of quadratic forms. Although this dates back to
 Kronecker, the classic proof uses complex analysis; we give a proof over
-any field where~$2 ≠ 0$.
+any field.
 
 We then prove that the regular case of the IP1S problem simplifies to a
 reduction problem for some quadratic forms over a local algebra. As this
@@ -256,7 +257,7 @@ forms, we shall study directly bilinear forms.
 
 In the case where~$2 = 0$ in~$k$, the situation is much more complicated;
 the polarity identity is no longer a bijection, but polar forms are
-instead alternate bilinear forms. This means that their classification is
+instead alternating bilinear forms. This means that their classification is
 very different from the odd-characteristic case~\cite{milnorhusemoller},
 and relies on symplectic groups and Artin-Schreier type equations,
 \emph{i.e.} of the type~$x^2+x+C = 0$.
@@ -324,10 +325,9 @@ symmetric pencil is reducible to the canonical form of Kronecker. This
 form is described in~\cite[XII(56)]{Gantmacher2}; however, the proof
 given there only applies to pencils over~$ℂ$, as its uses the computation
 of square roots of matrices via interpolation on the spectrum. We give
-here an algorithmic proof that applies to any field~$k$ such that~$2 ≠
-0$.
+here an algorithmic proof that applies to any field~$k$.
 
-\subsection{Reduction of (possibly singular) pencils to the Kronecker form} %<<<2
+\subsection{The Kronecker decomposition of the singular part of a pencil} %<<<2
 \label{SS:Kronecker-reduction}
 % Définition: indice minimal%<<<
 The pencil~$(b_{λ})$ defines a symmetric bilinear form on the
@@ -398,7 +398,7 @@ A \emph{Kronecker module} is a vector space~$V$ with a symmetric
 pencil~$(b_{λ})$ such that the coordinates~$e_i$ of a minimal isotropic
 vector~$∑ λ^i e_i$ span a space~$E$ satisfying~$E = E^{⟂}$.
 
-\begin{prop}\label{prop:kronecker-split}
+\begin{prop}\label{prop:kronecker-split}%<<<
 Let~$(b_{λ})$ be a symmetric pencil with minimal isotropic vector~$e =
 e_0 + … + λ^h e_h$. Then $V$~has, as an orthogonal direct factor,
 a Kronecker module~$K_E$ containing the vectors~$e_i$.
@@ -449,7 +449,7 @@ map~$∂_h$ is surjective. This proves that the map $V^h → (V/E^{⟂})^h ⊕
 ((E^{⟂})^{∨})^{h-1}$ defined by the relations between the~$v_j$ is
 surjective, and therefore that suitable~$v_j$ exist. This proves the
 orthogonality of the  decomposition~$V = K_E ⊕ (E^{⟂}/E)$.
-\end{proof}
+\end{proof}%>>>
 
 Define matrices~$K'_{h}$ of size~$(h+1) × h$
 and~$K_{h}$ of size~$(2h+1) × (2h+1)$ by
@@ -459,7 +459,7 @@ K'_h = \mat{λ&&0\\1&\sddots{λ}&\\&\sddots{λ}&λ\\0&&1}}, \quad
 K_{h} = \mat{0&K'_{h}\\\transpose{K'_{h}}&0}.
 \end{equation}
 
-\begin{prop}\label{prop:kronecker-matrix}
+\begin{prop}\label{prop:kronecker-matrix}%<<<
 Let~$(V, b_{λ})$ be a Kronecker module with minimal index~$h$. There
 exists a basis of~$V$ in which the pencil~$(b_{λ})$ has the
 matrix~$K_{h}$.
@@ -493,6 +493,11 @@ since~$2 ∈ k^{×}$. All other values follow
 from the relation~$w_{i,j} - w_{i-1,j+1} = b_{0} (f_i, f_j) - b_{∞} (f_i,
 f_{j+1})$.
 \end{proof}
+
+This last computation shows that the proof also hold in characteristic
+two if we further assume that the pencil~$b$ is alternating, which is the
+case for the polar part of a quadratic pencil.
+%>>>
 
 \begin{prop}[(Kronecker form)]\label{prop:kronecker}%<<<
 Let~$(b_{λ})$ be a symmetric pencil on~$V$. There exists a basis of~$V$
@@ -901,7 +906,7 @@ Use propositions~\ref{prop:bb-diag} and~\ref{prop:local-diag}.
 \begin{thm}\label{thm:IP1S}
 Let~$k$ be a finite field of characteristic~$≠2$ and~$(b_{λ})$ be a
 pencil of $n$-dimensional symmetric bilinear forms over~$k$.
-It is possible, using no more than~$\Ot(hn^3) ≤ \Ot(n^4)$ operations
+It is possible, using no more than~$\Ot(n^3(h+1)) ≤ \Ot(n^4)$ operations
 in~$k$, where $h ≤ n$~is the largest of the minimal indices of~$(b_{λ})$,
 to compute an isomorphism between~$(b_{λ})$ and a (unique) block-diagonal
 pencil with diagonal blocks of the following form:
@@ -938,6 +943,9 @@ same iff the two pencils are isomorphic in the IP1S sense, and in this
 case, composing the two transformations gives an answer to the
 computational IP1S problem.
 
+We note that, if $(b_{λ})$~is regular, then~$h = 0$ and the algorithm in
+this case has complexity~$\Ot(n^3)$.
+
 \paragraph{Algorithm and complexity.}
 
 The algorithm corresponding to Theorem~\ref{thm:IP1S} for a
@@ -970,17 +978,12 @@ over the local algebras is just the reduction over the residual field
 a Hensel lift.
 
 The only part not covered by classic algorithms is the reduction to
-Kronecker normal form performed in Step~\ref{it:alg-kronecker}. The
-computation of a minimal isotropic vector~$e = ∑ λ^i e_i$ amounts to a
-kernel computation over the polynomial ring~$k[λ]$. This requires
-handling polynomials of degree up to the minimal index~$h_1$ of~$(b_{λ})$
-and therefore has complexity~$\Ot(h_1 n^3)$. As this is performed for all
-minimal indices~$h_i$, the total complexity is~$\Ot(n^4)$. Computing a
-preimage by the map~$∂_h$ of~\eqref{eq:deriv-surj} has apparent
-complexity~$\Ot((nh)^3)$ as the corresponding matrix has size~$n'h ×
-n'(h+1)$, where~$n'=n-2h-1$. However, the matrix is block-sparse and all
-blocks are the same, therefore inverting a block needs only be done once.
-The complexity of this step is therefore~$\Ot(n^3h)≤ \Ot(n^4)$ as well.
+Kronecker normal form performed in Step~\ref{it:alg-kronecker}. Computing
+the minimal isotropic vectors requires solving a chain of~$h$ equations
+of the form~$b_{∞}(x) = b_0(y)$ and hence has a complexity~$O(n^3(h+1))$.
+The same applies to the computation of a preimage by the map~$∂_h$
+of~\eqref{eq:deriv-surj}. \ifappendix This algorithm is detailed in
+Appendix~\ref{A:algo} below. \fi
 
 There exist cubic algorithms computing the Kronecker kernel of pencils of
 linear maps over a characteristic zero field~\cite{beelen1988improved}.
@@ -1229,11 +1232,7 @@ quadratic
 forms over a local algebra behave differently~\cite[§93]{omeara};
 finally, extending from bilinear to quadratic forms requires a study of
 the action of a symplectic group on the diagonal coefficients, and this
-group becomes quite impractical in the non-cyclic case. We note however
-that the Kronecker decomposition works, with minimal changes in the
-proof, when~$2 = 0$: namely, solving~\eqref{eq:wij} is still possible, as
-in this case the polar form~$b_{λ}$ is an \emph{alternate} symmetric
-form.
+group becomes quite impractical in the non-cyclic case.
 
 On the other hand, studying the general problem with $m ≥ 3$~quadratic
 equations departs from the classic results about pencils of quadratic
@@ -1247,9 +1246,10 @@ polynomial.
 \bibliographystyle{plain}
 \bibliography{biblio}
 
-\iftrue
+\ifappendix
 \appendix
 \section{Matrix reduction algorithm to Kronecker normal form}
+\label{A:algo}
 
 We explain how, given a pencil~$B = (B_{0}, B_{∞})$ in matrix form, we
 can compute the Kronecker blocks of~$B$. This algorithm is a direct
