@@ -122,7 +122,7 @@ For the case of quadratic polynomials, the status of this problem is unclear des
 intensive research in the cryptographic community since this case is the most interesting 
 for practical schemes. There exists a claimed reduction between the quadratic IP1S problem and the GI
 problem~\cite{DBLP:conf/eurocrypt/PatarinGC98}, but we realized that this proof is incomplete. 
-Indeed, the proof works by induction and decompose any permutation as the composition of 
+Indeed, the proof works by induction and decomposes any permutation as the composition of 
 transpositions. It is possible to write a system of quadratic polynomials such that the only solutions 
 of the IP1S problem will be the identity or a transposition by modifying a bit the systems proposed 
 in~\cite{DBLP:conf/eurocrypt/PatarinGC98}. However, it is not obvious how we can compose the systems 
@@ -141,8 +141,8 @@ being homogeneous polynomials of degree~two. According to previous
 literature~\cite{DBLP:conf/eurocrypt/Perret05,DBLP:conf/eurocrypt/FaugereP06,DBLP:conf/pkc/BouillaguetFFP11,DBLP:conf/eurocrypt/BouillaguetFV13},
 this is the most difficult case.
 
-The case with only one homogeneous quadratic equation amounts to
-reduction of quadratic forms, which has been known for
+The case with only one homogeneous quadratic equation amounts to 
+reduce quadratic forms, which has been known for
 centuries~\cite{gauss,lidl1997finite}. In the non-homogeneous case, the
 presence of affine terms gives linear relations between the secret
 unknowns~\cite{DBLP:conf/eurocrypt/PatarinGC98}, and this extra
@@ -323,7 +323,7 @@ pencils in section~\ref{S:IP1S-regular} below.
 We reduce to the regular case by proving that the singular part of a
 symmetric pencil is reducible to the canonical form of Kronecker. This
 form is described in~\cite[XII(56)]{Gantmacher2}; however, the proof
-given there only applies to pencils over~$ℂ$, as its uses the computation
+given there only applies to pencils over~$ℂ$, as it uses the computation
 of square roots of matrices via interpolation on the spectrum. We give
 here an algorithmic proof that applies to any field~$k$.
 
@@ -958,11 +958,11 @@ minimal isotropic vector~$e = ∑ λ^i e_i$ and the according Kronecker
 block as an orthogonal direct factor, according to
 Prop.~\ref{prop:kronecker-split}.
 \item \label{it:alg-factor} Now~$\bm{b}$~is regular. Compute and factor
-its characteristic polynomial~$f(λ)$ and split~$V$ as a orthogonal direct
+its characteristic polynomial~$f(λ)$ and split~$V$ as an orthogonal direct
 sum of primary components~$V_p$ for each prime divisor~$p$.
 \item \label{it:alg-local} For each prime divisor~$p$, write the local
 pencil~$\bm{b}_p$ at~$p$ as a matrix with entries in~$K = k[μ]/p(μ)$.
-Perform big-block reduction to write~$\bm{b}_p$ as a orthogonal direct
+Perform big-block reduction to write~$\bm{b}_p$ as an orthogonal direct
 sum of quadratic forms over~$K[H]/H^{n_i}$, and then reduce
 each of these forms to one of the two canonical diagonal forms.
 \end{enumerate}
