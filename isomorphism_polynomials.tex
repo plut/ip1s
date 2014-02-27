@@ -1248,7 +1248,7 @@ polynomial.
 
 \ifappendix
 \appendix
-\section{Matrix reduction algorithm to Kronecker normal form}
+\section{An algorithm reducing a matrix pencil to Kronecker normal form}
 \label{A:algo}
 
 We explain how, given a pencil~$B = (B_{0}, B_{∞})$ in matrix form, we
@@ -1259,46 +1259,50 @@ translation of part~\ref{SS:Kronecker-reduction}.
 
 \step{Compute the minimal isotropic vectors~$(e_1,…,e_h)$}
 
-Define a \emph{chain} of length~$h$ to be a $h+1$-uple~$(e_0, …, e_h)$ of
-vectors of~$V$ such that the relations~$b_0 e_i = b_{∞} e_{i-1}$ hold for
-all~$i$.
-We can recursively compute a ``lower triangular'' basis for the space of
-$h$-chains in the following way: we determine vector spaces~$U_i$ and a
-linear map~$f: V → V$ such that the space of $h$-chains is defined by
-\begin{equation}\label{eq:echelon}
-e_0 ∈ U_h, \quad e_{i} ∈ f(e_{i-1}) + U_{h-i}.
+Write the~$n × (2n)$-matrix~$(-B_{∞} \; B_0)$ in lower row echelon form as
+\begin{equation}
+(B_{∞} \; B_0) \;=\; \mat{A_{∞} & 0\\ C & A_0},
 \end{equation}
-By putting the $n × (2n)$-matrix $(-B_{∞} | B_0)$ in lower row echelon
-form, we may compute a map~$f: V → V$ such that $b_{∞} x = b_{0} y$ iff
-$y ∈ f(x) + \Ker b_{0}$. This proves that the
-definition~\eqref{eq:echelon} is satisfied with~$U_0 = \Ker B_0$.
+where $0$~is a $r × n$-block with $r$~being the largest possible value.
+This implies that the $n-r$~lines of~$A_0$ are linearly independent, and
+therefore that its columns have full rank~$n-r$; therefore, there exists
+a matrix~$F$ such that~$C = A_0 F$. From this, we see that
+\begin{equation}
+B_{∞} x = B_0 y \;⇔ \; \begin{cases} A_{∞} x = 0\\ y ∈ Fx + \Ker A_0.
+\end{cases}
+\end{equation}
+In particular, the case~$x = 0$ tells us that $\Ker A_0 = \Ker B_0$. By
+using the \emph{upper} row echelon form, we likewise compute a matrix~$G$
+such that~$B_{∞} x = B_0 y$ implies~$x ∈ G y + \Ker B_{∞}$.
+
+A \emph{chain} of length~$h$ is a solution~$(e_0,…,e_h)$ of te
+equations~$b_0(e_i) = b_{∞}(e_{i-1})$ and~$b_{∞}(e_h) = 0$.
+We define by induction a sequence~$(U_i)$ of vector spaces such that the
+$h$-chains are defined by the relations~$e_0 ∈ U_h$ and~$e_i ∈ F(e_{i-1})
++ U_{h-i}$.
+
+The base case is that of chains of length~$0$, which are the
+elements of~$\Ker B_{∞}$. We define $U_0 = \Ker B_{∞}$.
 
 A $(h+1)$-chain is a $(h+2)$-uple~$(e_0,…,e_{h+1})$ such that
 $(e_1,…,e_{h+1})$~is a $h$-chain and $b_{0} e_1 = b_{∞} e_0$.
-From this we see that~$e_1 ∈ U_h$ and~$e_i ∈ f(e_{i-1}) + U_{h-i}$ for
-all~$i ≥ 2$. This proves that $U_{h+1} = B_∞^{-1} (B_0 (U_{h}))$
-satisfies the relation~\eqref{eq:echelon}. Computing~$U_{h+1}$ from~$U_h$
-has a complexity of~$O(n^3)$ operations in the base field using Gaussian
-elimination, therefore computing~$U_h$ has a total complexity of~$O(n^3
-h)$.
+The first condition amounts to~$e_1 ∈ U_h$ and~$e_i = f(e_{i-1}) +
+U_{h-i}$ for all~$i ≥ 2$; the second one means that $e_0 ∈ G U_{h} + \Ker
+B_{∞}$. We define~$U_{h+1} = G U_h + \Ker B_{∞}$.
 
-Isotropic vectors with degree~$≤ h$ correspond to $h$-chains satisfying
-the extra relations~$b_0(e_0) = 0$ and~$b_∞(e_h) = 0$. Only one of these
-need be considered since we can compute the other one by using an ``upper
-triangular'' basis for the space of $h$-chains and then taking the
-intersection, which will not change the overall complexity. The space of
-$h$-chains satisfying the first relation~$b_0(e_0) = 0$ is given by the
-extra relation $e_0 ∈ U_h ∩ \Ker B_0$; computing all the images~$e_i ∈
-f(e_{i-1}) + U_{h-i}$ has total complexity~$O(n^2 h)$.
-
-We can thus compute the space of isotropic vectors of degree~$≤ h$ with
-total complexity~$O(n^3 h)$; moreover, as this computation is triangular,
-it also gives the space of isotropic vectors of degree~$≤ h'$ for all~$h'
-≤ h$, so that we only need to perform one run of this algorithm for
-$h$~running up to the maximal value of~$(n-1)/2$, for a total cost
-of~$O(n^4)$. Once we have isolated the minimal Kronecker module~$K$
-of~$V$ in Step 2, we may then project this basis on the quotient~$V/K$ to
-directly obtain a (sorted) basis of the isotropic vectors of~$V/K$.
+This allows us to compute minimal isotropic vectors of length~$h$ as
+satisfying the relations
+\begin{equation}\label{eq:m.i.v.-matrix}
+e_0 ∈ U_{h} ∩ \Ker B_0, \quad e_{i} ∈ F e_{i-1} + U_{h-i}.
+\end{equation}
+This determines the space of isotropic vectors of degree~$≤ h$ with
+total complexity~$O(n^3 (h+1))$; moreover, as this computation is
+triangular, it also gives the space of isotropic vectors of degree~$≤ h'$
+for all~$h' ≤ h$, so that we only need to perform one run of this
+algorithm over all the singular part of the pencil. Once we have isolated
+the minimal Kronecker module~$K$ of~$V$ in Step 2, we may then project
+this basis on the quotient~$V/K$ to directly obtain a (sorted) basis of
+the isotropic vectors of~$V/K$.
 
 \step{Compute a Kronecker module as a direct factor}
 We can, with no more than~$O(n^3)$ field operations, compute
