@@ -1369,30 +1369,30 @@ time, which is~$O(n^2)$ computations in the base field~$K$.
 
 
 
-\section{Canonical pencil in normal form}
-We first would like to introduce and define a canonical representative $L_\lambda$ of the class of all symmetric pencils that are equivalent to $A_\lambda$, which depends only on the set of elementary divisors of $A_{\lambda}$. We require that the symmetric pencil $L_\lambda$ be block-diagonal and that each diagonal block has only one elementary divisor. 
-Let $p^d$ be one of the elementary divisors of $A_{\lambda}$. We may require that the corresponding expected block in $L_\lambda$ has the following expression: $T(\lambda +M)$ with $M$ and $T$ expressed as $d^2$-block matrices:
-\begin{equation}
-\label{eq:canonical}
-M=\begin{pmatrix}
-M_p & I & & 0\\
- & \ddots & \ddots & \\
- & & \ddots & I \\
-0 & & & M_p\\
-\end{pmatrix}
-,\quad 
-T =\begin{pmatrix}
-0& & & T_p\\
-& & \iddots & \\
-& \iddots & & \\
-T_p & & & 0\\	
-\end{pmatrix},
-\end{equation}
-where $M_p$ is the companion matrix of $p$ and $T_p$ as defined in \eqref{eq:companion}.
-%, $N$ being the companion matrix of $p$. 
-One can easily check that $M$ and $T$ have the following properties: $M$ has $p^d$ as its only elementary divisor, $T$ is non singular symmetric and satisfies $\transpose{M}T=TM$.
-
-From now, $L_\lambda=T(\lambda + M)$ refers to the whole block-diagonal pencil and is so by construction symmetric, equivalent to $A_\lambda$ representing the pencil, and uniquely defined except for the order of the elementary divisors.
+\section{Explicit similarity between $M_p$ and its transpose}
+% We first would like to introduce and define a canonical representative $L_\lambda$ of the class of all symmetric pencils that are equivalent to $A_\lambda$, which depends only on the set of elementary divisors of $A_{\lambda}$. We require that the symmetric pencil $L_\lambda$ be block-diagonal and that each diagonal block has only one elementary divisor. 
+% Let $p^d$ be one of the elementary divisors of $A_{\lambda}$. We may require that the corresponding expected block in $L_\lambda$ has the following expression: $T(\lambda +M)$ with $M$ and $T$ expressed as $d^2$-block matrices:
+% \begin{equation}
+% \label{eq:canonical}
+% M=\begin{pmatrix}
+% M_p & I & & 0\\
+%  & \ddots & \ddots & \\
+%  & & \ddots & I \\
+% 0 & & & M_p\\
+% \end{pmatrix}
+% ,\quad 
+% T =\begin{pmatrix}
+% 0& & & T_p\\
+% & & \iddots & \\
+% & \iddots & & \\
+% T_p & & & 0\\	
+% \end{pmatrix},
+% \end{equation}
+% where $M_p$ is the companion matrix of $p$ and $T_p$ as defined in \eqref{eq:companion}.
+% %, $N$ being the companion matrix of $p$. 
+% One can easily check that $M$ and $T$ have the following properties: $M$ has $p^d$ as its only elementary divisor, $T$ is non singular symmetric and satisfies $\transpose{M}T=TM$.
+% 
+% From now, $L_\lambda=T(\lambda + M)$ refers to the whole block-diagonal pencil and is so by construction symmetric, equivalent to $A_\lambda$ representing the pencil, and uniquely defined except for the order of the elementary divisors.
 \begin{prop}
 \label{transpose-symmetric}
 For any matrix $M$, 
@@ -1424,16 +1424,19 @@ M_p = \begin{pmatrix}
 \end{pmatrix}
 \end{equation}
 One can easily verify that for any polynomial $p$, $M=M_p$ and $T=T_p$
-satisfy the relation $\transpose{M}T = TM$ and $T$ is obviously non singular and symmetric. Therefore the theorem is proven for any companion matrix. The result can easily be generalized when $A_\lambda$ is in a normal form: since $M$ is block-diagonal and each block is the companion matrix of some elementary divisor, $T$ can also be built up as block-diagonal, each block being non singular symmetric. Then the result can be generalized to all matrices: for any matrix $N$ there exist a matrix $M$ in a normal form and a non singular matrix $P$ such as $N=P^{-1}MP$.  Since we have from previous step: $\transpose{M} = TMT^{-1}$ for some symmetric non-singular matrix $T$, we easily get $\transpose{N}=(\transpose{P}TP)N(\transpose{P}TP)^{-1}$ and $\transpose{P}TP$ is obviously non singular symmetric.
+satisfy the relation $\transpose{M}T = TM$ and $T$ is obviously non singular and symmetric.
+
+Therefore the theorem is proven for any companion matrix. The result can
+easily be generalized when $A_\lambda$ is in Frobenius normal form: since $M$ is block-diagonal and each block is the companion matrix of some elementary divisor, $T$ can also be built up as block-diagonal, each block being non singular symmetric. Then the result can be generalized to all matrices: for any matrix $N$ there exist a matrix $M$ in a normal form and a non singular matrix $P$ such as $N=P^{-1}MP$.  Since we have from previous step: $\transpose{M} = TMT^{-1}$ for some symmetric non-singular matrix $T$, we easily get $\transpose{N}=(\transpose{P}TP)N(\transpose{P}TP)^{-1}$ and $\transpose{P}TP$ is obviously non singular symmetric.
 %\qed
 \end{proof}
-
-We easily get the following results.
-
-\begin{prop}
-\label{cor:symmetric-similar-pencil}
-Let $M$ and $T$ be matrices as in Prop~\ref{transpose-symmetric}. Then $T(\lambda I+M)$ is obviously a symmetric pencil with the same invariant polynomials as $M$.
-\end{prop}
+% 
+% We easily get the following results.
+% 
+% \begin{prop}
+% \label{cor:symmetric-similar-pencil}
+% Let $M$ and $T$ be matrices as in Prop~\ref{transpose-symmetric}. Then $T(\lambda I+M)$ is obviously a symmetric pencil with the same invariant polynomials as $M$.
+% \end{prop}
 \fi
 
 \end{document}%<<<1
