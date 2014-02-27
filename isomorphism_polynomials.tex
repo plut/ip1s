@@ -4,6 +4,8 @@
 \usepackage{unicode}
 \DeclareUnicodeCharacter{22F1}{\smash\ddots}
 \DeclareUnicodeCharacter{22F0}{\smash\iddots}
+\DeclareUnicodeCharacter{2264}{\leqslant}
+\DeclareUnicodeCharacter{2265}{\geqslant}
 \usepackage{amsmath,amssymb,mathrsfs}
 \usepackage{bm}
 \usepackage{mathdots}
@@ -12,7 +14,7 @@
 \usepackage[all]{xy}
 
 \newnumbered{definition}{Definition}
-\newif\ifappendix \appendixtrue
+\newif\ifapx \apxtrue % If appendix
 
 % Theorems, equations, counters%<<<
 \def\linkcounter#1#2{\edef\magic{\noexpand\let
@@ -64,20 +66,22 @@
 
 \begin{document}
 \title[Solving ``Isomorphism of Polynomials with Two Secrets'']%
-{Solving the ``Isomorphism of Polynomials with Two Secrets'' Problem}%<<<1
+{Solving the ``Isomorphism of Polynomials with Two Secrets'' Problem
+for All Pairs of Quadratic Forms}%<<<1
 %\author{Pierre-Alain Fouque \and Gilles Macario-Rat \and Jérôme Plût}
 \author{Submission to ANTS 2014}
 \classno{15A21,15A22,15A63,11T71}
 \maketitle
 
 \begin{abstract}%<<<
-In this paper, we study the Isomorphism of Polynomial (IP) problem
+We study the Isomorphism of Polynomial (IP2S) problem
 with~$m=2$ homogeneous quadratic polynomials of $n$ variables over a finite field of odd
 characteristic: given two quadratic polynomials $(\bm{a},\bm{b})$ 
 on $n$ variables, we find two bijective linear maps $(s,t)$ such that
 $\bm{b}=t\circ \bm{a}\circ s$. We give an algorithm computing~$s$ and~$t$
 in time complexity~$\Ot(n^4)$ for all instances.
-This problem was introduced in cryptography by Patarin back in 1996.
+
+The IP2S problem was introduced in cryptography by Patarin back in 1996.
 The special case of this problem when $t$ is the identity is called
 the isomorphism with one secret (IP1S) problem.
 Generic algebraic equation solvers (for example using Gröbner bases)
@@ -98,7 +102,7 @@ be recovered in cubic time.
 
 
 The \emph{Isomorphism of Polynomial with Two Secrets} (IP2S) problem is
-the following. Given a field~$k$ and two $m$-uples $\bm{a} = (a_1, …,
+the following: given a field~$k$ and two $m$-uples $\bm{a} = (a_1, …,
 a_m)$ and~$\bm{b} = (b_1, …, b_m)$ in $n$~variables~$(x_1, …, x_m)$, compute
 two invertible linear maps~$s ∈ \GL_n(k)$ of the variables~$x_i$
 and~$t ∈ \GL_m(k)$ of the polynomials~$a_i$ such that
@@ -172,7 +176,7 @@ if $b_{∞}$~is invertible and~$b_{∞}^{-1} b_{0}$ is a cyclic matrix,
 polynomial. Although the cyclic case is generic in the geometric sense
 (\emph{i.e.} defined by the non-cancellation of some polynomial functions
 of the coefficients of~$\bm{b}$), it is not the general case in a
-practical sense. In the cyclic instances, Gröbner basis works
+practical sense. In the cyclic instances, Gröbner bases wor
 well~\cite{DBLP:conf/pkc/BouillaguetFFP11} since in this case, the number
 of solutions is small. For all other instances, the number of solutions
 is large, and it is well-known that in this case, such algorithms are
@@ -271,7 +275,7 @@ endomorphism~$u^{⋆}$ is called the \emph{left-adjoint} of~$u$. If $b$~is
 symmetric then left- and right-adjoints coincide.
 
 An \emph{(affine) pencil of symmetric bilinear
-forms} over~$V$, or a \emph{symmetric pencil} in short, is the data of a
+forms} over~$V$, or a \emph{symmetric pencil} in short, is a
 pair of symmetric bilinear forms~$\bm{b} = (b_{∞}, b_{0})$ over~$V$. We
 write this pencil in affine form as~$b_{λ} = -λ b_{∞} + b_{0}$, and in
 projective form as~$b_{λ:μ} = -λ b_{∞} + μ b_{0}$, where $b_{0}$
@@ -333,12 +337,12 @@ here an algorithmic proof that applies to any field~$k$.
 The pencil~$(b_{λ})$ defines a symmetric bilinear form on the
 module~$V_{∞} = V ⊗_{k} k[λ]$; if $(b_{λ})$~is singular, then this form
 has a non-trivial kernel~$W$. Elements of~$W$ are called \emph{isotropic}
-for~$(b_{λ})$. An element~$x = x_0 + λ x_1 + … + λ^h x_h$ is isotropic iff
+for~$(b_{λ})$. An element~$e = e_0 + λ e_1 + … + λ^h e_h$ is isotropic iff
 \begin{equation}\label{eq:isotropic}
-b_0 x_0 = 0, \quad
-b_0 x_1 = b_{∞} x_0, \quad …
-b_0 x_h = b_{∞} x_{h-1}, \quad
-b_{∞} x_{h} = 0.
+b_0 e_0 = 0, \quad
+b_0 e_1 = b_{∞} e_0, \quad …
+b_0 e_h = b_{∞} e_{h-1}, \quad
+b_{∞} e_{h} = 0.
 \end{equation}
 A \emph{minimal isotropic vector} for~$(b_{λ})$ is one with minimal
 degree~$h$; this degree is the \emph{minimal index} of~$(b_{λ})$. If
@@ -347,7 +351,7 @@ By choosing a basis of~$W$
 adapted to the filtration of~$V_{∞}$ by the degree of polynomials, we see
 that $W$~as a basis~$(w_1,…,w_r)$ such that, if $h_i$~is the degree of
 the isotropic vector~$w_i$, then $(w_i,…,w_r)$~generate no isotropic
-vector of degree~$< h_i$. The degree~$h_i$ are called the \emph{minimal
+vector of degree~$< h_i$. The degrees~$h_i$ are called the \emph{minimal
 indices} of the pencil~$(b_{λ})$.
 %>>>
 \begin{prop}\label{prop:minimal-indep}%<<<
@@ -474,7 +478,7 @@ Let~$e_0 + … + λ^{h} e_h$ be a minimal isotropic vector for~$(b_{λ})$ and
 $E$~be the span of the~$e_i$; we need to prove that $E$~has a supplement
 which is self-orthogonal for the pencil~$(b_{λ})$. Such a supplement
 corresponds to a retraction~$w$ of~$V ↪ E$ such that, for all~$x,y ∈ V$,
-$(x - w(x)) ⟂ (y-w(y))$, or:
+$(x - w(x)) ⟂ (y-w(y))$; given that~$E ⟂ E$, this amounts to
 \begin{equation}\label{eq:kro-self-orth}
 b_{λ} (x, y) = b_{λ} (x, w(y)) + b_{λ} (w(x), y)
 \quad \text{for all~$λ$ and for $x,y ∈ V$.}
@@ -494,7 +498,7 @@ from the relation~$w_{i,j} - w_{i-1,j+1} = b_{0} (f_i, f_j) - b_{∞} (f_i,
 f_{j+1})$.
 \end{proof}
 
-This last computation shows that the proof also hold in characteristic
+This last computation shows that the proof also holds in characteristic
 two if we further assume that the pencil~$b$ is alternating, which is the
 case for the polar part of a quadratic pencil.
 %>>>
@@ -502,7 +506,7 @@ case for the polar part of a quadratic pencil.
 \begin{prop}[(Kronecker form)]\label{prop:kronecker}%<<<
 Let~$(b_{λ})$ be a symmetric pencil on~$V$. There exists a basis of~$V$
 in which the pencil has a block-diagonal matrix with diagonal
-blocks~$(K_{h_1}, …, K_{h_r}, B')$, where $K_h = K_{h,0} + λ K_{h,∞}$~is
+blocks~$(K_{h_1}, …, K_{h_r}, B')$, where $K_h$~is
 the square matrix of size~$2h+1$ defined by equation~\eqref{eq:def-K},
 the integers~$h_1 ≤ … ≤ h_r$ are the minimal indices of~$(b_{λ})$, and
 $B'$~is the matrix of a regular pencil.
@@ -535,12 +539,12 @@ to the bilinear form~$b_{0}$. Then the decomposition~$V = V' ⊕ V_{∞}$ is
 orthogonal for all forms~$b_{λ}$; replacing~$V$ by~$V'$, we may assume
 that $b_{∞}$~is a regular bilinear form. This implies that $b_0$~has an
 adjoint endomorphism~$m = b_{∞}^{-1} b_0$ such that~$b_0(x,y) = b_{∞}(x,
-ay) = b_{∞}(ax, y)$; in particular, all elements of the algebra~$k[m]$
+m y) = b_{∞}(m x, y)$; in particular, all elements of the algebra~$k[m]$
 are self-adjoint with respect to~$b_{∞}$.
 
 Let~$f(λ) = f(λ: 1)$ be the affine characteristic polynomial. It is
 enough to prove the result for the decomposition~$f = gh$ where $g, h$
-are mutually prime. Let~$u, v$ be polynomials such that~$ug + vh = 1$ and
+are mutually prime. Let~$u, v$ be polynomials such that~$ug + vh = 1$, and
 $x, y ∈ V$ such that~$g(m)(x) = 0$ and~$h(m)(y) = 0$; we may then write
 \begin{equation}\label{eq:bezout}
 \begin{split}
@@ -549,7 +553,7 @@ b_{∞} (x, y) & = b_{∞} (x,\: u(m) g(m) y + v(m) h(m) y ) \\
 &= 0.
 \end{split}
 \end{equation}
-Since~$y' = ay$ also verifies~$h(m)(y') = 0$, equation~\eqref{eq:bezout}
+Since~$y' = m y$ also verifies~$h(m)(y') = 0$, equation~\eqref{eq:bezout}
 also proves that~$b_{0}(x,y) = b_{∞}(x,y') = 0$, and hence~$x, y$ are
 orthogonal for all forms~$b_{λ}$.
 \end{proof}%>>>
@@ -633,8 +637,11 @@ relatively to the bilinear form~$t$. Then
 \end{prop}
 
 \begin{proof}
-Point~\itemref{it:sym-inv} is explicitly proven in Prop.~\ref{prop:big-T}
-below. Assuming that $a$~is self-adjoint with respect to~$t$,
+\ifapx
+Point~\itemref{it:sym-inv} is explicitly proven in Appendix~\ref{A:T}
+below.
+\fi
+Assuming that $a$~is self-adjoint with respect to~$t$,
 point~\itemref{it:sym-comm} follows from
 \begin{equation}
 \transpose{(tam)} \;=\; \transpose{m}\, \transpose{(ta)}
@@ -765,8 +772,8 @@ in~$k[H]/H^{\min (n_i, n_j)}$.
 %>>>
 
 As a corollary of Prop.~\ref{prop:phantom} and~\ref{prop:adjoint}, we get
-the following. Let~$D$ be the diagonal matrix~$(H^{n_1-n_i}) ∈ R^{r×r}$.
-For any~$A = (a_{i,j}∈ \ro C(M)$, let
+the following. Let~$D$ be the diagonal matrix with entries~$(H^{n_1-n_i})
+∈ R^{r×r}$. For any~$A = (a_{i,j}∈ \ro C(M)$, let
 \begin{equation}
 φ(A) = D · ψ(A) = (H^{\max (n_1-n_i,n_1-n_j)}a_{i,j}) ∈ R^{r×r}.
 \end{equation}
@@ -934,17 +941,16 @@ different from~$1$.
 \end{enumerate}
 \end{thm}
 
+This theorem solves the IP1S problem in time~$O(n^4)$: given two
+pencils~$\bm{a}$ and~$\bm{b}$, we only have to transform both of them to
+the canonical form above. This form will be the same iff the two pencils
+are isomorphic in the IP1S sense, and in this case, composing the two
+transformations gives an answer to the computational IP1S problem.
+
 The only place where the finiteness of~$k$ is required for this theorem
 to hold is for the computation of square roots, needed for
-Prop.~\ref{prop:local-diag}. This theorem solves the IP1S problem in
-cubic time: given two pencils~$\bm{a}$ and~$\bm{b}$, we only have to
-transform both of them to the canonical form above. This form will be the
-same iff the two pencils are isomorphic in the IP1S sense, and in this
-case, composing the two transformations gives an answer to the
-computational IP1S problem.
-
-We note that, if $(b_{λ})$~is regular, then~$h = 0$ and the algorithm in
-this case has complexity~$\Ot(n^3)$.
+Prop.~\ref{prop:local-diag}. We also note that, if $(b_{λ})$~is regular,
+then~$h = 0$ and the algorithm in this case has complexity~$\Ot(n^3)$.
 
 \paragraph{Algorithm and complexity.}
 
@@ -982,7 +988,7 @@ Kronecker normal form performed in Step~\ref{it:alg-kronecker}. Computing
 the minimal isotropic vectors requires solving a chain of~$h$ equations
 of the form~$b_{∞}(x) = b_0(y)$ and hence has a complexity~$O(n^3(h+1))$.
 The same applies to the computation of a preimage by the map~$∂_h$
-of~\eqref{eq:deriv-surj}. \ifappendix This algorithm is detailed in
+of~\eqref{eq:deriv-surj}. \ifapx This algorithm is detailed in
 Appendix~\ref{A:algo} below. \fi
 
 There exist cubic algorithms computing the Kronecker kernel of pencils of
@@ -1046,9 +1052,11 @@ secret~$t$ is a homography in two variables, which we write~$γ ∈
 \GL_2(k)$.
 
 \begin{prop}
-Two pencils~$\bm{a} = (a_{λ})$ and~$\bm{b} = (b_{λ})$ are isomorphic with
-two secrets if, and only if, the regular parts of both pencils are
-isomorphic with two secrets.
+\def\reg{'}
+Let~$\bm{a}$, $\bm{b}$ be two pencils and $\bm{a}\reg$ and~$\bm{b}\reg$ be
+their regular parts. For any homography~$t$, $t ∘ \bm{a}$~is isomorphic
+(in the IP1S sense) to~$\bm{b}$ if, and only if, $t ∘ \bm{a}\reg$~is
+isomorphic to~$\bm{b}\reg$.
 \end{prop}
 
 \begin{proof}
@@ -1131,8 +1139,9 @@ the same $j$-invariant~$j(x) = j(y)$, where
 j(x) = \frac{(B(x)^2-B(x)+1)^3}{B(x)^2(1-B(x))^2}.
 \end{equation}
 \item Let~$u(x) = ∑ u_i x^i$ and~$v(x)$ be two monic polynomials
-of degree four. They are homographic iff they have the same $j$-invariant,
-where $j(u)$~is a polynomial of degree~$6$ in the coefficients of~$u$.
+of degree four. They are homographic iff they have the same
+$j$-invariant, where $j(u)$~is a rational function of degree~six in the
+coefficients of~$u$.
 \end{enumerate}
 \end{prop}
 
@@ -1242,13 +1251,11 @@ polynomial. An analogous strategy for~$m ≥ 3$ would require a detailed
 geometric study of the hypersurface defined by this characteristic
 polynomial.
 
-% Biblio<<<1
+%>>>1
 \bibliographystyle{plain}
 \bibliography{biblio}
-
-\ifappendix
-\appendix
-\section{An algorithm reducing a matrix pencil to Kronecker normal form}
+\ifapx \appendix
+\section{An algorithm reducing a matrix pencil to Kronecker normal form}%<<<1
 \label{A:algo}
 
 We explain how, given a pencil~$B = (B_{0}, B_{∞})$ in matrix form, we
@@ -1257,7 +1264,7 @@ translation of part~\ref{SS:Kronecker-reduction}.
 \newcounter{step}
 \def\step#1{\paragraph{Step \arabic{step}: #1.}\stepcounter{step}}
 
-\step{Compute the minimal isotropic vectors~$(e_1,…,e_h)$}
+\step{Compute the minimal isotropic vectors~$(e_1,…,e_h)$}%<<<2
 
 Write the~$n × (2n)$-matrix~$(-B_{∞} \; B_0)$ in lower row echelon form as
 \begin{equation}
@@ -1304,7 +1311,7 @@ the minimal Kronecker module~$K$ of~$V$ in Step 2, we may then project
 this basis on the quotient~$V/K$ to directly obtain a (sorted) basis of
 the isotropic vectors of~$V/K$.
 
-\step{Compute a Kronecker module as a direct factor}
+\step{Compute a Kronecker module as a direct factor}%<<<2
 We can, with no more than~$O(n^3)$ field operations, compute
 vectors~$f_1,…,f_h$ such that~$b_0(e_i, f_j) = 1$ if~$i = j$ and
 $0$~otherwise.
@@ -1342,7 +1349,7 @@ for a total cost of~$O(n^3 h)$. Computing the values~$(x_i)$ is then
 straightforward.
 
 
-\step{Put the Kronecker module in canonical form}
+\step{Put the Kronecker module in canonical form}%<<<2
 We now compute a coordinate change
 \begin{equation}\label{eq:chvar-q}
 \def\arraystretch{.7}
@@ -1366,10 +1373,8 @@ We check that these relations compute all the values~$z_{i,j}$ in optimal
 time, which is~$O(n^2)$ computations in the base field~$K$.
 
 
-
-
-
-\section{Explicit similarity between $M_p$ and its transpose}
+\section{Explicit similarity between a matrix and its transpose}%<<<2
+\label{A:T}
 % We first would like to introduce and define a canonical representative $L_\lambda$ of the class of all symmetric pencils that are equivalent to $A_\lambda$, which depends only on the set of elementary divisors of $A_{\lambda}$. We require that the symmetric pencil $L_\lambda$ be block-diagonal and that each diagonal block has only one elementary divisor. 
 % Let $p^d$ be one of the elementary divisors of $A_{\lambda}$. We may require that the corresponding expected block in $L_\lambda$ has the following expression: $T(\lambda +M)$ with $M$ and $T$ expressed as $d^2$-block matrices:
 % \begin{equation}
