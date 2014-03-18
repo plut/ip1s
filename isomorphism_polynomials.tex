@@ -522,6 +522,56 @@ the bilinear form~$b_{λ}$ is regular.
 
 \subsection{Localisation of the IP1S problem}%<<<2
 
+\begin{prop}\label{lem:finite}
+Let~$\bm{b}$ be a regular symmetric pencil on~$V$. For any two vectors
+$x,y ∈ V$, we write~$x ≻ y$ if~$b_{∞} x = b_0 y$.
+\begin{enumerate}
+\item Let~$W$ be the set of~$x ∈ V$ such that there exists a chain~$x ≻ …
+≻ 0$. For all~$y ∈ V$, if $b_0(y, W) = 0$ then $b_{∞}(y, W) = 0$.
+\item Let~$W'$~be the $b_0$-orthogonal of~$W$. Then $b_0(W') ⊂ b_{∞}
+(W')$.
+\end{enumerate}
+Further assume that $\bm{b}$~is regular; this means that there exists no
+non-trivial chain~$0 ≻ x_0 ≻ … ≻ x_h ≻ 0$.
+\begin{enumerate}
+\setcounter{enumi}{2}
+\item The space~$V$ decomposes as the orthogonal direct sum~$V = W ⊕ W'$.
+\item The restriction of~$b_{∞}$ to~$W'$ and the restriction of~$b_{0}$
+to~$W$ are injective.
+\end{enumerate}
+% There exists an
+% orthogonal direct sum decomposition~$V = W ⊕ W'$ such that $b_{0}$~is
+% injective on~$W$, and $b_{∞}$~is injective on~$W'$.
+\end{prop}
+
+\begin{proof}
+(i) Assume that $b_0(y, W) = 0$ and that~$x_0 ≻ x_1 ≻ … ≻ 0$. Then since
+$x_1 ∈ W$, we have~$b_{∞} (y, x_0) = b_0 (y, x_1) = 0$.
+
+(ii) We have to prove the following: for any vector~$x$, $b_{∞}(x, W') =
+0$ implies~$b_0 (x, W') = 0$. The relation~$b_{∞} (x, W') = 0$ means
+that, for all~$y ∈ V$, $b_0(W, y) = 0$~implies~$b_{∞} (x, y) = 0$; in
+other words, we have~$b_{∞} (x) ∈ b_0(W)$. This means that there
+exists~$w ∈ W$ such that~$x ≻ w$, which in turn implies that~$x ∈ W$.It
+follows that~$b_0(x, W') = 0$.
+
+(iii) Let~$y_0 ∈ W ∩ W'$. By~(ii), there exists~$y_1 ∈ W'$ such that~$y_1
+≻ y_0$; this implies that~$y_1 ∈ W$. It follows that there exists an
+infinite sequence~$y = (y_i) ∈ W ∩ W'$ such that~$y_{i+1} ≻ y_i$. Since
+$V$~is finite-dimensional, this family is not free. Assume that~$α_0 y_0
++ … + α_m y_m = 0$ with~$α_m ≠ 0$ and define vectors~$y'_i = α_m y_i + …
++ α_0 y_{m-i}$; then we again have~$y'_i ∈ W ∩ W'$, $y'_{i+1} ≻ y'_i$,
+and~$y'_m = 0$. This implies that~$0 ≻ y'_{m-1} ≻ … ≻ y'_0 ≻ 0$. Since
+$\bm{b}$~is regular and~$α_m ≠ 0$, we deduce that~$y_0 = 0$ and that~$W ∩
+W' = 0$. Since $\dim W' = n - \dim b_0(W) ≥ n - \dim W$, this proves
+that~$W ⊕ W' = V$.
+
+(iv) Let~$x ∈ W$ such that~$b_0(x) = 0$. Then~$0 ≻ x$. Since $\bm{b}$~is
+regular, this implies~$x = 0$. 
+Let~$y ∈ W'$ such that~$b_{∞} (y) = 0$. This means that~$y ≻ 0$, and
+therefore~$y ∈ W$. By~(iii), this implies~$y = 0$.
+\end{proof}
+
 \begin{lem}\label{lem:decomp-bezout}%<<<
 Let~$\bm{b}$ be a regular symmetric pencil on the vector space~$V$.
 Let~$f(λ: μ) = \det (λ b_{∞} + μ b_0)$~be the homogeneous characteristic
