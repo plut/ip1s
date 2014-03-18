@@ -522,6 +522,14 @@ the bilinear form~$b_{λ}$ is regular.
 
 \subsection{Localisation of the IP1S problem}%<<<2
 
+We first prove that we may assume that one of the bilinear
+forms~$(b_{λ})$ is regular.
+Note that when $k = \F_q$~is a finite field, it may happen that $λ^q μ -
+λ μ^q$ divides~$f(λ:μ) ≠ 0$, so that~$f(λ) = 0$ for all~$λ ∈ ℙ^1(k)$. In
+this case, although $(b_{λ})$~is a regular pencil, all forms~$b_{λ}$ are
+degenerate. However, the decomposition given by Lemma~\ref{lem:finite}
+below still applies.
+
 \begin{prop}\label{lem:finite}
 Let~$\bm{b}$ be a regular symmetric pencil on~$V$. For any two vectors
 $x,y ∈ V$, we write~$x ≻ y$ if~$b_{∞} x = b_0 y$.
@@ -584,13 +592,15 @@ restriction~$S|_{V_i}$ has characteristic polynomial~$g_i$.
 \end{lem}
 
 \begin{proof}
-Let~$V_{∞} = \Ker b_{∞}$ and $V'$ be the orthogonal of~$b_{∞}$ relatively
-to the bilinear form~$b_{0}$. Then the decomposition~$V = V' ⊕ V_{∞}$ is
-orthogonal for all forms~$b_{λ}$; replacing~$V$ by~$V'$, we may assume
-that $b_{∞}$~is a regular bilinear form. This implies that $b_0$~has an
-adjoint endomorphism~$m = b_{∞}^{-1} b_0$ such that~$b_0(x,y) = b_{∞}(x,
-m y) = b_{∞}(m x, y)$; in particular, all elements of the algebra~$k[m]$
-are self-adjoint with respect to~$b_{∞}$.
+By Lemma~\ref{lem:finite}, there exists a unique orthogonal
+decomposition~$V = V_{∞} ⊕ V'$ such that $b_{∞} | V'$ and~$b_{0} |
+V_{∞}$~are regular and $b_{0}^{-1} b_{∞} | V_{∞}$~is nilpotent. The
+space~$V_{∞}$ corresponds to the largest divisor~$μ^{e}$ of~$f(λ:μ)$.
+
+Replacing~$V$ by~$V'$, we may assume that~$b_{∞}$~is regular. This
+implies that $b_0$~has an adjoint endomorphism~$m = b_{∞}^{-1} b_0$ such
+that~$b_0(x,y) = b_{∞}(x, m y) = b_{∞}(m x, y)$; in particular, all
+elements of the algebra~$k[m]$ are self-adjoint with respect to~$b_{∞}$.
 
 Let~$f(λ) = f(λ: 1)$ be the affine characteristic polynomial. It is
 enough to prove the result for the decomposition~$f = gh$ where $g, h$
@@ -619,20 +629,20 @@ If two regular pencils~$\bm{b}, \bm{b}'$ are isomorphic (in the IP1S sense), the
 they have the same characteristic polynomial, and computing an
 isomorphism between~$\bm{b}$ and~$\bm{b}'$ is the same as computing it on each
 factor of the primary decomposition. Therefore, in what follows, we shall
-assume that both pencils are local.
+assume that both pencils are local (and hence hence finite).
 
-\medskip
-
-Note that when $k = \F_q$~is a finite field, it may happen that $λ^q μ -
-λ μ^q$ divides~$f(λ:μ) ≠ 0$, so that~$f(λ) = 0$ for all~$λ ∈ ℙ^1(k)$. In
-this case, although $(b_{λ})$~is a regular pencil, all forms~$b_{λ}$ are
-degenerate. However, the decomposition given by
-Lemma~\ref{lem:decomp-bezout} still applies, and all the local pencils
-given by this decomposition contain at least one non-degenerate form,
-namely~$b_{0}$ on~$V_{∞}$ and~$b_{∞}$ in all other cases.
-Swapping~$b_{∞}$ and~$b_{0}$ when required, we may assume that all local
-pencils are \emph{finite}, \emph{i.e.} that $b_{∞}$~is a regular bilinear
-form.
+% \medskip
+% 
+% Note that when $k = \F_q$~is a finite field, it may happen that $λ^q μ -
+% λ μ^q$ divides~$f(λ:μ) ≠ 0$, so that~$f(λ) = 0$ for all~$λ ∈ ℙ^1(k)$. In
+% this case, although $(b_{λ})$~is a regular pencil, all forms~$b_{λ}$ are
+% degenerate. However, the decomposition given by
+% Lemma~\ref{lem:decomp-bezout} still applies, and all the local pencils
+% given by this decomposition contain at least one non-degenerate form,
+% namely~$b_{0}$ on~$V_{∞}$ and~$b_{∞}$ in all other cases.
+% Swapping~$b_{∞}$ and~$b_{0}$ when required, we may assume that all local
+% pencils are \emph{finite}, \emph{i.e.} that $b_{∞}$~is a regular bilinear
+% form.
 
 \bigskip
 
