@@ -1,4 +1,4 @@
-\documentclass{lms}%<<<1
+\documentclass{article}%<<<1
 %\usepackage[margin=30mm]{geometry}
 %\usepackage[letterpaper,hmargin=1.4in,vmargin=1.4in]{geometry}
 \usepackage{unicode}
@@ -13,7 +13,10 @@
 \usepackage{algpseudocode}
 \usepackage[all]{xy}
 
-\newnumbered{definition}{Definition}
+\usepackage{amsthm}
+\usepackage[margin=25mm]{geometry}
+
+% \newnumbered{definition}{Definition}
 \newif\ifapx \apxtrue % If appendix
 
 % Theorems, equations, counters%<<<
@@ -32,7 +35,8 @@
   \displaylimits}
 \let\fr\mathfrak
 \let\ro\mathscr
-\def\transpose{\,{}^{\mathrm{t}\!}}
+% \def\transpose{\,{}^{\mathrm{t}\!}}
+\def\transpose#1{{\vphantom{#1}}^{\mathrm{t}}\!#1}
 \def\pa#1{\left(\right)}
 \def\acco#1{\left\{#1\right\}}
 \def\abs#1{\left|#1\right|}
@@ -65,12 +69,10 @@
 %>>>1
 
 \begin{document}
-\title[Solving ``Isomorphism of Polynomials with Two Secrets'']%
+\title%[Solving ``Isomorphism of Polynomials with Two Secrets'']%
 {Solving the ``Isomorphism of Polynomials with Two Secrets'' Problem
 for All Pairs of Quadratic Forms}%<<<1
 %\author{Pierre-Alain Fouque \and Gilles Macario-Rat \and Jérôme Plût}
-\author{Submission to ANTS 2014}
-\classno{15A21,15A22,15A63,11T71}
 \maketitle
 
 \begin{abstract}%<<<
@@ -93,7 +95,7 @@ characteristic reduces to the computation of the square root of a matrix.
 
 We give here an algorithm solving all cases of the IP1S problem in odd
 characteristic using two new tools, the Kronecker form for a singular
-quadratic pencils, and the reduction of bilinear forms over a non-commutative
+quadratic pencil, and the reduction of bilinear forms over a non-commutative
 algebra. Finally, we show that the second secret in the IP2S problem may
 be recovered in cubic time.
 \end{abstract}%>>>
@@ -176,7 +178,7 @@ if $b_{∞}$~is invertible and~$b_{∞}^{-1} b_{0}$ is a cyclic matrix,
 polynomial. Although the cyclic case is generic in the geometric sense
 (\emph{i.e.} defined by the non-cancellation of some polynomial functions
 of the coefficients of~$\bm{b}$), it is not the general case in a
-practical sense. In the cyclic instances, Gröbner bases wor
+practical sense. In the cyclic instances, Gröbner bases works
 well~\cite{DBLP:conf/pkc/BouillaguetFFP11} since in this case, the number
 of solutions is small. For all other instances, the number of solutions
 is large, and it is well-known that in this case, such algorithms are
@@ -277,8 +279,8 @@ symmetric then left- and right-adjoints coincide.
 An \emph{(affine) pencil of symmetric bilinear
 forms} over~$V$, or a \emph{symmetric pencil} in short, is a
 pair of symmetric bilinear forms~$\bm{b} = (b_{∞}, b_{0})$ over~$V$. We
-write this pencil in affine form as~$b_{λ} = -λ b_{∞} + b_{0}$, and in
-projective form as~$b_{λ:μ} = -λ b_{∞} + μ b_{0}$, where $b_{0}$
+write this pencil in affine form as~$b_{λ} = λ b_{∞} + b_{0}$, and in
+projective form as~$b_{λ:μ} = λ b_{∞} + μ b_{0}$, where $b_{0}$
 and~$b_{∞}$ are symmetric bilinear forms.
 
 Two elements~$x$ and~$y$ of~$V$ are \emph{orthogonal} for a
@@ -326,7 +328,7 @@ pencils in section~\ref{S:IP1S-regular} below.
 
 We reduce to the regular case by proving that the singular part of a
 symmetric pencil is reducible to the canonical form of Kronecker. This
-form is described in~\cite[XII(56)]{Gantmacher2}; however, the proof
+form is described in~\cite[XII(56)]{Gantmacher}; however, the proof
 given there only applies to pencils over~$ℂ$, as it uses the computation
 of square roots of matrices via interpolation on the spectrum. We give
 here an algorithmic proof that applies to any field~$k$.
@@ -340,8 +342,8 @@ has a non-trivial kernel~$W$. Elements of~$W$ are called \emph{isotropic}
 for~$(b_{λ})$. An element~$e = e_0 + λ e_1 + … + λ^h e_h$ is isotropic iff
 \begin{equation}\label{eq:isotropic}
 b_0 e_0 = 0, \qquad
-b_0 e_1 = b_{∞} e_0, \quad … \quad
-b_0 e_h = b_{∞} e_{h-1}, \qquad
+b_0 e_1 + b_{∞} e_0 = 0, \quad … \quad
+b_0 e_h + b_{∞} e_{h-1} = 0, \qquad
 b_{∞} e_{h} = 0.
 \end{equation}
 A \emph{minimal isotropic vector} for~$(b_{λ})$ is one with minimal
@@ -372,9 +374,11 @@ vectors satisfy the relations
 \begin{equation}\label{eq:relation-e'}
 \begin{split}
 b_0 e'_0 &= α_h b_0 e_0 = 0, \\
-b_0 e'_i &= α_{h-i+1} b_0 e_1 + … + α_m b_0 e_{i-1} = b_{∞} e'_{i-1}, \\
+b_0 e'_{i+1} + b_{∞} e'_i
+  &= b_0 (α_{h-i} e_1 + … + α_h e_{i+1})
+  + b_{∞} (α_{h-i} e_0 + … + α_h e_i) = 0, \\
 b_{∞} e'_{h-1} &= b_{∞} (α_1 e_{0} + … + α_{h} e_{h-1}) \\
- &= b_{0} (α_1 e_{1} + … + α_{h} e_{h}) \\
+ &= -b_{0} (α_1 e_{1} + … + α_{h} e_{h}) \\
  &= 0.
 \end{split}
 \end{equation}
@@ -389,7 +393,7 @@ h-1$.
 
 We now prove~(iii). For all~$i, j$, note that we have
 \begin{equation}\label{eq:zero-bij}
-b_{∞}(e_i,e_j) = b_0(e_i, e_{j+1}) = b_0(e_{j+1}, e_i) =
+b_{∞}(e_i,e_j) = -b_0(e_i, e_{j+1}) = -b_0(e_{j+1}, e_i) =
   b_{∞} (e_{j+1}, e_{i-1}) = b_{∞} (e_{i-1}, e_{j+1}).
 \end{equation}
 From this and the fact that~$b_{∞} (e_i, e_h) = b_{∞} (e_h, e_i) = 0$
@@ -433,18 +437,18 @@ section~$v$ be defined by elements~$v_1,…,v_h ∈ V$ such that~$b_0(e_i,
 v_j) = 1$ if~$i = j$ and~$0$ otherwise.
 The orthogonality condition then becomes
 \begin{equation}\label{eq:orth2}
-b_0 (v_j,x) = u_j(x), \quad b_{∞} (v_j,x) = u_{j-1}(x), \qquad
+b_0 (v_j,x) = u_j(x), \quad b_{∞} (v_j,x) = -u_{j-1}(x), \qquad
 \text{for all~$x ∈ E^{⟂}$, $j = 1,…,h$.}
 % \text{(as elements of~$(E^{⟂})^{∨}$) for~$i=1,…,d$.}
 \end{equation}
 These relations uniquely determine~$u_0$ and~$u_h$, and
 solutions~$(u_1,…,u_{h-1})$ exist iff the values~$v_i$ also satisfy the
-relations~$b_{0} (v_{j},x) = b_{∞} (v_{j+1},x)$ for~$j = 1,…,h-1$ and~$x
+relations~$b_{0} (v_{j},x) = -b_{∞} (v_{j+1},x)$ for~$j = 1,…,h-1$ and~$x
 ∈ E^{⟂}$.
 
 Define a map~$∂_h: (E^{⟂})^h → ((E^{⟂})^{∨})^{h-1}$ by
 \begin{equation} \label{eq:deriv-surj}
-∂_h (v_1,…,v_h) = (b_{0}(v_1) - b_{∞}(v_2),…,b_{0} (v_h) - b_{∞}
+∂_h (v_1,…,v_h) = (b_{0}(v_1) + b_{∞}(v_2),…,b_{0} (v_h) + b_{∞}
 (v_{h-1})).
 \end{equation}
 Elements of the cokernel of~$∂_h$ are exactly isotropic vectors of
@@ -489,12 +493,12 @@ family~$e_0,…,e_h;f_1,…,f_h$ is a basis of~$V$. Write~$w(f_j) = ∑ w_{ij}
 e_i$. The equations~\eqref{eq:kro-self-orth} then amount to
 \begin{equation}\label{eq:wij}
 w_{i,j} + w_{j,i} = b_{0} (f_i, f_j);\quad
-w_{i-1,j} + w_{j-1,i} = b_{∞} (f_i, f_j).
+w_{i-1,j} + w_{j-1,i} = -b_{∞} (f_i, f_j).
 \end{equation}
 This defines the values~$w_{i,i} = \frac{1}{2} b_{0} (f_i, f_i)$
-and~$w_{i-1,i} = \frac{1}{2} b_{∞} (f_i, f_i)$, which is possible
+and~$w_{i-1,i} = -\frac{1}{2} b_{∞} (f_i, f_i)$, which is possible
 since~$2 ∈ k^{×}$. All other values follow
-from the relation~$w_{i,j} - w_{i-1,j+1} = b_{0} (f_i, f_j) - b_{∞} (f_i,
+from the relation~$w_{i,j} - w_{i-1,j+1} = b_{0} (f_i, f_j) + b_{∞} (f_i,
 f_{j+1})$.
 \end{proof}
 
@@ -502,6 +506,9 @@ This last computation shows that the proof also holds in characteristic
 two if we further assume that the pencil~$b$ is alternating, which is the
 case for the polar part of a quadratic pencil.
 %>>>
+
+From Props.~\ref{prop:kronecker-split} and~\ref{prop:kronecker-matrix} we
+deduce the following.
 
 \begin{prop}[(Kronecker form)]\label{prop:kronecker}%<<<
 Let~$(b_{λ})$ be a symmetric pencil on~$V$. There exists a basis of~$V$
@@ -532,7 +539,7 @@ below still applies.
 
 \begin{prop}\label{lem:finite}
 Let~$\bm{b}$ be a regular symmetric pencil on~$V$. For any two vectors
-$x,y ∈ V$, we write~$x ≻ y$ if~$b_{∞} x = b_0 y$.
+$x,y ∈ V$, we write~$x ≻ y$ if~$b_{∞} x + b_0 y = 0$.
 \begin{enumerate}
 \item Let~$W$ be the set of~$x ∈ V$ such that there exists a chain~$x ≻ …
 ≻ 0$. For all~$y ∈ V$, if $b_0(y, W) = 0$ then $b_{∞}(y, W) = 0$.
@@ -554,7 +561,7 @@ to~$W$ are injective.
 
 \begin{proof}
 (i) Assume that $b_0(y, W) = 0$ and that~$x_0 ≻ x_1 ≻ … ≻ 0$. Then since
-$x_1 ∈ W$, we have~$b_{∞} (y, x_0) = b_0 (y, x_1) = 0$.
+$x_1 ∈ W$, we have~$b_{∞} (y, x_0) = -b_0 (y, x_1) = 0$.
 
 (ii) We have to prove the following: for any vector~$x$, $b_{∞}(x, W') =
 0$ implies~$b_0 (x, W') = 0$. The relation~$b_{∞} (x, W') = 0$ means
@@ -598,8 +605,8 @@ V_{∞}$~are regular and $b_{0}^{-1} b_{∞} | V_{∞}$~is nilpotent. The
 space~$V_{∞}$ corresponds to the largest divisor~$μ^{e}$ of~$f(λ:μ)$.
 
 Replacing~$V$ by~$V'$, we may assume that~$b_{∞}$~is regular. This
-implies that $b_0$~has an adjoint endomorphism~$m = b_{∞}^{-1} b_0$ such
-that~$b_0(x,y) = b_{∞}(x, m y) = b_{∞}(m x, y)$; in particular, all
+implies that $b_0$~has an adjoint endomorphism~$m = -b_{∞}^{-1} b_0$ such
+that~$b_0(x,y) = -b_{∞}(x, m y) = -b_{∞}(m x, y)$; in particular, all
 elements of the algebra~$k[m]$ are self-adjoint with respect to~$b_{∞}$.
 
 Let~$f(λ) = f(λ: 1)$ be the affine characteristic polynomial. It is
@@ -647,18 +654,18 @@ assume that both pencils are local (and hence hence finite).
 \bigskip
 
 Let~$b_{λ} = λ b_{∞} + b_0$ be a finite pencil. We may use the
-characteristic endomorphism~$m = b_{∞}^{-1}b_0$ to write~$\bm{b}$ in the form
+characteristic endomorphism~$m = -b_{∞}^{-1}b_0$ to write~$\bm{b}$ in the form
 \begin{equation}\label{eq:adjoint}
-b_{λ} = b_{∞}\;(λ + m).
+b_{λ} = b_{∞}\;(λ - m).
 \end{equation}
 The image of~$\bm{b}$ by a linear change of variables~$s$ is then
 \begin{equation}\label{eq:adjoint-change}
 \transpose{s} · b_{λ} · s = 
-  \transpose{s} · b_{∞} · s\; ( λ + s^{-1} · m · s).
+  \transpose{s} · b_{∞} · s\; ( λ - s^{-1} · m · s).
 \end{equation}
-Let~$b'_{λ} = b'_{∞} (λ + m')$ be a pencil isomorphic to~$\bm{b}$; then there
+Let~$b'_{λ} = b'_{∞} (λ - m')$ be a pencil isomorphic to~$\bm{b}$; then there
 exists a change of variables~$t$ such that~$t^{-1} · m' · t = m$, and the
-pencil~$\transpose{t} · b'_{λ} · t$ is of the form $b'_{∞} (λ + m)$, so
+pencil~$\transpose{t} · b'_{λ} · t$ is of the form $b'_{∞} (λ - m)$, so
 that we may assume that~$m' = m$. Computing the isomorphism
 between~$b_{λ}$ and~$b'_{λ}$ then amounts to computing~$s$ such that
 \begin{equation}
@@ -674,7 +681,7 @@ space}~$\ro S(m)$ and the \emph{commutant}~$\ro C(m)$ as
 The invertible elements of~$\ro C(m)$ form the \emph{commutant
 group}~$\ro C(m)^{×}$.
 
-\begin{prop}\label{prop:structure-sym}
+\begin{lem}\label{lem:structure-sym}
 Let~$m$ be an endomorphism of~$V$.
 \begin{enumerate}
 \item \label{it:sym-inv} The set~$\ro S(m)$ contains a regular bilinear
@@ -683,18 +690,19 @@ form.
 and any endomorphism~$a$ of~$V$, the bilinear form~$ta$ belongs to~$\ro
 S(m)$ if and only if $a$~is self-adjoint with respect to~$t$ and $a ∈ \ro
 C(m)$.
-\item Any finite pencil with characteristic endomorphism~$m$ is of the
-form $b_{λ} = ta (λ+m)$ where~$a ∈ \ro C(m)^{×}$.
-\item Let~$b_{λ} = ta(λ+m)$ be a finite pencil and~$s ∈ \ro C(m)$.
+\item \label{it:sym-form} Let~$t ∈ \ro S(m)$ be regular. Any finite
+pencil with characteristic endomorphism~$m$ is of the form $b_{λ} = ta
+(λ-m)$ where~$a ∈ \ro C(m)^{×}$.
+\item \label{it:sym-adj} Let~$b_{λ} = ta(λ-m)$ be a finite pencil and~$s ∈ \ro C(m)$.
 Let~$s^{⋆} = t^{-1} · \transpose{s} · t$ be the adjoint of~$s$
 relatively to the bilinear form~$t$. Then
 \begin{equation}
-\transpose{s} · b_{λ} · s = t\: (s^{⋆} a s)\: (λ + m).
+\transpose{s} · b_{λ} · s = t\: (s^{⋆} a s)\: (λ - m).
 \end{equation}
 % \item Let~$a ∈ \ro C(m)$. Then $\transpose{(t·a)} = t·a^{⋆}$. In
 % particular, $t·a$~is symmetric if, and only if, $a = a^{⋆}$.
 \end{enumerate}
-\end{prop}
+\end{lem}
 
 \begin{proof}
 \ifapx
@@ -708,8 +716,12 @@ point~\itemref{it:sym-comm} follows from
  \;=\; \transpose{m}\,ta = tma;
 \end{equation}
 since $t$~is regular, it is cancellable in the resulting equation~$tma
-= tam$.
+= tam$. Point~\ref{it:sym-form} follows directly from~\ref{it:sym-comm},
+and \ref{it:sym-adj} is a straightforward computation.
 \end{proof}
+
+Point~\ref{it:sym-adj} of Lemma~\ref{lem:structure-sym} translates to the
+following result.
 
 \begin{prop}\label{prop:IP1S-congruence}
 The congruence problem for finite symmetric pencils is equivalent to the
@@ -728,52 +740,73 @@ a square root computation.
 
 \subsection{The local IP1S problem in matrix form}%<<<2
 
-Assume that $b_{λ}$~is a finite local pencil with characteristic
-endomorphism~$m$ and characteristic polynomial~$p^d$, where $p$~is an
-irreducible polynomial of degree~$e$. Let~$M_p$ be the companion matrix
-of~$p$; then $k[M_p]$~is isomorphic to the extension field~$K =
-k[μ]/(p(μ))$. For any matrix~$A = (a_{i,j})$ of size~$u × v$ with
-coefficients in~$K$, let~$A^{♭}$ be the (``flattened'') matrix of
-size~$eu × ev$ with blocks of size~$e × e$ given by~$a_{i,j}(M_p)$. We
-have~$1^{♭} = 1$ and~$(AB)^{♭} = A^{♭} B^{♭}$ whenever the product
-exists. We write~$A ↦ A^{♯}$ for the inverse map where it is defined.
-
-For any integer~$u$, let~$H_u$ be the companion matrix of the
-polynomial~$x^u$. Then there exists a basis of~$V$ in which the
-matrix~$M$ of~$m$ is block-diagonal, with diagonal blocks~$M_{n_i} =
-(H_{n_i} + μ)^{♭}$, for integers~$n_1 ≥ … ≥ n_r$.
+We give the structure of the commutant for a local pencil. We first
+examine the case where the pencil is cyclic with characteristic
+polynomial~$x^u$. Let~$H_u$ be the companion matrix of~$x^u$.
 
 \begin{lem}\label{lem:commute-jordan}%<<<
-For all integers~$u, v$, define a matrix~$J_{u,v}$ of size~$u × v$ as
+For all integers~$u, v$, let~$I_u$ be the identity matrix of size~$u$,
+and define a matrix~$J_{u,v}$ of size~$u × v$ by
+% For all integers~$u, v$, define a matrix~$J_{u,v}$ of size~$u × v$ as
 \begin{equation}
-\def\arraystretch{.9}
-J_{u,v} = \mat{1& &0\\&⋱&\\0&&1\\0&⋯&0\\⋮&&⋮\\0&⋯&0} \text{ if~$u ≥
-v$,}\quad
-J_{u,v} = \mat{0&⋯&0&1&&0\\⋮&&⋮&&⋱&\\0&⋯&0&0&&1} \text{ if $u ≤ v$.}
+% \def\arraystretch{.9}
+J_{u,v} = \mat{ 0_{(u-v)×v} \\ I^{}_v } \text{if~$u ≥ v$,}\quad
+J_{u,v} = \mat{ I_{u} & 0_{u×(v-u)} } \text{if $u ≤ v$.}
+% J_{u,v} = \mat{1& &0\\&⋱&\\0&&1\\0&⋯&0\\⋮&&⋮\\0&⋯&0} \text{ if~$u ≥
+% v$,}\quad
+% J_{u,v} = \mat{0&⋯&0&1&&0\\⋮&&⋮&&⋱&\\0&⋯&0&0&&1} \text{ if $u ≤ v$.}
 \end{equation}
 \begin{enumerate}
-\item For all integers~$u, v$, $H_{u} J_{u,v} = J_{u,v} H_{v}$.
-\item The space of all matrices~$A$ of size~$u × v$ such that~$H_u A = A
+\item \label{it:rel-J} For all integers~$u, v$, $H_{u} J_{u,v} = J_{u,v} H_{v}$.
+\item \label{it:commute-H} The space of all matrices~$A$ of size~$u × v$ such that~$H_u A = A
 H_v$ is exactly $k[H_u] J_{u,v}$.
-\item \label{it:Juw} $J_{u,v} J_{v,w} = H_v^{d} J_{v,w}^{}$ where $d$~is
+\item \label{it:Juw} $J_{u,v} J_{v,w} = H_v^{d} J_{u,w}^{}$ where $d$~is
 the distance between~$v$ and the interval~$[u,w]$. In particular,
 $J_{u,v} J_{v,u} = H_{u}^{\abs{u-v}}$.
 \end{enumerate}
 \end{lem}
+
+\begin{proof}
+Points~\ref{it:rel-J} and~\ref{it:Juw} are straightforward computations.
+Point~\ref{it:commute-H} follows from the linear relations on the
+coefficients on a matrix~$A$ such that~$H_u A = A H_v$.
+\end{proof}
 %>>>
+
+We now turn to the general case where $b_{λ}$~is a local pencil. Let~$m$
+be its characteristic endomorphism~$m$ and $p^d$ be its characteristic
+polynomial, where $p$~is an irreducible polynomial of degree~$e$. We
+describe the matrix~$M$ of~$m$ in an appropriate basis of~$V$.
+
+Let~$M_p$ be the companion matrix of~$p$; then $k[M_p]$~is isomorphic to
+the extension field~$K = k[μ]/(p(μ))$.
+For any matrix~$A = (a_{i,j})$ of size~$u × v$ with
+coefficients in~$K$, let~$A^{♭}$ be the (``flattened'') matrix of
+size~$eu × ev$ with blocks of size~$e × e$ given by~$a_{i,j}(M_p)$.
+The map~$A ↦ A^{♭}$ is a morphism of algebras.
+We write~$A ↦ A^{♯}$ for the inverse map where it is defined.
+There exist integers~$n_1 ≥ … ≥ n_r$ and a basis
+of~$V$ in which the matrix~$M$ of~$m$ is block-diagonal, with diagonal
+blocks~$M_{n_i} = (H_{n_i} + μ)^{♭}$. In this particular case, the
+structure of the commutant space~$\ro C(M)$ is known~\cite[VIII, §1,
+Theorem~1]{Gantmacher}:
+
 \begin{prop}\label{prop:structure-commutant}%<<<
-Let~$M$ be the block-diagonal matrix with diagonal blocks~$(H_{n_i} +
+Let~$M$ be the block-diagonal matrix with diagonal blocks~$(H_{n_i} -
 μ)^{♭}$. The commuting space of~$M$ is the space of all matrices~$A^{♭}$,
 where $A$~is a block matrix~$A = (A_{i,j})$, with $A_{i,j} ∈
  k[H_{n_i}] J_{n_{i}, n_{j}} = J_{n_i, n_j} k[H_{n_j}]$.
 \end{prop}
+
 %>>>
-According to Prop.~\ref{prop:structure-commutant}, we may replace all
+According to Prop.~\ref{prop:structure-commutant}, we have~$\ro C(M) =
+\ro C(M^{♯})^{♭}$. We therefore replace all
 elements~$A$ of~$\ro C(M)$ by their images~$A^{♯}$ in~$\ro C(M^{♯})$. We
 may therefore assume that~$e = 1$, which means that~$K = k$. In this
 case, as~$\ro C(M) = \ro C(M-μ)$, we may further assume that~$μ = 0$.
-This means that  $M$~is the block-diagonal matrix with diagonal
-blocks~$H_{n_i}$ for integers~$n_1 ≥ … ≥ n_r$.
+This means that $M$~is the block-diagonal matrix with diagonal
+blocks~$H_{n_i}$ for integers~$n_1 ≥ … ≥ n_r$. We use this matrix~$M$ for
+the remainder of this section.
 
 Let~$A ∈ \ro C(M)$. Each entry~$A_{i,j}$ may be written as a polynomial
 \begin{equation}
@@ -800,29 +833,28 @@ Then $ψ$~is a $k$-algebra morphism from~$\ro C(M)$ to~$R^{r×r}$.
 \begin{proof}
 The matrices of~$\ro C(M)$ multiply according to the relations of
 Lemma~\ref{lem:commute-jordan}. We only need to prove that the
-integers~$e_{i,j}$ are an integral of the exponents~$\mathrm{distance}
-(n_k, [n_i, n_j])$ of Lemma~\ref{lem:commute-jordan}:
+integers~$e_{i,j}$ satisfy the relations:
 \begin{equation}\label{eq:integral}
 e_{i,k} - e_{i,j} + e_{k,j} = \mathrm{distance} (n_k, [n_i, n_j]).
 \end{equation}
-This can be verified by checking for all orderings of the
+We verify this by checking for all possible orderings of the
 triple~$(i,j,k)$.
 \end{proof}%>>>
 
 \paragraph{The adjunction involution.}
 We now describe the adjunction involution~$A ↦ A^{⋆}$ of the commuting
-space~$\ro C(M)$.
+space~$\ro C(M)$. The following lemma is an easy computation.
 
-\begin{prop}\label{prop:big-T}%<<<
+\begin{lem}\label{lem:big-T}%<<<
 For each integer~$u$, write~$T_u$ for the anti-identity matrix of
-size~$u$.
+size~$u$ (\emph{i.e.} the matrix having ones on the counter-diagonal).
 \begin{enumerate}
 \item $T_u$~is invertible and both~$T_u$ and~$T_u H_u$ are symmetric.
 \item $\transpose{J_{u,v}} T_u = T_v J_{v,u}$.
 \item Let~$T$ be the block-diagonal matrix with diagonal
 blocks~$T_{n_i}$. Then $T ∈ \ro S(M)^{×}$.
 \end{enumerate}
-\end{prop}
+\end{lem}
 %>>>
 \begin{prop}\label{prop:adjoint}%<<<
 Let~$A = (a_{i,j}(H)) ∈ \ro C(M)$. Then \[ A^{⋆} = (a_{ji}(H)). \]
@@ -909,22 +941,39 @@ triangular.
 \subsection{Classification of local symmetric pencils}%<<<2
 
 We shall need the following classic result about bilinear forms over
-local algebras.
+local algebras. We hereafter assume that $k$~is a finite field with
+characteristic different from~$2$.
 
-\begin{prop}\label{prop:local-diag}%<<<
-Let~$R$ be a local ring with residue field~$k$ and let~$\acco{δ_i}$ be a
-set of representatives for~$k^{×}$ modulo squares. Then any regular
-symmetric matrix with entries in~$R$ is congruent over~$R$ to a
-diagonal matrix~$(1, …, 1, δ_i)$ for some~$i$.
+\begin{prop}[{\cite[92:1]{omeara}}]\label{prop:local-diag}%<<<
+Let~$R$ be a complete local ring with finite residue field~$k$ and~$Δ ∈
+R$ having a non-square image~$δ$ in~$R$. Any regular symmetric matrix
+with entries in~$R$ is congruent over~$R$ to a diagonal matrix~$(1, …, 1,
+ε)$, where $ε ∈ \acco{1, Δ}$.
 \end{prop}
 
 \begin{proof}
-The Gram orthogonalization algorithm works; cf.
-\cite[I(3.4)]{milnorhusemoller} or \cite[92:1]{omeara}.
+The proof follows from applying a Hensel lift to the classical proof over
+finite fields~\cite[IV(1.5)]{milnorhusemoller}.
+Let~$A$ be a regular symmetric matrix over~$R$.
+By the Gram orthogonalization algorithm, $A$~is congruent to a diagonal
+matrix~\cite[I(3.4)]{milnorhusemoller}, so that we may write~$A =
+\mathrm{diag} (a_1,…, a_n)$. Since $x^2$~is a separable
+polynomial over~$R$, two applications of Hensel's lemma in the complete
+ring~$R$ readily prove the following:
+\begin{enumerate}
+\item for all~$i$, we have either~$a_i = b_i^2$ or~$a_i = b_i^2 Δ$
+in~$R$;
+\item the equation~$u^2 + v^2 = Δ$ has a solution with~$u, v ∈ R$.
+\end{enumerate}
+By~(i), we may assume that~$a_i = 1$ or~$a_i = Δ$. From~(ii), we deduce
+the matrix relation
+\begin{equation}
+\transpose{\mat{u&-v\\v&u}}·\mat{1&0\\0&1}·\mat{u&-v\\v&u} =
+\mat{Δ&0\\0&Δ}.
+\end{equation}
+This allows canceling all pairs of~$Δ$ appearing in the diagonalization
+of~$A$.
 \end{proof}
-
-In the present case, since $k$~is a finite field, we have $k^{×} /
-(k^{×})^2 = \acco {1, δ}$ for some element~$δ$.
 %>>>
 \begin{prop}\label{prop:bb-diag}%<<<
 Let~$A$ be an invertible, self-adjoint element of~$\ro C(M)$. Then there
@@ -983,8 +1032,8 @@ pencil with diagonal blocks of the following form:
 Prop.~\ref{prop:kronecker};
 \item \emph{finite local blocks}~$L_{p,d,u}$, defined as the~$d ×
 d$-block matrix
-\[ L_{p,d,u} \;=\; \mat{0&&&T_p u (λ + M_p)\\&&\siddots{T_pu}&T_p u\\
-  &\siddots{T_pu}&\siddots{T_pu}&\\T_pu(λ+M_p)&T_p u&&0}, \]
+\[ L_{p,d,u} \;=\; \mat{0&&&T_p u (λ - M_p)\\&&\siddots{T_pu}&T_p u\\
+  &\siddots{T_pu}&\siddots{T_pu}&\\T_pu(λ-M_p)&T_p u&&0}, \]
 where $p$~is an irreducible polynomial, $M_p$~is the companion matrix
 of~$p$, $T_p$~is a prescribed invertible matrix such that both~$T_p$
 and~$T_p M_p$~are symmetric, $d$~is an integer, and $u$~is either the
@@ -1163,8 +1212,8 @@ their Kronecker blocks coincide.
 
 Let~$(a_{λ})$ and~$(b_{λ})$ be two \emph{regular} pencils of bilinear
 forms such that $a_{γ(λ)}$~is isomorphic, in the IP1S sense, to~$b_{λ}$.
-Then the homography~$γ$ maps the characteristic polynomial~$f(λ)
-= \det (a_{λ})$ to~$g(λ) = \det (b_{λ})$. In particular, it maps the
+Then the homography~$γ$ maps the characteristic polynomial~$f(λ:μ)
+= \det (a_{λ:μ})$ to~$g(λ:μ) = \det (b_{λ:μ})$. In particular, it maps the
 prime factors of~$f$ to those of~$g$, respecting both their degree and
 their exponent as a factor of the characteristic polynomial.
 
@@ -1220,11 +1269,11 @@ If $\card{S_{1,e}} ≥ 3$, then we may immediately recover the
 homography~$γ$: namely, fix a triple~$(x_1,x_2,x_3)$ in~$S_{1,e}$, and
 iterate over the triples in~$T_{1,e}$. For each such triple, there exists
 a unique homography~$γ$ such that~$γ(x_i) = y_i$. This homography belongs
-to~$H_{1,e}$ iff the images of all the other points of~$S_{1,e}$ belong
+to~$Γ_{1,e}$ iff the images of all the other points of~$S_{1,e}$ belong
 to~$T_{1,e}$. Since there are~$3!\binom{\card{S_{1,e}}}{3} = O(n^3)$
 triples~$(y_i)$, this computation requires~$O(n^3)$ field operations.
 
-If $1 ≤ \card{S_{1,e}} ≤ 2$, then $H_{1,e}$~may be explicitly computed as
+If $1 ≤ \card{S_{1,e}} ≤ 2$, then $Γ_{1,e}$~may be explicitly computed as
 the union of the set of homographies mapping the elements of~$S_{1,e}$ to
 those of~$T_{1,e}$ for all permutations of~$T_{1,e}$.
 
@@ -1236,14 +1285,14 @@ v_2$. By Prop.~\ref{prop:homography}(iv), there exists at most a bounded
 number of such homographies. Since there are~$\binom{\card{S_{2,e}}}{2} =
 O(n^2)$ pairs~$(v_1, v_2)$, this requires~$O(n^2)$ field operations.
 
-If~$\card{S_{2,e}} = 1$, then $H_{2,e}$~is the set of all homographies
+If~$\card{S_{2,e}} = 1$, then $Γ_{2,e}$~is the set of all homographies
 mapping the unique element of~$S_{2,e}$ to the unique element
 of~$T_{2,e}$.
 
 \paragraph{Case~$d = 3$.}
 Fix an element~$u ∈ S_{3,e}$. For all~$v ∈ T_{3,e}$, there exist at
 most~$3! = 6$ homographies~$γ$ mapping~$u$ to~$v$. Each candidate belongs
-to~$H_{3,e}$ iff it maps all other elements of~$S_{3,e}$ to elements
+to~$Γ_{3,e}$ iff it maps all other elements of~$S_{3,e}$ to elements
 of~$T_{3,e}$. There are~$\card{S_{3,e}} = O(n)$ candidates~$u$ and
 therefore~$O(n)$ candidate homographies~$γ$.
 
@@ -1251,7 +1300,7 @@ therefore~$O(n)$ candidate homographies~$γ$.
 Fix an element~$u ∈ S_{4,e}$. The candidates as homographic images of~$u$
 in~$T_{4,e}$ are the~$v$ such that~$j(v) = j(u)$. Each candidate
 polynomial~$v$ gives at most $4! = 24$~candidates homographies~$γ$. This
-allows to compute~$H_{4,e}$ in~$O(n)$ field operations.
+allows to compute~$Γ_{4,e}$ in~$O(n)$ field operations.
 
 \paragraph{Case~$d ≥ 5$.} The naïve method is to differentiate~$(d-4)$
 times the elements of~$S_{d,e}$ to reduce to the case where~$d = 4$.
@@ -1305,7 +1354,7 @@ group becomes quite impractical in the non-cyclic case.
 
 On the other hand, studying the general problem with $m ≥ 3$~quadratic
 equations departs from the classic results about pencils of quadratic
-forms; therefore, less tools are available. Even in the regular
+forms; therefore, fewer tools are available. Even in the regular
 case, our work heavily uses the factorization of the characteristic
 polynomial. An analogous strategy for~$m ≥ 3$ would require a detailed
 geometric study of the hypersurface defined by this characteristic
