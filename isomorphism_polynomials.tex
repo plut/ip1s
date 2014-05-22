@@ -28,7 +28,9 @@
 \newthm{thm}{Theorem}
 \newthm{lem}{Lemma}
 
-\def\labelenumi{(\roman{enumi})} \let\itemref\ref
+\def\labelenumi{(\roman{enumi})}
+\def\itemref#1{\expandafter\ifx\csname r@#1\endcsname\relax
+  {\bfseries ??}\else{\setcounter{enumi}{\ref{#1}}\labelenumi}\fi}
 %>>>
 % Misc. math stuff%<<<
 \def\bigperp{\mathop{\vcenter{\hbox{\scalebox{2}{\ensuremath{\perp}}}}}%
@@ -170,22 +172,35 @@ when three equations are available
 and one of the quadratic equations $\bm{a}$ comes from a special mapping $X\mapsto X^{q^\theta+1}$ 
 over $\F_q$. In the case of the IP problem, this is optimal using an information theoretic argument.
 
-Macario-Rat, Plût and Gilbert explained in 2013~\cite{MPG2013} how to
-solve cyclic instances of the IP1S problem for~$m=2$ over finite fields
-of any characteristic. A pencil~$\bm{b} = (b_{∞}, b_0)$ is \emph{cyclic}
-if $b_{∞}$~is invertible and~$b_{∞}^{-1} b_{0}$ is a cyclic matrix,
-\emph{i.e.} its characteristic polynomial is equal to its minimal
-polynomial. Although the cyclic case is generic in the geometric sense
-(\emph{i.e.} defined by the non-cancellation of some polynomial functions
-of the coefficients of~$\bm{b}$), it is not the general case in a
-practical sense. In the cyclic instances, Gröbner bases works
-well~\cite{DBLP:conf/pkc/BouillaguetFFP11} since in this case, the number
-of solutions is small. For all other instances, the number of solutions
-is large, and it is well-known that in this case, such algorithms are
-less efficient.
+A case of interest is the particular case of \emph{cyclic} pencils: a
+pencil~$\bm{b} = (b_{∞}, b_0)$ is \emph{cyclic} if $b_{∞}$~is invertible
+and $b_{∞}^{-1} b_{0}$ is a cyclic matrix, \emph{i.e.} its characteristic
+polynomial is equal to its minimal polynomial. The cyclic case is
+dominant (it is defined by the non-cancellation of some polynomial
+functions of the coefficients of~$\bm{b}$). For cyclic instances of the
+IP1S problem, the Gröbner basis approach works
+well~\cite{DBLP:conf/pkc/BouillaguetFFP11} since the number of solutions
+is known to be small. For all other instances, the number of solutions is
+empirically large and such algorithms are then well known to be less
+efficient. Macario-Rat, Plût and Gilbert explained in 2013~\cite{MPG2013}
+how to algebraically solve the cyclic instances of the IP1S problem for
+$m=2$ over finite fields of any characteristic.
+% Macario-Rat, Plût and Gilbert explained in 2013~\cite{MPG2013} how to
+% solve cyclic instances of the IP1S problem for~$m=2$ over finite fields
+% of any characteristic. A pencil~$\bm{b} = (b_{∞}, b_0)$ is \emph{cyclic}
+% if $b_{∞}$~is invertible and~$b_{∞}^{-1} b_{0}$ is a cyclic matrix,
+% \emph{i.e.} its characteristic polynomial is equal to its minimal
+% polynomial. Although the cyclic case is dominant (it is defined by the
+% non-cancellation of some polynomial functions
+% of the coefficients of~$\bm{b}$), it is not the general case in a
+% practical sense. In the cyclic instances, Gröbner bases works
+% well~\cite{DBLP:conf/pkc/BouillaguetFFP11} since in this case, the number
+% of solutions is small. For all other instances, the number of solutions
+% is large, and it is well-known that in this case, such algorithms are
+% less efficient.
 
-Finally, very recently Berthomieu, Faugère and Perret
-in~\cite{DBLP:journals/corr/BerthomieuFP13} proposed a polynomial
+Finally, in the recent preprint~\cite{DBLP:journals/corr/BerthomieuFP13}
+Berthomieu, Faugère and Perret proposed a polynomial
 algorithm for IP1S with any number of equations when~$2 ≠ 0$. Given two
 families of polynomials over a field~$k$, they give a solution to the
 IP1S problem over a tower~$k'$ of real quadratic extensions (a \emph{real
@@ -219,21 +234,27 @@ of a finite field is real, no finite field is Euclidean.
 
 \subsection*{Our contributions}%<<<2
 This work covers the IP1S and IP2S problems for~$m = 2$ equations over a
-non-binary field, although the complexity estimate depends on
-computing square roots and thus only applies to finite fields.
+finite non-binary field; some parts of it are also applicable to binary
+or infinite fields.
 
-We first reduce the general IP1S problem to the \emph{regular case},
-which is the case where $b_{∞}$~is invertible. This is the object of
-section~\ref{S:IP1S-singular} of this document and uses the Kronecker
-classification of pencils of quadratic forms. Although this dates back to
-Kronecker, the classic proof uses complex analysis; we give a proof over
-any field.
+For the IP1S problem, we introduce three new tools. We first give a full
+description of the \emph{singular part} of all quadratic pencils in
+section~\ref{S:IP1S-singular}. This uses the Kronecker classification of
+pencils of quadratic forms. Although this dates back to Kronecker, the
+classic proof uses complex analysis; we give a new proof, true over any
+field.
 
-We then prove that the regular case of the IP1S problem simplifies to a
-reduction problem for some quadratic forms over a local algebra. As this
-is a well-understood theory (in odd characteristic), we are able to give
-a polynomial-time answer to all instances of IP1S in
-section~\ref{S:IP1S-regular}.
+A pencil is \emph{regular} if its characteristic polynomial is not zero.
+For regular pencils, we first give a decomposition as the orthogonal
+direct sum of \emph{local pencils}, for which we know that at least one
+of the quadratic forms is regular.
+
+We finally prove that the IP1S problem for a local, regular pencil
+amounts to a reduction problem for some quadratic forms a local algebra.
+As this is a well-known theory (in odd characteristic), we are able to
+give a polynomial-time answer to all instances of IP1S in
+section~\ref{S:IP1S-regular}. Our proof here specializes to that
+of~\cite{MPG2013} in the particular case of a cyclic pencil.
 
 The last section explains how we recover the second (``outer'') secret in
 the two-secret IP2S problem. As applying an outer linear combination to a
@@ -507,8 +528,9 @@ two if we further assume that the pencil~$b$ is alternating, which is the
 case for the polar part of a quadratic pencil.
 %>>>
 
-From Props.~\ref{prop:kronecker-split} and~\ref{prop:kronecker-matrix} we
-deduce the following.
+From Props.~\ref{prop:kronecker-split}, \ref{prop:kronecker-matrix} and
+an induction step on the minimal index of the pencil we deduce the
+following.
 
 \begin{prop}[(Kronecker form)]\label{prop:kronecker}%<<<
 Let~$(b_{λ})$ be a symmetric pencil on~$V$. There exists a basis of~$V$
@@ -518,7 +540,11 @@ the square matrix of size~$2h+1$ defined by equation~\eqref{eq:def-K},
 the integers~$h_1 ≤ … ≤ h_r$ are the minimal indices of~$(b_{λ})$, and
 $B'$~is the matrix of a regular pencil.
 \end{prop}
+
+We note that this result is the same as the classical result in
+characteristic zero~\cite[XII, §4]{Gantmacher}.
 %>>>
+%>>>1
 \section{IP1S for regular pencils}%<<<1
 \label{S:IP1S-regular}
 
@@ -534,11 +560,16 @@ forms~$(b_{λ})$ is regular.
 Note that when $k = \F_q$~is a finite field, it may happen that $λ^q μ -
 λ μ^q$ divides~$f(λ:μ) ≠ 0$, so that~$f(λ) = 0$ for all~$λ ∈ ℙ^1(k)$. In
 this case, although $(b_{λ})$~is a regular pencil, all forms~$b_{λ}$ are
-degenerate. However, the decomposition given by Lemma~\ref{lem:finite}
-below still applies.
+degenerate. However, the decomposition given by
+Lemma~\ref{lem:decomp-bezout} below still applies.
 
-\begin{prop}\label{lem:finite}
-Let~$\bm{b}$ be a regular symmetric pencil on~$V$. For any two vectors
+We first isolate the part where $b_{∞}$~is not regular. If $b_{0}$~is
+regular, this is the locus where the endomorphism~$b_{0}^{-1} b_{∞}$~is
+nilpotent. To make the proof work in the general case, we replace this
+endomorphism by the relation~$≻$ below.
+
+\begin{lem}\label{lem:finite}%<<<
+Let~$\bm{b}$ be a symmetric pencil on~$V$. For any two vectors
 $x,y ∈ V$, we write~$x ≻ y$ if~$b_{∞} x + b_0 y = 0$.
 \begin{enumerate}
 \item Let~$W$ be the set of~$x ∈ V$ such that there exists a chain~$x ≻ …
@@ -557,18 +588,21 @@ to~$W$ are injective.
 % There exists an
 % orthogonal direct sum decomposition~$V = W ⊕ W'$ such that $b_{0}$~is
 % injective on~$W$, and $b_{∞}$~is injective on~$W'$.
-\end{prop}
+\end{lem}
 
 \begin{proof}
 (i) Assume that $b_0(y, W) = 0$ and that~$x_0 ≻ x_1 ≻ … ≻ 0$. Then since
 $x_1 ∈ W$, we have~$b_{∞} (y, x_0) = -b_0 (y, x_1) = 0$.
 
-(ii) We have to prove the following: for any vector~$x$, $b_{∞}(x, W') =
+(ii) Let~$V^{∨}$ be the dual space of~$V$. The space~$b_{λ}(W')$ is the set
+of linear forms which are zero on all elements~$x$ such that~$b_{λ} (x,
+W') = 0$.
+We have to prove the following: for any vector~$x$, $b_{∞}(x, W') =
 0$ implies~$b_0 (x, W') = 0$. The relation~$b_{∞} (x, W') = 0$ means
 that, for all~$y ∈ V$, $b_0(W, y) = 0$~implies~$b_{∞} (x, y) = 0$; in
 other words, we have~$b_{∞} (x) ∈ b_0(W)$. This means that there
-exists~$w ∈ W$ such that~$x ≻ w$, which in turn implies that~$x ∈ W$.It
-follows that~$b_0(x, W') = 0$.
+exists~$w ∈ W$ such that~$x ≻ w$, which in turn implies that~$x ∈ W$. It
+follows by definition of~$W'$ that~$b_0(x, W') = 0$.
 
 (iii) Let~$y_0 ∈ W ∩ W'$. By~(ii), there exists~$y_1 ∈ W'$ such that~$y_1
 ≻ y_0$; this implies that~$y_1 ∈ W$. It follows that there exists an
@@ -585,8 +619,7 @@ that~$W ⊕ W' = V$.
 regular, this implies~$x = 0$. 
 Let~$y ∈ W'$ such that~$b_{∞} (y) = 0$. This means that~$y ≻ 0$, and
 therefore~$y ∈ W$. By~(iii), this implies~$y = 0$.
-\end{proof}
-
+\end{proof}%>>>
 \begin{lem}\label{lem:decomp-bezout}%<<<
 Let~$\bm{b}$ be a regular symmetric pencil on the vector space~$V$.
 Let~$f(λ: μ) = \det (λ b_{∞} + μ b_0)$~be the homogeneous characteristic
@@ -691,14 +724,18 @@ and any endomorphism~$a$ of~$V$, the bilinear form~$ta$ belongs to~$\ro
 S(m)$ if and only if $a$~is self-adjoint with respect to~$t$ and $a ∈ \ro
 C(m)$.
 \item \label{it:sym-form} Let~$t ∈ \ro S(m)$ be regular. Any finite
+regular
 pencil with characteristic endomorphism~$m$ is of the form $b_{λ} = ta
 (λ-m)$ where~$a ∈ \ro C(m)^{×}$.
-\item \label{it:sym-adj} Let~$b_{λ} = ta(λ-m)$ be a finite pencil and~$s ∈ \ro C(m)$.
-Let~$s^{⋆} = t^{-1} · \transpose{s} · t$ be the adjoint of~$s$
-relatively to the bilinear form~$t$. Then
+\item \label{it:sym-adj} Let~$b_{λ} = ta(λ-m)$ be a finite pencil and~$s
+∈ \ro C(m)$. Then
+% Let~$s^{⋆} = t^{-1} · \transpose{s} · t$ be the adjoint of~$s$
+% relatively to the bilinear form~$t$. Then
 \begin{equation}
-\transpose{s} · b_{λ} · s = t\: (s^{⋆} a s)\: (λ - m).
+\transpose{s} · b_{λ} · s = t\: (s^{⋆} a s)\: (λ - m),
 \end{equation}
+where $s^{⋆} = t^{-1} · \transpose{s} · t$ is the adjoint of~$s$
+relatively to the bilinear form~$t$.
 % \item Let~$a ∈ \ro C(m)$. Then $\transpose{(t·a)} = t·a^{⋆}$. In
 % particular, $t·a$~is symmetric if, and only if, $a = a^{⋆}$.
 \end{enumerate}
@@ -712,22 +749,24 @@ below.
 Assuming that $a$~is self-adjoint with respect to~$t$,
 point~\itemref{it:sym-comm} follows from
 \begin{equation}
+tam \;=\;
 \transpose{(tam)} \;=\; \transpose{m}\, \transpose{(ta)}
  \;=\; \transpose{m}\,ta = tma;
 \end{equation}
 since $t$~is regular, it is cancellable in the resulting equation~$tma
-= tam$. Point~\ref{it:sym-form} follows directly from~\ref{it:sym-comm},
-and \ref{it:sym-adj} is a straightforward computation.
+= tam$. Point~\itemref{it:sym-form} follows directly
+from~\itemref{it:sym-comm} and defining~$a = t^{-1} b_{∞}$,
+and \itemref{it:sym-adj} is a straightforward computation.
 \end{proof}
 
-Point~\ref{it:sym-adj} of Lemma~\ref{lem:structure-sym} translates to the
+Point~\itemref{it:sym-adj} of Lemma~\ref{lem:structure-sym} translates to the
 following result.
 
 \begin{prop}\label{prop:IP1S-congruence}
 The congruence problem for finite symmetric pencils is equivalent to the
-following: given an endomorphism~$m$ of~$V$ and two invertible
-self-adjoint matrices~$a, a' ∈ \ro C(m)$, compute a matrix~$x ∈ \ro
-C(m)^{×}$ such that~$x^{⋆} a x = a'$.
+following congruence problem: given an endomorphism~$m$ of~$V$ and two
+invertible self-adjoint matrices~$a, a' ∈ \ro C(m)$, compute a matrix~$x
+∈ \ro C(m)^{×}$ such that~$x^{⋆} a x = a'$.
 \end{prop}
 
 In the particular case where $m$~is cyclic, the commutant~$\ro C(m)$ is
@@ -738,7 +777,16 @@ $m$~is cyclic, then Prop.~\ref{prop:IP1S-congruence} amounts to
 equivalence of 1-dimensional quadratic forms over~$k[m]$, which is simply
 a square root computation.
 
-\subsection{The local IP1S problem in matrix form}%<<<2
+To solve the general case, we first need to recall the structure of the
+commutant algebra~$\ro C(m)$ (part~\ref{ss:commutant-space}); we then
+explicit the adjunction involution~$a ↦ a^{⋆}$ (part \ref{ss:adjunction})
+and give the multiplicative structure of the commutant group~$\ro
+C(m)^{×}$ (part~\ref{ss:commutant-group}). We then need a result for
+quadratic forms over complete local rings (part~\ref{ss:quadratic-forms})
+to conclude the proof.
+
+\subsection{Matrix form of the commutant space}%<<<2
+\label{ss:commutant-space}
 
 We give the structure of the commutant for a local pencil. We first
 examine the case where the pencil is cyclic with characteristic
@@ -767,19 +815,20 @@ $J_{u,v} J_{v,u} = H_{u}^{\abs{u-v}}$.
 \end{lem}
 
 \begin{proof}
-Points~\ref{it:rel-J} and~\ref{it:Juw} are straightforward computations.
-Point~\ref{it:commute-H} follows from the linear relations on the
+Points~\itemref{it:rel-J} and~\itemref{it:Juw} are straightforward computations.
+Point~\itemref{it:commute-H} follows from the linear relations on the
 coefficients on a matrix~$A$ such that~$H_u A = A H_v$.
 \end{proof}
 %>>>
 
 We now turn to the general case where $b_{λ}$~is a local pencil. Let~$m$
-be its characteristic endomorphism~$m$ and $p^d$ be its characteristic
-polynomial, where $p$~is an irreducible polynomial of degree~$e$. We
-describe the matrix~$M$ of~$m$ in an appropriate basis of~$V$.
+be its characteristic endomorphism and $p^d$ be its characteristic
+polynomial, where $p$~is an irreducible polynomial of degree~$e$. There
+exists an appropriate basis of~$V$ in which $m$~has the matrix~$M$ as
+given below.
 
 Let~$M_p$ be the companion matrix of~$p$; then $k[M_p]$~is isomorphic to
-the extension field~$K = k[μ]/(p(μ))$.
+the extension field~$K = k[θ]/(p(θ))$.
 For any matrix~$A = (a_{i,j})$ of size~$u × v$ with
 coefficients in~$K$, let~$A^{♭}$ be the (``flattened'') matrix of
 size~$eu × ev$ with blocks of size~$e × e$ given by~$a_{i,j}(M_p)$.
@@ -787,28 +836,32 @@ The map~$A ↦ A^{♭}$ is a morphism of algebras.
 We write~$A ↦ A^{♯}$ for the inverse map where it is defined.
 There exist integers~$n_1 ≥ … ≥ n_r$ and a basis
 of~$V$ in which the matrix~$M$ of~$m$ is block-diagonal, with diagonal
-blocks~$M_{n_i} = (H_{n_i} + μ)^{♭}$. In this particular case, the
+blocks~$M_{n_i} = (H_{n_i} + θ)^{♭}$. (The matrices~$H_{n_i} + θ$ are the
+Jordan blocks, and this decomposition is a variant of the rational normal
+form). In this particular case, the
 structure of the commutant space~$\ro C(M)$ is known~\cite[VIII, §1,
 Theorem~1]{Gantmacher}:
 
 \begin{prop}\label{prop:structure-commutant}%<<<
-Let~$M$ be the block-diagonal matrix with diagonal blocks~$(H_{n_i} -
-μ)^{♭}$. The commuting space of~$M$ is the space of all matrices~$A^{♭}$,
+Let~$M$ be the block-diagonal matrix with diagonal blocks~$(H_{n_i} +
+θ)^{♭}$. The commuting space of~$M$ is the space of all matrices~$A^{♭}$,
 where $A$~is a block matrix~$A = (A_{i,j})$, with $A_{i,j} ∈
- k[H_{n_i}] J_{n_{i}, n_{j}} = J_{n_i, n_j} k[H_{n_j}]$.
+ k[H_{n_i}] J_{n_{i}, n_{j}} = J_{n_i, n_j} K[H_{n_j}]$.
 \end{prop}
 
 %>>>
 According to Prop.~\ref{prop:structure-commutant}, we have~$\ro C(M) =
 \ro C(M^{♯})^{♭}$. We therefore replace all
 elements~$A$ of~$\ro C(M)$ by their images~$A^{♯}$ in~$\ro C(M^{♯})$. We
-may therefore assume that~$e = 1$, which means that~$K = k$. In this
-case, as~$\ro C(M) = \ro C(M-μ)$, we may further assume that~$μ = 0$.
+may therefore assume that~$e = 1$, which means that~$K = k$.
+
+Since~$\ro C(M) = \ro C(M-θ)$, the matrices~$M$ and~$M - θ$ share the
+same IP1S solutions, so that we may further assume that~$θ = 0$.
 This means that $M$~is the block-diagonal matrix with diagonal
 blocks~$H_{n_i}$ for integers~$n_1 ≥ … ≥ n_r$. We use this matrix~$M$ for
 the remainder of this section.
 
-Let~$A ∈ \ro C(M)$. Each entry~$A_{i,j}$ may be written as a polynomial
+Let~$A ∈ \ro C(M)$. Each block~$A_{i,j}$ may be written as a polynomial
 \begin{equation}
 A_{i,j} = a_{i,j} (H_{n_i}) J_{n_i,n_j} = J_{n_i,n_j} a_{i,j} (H_{n_j})
 \end{equation}
@@ -817,7 +870,8 @@ where $a_{i,j}(H) ∈ k[H]/H^{n_j}$.
 We simplify the notation and write~$A = (a_{i,j})$ where~$a_{i,j} ∈
 k[H]$. We note however that elements of~$\ro C(M)$ do not multiply as
 matrices with coefficients in~$k[H]$, due to the relations
-of Lemma~\ref{lem:commute-jordan}. An easy way to perform the computations is
+of Lemma~\ref{lem:commute-jordan}~\itemref{it:Juw}.
+An easy way to perform the computations is
 given in Prop.~\ref{prop:phantom} below.
 
 \begin{prop}\label{prop:phantom}%<<<
@@ -832,8 +886,8 @@ Then $ψ$~is a $k$-algebra morphism from~$\ro C(M)$ to~$R^{r×r}$.
 
 \begin{proof}
 The matrices of~$\ro C(M)$ multiply according to the relations of
-Lemma~\ref{lem:commute-jordan}. We only need to prove that the
-integers~$e_{i,j}$ satisfy the relations:
+Lemma~\ref{lem:commute-jordan}~\itemref{it::Juw}. We only need to prove
+that the integers~$e_{i,j}$ satisfy the relations:
 \begin{equation}\label{eq:integral}
 e_{i,k} - e_{i,j} + e_{k,j} = \mathrm{distance} (n_k, [n_i, n_j]).
 \end{equation}
@@ -841,7 +895,8 @@ We verify this by checking for all possible orderings of the
 triple~$(i,j,k)$.
 \end{proof}%>>>
 
-\paragraph{The adjunction involution.}
+\subsection{The adjunction involution on~$\ro C(M)$}
+\label{ss:adjunction}
 We now describe the adjunction involution~$A ↦ A^{⋆}$ of the commuting
 space~$\ro C(M)$. The following lemma is an easy computation.
 
@@ -861,11 +916,16 @@ Let~$A = (a_{i,j}(H)) ∈ \ro C(M)$. Then \[ A^{⋆} = (a_{ji}(H)). \]
 In particular, $TA$~is symmetric if, and only if, $a_{i,j} = a_{ji}$
 in~$k[H]/H^{\min (n_i, n_j)}$.
 \end{prop}
+
+\begin{proof}
+This is a consequence of the definition~$A^{⋆} = T^{-1} A T$ and the
+description of~$T$ in Lemma~\ref{lem:big-T}.
+\end{proof}
 %>>>
 
 As a corollary of Prop.~\ref{prop:phantom} and~\ref{prop:adjoint}, we get
-the following. Let~$D$ be the diagonal matrix with entries~$(H^{n_1-n_i})
-∈ R^{r×r}$. For any~$A = (a_{i,j}∈ \ro C(M)$, let
+the following. Let~$D ∈ R^{r × r}$ be the diagonal matrix with
+entries~$(H^{n_1-n_i}) ∈ R^{r×r}$. For any~$A = (a_{i,j}∈ \ro C(M)$, let
 \begin{equation}
 φ(A) = D · ψ(A) = (H^{\max (n_1-n_i,n_1-n_j)}a_{i,j}) ∈ R^{r×r}.
 \end{equation}
@@ -875,7 +935,8 @@ all~$A, X ∈ \ro C(M)$:
 φ(X^{⋆}\,A\,X) = \transpose{ψ(X)}\, φ(A)\, ψ(X).
 \end{equation}
 
-\paragraph{Structure of the commutant group.}%<<<
+\subsection{Multiplicative structure of the commutant group~$\ro C(M)^{×}$}%<<<
+\label{ss:commutant-group}
 
 We show here how to compute in the commutant group~$\ro C(M)^{×}$. The
 main result can be stated in two equivalent ways, as a formula to compute
@@ -925,7 +986,7 @@ generated by the following matrices:
 \begin{enumerate}
 \item big-block-diagonal matrices, i.e. matrices whose only non-zero big
 blocks are those on the diagonal;
-\item small-block transvection matrices.
+\item transvection matrices.
 \end{enumerate}
 \end{prop}
 
@@ -939,6 +1000,7 @@ triangular.
 %>>>
 
 \subsection{Classification of local symmetric pencils}%<<<2
+\label{ss:quadratic-forms}
 
 We shall need the following classic result about bilinear forms over
 local algebras. We hereafter assume that $k$~is a finite field with
@@ -946,7 +1008,7 @@ characteristic different from~$2$.
 
 \begin{prop}[{\cite[92:1]{omeara}}]\label{prop:local-diag}%<<<
 Let~$R$ be a complete local ring with finite residue field~$k$ and~$Δ ∈
-R$ having a non-square image~$δ$ in~$R$. Any regular symmetric matrix
+R$ having a non-square image~$δ$ in~$k$. Any regular symmetric matrix
 with entries in~$R$ is congruent over~$R$ to a diagonal matrix~$(1, …, 1,
 ε)$, where $ε ∈ \acco{1, Δ}$.
 \end{prop}
@@ -987,15 +1049,15 @@ big block of~$A$. We may then write $A$~as a block matrix
 \begin{equation}
 A = \mat{B & C \\ \transpose{C} & A'}, B ∈ R^{d×d}.
 \end{equation}
-Since $A$~is invertible, all its diagonal big blocks are invertible; in
-particular the matrices~$B$ and $A'$~are invertible. By the induction
-hypothesis, there exists~$X'$ such that~$Δ = (X')^{*} A' X'$ is
-big-block diagonal.
+Since $A$~is invertible, by Prop.~\ref{prop:structure-gl}, all its
+diagonal big blocks are invertible; in particular the matrices~$B$ and
+$A'$~are invertible. By the induction hypothesis, there exists~$X'$ such
+that~$D = (X')^{*} A' X'$ is big-block diagonal.
 
 We then define
 \begin{equation}
 X = \mat{1 & -B^{-1} C\\0 & X'}\quad\text{and see that}\quad
-X^{⋆} A X = \mat{B & 0\\0 & Δ}.
+X^{⋆} A X = \mat{B & 0\\0 & D}.
 \end{equation}
 \end{proof}
 
@@ -1007,6 +1069,9 @@ Then, using the notations from~\eqref{eq:phi-psi}, no matrix of the
 form~$ψ(X) = \mat{x_1&H x_2\\x_3&x_4}$ diagonalizes~$φ(A) =
 \mat{H&H\\H&H^2}$ in~$R^{2×2}$, and therefore $A$~is not not big-block
 diagonalizable by a matrix commuting with~$M$.
+
+This regularity hypothesis will be satisfied in the IP1S case since we
+then have~$A = T^{-1} B_{∞}$.
 %>>>
 \begin{prop}\label{prop:diag}%<<<
 Let~$A$ be an invertible, self-adjoint element of~$\ro C(M)$. Then $A$~is
@@ -1056,10 +1121,16 @@ the canonical form above. This form will be the same iff the two pencils
 are isomorphic in the IP1S sense, and in this case, composing the two
 transformations gives an answer to the computational IP1S problem.
 
-The only place where the finiteness of~$k$ is required for this theorem
-to hold is for the computation of square roots, needed for
-Prop.~\ref{prop:local-diag}. We also note that, if $(b_{λ})$~is regular,
-then~$h = 0$ and the algorithm in this case has complexity~$\Ot(n^3)$.
+The only place where the finiteness of~$k$ is required in the proof of
+this theorem is for the structure of quadratic forms over~$k$ in
+Prop.~\ref{prop:local-diag}. Even when $k$~is infinite, if it has a good
+theory of quadratic forms, we expect it to translate to a good theory of
+the IP1S problem over~$k$.
+
+We also note that, if $(b_{λ})$~is regular,
+then~$h = 0$ and the algorithm in this case has complexity~$\Ot(n^3)$. As
+explained before, this is the dominant case and we therefore expect any
+implementation on random pencils to run in average time~$\Ot(n^3)$.
 
 \paragraph{Algorithm and complexity.}
 
@@ -1076,13 +1147,13 @@ Prop.~\ref{prop:kronecker-split}.
 its characteristic polynomial~$f(λ)$ and split~$V$ as an orthogonal direct
 sum of primary components~$V_p$ for each prime divisor~$p$.
 \item \label{it:alg-local} For each prime divisor~$p$, write the local
-pencil~$\bm{b}_p$ at~$p$ as a matrix with entries in~$K = k[μ]/p(μ)$.
+pencil~$\bm{b}_p$ at~$p$ as a matrix with entries in~$K = k[θ]/p(θ)$.
 Perform big-block reduction to write~$\bm{b}_p$ as an orthogonal direct
 sum of quadratic forms over~$K[H]/H^{n_i}$, and then reduce
 each of these forms to one of the two canonical diagonal forms.
 \end{enumerate}
 
-Most of the linear algebra steps, including computing the Frobenius
+Most of the linear algebra steps, including computing the
 rational normal form of the regular part of the pencil, may be done
 in~$\Ot(n^3)$ field operations~\cite{kaltoffen11compute}. In particular,
 the Frobenius rational normal form covers the factoring of the
@@ -1093,30 +1164,30 @@ over the local algebras is just the reduction over the residual field
 a Hensel lift.
 
 The only part not covered by classic algorithms is the reduction to
-Kronecker normal form performed in Step~\ref{it:alg-kronecker}. Computing
+Kronecker normal form performed in Step~\itemref{it:alg-kronecker}. Computing
 the minimal isotropic vectors requires solving a chain of~$h$ equations
 of the form~$b_{∞}(x) = b_0(y)$ and hence has a complexity~$O(n^3(h+1))$.
 The same applies to the computation of a preimage by the map~$∂_h$
 of~\eqref{eq:deriv-surj}. \ifapx This algorithm is detailed in
 Appendix~\ref{A:algo} below. \fi
 
-There exist cubic algorithms computing the Kronecker kernel of pencils of
+There exist cubic algorithms computing the Kronecker decomposition of pencils of
 linear maps over a characteristic zero field~\cite{beelen1988improved}.
 These algorithms are not directly applicable over a finite field as they
 use some rotations over the real numbers and are mostly concerned with
 numerical stability; more importantly, they work with linear maps up to
 equivalence, whereas we need quadratic forms up to congruence. However, as the
 corresponding problem over a finite field has not been much studied, the
-existence of a faster algorithm for computing the Kronecker kernel is not
+existence of a faster algorithm for computing the Kronecker decomposition is not
 unlikely.
 
 \paragraph{Decisional IP1S and extensions of scalars.}
 
 The solution of IP1S over an extension field
 in~\cite{DBLP:journals/corr/BerthomieuFP13} raises the following
-question: given two pencils~$\bm{a}$, $\bm{b}$ which are IP1S-equivalent
-over an extension~$k'$ of the field~$k$, are they always equivalent over
-the field~$k$?
+question: given two pencils~$\bm{a}$, $\bm{b}$ defined over a field~$k$
+and IP1S-equivalent over an extension~$k'$ of~$k$, are they always
+equivalent over the base field~$k$?
 
 The structure given by theorem~\ref{thm:IP1S} gives an easy answer
 to this question. As the Kronecker blocks are invariant by extension of
@@ -1375,16 +1446,17 @@ translation of part~\ref{SS:Kronecker-reduction}.
 
 \step{Compute the minimal isotropic vectors~$(e_1,…,e_h)$}%<<<2
 
-Write the~$n × (2n)$-matrix~$(-B_{∞} \; B_0)$ in lower row echelon form as
+Write the~$n × (2n)$-matrix~$(B_{∞} \; B_0)$ in lower row echelon form as
 \begin{equation}
-(B_{∞} \; B_0) \;=\; \mat{A_{∞} & 0\\ C & A_0},
+(B_{∞} \; B_0) \;=\; (⋆) · \mat{A_{∞} & 0\\ C & A_0},
 \end{equation}
-where $0$~is a $r × n$-block with $r$~being the largest possible value.
+where $(⋆)$~is an invertible~$n × n$-matrix and
+$0$~is a $r × n$-block with $r$~being the largest possible value.
 This implies that the $n-r$~lines of~$A_0$ are linearly independent, and
 therefore that its columns have full rank~$n-r$; therefore, there exists
-a matrix~$F$ such that~$C = A_0 F$. From this, we see that
+a matrix~$F$ such that~$C = -A_0 F$. From this, we see that
 \begin{equation}
-B_{∞} x = B_0 y \;⇔ \; \begin{cases} A_{∞} x = 0\\ y ∈ Fx + \Ker A_0.
+B_{∞} x + B_0 y = 0 \;⇔ \; \begin{cases} A_{∞} x = 0\\ y ∈ Fx + \Ker A_0.
 \end{cases}
 \end{equation}
 In particular, the case~$x = 0$ tells us that $\Ker A_0 = \Ker B_0$. By
@@ -1392,7 +1464,7 @@ using the \emph{upper} row echelon form, we likewise compute a matrix~$G$
 such that~$B_{∞} x = B_0 y$ implies~$x ∈ G y + \Ker B_{∞}$.
 
 A \emph{chain} of length~$h$ is a solution~$(e_0,…,e_h)$ of te
-equations~$b_0(e_i) = b_{∞}(e_{i-1})$ and~$b_{∞}(e_h) = 0$.
+equations~$b_0(e_i) + b_{∞}(e_{i-1}) = 0$ and~$b_{∞}(e_h) = 0$.
 We define by induction a sequence~$(U_i)$ of vector spaces such that the
 $h$-chains are defined by the relations~$e_0 ∈ U_h$ and~$e_i ∈ F(e_{i-1})
 + U_{h-i}$.
@@ -1401,7 +1473,7 @@ The base case is that of chains of length~$0$, which are the
 elements of~$\Ker B_{∞}$. We define $U_0 = \Ker B_{∞}$.
 
 A $(h+1)$-chain is a $(h+2)$-uple~$(e_0,…,e_{h+1})$ such that
-$(e_1,…,e_{h+1})$~is a $h$-chain and $b_{0} e_1 = b_{∞} e_0$.
+$(e_1,…,e_{h+1})$~is a $h$-chain and $b_{0} e_1 + b_{∞} e_0 = 0$.
 The first condition amounts to~$e_1 ∈ U_h$ and~$e_i = f(e_{i-1}) +
 U_{h-i}$ for all~$i ≥ 2$; the second one means that $e_0 ∈ G U_{h} + \Ker
 B_{∞}$. We define~$U_{h+1} = G U_h + \Ker B_{∞}$.
@@ -1421,7 +1493,8 @@ this basis on the quotient~$V/K$ to directly obtain a (sorted) basis of
 the isotropic vectors of~$V/K$.
 
 \step{Compute a Kronecker module as a direct factor}%<<<2
-We can, with no more than~$O(n^3)$ field operations, compute
+Given the vectors~$e_1,…,e_h$ computed in the previous step,
+we can, with no more than~$O(n^3)$ field operations, compute
 vectors~$f_1,…,f_h$ such that~$b_0(e_i, f_j) = 1$ if~$i = j$ and
 $0$~otherwise.
 In any basis completing the family~$(e_0, …, e_h; f_1, …, f_h)$,
@@ -1436,8 +1509,8 @@ coordinates of the form
 P = \mat{1 & 0 & X\\0&1&0\\0&Y&1}.
 \end{equation}
 The action of~$P$ on the sub-matrix~$C_{λ}$ of~$B_{λ}$ is given by $C_{λ}
-← C_{λ} + \transpose{X} K'_{λ} + B_{λ} Y$. Now let~$x_0,…,x_{h};\;
-y_1,…,y_h;\; c_1,…,c_h;\; c'_1,…,c'_h$ be the columns of~$\transpose{X}, Y,
+← C_{λ} + \transpose{X} K'_{λ} + B_{λ} Y$. Now let~$x_0,…,x_{h}$;
+$y_1,…,y_h$; $c_1,…,c_h$; $c'_1,…,c'_h$ be the columns of~$\transpose{X}, Y,
 C_0$ and~$C_{∞}$. We then have to
 solve the equations
 \begin{equation}\label{eq:chvar-x}
@@ -1447,10 +1520,10 @@ solve the equations
 This uniquely determines the values~$x_0$ and~$x_{h}$. The equations
 for~$x_1,…,x_{h-1}$ have solutions iff the values~$y_1,…,y_h$ satisfy
 the relations
-$B'_0 y_i - B'_{∞} y_{i+1} = c'_{i+1} - c_i$ for~$i = 1,…,h-1$. This
+$B'_0 y_i + B'_{∞} y_{i+1} = c'_{i+1} - c_i$ for~$i = 1,…,h-1$. This
 translates into matrix form as
 \begin{equation}\label{eq:chvar-y}
-\mat{B'_0&-B'_{∞}&&0\\&\;\sddots{-B'_{∞}}&\sddots{-B'_{∞}}&\\0&&B'_0&-B'_{∞}} ·
+\mat{B'_0&B'_{∞}&&0\\&\;\sddots{B'_{∞}}&\sddots{B'_{∞}}&\\0&&B'_0&B'_{∞}} ·
   \mat{y_1\\⋮\\y_h} = \mat{c'_2-c_1\\⋮\\c'_h-c_{h-1}}.
 \end{equation}
 We may solve this equation using the same technique as that of Step~1,
