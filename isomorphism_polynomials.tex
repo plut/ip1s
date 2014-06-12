@@ -74,7 +74,10 @@
 \title%[Solving ``Isomorphism of Polynomials with Two Secrets'']%
 {Solving the ``Isomorphism of Polynomials with Two Secrets'' Problem
 for All Pairs of Quadratic Forms}%<<<1
-%\author{Pierre-Alain Fouque \and Gilles Macario-Rat \and Jérôme Plût}
+\author{Jérôme Plût\footnote{ANSSI}
+\and Pierre-Alain Fouque\footnote{Université Rennes 1 and Institut
+Universitaire de France}
+\and Gilles Macario-Rat\footnote{Orange Labs}}
 \maketitle
 
 \begin{abstract}%<<<
@@ -549,9 +552,10 @@ characteristic zero~\cite[XII, §4]{Gantmacher}.
 \label{S:IP1S-regular}
 
 We give here an algorithm for solving the IP1S problem in the case of two
-regular pencils. Assume that $\bm{b} = (b_{λ})$~is regular, and let~$f ≠ 0$
-be its characteristic polynomial. Then, for any~$λ$ such that~$f(λ) ≠ 0$,
-the bilinear form~$b_{λ}$ is regular.
+regular pencils. Assume that $\bm{b} = (b_{λ})$~is regular, which means
+that its characteristic polynomial~$f(λ) = \det (b_0 + λ b_{∞})$ is not
+zero. Then, for any~$λ$ such that~$f(λ) ≠ 0$, the bilinear form~$b_{λ}$
+is regular.
 
 \subsection{Localisation of the IP1S problem}%<<<2
 
@@ -623,12 +627,12 @@ therefore~$y ∈ W$. By~(iii), this implies~$y = 0$.
 \begin{lem}\label{lem:decomp-bezout}%<<<
 Let~$\bm{b}$ be a regular symmetric pencil on the vector space~$V$.
 Let~$f(λ: μ) = \det (λ b_{∞} + μ b_0)$~be the homogeneous characteristic
-polynomial of~$S$, and let~$f = ∏ g_i$ be a factorisation of~$f$ in
+polynomial of~$\bm{b}$, and let~$f = ∏ g_i$ be a factorisation of~$f$ in
 mutually coprime factors.
 
 Then there exists a unique decomposition~$V = ⨁ V_i$ such that the
 spaces~$V_i$ are pairwise orthogonal for all forms of~$\bm{b}$ and the
-restriction~$S|_{V_i}$ has characteristic polynomial~$g_i$.
+restriction~$\bm{b}|_{V_i}$ has characteristic polynomial~$g_i$.
 \end{lem}
 
 \begin{proof}
@@ -1097,18 +1101,19 @@ pencil with diagonal blocks of the following form:
 Prop.~\ref{prop:kronecker};
 \item \emph{finite local blocks}~$L_{p,d,u}$, defined as the~$d ×
 d$-block matrix
-\[ L_{p,d,u} \;=\; \mat{0&&&T_p u (λ - M_p)\\&&\siddots{T_pu}&T_p u\\
-  &\siddots{T_pu}&\siddots{T_pu}&\\T_pu(λ-M_p)&T_p u&&0}, \]
+\[ L_{p,d,u} \;=\; \mat{0&&-T_p u&T_p u (λ - M_p)\\
+  &\siddots{-T_p u}&\siddots{-T_pu}&\\
+  -T_p u&\siddots{-T_pu}&\\T_pu(λ-M_p)&&&0}, \]
 where $p$~is an irreducible polynomial, $M_p$~is the companion matrix
 of~$p$, $T_p$~is a prescribed invertible matrix such that both~$T_p$
 and~$T_p M_p$~are symmetric, $d$~is an integer, and $u$~is either the
 identity matrix or a prescribed non-square element of the field~$k[M_p]$,
 with the extra condition that for fixed~$(p, d)$, at most one of the
 values~$u$ may be different from~$1$;
-\item \emph{infinite local blocks}~$L_{1,d,u}$, defined as
+\item \emph{infinite local blocks}~$L_{∞,d,u}$, defined as
 the~$d×d$-matrix
-\[ L_{1,d,u} \;=\; u\mat{0&&&1\\&&\siddots{λ}&λ\\
-  &\siddots{λ}&\siddots{λ}&\\1&λ&&0}, \]
+\[ L_{∞,d,u} \;=\; u\mat{0&&-λ&1\\&\siddots{-λ}&\siddots{-λ}&\\
+  -λ&\siddots{-λ}&&\\1&&&0}, \]
 where $d$~is an integer, $u$~is either 1 or a prescribed non-square
 element of~$k$, and for fixed~$d$, at most one of the values~$u$ may be
 different from~$1$.
