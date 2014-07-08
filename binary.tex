@@ -1,0 +1,385 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{unicode}
+\usepackage{math}
+\usepackage[margin=25mm]{geometry}
+\usepackage{color}
+\DeclareUnicodeCharacter{26A0}{{\color{red}\ensuremath{\lower .25ex\hbox{\Large
+$\triangle$\hskip -1.25ex}!\;\,}}}
+
+
+\def\transpose#1{{\vphantom{#1}}^{\mathrm{t}}\!#1}
+\def\mat#1{\begin{pmatrix}#1\end{pmatrix}}
+\def\F{\mathbb{F}}
+\def\appli#1#2#3#4{\begin{array}{rcl}#1&\longrightarrow&#2\\
+  #3&\longmapsto&#4\end{array}}
+\DeclareMathOperator\GL{GL}
+
+\begin{document}
+\title{Solving IP1S in characteristic two: the fully irregular case}
+
+A pencil is \emph{fully irregular} if its regular part is zero,
+\emph{i.e.} if it is isomorphic to a direct sum of Kronecker modules.
+
+\section{The equations for IP1S}
+
+Let~$k$ be a finite field with characteristic~$2$. Except where
+indicated, all tensor products shall be taken over~$k$.
+
+\subsection{Kronecker modules as homogeneous polynomials}
+
+
+For~$d ≥ 0$, we write~$H_d$ for the $d+1$-dimensional space of
+homogeneous polynomials in~$k[x:y]$ of degree~$d$. For any~$h ∈ H_m$, the
+multiplication by~$m$ defines linear maps~$H_d → H_{d+1}$, which we again
+write~$h$; all these maps
+commute with each other. We write~$H_d^{∨}$ for the dual vector space
+of~$H_d$, and~$h^{∨}: H_{d+1}^{∨} → H_{d}^{∨}$ for the transposed
+maps of~$h$. We also write~$\chev{φ, f}$ for the canonical bilinear
+map~$H_d ⊗ H_d^{∨} → k$; we note that, for~$f ∈ H_{d-1}$ and~$φ ∈
+H_d^{∨}$, we always have the relation~$\chev{φ, fh} = \chev{h^{∨} φ, f}$.
+
+The \emph{Kronecker module} of degree~$d ≥ 0$ over~$k$ is the
+$2d+1$-dimensional space~$K_d = H_{d-1} ⊕ H_d^{∨}$, equipped with the
+symmetric bilinear pencil~$(b_{t})$ defined for~$f, f' ∈ H_{d-1}$ and~$φ,
+φ' ∈ H_{d}^{∨}$ by
+\begin{equation}
+b_t (f, f') \;=\; b_t (φ, φ') \;=\; 0; \qquad
+b_t (f, φ) \;=\; \chev {φ, (x-ty) f}.
+\end{equation}
+We shall write~$u · v$ instead of~$b_t (u, v)$.
+
+% For~$d ≥ -1$, we write~$P_d$ for the
+% $d+1$-dimensional space of polynomials in~$k[x]$ of degree~$≤ d$,
+% and~$P_d^∨$ for its dual. Let~$ι_d: P_{d-1} → P_{d}$ be the natural
+% injection map and~$x_d: P_{d-1} → P_{d}$ be the multiplication by~$x$.
+% The various maps~$ι_d$ and~$x_d$, when composable, commute with each
+% other, and we shall simply write them as~$ι$ and~$x$. They define
+% transposed maps~$ι^{∨}$ and~$x^{∨}: P_{
+
+% The \emph{Kronecker module} of degree~$d$
+% over~$k$ is then the space~$K_d = P_{d-1} ⊕ P_d^{∨}$, equipped with the
+% symmetric bilinear pencil~$(b_{t})$ defined for~$f, f' ∈ P_{d-1}$ and~$φ, φ' ∈
+% P_{d}^{∨}$ by
+% \begin{equation}
+% b_t (f, f') \;=\; b_t (φ, φ') \;=\; 0, \qquad
+% b_t (f, φ') \;=\; \chev{φ, (x - t) ι_d f}.
+% \end{equation}
+
+\subsection{Kronecker modules with coefficients}
+
+A \emph{coefficient space} is a bilinear space~$E$ isomorphic to~$k^n$,
+together with its standard scalar product~$u, v ↦ u · v$. For any linear
+maps~$α: V → E$, $β: W → E$, we write~$α · β$ for the corresponding
+bilinear form on~$V × W$.
+
+The bilinear module~$K_d^{n}$ is isomorphic to~$E ⊗ K_d$. For~$u ∈ E ⊗
+H_m$ written as~$u = ∑ u_i ⊗ x^i$ with~$u_i ∈ k^n$ and~$x^i ∈ H_m$, we
+define, for~$f ∈ H_d$ and~$φ ∈ H_d^{∨}$,
+\begin{equation}
+u f \;=\; ∑ u_i ⊗ (x^i f) \;∈ E ⊗ H_{d+m}, \quad
+u^{∨} φ \;=\; ∑ u_i ⊗ ((x^i)^{∨} φ) \;∈ E ⊗ H_{d-m}^{∨}.
+\end{equation}
+Likewise, for any~$h ∈ \Hom(E, E') ⊗ H_m$, write~$h = ∑ h_i ⊗ x^i$
+with~$h_i ∈ \Hom (E, E')$. For any~$u ⊗ f ∈ E ⊗ H_d$, we define~$h(u ⊗
+f) ∈ E' ⊗ H_{d+m}$ by~$h(u ⊗ f) = ∑ h_i(u) ⊗ (x^i f)$. An element
+of~$\Hom (E ⊗ H_d, E' ⊗ H_{d+m})$ defined in this way is called
+\emph{principal}. In the same way, we define principal elements of~$\Hom
+(E ⊗ H_{d+m}^{∨}, E' ⊗ H_{d}^{∨})$.
+
+Let~$r ≤ s$ be two integers and~$E, E'$ be two coefficient spaces. We say
+that a bilinear form~$B$ on~$(E ⊗ H_r) × (E' ⊗ H_s^{∨})$ is
+\emph{principal} if it is of the form~$B(f, φ) = \chev {φ, hf} = \chev
+{h^{∨} φ, f}$ for some~$h ∈ \Hom (E, E') ⊗ H_{s-r}$.
+
+\begin{lem}\label{lem:principal}
+Let~$r ≤ s$ be two integers and~$E, E'$ be two coefficient spaces.
+\begin{enumerate}
+\item A bilinear form~$B$ on~$(E ⊗ H_r) × (E' ⊗ H_s^{∨})$ is principal
+if, and only if, for any polynomial~$z$, $B(zf, φ) = B(f, z^{∨} φ)$.
+\item Let~$α: E ⊗ H_r → E' ⊗ H_s$ and~$β: E' ⊗ H_s^{∨} → E ⊗ H_r^{∨}$ be
+two linear maps. If $1 · α + β · 1$~is principal, then both~$α$ and~$β$
+are principal.
+\end{enumerate}
+\end{lem}
+
+\subsection{The automorphisms of a direct sum of Kronecker modules}
+
+Any totally irregular pencil of quadrics is isomorphic to a space of the
+form~$⨁ E_d ⊗ K_d$, where~$E_d = k^{n_d}$, and $(n_d)$~is some finite
+sequence of integers.
+
+
+\begin{prop}\label{prop:aut-Ed-Kd}
+The automorphisms of~$⨁ E_d ⊗ K_d$ are of the form
+\[ u ⊗ f ↦ ∑_{d' ≥ d} α_{d,d'} (u) f + ∑_{d'} f^{∨} γ_{d,d'} (u), \quad
+u ⊗ φ ↦  ∑_{d' ≤ d} β_{d,d'} (u)^{∨} φ, \]
+where~$α_{d,d'} ∈ \Hom (E_d, E_{d'}) ⊗ H_{d'-d}$, $β_{d,d'} ∈ \Hom (E_d,
+E_{d'} ⊗ H_{d-d'})$ and~$γ_{d,d'} ∈ \Hom (E_{d}, E_{d'}) ⊗
+H_{d+d'-1}^{∨}$ satisfy the following relations: let~$A, B, C$ be the
+matrices~$(α_{d,d'})$, $(β_{d,d'})$, and~$(γ_{d,d'})$; then
+$\transpose{A} · B = 1$, and $\transpose{A} C$~is symmetric.
+\end{prop}
+
+
+% \begin{prop}\label{prop:aut-Ed-Kd}
+% The group of automorphisms of~$⨁ E_d ⊗ K_d$ is generated by the following
+% elements:
+% \begin{enumerate}
+% \item elements of the form~
+% \begin{equation}
+% u ⊗ f ↦ ∑_{d' ≥ d} α_{d, d'} (u) f, \quad
+% u ⊗ φ ↦ ∑_{d' ≤ d} β_{d, d'} (u)^{∨} φ,
+% \end{equation}
+% where~$α_{d, d'}: E_{d} → E_{d'} ⊗ H_{d'-d}$ and~$β_{d,d'}: E_{d} → E_{d'} ⊗ H_{d-d'}$ are linear maps satisfying
+% the relations, for~$d ≤ d'$
+% \begin{equation}
+% ∑_{i=d}^{d'} α_{d,i} · β_{d',i} =
+% \begin{cases} 1 & \text{if $d = d'$,}\\0 & \text{else.}\end{cases}
+% \end{equation}
+
+% \item elements of the form~$u ⊗ φ ↦ u ⊗ φ$, $u ⊗ f ↦ ∑_{d'} γ_{d,d'} (u)
+% f$, where~$γ_{d,d'}: E_d → E_{d'} ⊗ P_{d+d'}^{∨}$ is a linear map, such
+% that~$γ_{d,d'} = \transpose{γ_{d', d}}$.
+% \item elements of the form
+% \begin{equation}
+% u ⊗ φ ↦ u ⊗ φ, u ⊗ f ↦ u ⊗ f + ∑_{d'} f^{∨} γ_{d,d'} (u),
+% \end{equation}
+% where~$γ_{d,d'}: E_{d} → E_{d'} ⊗ H_{d+d'-1}^{∨}$ is such
+% that~$\transpose{γ_{d,d'}} = γ_{d',d}$.
+% \end{enumerate}
+% \end{prop}
+
+In the above theorem, we understand the elements~$u ⊗ f$ and~$u ⊗ φ$ to
+belong to the spaces~$E_d ⊗ H_{d-1}$ and~$E_d ⊗ H_d^{∨}$. For~$d > d'$,
+the space~$H_{d' - d}$ is zero, and therefore~$α_{d,d'} = β_{d',d} = 0$.
+
+The relation~$\transpose{A} · B = 1$ means that, for all~$d, d'$, $∑_i
+α_{d,i} · β_{d',i} = 1$ if $d = d'$ and~$0$ else; this product is to be
+interpreted as the collection of the corresponding terms of all degrees
+in~$(x:y)$.
+
+The equation on~$∑
+α_{d,i} · β_{d',i}$ is to be interpreted as the collection of the
+corresponding terms for all degreees in~$(x:y)$. Writing the matrices~$A
+= (α_{d,d'})$ and~$B = (β_{d,d'})$ ($A$~is lower triangular while $B$~is
+upper triangular), these relations mean that the scalar
+product~$\transpose{A} · B$ is the identity matrix. Therefore, the
+elements~$α_{d,d'}$ uniquely determine all of the~$β_{d,d'}$.
+
+
+\begin{proof}[Proof of Prop.~\ref{prop:aut-Ed-Kd}]
+Let~$F$ be an automorphism of~$V = ⨁ E_d ⊗ K_d$. The space~$V$ is
+filtered by the degrees of its kernel vectors: for all~$d$, the
+sub-space~$⨁ E_{d'} ⊗ H_{d'}^{∨}$ for~$d' ≤ d$ is exactly the linear span
+of all kernel vectors of degree~$≤ d$. Therefore, $F$~is upper triangular
+on these spaces, so that we may write, for~$u ∈ E_d$, $φ ∈ H_{d}^{∨}$
+and~$f ∈ H_{d-1}$:
+\begin{equation}
+F(u ⊗ f) = ∑_{d'} α_{d,d'} (u ⊗ f) + ∑_{d'} γ_{d,d'} (u ⊗ f), \quad
+F(u ⊗ φ) = ∑_{d' ≤ d} β_{d,d'} (u ⊗ φ),
+\end{equation}
+where~$α_{d,d'}: E_d ⊗ H_{d-1} → E_{d'} ⊗ H_{d'-1}$, $γ_{d,d'}: E_d ⊗
+H_{d-1} → E_{d'} ⊗ H_{d'}^{∨}$ and~$β_{d,d'}: E_d ⊗ H_{d}^{∨} → E_d ⊗
+H_{d'}^{∨}$. Moreover, for all~$d$, since $β_{d,d}(u ⊗ φ)$~preserves the
+kernel of~$b$, it is principal, i.e. of the form~$β_{d,d,0} (u) ⊗ φ$
+where $β_{d,d,0}: E_d → E_d$~is a linear map.
+
+
+Since the collection of all endomorphisms~$β$ is upper triangular, the
+collection of all endomorphisms~$α$, which is its inverse transpose, is
+lower triangular. We may then use Lemma~\ref{lem:principal} to prove that
+all the~$α_{d,d'}$ and~$β_{d,d'}$ are principal, by induction on~$d-d'$.
+% Write~$β · α$ for the bilinear product of~$β(v ⊗ φ)$ and~$α(u ⊗ f)$, so
+% that we have for all~$r, s$ the relation $∑_{i ≤ s} β_{s,i} · α_{r,i}
+% = 1$ if $r = s$ and $0$~else.
+% We now prove by induction on~$d$ the following statement: $β_{s,s} ·
+% α_{s,s} = 1$ and, for all~$r > s$, we have~$α_{r,s} = 0$. For~$s = 0$,
+% the previous relation becomes~$β_{0,0} α_{r,0} = 1$ if~$r = 0$ and
+% $0$~else. The case~$r = 0$ proves that~$β_{0,0}$~is invertible and
+% therefore that all~$α_{r,0}$ for~$r ≥ 1$ are zero. The induction step
+% works in the same way: the relation for~$s$ is now~$∑
+\end{proof}
+
+
+
+\section{Old version}
+
+We write~$K_d$ for the Kronecker module of dimension~$2d+1$: its basis
+is~$(e_0, …, e_d, f_1, …, f_d)$, with the bilinear pencil~$b_{λ}$ defined
+by~$-b_{∞} (e_j, f_{j+1}) = b_{0} (e_j, f_j) = 1$ and~$0$ else. We shall
+write~$e_{d,i}$ and~$f_{d,i}$ when needed to prevent ambiguity. We also
+write~$K_d^+$ for the space generated by the vectors~$e_i$ and~$K_d^-$
+for that generated by the~$f_i$.
+
+Let~$k^n$ be the $n$-dimensional vector space, equipped with its
+canonical scalar product and its canonical basis~$(ε_1, …, ε_n)$. Given a
+sequence of integers~$(n_d)$, we write~$E_d = k^{n_d}$. The
+bilinear module~$K_d^{n_d}$ is isomorphic to~$E_d ⊗ K_d$, with the basis~$ε_i ⊗
+e_j, ε_i ⊗ f_j$. We order this basis in the following way: $ε_1 ⊗ e_0, …,
+ε_{n_d} ⊗ e_0, …, ε_{n_d} ⊗ e_d, ε_1 ⊗ f_1, …, ε_{n_d} ⊗ f_1, …, ε_{n_d} ⊗ f_d$.
+
+⚠ la prop. 2 est synonyme de la prop. 1, à plus bas niveau, et j'ai un
+peu moins confiance dans le fait de ne pas m'être planté dans les
+indices...
+
+\begin{prop}
+Let~$V = ⨁ K_d^{n_d} = ⨁ E_d ⊗ K_d$ be a module with a totally irregular
+bilinear pencil. Each automorphism of~$V$ is the product, in
+this order, of the following maps:
+\begin{enumerate}
+\item an endomorphism of the form
+\[\begin{array}{rcl}
+u ⊗ e_{d,i} & \longmapsto & \displaystyle ∑_{m ≥ 0} ∑_{j=0}^{m}
+  α_{d,m,j} (u) e_{d-m,i-j},\\
+u ⊗ f_{d,i} & \longmapsto & \displaystyle ∑_{m ≥ 0} ∑_{j=0}^{m}
+  β_{d,m,j} (u) f_{d+m,i+j},
+\end{array}\]
+where~$α_{m,j}: E_{d} → E_{d-m}$ and~$β_{m,j}: E_{d} →
+E_{d+m}$ are $k$-linear maps such that, when writing~$α_{d,m} = ∑ x^j
+α_{d,m,j}$ and~$β_{d,m} = ∑ y^j β_{d,m,j}$, we have the relation
+\begin{equation}
+∑_{i+j=m} \transpose{α_{d+m,i}} β_{d,j} = \begin{cases}
+1 & \text{if $m = 0$,}\\0 & \text{if $m ≥ 1$.}
+\end{cases}
+\end{equation}
+\item the map defined by
+\[\begin{array}{rcl}
+u ⊗ e_{d,i} & \longmapsto & u ⊗ e_{d,i},\\
+u ⊗ f_{d,i} & \longmapsto & u ⊗ f_{d,i} + \displaystyle
+  ∑_{(d',i')} γ_{d,d',i+i'}(u) ⊗ e_{d',i'}\\
+\end{array}\]
+where $γ_{d,d',i}: E_d → E_{d'}$, for~$i=1,…, d+d'$, is a linear
+map such that~$\transpose{γ_{d,d',i}} = γ_{d',d,i}$.
+\end{enumerate}
+\end{prop}
+
+% \begin{prop}\label{prop:Aut-Kdn}
+% The isometries of~$K_d^n → K_d^n$ have the matrix form
+% \[ \mat{A&&&&&\\ &⋱&&&(C_{i+j})&\\&&A&&&\\
+%   &&&\transpose{A^{-1}}&&\\&0&&&⋱&\\&&&&&\transpose{A^{-1}}}, \]
+% where $A$~is an invertible matrix of size~$n × n$, and the
+% matrices~$(C_{i})$, for~$i = 1, …, 2d$, are such that $A^{-1} C_{i}$~is
+% symmetric.
+% \end{prop}
+% 
+% \begin{proof}
+% Let~$K_d[λ] = K_d ⊗_{k} k[λ]$. We recall that the kernel of~$b_{λ} =
+% b_{0} + λ b_{∞}$ in~$K_d[λ]$ is the line generated by~$e(λ) = ∑ λ^j e_j$.
+% 
+% Let~$u: K_d^n → K_d^n$ be an isometry; it extends as an isometry of~$E ⊗
+% K_d[λ]$. For all~$v ∈ k^n$, the vector~$u(v
+% ⊗ e(λ)$ belongs to the kernel of~$b_{λ})$ and is therefore of the
+% form~$α(v) ⊗ e(λ)$, where $α: E → E$~is a linear map. Since $u$~is an
+% automorphism, the map~$α$ is invertible.
+% 
+% There exist linear maps~$β_{i,j}, γ_{i,j}: E → E$ such that~$u(v ⊗ f_i) =
+% ∑ β_{i,j} (v) ⊗ f_j + ∑ γ_{i,j} (v) ⊗ e_j$. The relations for~$b_{λ}
+% (u(v ⊗ e_i), u(v' ⊗ f_j))$ write down as
+% \begin{equation}
+% α(v) · β_{i,j} (v') = \text{$1$ if $r = i$, $0$ else;}
+% \end{equation}
+% since $α$~is regular, this means that $β_{i,i} = α' = \transpose{α}^{-1}$
+% and all other~$β_{i,j}$ are zero. The relations~$b_{λ} (u(v ⊗ f_i), u(v' ⊗
+% f_j)) = 0$ write down as
+% \begin{equation}
+% γ_{i,j}(v) · α'(v') + α'(v) · γ_{j,i} (v') = 0; \quad
+% γ_{i,j-1} (v) · α'(v') + α'(v) · γ_{j,i-1} (v') = 0.
+% \end{equation}
+% Letting~$C_{i,j}$ be the matrix of~$γ_{i,j}$ and~$C'_{i,j} = A^{-1}
+% C_{i,j}$, these relations become
+% \begin{equation}
+% C'_{i,j} + \transpose{C'_{j,i}} = 0, \quad
+% C'_{i,j-1} + \transpose{C'_{j,i-1}} = 0.
+% \end{equation}
+% From these we deduce that $C'_{i,j} = C'_{i+1,j-1}$ and $C'_{i,j} +
+% \transpose{C'_{i,j}} = 0$.
+% \end{proof}
+
+
+
+We write~$Δ$ for the canonical isomorphism from diagonal matrices to
+column vectors, and $∇ = Δ^{-1}$. We easily check that, for any column
+vector~$X$ and square matrix~$A$, we have~$Δ(A ∇(X) \transpose{A}) = σ(A)
+X$, where $σ$~is the absolute Frobenius.
+
+Let~$q$ be a quadratic pencil, with polar form
+isomorphic to~$K_d^n$; then, using the above basis of~$E ⊗ K_d$, there
+exist coumn vectors~$D_0, …, D_d, E_1, …, E_d$ such that $b$~has a matrix
+of the form
+\[ B(D_0,…, E_d) =
+  \mat{∇(D_0)&&&&-λ&&\\&∇(D_1)&&&1&⋱&\\&&⋱&&&⋱&-λ\\&&&∇(D_d)&&&1\\
+  &&&&∇(E_1)&&\\&0&&&&⋱&\\&&&&&&∇(E_d)}.
+\]
+\begin{prop}\label{prop:aut-Kdn-diag}
+Let~$b$ be a quadratic pencil with matrix~$B(D_0,…, E_d)$ and~$u$ be an
+isometry of~$K_d^n$, with matrix given by~$A, C_i$ as in
+Prop.~\ref{prop:Aut-Kdn}. Then $b ∘ u$ has matrix $B(D'_0, …, E'_d)$,
+where
+\begin{eqnarray*}
+D'_i &=& \transpose{σ(A)} · D_i),\\
+E'_i &=& σ(A)^{-1} · E_i + ∑_j σ(\transpose{C_{i+j}}) · D_j
+  - λ Δ(A^{-1}·C_{2i-1}) + Δ(A^{-1}·C_{2i}).
+\end{eqnarray*}
+\end{prop}
+
+Write~$X = σ(A^{-1})$ and the symmetric matrix~$A^{-1} C_{i}$ as~$∇(Y_i)
++ Z_i + σ^{-1}(Z_i)$, where $Z_i$~is alternate.
+Given two quadratic pencils with polar forms isomorphic to~$K_d^n$ and
+diagonal coefficients~$D_0, …, E_d$ and~$D'_0, …, E'_d$, the IP1S problem
+then reduces to the equations
+\begin{equation}\begin{split}
+D_i &= \transpose{X} D'_i,\\
+E'_i &= X E_i + ∑ D'_j × σ(Y_{i+j}) - λ Y_{2i-1} + Y_{2i}
+  + ∑ Z_{i+j} · D'_j,
+\end{split}\end{equation}
+where $×$~is the coefficient-wise product of the two column
+vectors~$D'_j$ and~$σ(Y_{i+j})$.
+
+\section{Solving Frobenius equations}
+
+Part~1 shows how to bring the IP1S problem to an equation of the form
+\begin{equation}
+X = A σ(X) + B,
+\end{equation}
+where $A$~is a square matrix of size~$O(nd)$. As this matrices seem to be
+quite general, we present a generic method for solving this family of
+\emph{Frobenius equations}.
+
+
+Let~$R$ be the non-commutative ring~$k[φ]$, with the non-commutative
+relations~$φ c = σ(c) φ$ for all~$c ∈ k$. The ring $R$~has the following
+properties.
+\begin{itemize}
+\item It is Euclidean.
+More precisely, the (left-side) Euclidean algorithm works: given two
+elements~$a, b ∈ k$, there exist elements~$u, v$ such that~$u a + v b =
+d$ where $d$~is the gcd of~$a$ and~$b$.
+\item The only two-sided ideals of~$R$ are those generated by the powers
+of~$φ$.
+\end{itemize}
+
+From these two remarks and [Jacobson, Th.~19] we get the following.
+\begin{thm}
+Let~$φ: k^n → k^n$ be a semi-linear endomorphism. There exists a basid
+of~$k^n$ in which the matrix of~$φ$ is the direct sum of cyclic matrices,
+at most one of which is not nilpotent.
+\end{thm}
+
+% Write one of the cyclic parts of~$φ$ in matrix form as
+% \begin{equation}
+% \mat{y_0\\⋮\\y_{d-1}} = \mat{0&&&a_0\\ 1&⋱&&a_1\\ &⋱&⋱&⋮\\ &&1&a_{d-1}}
+%   φ \mat{y_0\\⋮\\y_{d-1}} + \mat{b_0\\⋮\\b_{d-1}}.
+% \end{equation}
+Each cyclic part of~$φ$ comes down to a semi-polynomial equation in~$k$
+of the form
+\begin{equation}
+a(σ) (y) = b,
+\end{equation}
+where $a$~is an element of the non-commutative ring~$R$. Let~$e = [k:
+\F_2]$, so that $σ^e$~is the identity morphism. Choosing a normal basis
+of~$k$ over~$\F_2$ shows that $k$~is isomorphic, as a $\F_2[φ]$-module,
+to $k[φ]/(φ^e-1)$.
+
+\end{document}
