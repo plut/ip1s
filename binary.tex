@@ -110,16 +110,15 @@ Any totally irregular pencil of quadrics is isomorphic to a space of the
 form~$⨁ E_d ⊗ K_d$, where~$E_d = k^{n_d}$, and $(n_d)$~is some finite
 sequence of integers.
 
-
 \begin{prop}\label{prop:aut-Ed-Kd}
-The automorphisms of~$⨁ E_d ⊗ K_d$ are of the form
-\[ u ⊗ f ↦ ∑_{d' ≥ d} α_{d,d'} (u) f + ∑_{d'} f^{∨} γ_{d,d'} (u), \quad
-u ⊗ φ ↦  ∑_{d' ≤ d} β_{d,d'} (u)^{∨} φ, \]
-where~$α_{d,d'} ∈ \Hom (E_d, E_{d'}) ⊗ H_{d'-d}$, $β_{d,d'} ∈ \Hom (E_d,
-E_{d'} ⊗ H_{d-d'})$ and~$γ_{d,d'} ∈ \Hom (E_{d}, E_{d'}) ⊗
+The automorphisms of~$⨁ E_d ⊗ K_d$ are exactly the maps of the form
+\[ u ⊗ f ↦ ∑_{d' ≥ d} α_{d',d} (u) f + ∑_{d'} f^{∨} γ_{d',d} (u), \quad
+u ⊗ φ ↦  ∑_{d' ≤ d} β_{d',d} (u)^{∨} φ, \]
+where~$α_{d',d} ∈ \Hom (E_d, E_{d'}) ⊗ H_{d'-d}$, $β_{d',d} ∈ \Hom (E_d,
+E_{d'} ⊗ H_{d-d'})$ and~$γ_{d',d} ∈ \Hom (E_{d}, E_{d'}) ⊗
 H_{d+d'-1}^{∨}$ satisfy the following relations: let~$A, B, C$ be the
-matrices~$(α_{d,d'})$, $(β_{d,d'})$, and~$(γ_{d,d'})$; then
-$\transpose{A} · B = 1$, and $\transpose{A} C$~is symmetric.
+matrices~$(α_{d',d})$, $(β_{d',d})$, and~$(γ_{d',d})$; then
+$\transpose{B} · A = 1$, and $\transpose{C} · A$~is antisymmetric.
 \end{prop}
 
 
@@ -156,20 +155,17 @@ belong to the spaces~$E_d ⊗ H_{d-1}$ and~$E_d ⊗ H_d^{∨}$. For~$d > d'$,
 the space~$H_{d' - d}$ is zero, and therefore~$α_{d,d'} = β_{d',d} = 0$.
 
 The relation~$\transpose{A} · B = 1$ means that, for all~$d, d'$, $∑_i
-α_{d,i} · β_{d',i} = 1$ if $d = d'$ and~$0$ else; this product is to be
+\transpose{α_{i,d}} · β_{i,d'} ∈ E_d^{∨} ⊗ E_{d'}^{∨} ⊗ H_{d'-d}$ is the standard
+scalar product of~$E_d$ if $d = d'$ and~$0$ else; this product is to be
 interpreted as the collection of the corresponding terms of all degrees
-in~$(x:y)$.
-
-The equation on~$∑
-α_{d,i} · β_{d',i}$ is to be interpreted as the collection of the
-corresponding terms for all degreees in~$(x:y)$. Writing the matrices~$A
-= (α_{d,d'})$ and~$B = (β_{d,d'})$ ($A$~is lower triangular while $B$~is
-upper triangular), these relations mean that the scalar
-product~$\transpose{A} · B$ is the identity matrix. Therefore, the
-elements~$α_{d,d'}$ uniquely determine all of the~$β_{d,d'}$.
+in~$(x:y)$, and the scalar product is taken in~$E_i$. Therefore, the
+elements~$α_{i,j}$ uniquely determine all of the~$β_{i,j}$. Likewise, the
+relation~$\transpose{A} · C + \transpose{C} · A = 0$ means that $∑_i
+\transpose{α_{i,d}} · γ_{i,d'} + \transpose{γ_{i,d}} · α_{i,d'} = 0 ∈ E_d
+⊗ E_{d'} ⊗ H_{d+d'-1}$, where scalar products are taken in~$E_i$.
 
 
-\begin{proof}[Proof of Prop.~\ref{prop:aut-Ed-Kd}]
+\begin{proof}[(Sketch of) Proof of Prop.~\ref{prop:aut-Ed-Kd}]
 Let~$F$ be an automorphism of~$V = ⨁ E_d ⊗ K_d$. The space~$V$ is
 filtered by the degrees of its kernel vectors: for all~$d$, the
 sub-space~$⨁ E_{d'} ⊗ H_{d'}^{∨}$ for~$d' ≤ d$ is exactly the linear span
@@ -177,20 +173,21 @@ of all kernel vectors of degree~$≤ d$. Therefore, $F$~is upper triangular
 on these spaces, so that we may write, for~$u ∈ E_d$, $φ ∈ H_{d}^{∨}$
 and~$f ∈ H_{d-1}$:
 \begin{equation}
-F(u ⊗ f) = ∑_{d'} α_{d,d'} (u ⊗ f) + ∑_{d'} γ_{d,d'} (u ⊗ f), \quad
-F(u ⊗ φ) = ∑_{d' ≤ d} β_{d,d'} (u ⊗ φ),
+F(u ⊗ f) = ∑_{d'} α_{d',d} (u ⊗ f) + ∑_{d'} γ_{d',d} (u ⊗ f), \quad
+F(u ⊗ φ) = ∑_{d' ≤ d} β_{d',d} (u ⊗ φ),
 \end{equation}
-where~$α_{d,d'}: E_d ⊗ H_{d-1} → E_{d'} ⊗ H_{d'-1}$, $γ_{d,d'}: E_d ⊗
-H_{d-1} → E_{d'} ⊗ H_{d'}^{∨}$ and~$β_{d,d'}: E_d ⊗ H_{d}^{∨} → E_d ⊗
+where~$α_{d',d}: E_d ⊗ H_{d-1} → E_{d'} ⊗ H_{d'-1}$, $γ_{d',d}: E_d ⊗
+H_{d-1} → E_{d'} ⊗ H_{d'}^{∨}$ and~$β_{d',d}: E_d ⊗ H_{d}^{∨} → E_d ⊗
 H_{d'}^{∨}$. Moreover, for all~$d$, since $β_{d,d}(u ⊗ φ)$~preserves the
 kernel of~$b$, it is principal, i.e. of the form~$β_{d,d,0} (u) ⊗ φ$
 where $β_{d,d,0}: E_d → E_d$~is a linear map.
 
-
-Since the collection of all endomorphisms~$β$ is upper triangular, the
-collection of all endomorphisms~$α$, which is its inverse transpose, is
-lower triangular. We may then use Lemma~\ref{lem:principal} to prove that
-all the~$α_{d,d'}$ and~$β_{d,d'}$ are principal, by induction on~$d-d'$.
+The relation~$b(F (u ⊗ f), F(v ⊗ φ)) = b(u ⊗ f, v ⊗ φ)$ implies that the
+matrix~$A$ of all endomorphisms~$α$ is the inverse transpose of the
+matrix~$B$ of the endomorphisms~$β$; since $B$~is upper triangular,
+$A$~is lower triangular. We may then use Lemma~\ref{lem:principal} to
+prove that all the~$α_{d',d}$ and~$β_{d',d}$ are principal, by induction
+on~$d-d'$.
 % Write~$β · α$ for the bilinear product of~$β(v ⊗ φ)$ and~$α(u ⊗ f)$, so
 % that we have for all~$r, s$ the relation $∑_{i ≤ s} β_{s,i} · α_{r,i}
 % = 1$ if $r = s$ and $0$~else.
@@ -200,7 +197,67 @@ all the~$α_{d,d'}$ and~$β_{d,d'}$ are principal, by induction on~$d-d'$.
 % $0$~else. The case~$r = 0$ proves that~$β_{0,0}$~is invertible and
 % therefore that all~$α_{r,0}$ for~$r ≥ 1$ are zero. The induction step
 % works in the same way: the relation for~$s$ is now~$∑
+
+Finally, the relation on the coefficients~$γ_{d',d}$ comes directly from
+the relation $b(F (u ⊗f), F(u' ⊗ f')) = 0$.
 \end{proof}
+
+\subsection{Action on the diagonal coefficients}
+
+Let~$(V, b) = ⨁ E_d ⊗ K_d$ be a totally irregular bilinear pencil and
+let~$q$ be a quadratic pencil on~$V$ whose polar form is~$b$. Since $b$~is
+isotropic on~$⨁ E_d ⊗ H_{d-1}$ and on~$⨁ E_d ⊗ H_d^{∨}$, for any
+element~$z = ∑ u_i ⊗ f_i + ∑ v_j ⊗ φ_j ∈ V$, we have
+\begin{equation}
+q(z) = ∑_i q(u_i ⊗ f_i) + ∑_j q(v_j ⊗ φ_j) +
+  ∑_{i,j} b(u_i ⊗ f_i, v_j ⊗ φ_j).
+\end{equation}
+Let~$σ$ be the absolute Frobenius defined by~$σ(x)=x^2$. We note that the
+restriction of~$q$ to one of the spaces~$E_d ⊗ H_{d-1}$ or~$E_d ⊗
+H_{d}^{∨}$ is a $σ$-linear form. The quadratic form~$q$ is determined by the
+restrictions of~$σ^{-1} ∘ q$ to these spaces, which are linear forms.
+For~$u ∈ E_d$, $f ∈ H_{d-1}$ and~$φ ∈ H_d^{∨}$, we write $λ_d(u ⊗ f) =
+σ^{-1} ∘ q\: (u ⊗ f)$ and~$μ_d (u ⊗ φ) = σ^{-1} ∘ q\: (u ⊗ φ)$.
+% which we write~$λ_d ∈ E_d ⊗
+% H_{d-1}^{∨}$ and~$μ_d ∈ E_d ⊗ H_d$ (using the scalar product to
+% identify~$E_d$ with its dual).
+
+Let~$F$ be an automorphism of~$b$, and define its coefficients
+$α_{d,d'}$, $β_{d,d'}$ and~$γ_{d,d'}$ as in Prop.\ref{prop:aut-Ed-Kd}
+above.
+
+The action of~$F$ on the quadratic pencil~$q$ is given as follows:
+\begin{align*}
+q ∘ F\;(u ⊗ f) &= ∑_i q(α_{i,d} (u) f) + 
+  ∑_i q(f^{∨} γ_{i,d} (u)) + ∑_i b(γ_{i,d} (u), α_{i,d} (u) f^2);\\
+q ∘ F\;(u ⊗ φ) &= ∑_i q(β_{i,d} (u) φ).
+\end{align*}
+Define as above~$λ_d$, $μ_d$ as the diagonal parts of~$q$. Also
+let~$γ'_{d,d'} = ∑_i \transpose{α_{i,d}} γ_{i,d'} ∈ \Hom (E_d, E_{d'}) ⊗
+H_{d+d'-1}^{∨}$, so that the anti-symmetry condition on the
+coefficients~$γ$ becomes $\transpose{γ'_{d,d'}} = γ_{d',d}$.
+Write~$γ'_{d,d',j} = ∑_{i,r} \transpose{α_{i,d,r}} · γ_{i,d',r+j}$ for
+the coefficients of~$γ'$, as a linear map on~$H_{d+d'-1}$.
+
+The diagonal coefficients~$λ'_d$, $μ'_d$ of~$q' = q ∘ F$ are given by
+\begin{align*}
+λ'_d &= ∑_i λ_i ∘ α_{i,d} + ∑_i μ_i ∘ γ_{i,d}
+  + ∑_{i,j} σ^{-1} (γ'_{d,d,2j+1} - t γ'_{d,d,2j}) ξ_{j,d-j},\\
+μ'_d &= ∑_i μ_i ∘ β_{i,d}.
+\end{align*}
+
+
+\begin{prop}
+The $n$-dimensional IP1S problem for totally irregular pencils over a
+field of characteristic two is equivalent to linears equation of
+dimension~$O(n^2)$ and one semi-linear equation of
+the form
+\begin{equation*}
+X = A σ(X) + B,
+\end{equation*}
+where $A$~is a square matrix and $X, B$~are column matrices of
+dimension~$O(n^2)$.
+\end{prop}
 
 
 
@@ -219,10 +276,6 @@ sequence of integers~$(n_d)$, we write~$E_d = k^{n_d}$. The
 bilinear module~$K_d^{n_d}$ is isomorphic to~$E_d ⊗ K_d$, with the basis~$ε_i ⊗
 e_j, ε_i ⊗ f_j$. We order this basis in the following way: $ε_1 ⊗ e_0, …,
 ε_{n_d} ⊗ e_0, …, ε_{n_d} ⊗ e_d, ε_1 ⊗ f_1, …, ε_{n_d} ⊗ f_1, …, ε_{n_d} ⊗ f_d$.
-
-⚠ la prop. 2 est synonyme de la prop. 1, à plus bas niveau, et j'ai un
-peu moins confiance dans le fait de ne pas m'être planté dans les
-indices...
 
 \begin{prop}
 Let~$V = ⨁ K_d^{n_d} = ⨁ E_d ⊗ K_d$ be a module with a totally irregular
