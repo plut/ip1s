@@ -16,6 +16,14 @@ $\triangle$\hskip -1.25ex}!\;\,}}}
   #3&\longmapsto&#4\end{array}}
 \DeclareMathOperator\GL{GL}
 
+
+% \def\chk#1{#1^{\scriptscriptstyle\vee}}
+\usepackage{graphicx}
+\def\chk#1{#1^{\smash{\scalebox{.7}[1.4]{\rotatebox{90}{\guilsinglleft}}}}}
+\let\fr\mathfrak
+
+\long\def\note#1{\textcolor{magenta}{\textbf{Note:} #1}}
+
 \begin{document}
 \title{Solving IP1S in characteristic two: the fully irregular case}
 
@@ -34,21 +42,24 @@ For~$d ≥ 0$, we write~$H_d$ for the $d+1$-dimensional space of
 homogeneous polynomials in~$k[x:y]$ of degree~$d$. For any~$h ∈ H_m$, the
 multiplication by~$m$ defines linear maps~$H_d → H_{d+1}$, which we again
 write~$h$; all these maps
-commute with each other. We write~$H_d^{∨}$ for the dual vector space
-of~$H_d$, and~$h^{∨}: H_{d+1}^{∨} → H_{d}^{∨}$ for the transposed
+commute with each other. We write~$\chk{H_d}$ for the dual vector space
+of~$H_d$, and~$\chk{h}: \chk{H_{d+1}} → \chk{H_{d}}$ for the transposed
 maps of~$h$. We also write~$\chev{φ, f}$ for the canonical bilinear
-map~$H_d ⊗ H_d^{∨} → k$; we note that, for~$f ∈ H_{d-1}$ and~$φ ∈
-H_d^{∨}$, we always have the relation~$\chev{φ, fh} = \chev{h^{∨} φ, f}$.
+map~$H_d ⊗ \chk{H_d} → k$; we note that, for~$f ∈ H_{d-m}$ and~$φ ∈
+\chk{H_d}$, we always have the relation~$\chev{φ, fh} = \chev{\chk{h} φ, f}$.
 
 The \emph{Kronecker module} of degree~$d ≥ 0$ over~$k$ is the
-$2d+1$-dimensional space~$K_d = H_{d-1} ⊕ H_d^{∨}$, equipped with the
+$2d+1$-dimensional space~$K_d = H_{d-1} ⊕ \chk{H_d}$, equipped with the
 symmetric bilinear pencil~$(b_{t})$ defined for~$f, f' ∈ H_{d-1}$ and~$φ,
-φ' ∈ H_{d}^{∨}$ by
+φ' ∈ \chk{H_{d}}$ by
 \begin{equation}
 b_t (f, f') \;=\; b_t (φ, φ') \;=\; 0; \qquad
-b_t (f, φ) \;=\; \chev {φ, (x-ty) f}.
+b_t (f, φ) \;=\; \chev {φ, (ty-x) f}.
 \end{equation}
-We shall write~$u · v$ instead of~$b_t (u, v)$.
+This means that $b_{0} (f, φ) = \chev {φ, xf} = \chev {\chk{x} φ,  f}$,
+and $b_{∞} (f, φ) = \chev{φ, yf} = \chev{\chk{y} φ, f}$. Since $f ∈
+H_{d-1}$ and~$φ ∈ \chk{H_{d}}$, we have~$xf ∈ H_{d}$ and~$\chk{x} φ ∈
+\chk{H_{d-1}}$, so these pairings are well-defined.
 
 % For~$d ≥ -1$, we write~$P_d$ for the
 % $d+1$-dimensional space of polynomials in~$k[x]$ of degree~$≤ d$,
@@ -56,12 +67,12 @@ We shall write~$u · v$ instead of~$b_t (u, v)$.
 % injection map and~$x_d: P_{d-1} → P_{d}$ be the multiplication by~$x$.
 % The various maps~$ι_d$ and~$x_d$, when composable, commute with each
 % other, and we shall simply write them as~$ι$ and~$x$. They define
-% transposed maps~$ι^{∨}$ and~$x^{∨}: P_{
+% transposed maps~$\chk{ι}$ and~$\chk{x}: P_{
 
 % The \emph{Kronecker module} of degree~$d$
-% over~$k$ is then the space~$K_d = P_{d-1} ⊕ P_d^{∨}$, equipped with the
+% over~$k$ is then the space~$K_d = P_{d-1} ⊕ \chk{P_d}$, equipped with the
 % symmetric bilinear pencil~$(b_{t})$ defined for~$f, f' ∈ P_{d-1}$ and~$φ, φ' ∈
-% P_{d}^{∨}$ by
+% \chk{P_{d}}$ by
 % \begin{equation}
 % b_t (f, f') \;=\; b_t (φ, φ') \;=\; 0, \qquad
 % b_t (f, φ') \;=\; \chev{φ, (x - t) ι_d f}.
@@ -74,31 +85,34 @@ together with its standard scalar product~$u, v ↦ u · v$. For any linear
 maps~$α: V → E$, $β: W → E$, we write~$α · β$ for the corresponding
 bilinear form on~$V × W$.
 
+\note{En première lecture, on pourra ignorer ces espaces de coefficients,
+c'est-à-dire supposer que tous les coefficients~$α$, $β$ sont scalaires.}
+
 The bilinear module~$K_d^{n}$ is isomorphic to~$E ⊗ K_d$. For~$u ∈ E ⊗
 H_m$ written as~$u = ∑ u_i ⊗ x^i$ with~$u_i ∈ k^n$ and~$x^i ∈ H_m$, we
-define, for~$f ∈ H_d$ and~$φ ∈ H_d^{∨}$,
+define, for~$f ∈ H_d$ and~$φ ∈ \chk{H_d}$,
 \begin{equation}
 u f \;=\; ∑ u_i ⊗ (x^i f) \;∈ E ⊗ H_{d+m}, \quad
-u^{∨} φ \;=\; ∑ u_i ⊗ ((x^i)^{∨} φ) \;∈ E ⊗ H_{d-m}^{∨}.
+\chk{u} φ \;=\; ∑ u_i ⊗ (\chk{(x^i)} φ) \;∈ E ⊗ \chk{H_{d-m}}.
 \end{equation}
 Likewise, for any~$h ∈ \Hom(E, E') ⊗ H_m$, write~$h = ∑ h_i ⊗ x^i$
 with~$h_i ∈ \Hom (E, E')$. For any~$u ⊗ f ∈ E ⊗ H_d$, we define~$h(u ⊗
 f) ∈ E' ⊗ H_{d+m}$ by~$h(u ⊗ f) = ∑ h_i(u) ⊗ (x^i f)$. An element
 of~$\Hom (E ⊗ H_d, E' ⊗ H_{d+m})$ defined in this way is called
 \emph{principal}. In the same way, we define principal elements of~$\Hom
-(E ⊗ H_{d+m}^{∨}, E' ⊗ H_{d}^{∨})$.
+(E ⊗ \chk{H_{d+m}}, E' ⊗ \chk{H_{d}})$.
 
 Let~$r ≤ s$ be two integers and~$E, E'$ be two coefficient spaces. We say
-that a bilinear form~$B$ on~$(E ⊗ H_r) × (E' ⊗ H_s^{∨})$ is
+that a bilinear form~$B$ on~$(E ⊗ H_r) × (E' ⊗ \chk{H_s})$ is
 \emph{principal} if it is of the form~$B(f, φ) = \chev {φ, hf} = \chev
-{h^{∨} φ, f}$ for some~$h ∈ \Hom (E, E') ⊗ H_{s-r}$.
+{\chk{h} φ, f}$ for some~$h ∈ \Hom (E, E') ⊗ H_{s-r}$.
 
 \begin{lem}\label{lem:principal}
 Let~$r ≤ s$ be two integers and~$E, E'$ be two coefficient spaces.
 \begin{enumerate}
-\item A bilinear form~$B$ on~$(E ⊗ H_r) × (E' ⊗ H_s^{∨})$ is principal
-if, and only if, for any polynomial~$z$, $B(zf, φ) = B(f, z^{∨} φ)$.
-\item Let~$α: E ⊗ H_r → E' ⊗ H_s$ and~$β: E' ⊗ H_s^{∨} → E ⊗ H_r^{∨}$ be
+\item A bilinear form~$B$ on~$(E ⊗ H_r) × (E' ⊗ \chk{H_s})$ is principal
+if, and only if, for any polynomial~$z$, $B(zf, φ) = B(f, \chk{z} φ)$.
+\item Let~$α: E ⊗ H_r → E' ⊗ H_s$ and~$β: E' ⊗ \chk{H_s} → E ⊗ \chk{H_r}$ be
 two linear maps. If $1 · α + β · 1$~is principal, then both~$α$ and~$β$
 are principal.
 \end{enumerate}
@@ -112,11 +126,11 @@ sequence of integers.
 
 \begin{prop}\label{prop:aut-Ed-Kd}
 The automorphisms of~$⨁ E_d ⊗ K_d$ are exactly the maps of the form
-\[ u ⊗ f ↦ ∑_{d' ≥ d} α_{d',d} (u) f + ∑_{d'} f^{∨} γ_{d',d} (u), \quad
-u ⊗ φ ↦  ∑_{d' ≤ d} β_{d',d} (u)^{∨} φ, \]
+\[ u ⊗ f ↦ ∑_{d' ≥ d} α_{d',d} (u) f + ∑_{d'} \chk{f} γ_{d',d} (u), \quad
+u ⊗ φ ↦  ∑_{d' ≤ d} \chk{β_{d',d} (u)} φ, \]
 where~$α_{d',d} ∈ \Hom (E_d, E_{d'}) ⊗ H_{d'-d}$, $β_{d',d} ∈ \Hom (E_d,
 E_{d'} ⊗ H_{d-d'})$ and~$γ_{d',d} ∈ \Hom (E_{d}, E_{d'}) ⊗
-H_{d+d'-1}^{∨}$ satisfy the following relations: let~$A, B, C$ be the
+\chk{H_{d+d'-1}}$ satisfy the following relations: let~$A, B, C$ be the
 matrices~$(α_{d',d})$, $(β_{d',d})$, and~$(γ_{d',d})$; then
 $\transpose{B} · A = 1$, and $\transpose{C} · A$~is antisymmetric.
 \end{prop}
@@ -129,7 +143,7 @@ $\transpose{B} · A = 1$, and $\transpose{C} · A$~is antisymmetric.
 % \item elements of the form~
 % \begin{equation}
 % u ⊗ f ↦ ∑_{d' ≥ d} α_{d, d'} (u) f, \quad
-% u ⊗ φ ↦ ∑_{d' ≤ d} β_{d, d'} (u)^{∨} φ,
+% u ⊗ φ ↦ ∑_{d' ≤ d} \chk{β_{d, d'} (u)} φ,
 % \end{equation}
 % where~$α_{d, d'}: E_{d} → E_{d'} ⊗ H_{d'-d}$ and~$β_{d,d'}: E_{d} → E_{d'} ⊗ H_{d-d'}$ are linear maps satisfying
 % the relations, for~$d ≤ d'$
@@ -139,23 +153,23 @@ $\transpose{B} · A = 1$, and $\transpose{C} · A$~is antisymmetric.
 % \end{equation}
 
 % \item elements of the form~$u ⊗ φ ↦ u ⊗ φ$, $u ⊗ f ↦ ∑_{d'} γ_{d,d'} (u)
-% f$, where~$γ_{d,d'}: E_d → E_{d'} ⊗ P_{d+d'}^{∨}$ is a linear map, such
+% f$, where~$γ_{d,d'}: E_d → E_{d'} ⊗ \chk{\P_{d+d'}}$ is a linear map, such
 % that~$γ_{d,d'} = \transpose{γ_{d', d}}$.
 % \item elements of the form
 % \begin{equation}
-% u ⊗ φ ↦ u ⊗ φ, u ⊗ f ↦ u ⊗ f + ∑_{d'} f^{∨} γ_{d,d'} (u),
+% u ⊗ φ ↦ u ⊗ φ, u ⊗ f ↦ u ⊗ f + ∑_{d'} \chk{f} γ_{d,d'} (u),
 % \end{equation}
-% where~$γ_{d,d'}: E_{d} → E_{d'} ⊗ H_{d+d'-1}^{∨}$ is such
+% where~$γ_{d,d'}: E_{d} → E_{d'} ⊗ \chk{H_{d+d'-1}}$ is such
 % that~$\transpose{γ_{d,d'}} = γ_{d',d}$.
 % \end{enumerate}
 % \end{prop}
 
 In the above theorem, we understand the elements~$u ⊗ f$ and~$u ⊗ φ$ to
-belong to the spaces~$E_d ⊗ H_{d-1}$ and~$E_d ⊗ H_d^{∨}$. For~$d > d'$,
+belong to the spaces~$E_d ⊗ H_{d-1}$ and~$E_d ⊗ \chk{H_d}$. For~$d > d'$,
 the space~$H_{d' - d}$ is zero, and therefore~$α_{d,d'} = β_{d',d} = 0$.
 
 The relation~$\transpose{A} · B = 1$ means that, for all~$d, d'$, $∑_i
-\transpose{α_{i,d}} · β_{i,d'} ∈ E_d^{∨} ⊗ E_{d'}^{∨} ⊗ H_{d'-d}$ is the standard
+\transpose{α_{i,d}} · β_{i,d'} ∈ \chk{E_d} ⊗ \chk{E_{d'}} ⊗ H_{d'-d}$ is the standard
 scalar product of~$E_d$ if $d = d'$ and~$0$ else; this product is to be
 interpreted as the collection of the corresponding terms of all degrees
 in~$(x:y)$, and the scalar product is taken in~$E_i$. Therefore, the
@@ -168,17 +182,17 @@ relation~$\transpose{A} · C + \transpose{C} · A = 0$ means that $∑_i
 \begin{proof}[(Sketch of) Proof of Prop.~\ref{prop:aut-Ed-Kd}]
 Let~$F$ be an automorphism of~$V = ⨁ E_d ⊗ K_d$. The space~$V$ is
 filtered by the degrees of its kernel vectors: for all~$d$, the
-sub-space~$⨁ E_{d'} ⊗ H_{d'}^{∨}$ for~$d' ≤ d$ is exactly the linear span
+sub-space~$⨁ E_{d'} ⊗ \chk{H_{d'}}$ for~$d' ≤ d$ is exactly the linear span
 of all kernel vectors of degree~$≤ d$. Therefore, $F$~is upper triangular
-on these spaces, so that we may write, for~$u ∈ E_d$, $φ ∈ H_{d}^{∨}$
+on these spaces, so that we may write, for~$u ∈ E_d$, $φ ∈ \chk{H_{d}}$
 and~$f ∈ H_{d-1}$:
 \begin{equation}
 F(u ⊗ f) = ∑_{d'} α_{d',d} (u ⊗ f) + ∑_{d'} γ_{d',d} (u ⊗ f), \quad
 F(u ⊗ φ) = ∑_{d' ≤ d} β_{d',d} (u ⊗ φ),
 \end{equation}
 where~$α_{d',d}: E_d ⊗ H_{d-1} → E_{d'} ⊗ H_{d'-1}$, $γ_{d',d}: E_d ⊗
-H_{d-1} → E_{d'} ⊗ H_{d'}^{∨}$ and~$β_{d',d}: E_d ⊗ H_{d}^{∨} → E_d ⊗
-H_{d'}^{∨}$. Moreover, for all~$d$, since $β_{d,d}(u ⊗ φ)$~preserves the
+H_{d-1} → E_{d'} ⊗ \chk{H_{d'}}$ and~$β_{d',d}: E_d ⊗ \chk{H_{d}} → E_d ⊗
+\chk{H_{d'}}$. Moreover, for all~$d$, since $β_{d,d}(u ⊗ φ)$~preserves the
 kernel of~$b$, it is principal, i.e. of the form~$β_{d,d,0} (u) ⊗ φ$
 where $β_{d,d,0}: E_d → E_d$~is a linear map.
 
@@ -206,7 +220,7 @@ the relation $b(F (u ⊗f), F(u' ⊗ f')) = 0$.
 
 Let~$(V, b) = ⨁ E_d ⊗ K_d$ be a totally irregular bilinear pencil and
 let~$q$ be a quadratic pencil on~$V$ whose polar form is~$b$. Since $b$~is
-isotropic on~$⨁ E_d ⊗ H_{d-1}$ and on~$⨁ E_d ⊗ H_d^{∨}$, for any
+isotropic on~$⨁ E_d ⊗ H_{d-1}$ and on~$⨁ E_d ⊗ \chk{H_d}$, for any
 element~$z = ∑ u_i ⊗ f_i + ∑ v_j ⊗ φ_j ∈ V$, we have
 \begin{equation}
 q(z) = ∑_i q(u_i ⊗ f_i) + ∑_j q(v_j ⊗ φ_j) +
@@ -214,12 +228,12 @@ q(z) = ∑_i q(u_i ⊗ f_i) + ∑_j q(v_j ⊗ φ_j) +
 \end{equation}
 Let~$σ$ be the absolute Frobenius defined by~$σ(x)=x^2$. We note that the
 restriction of~$q$ to one of the spaces~$E_d ⊗ H_{d-1}$ or~$E_d ⊗
-H_{d}^{∨}$ is a $σ$-linear form. The quadratic form~$q$ is determined by the
+\chk{H_{d}}$ is a $σ$-linear form. The quadratic form~$q$ is determined by the
 restrictions of~$σ^{-1} ∘ q$ to these spaces, which are linear forms.
-For~$u ∈ E_d$, $f ∈ H_{d-1}$ and~$φ ∈ H_d^{∨}$, we write $λ_d(u ⊗ f) =
+For~$u ∈ E_d$, $f ∈ H_{d-1}$ and~$φ ∈ \chk{H_d}$, we write $λ_d(u ⊗ f) =
 σ^{-1} ∘ q\: (u ⊗ f)$ and~$μ_d (u ⊗ φ) = σ^{-1} ∘ q\: (u ⊗ φ)$.
 % which we write~$λ_d ∈ E_d ⊗
-% H_{d-1}^{∨}$ and~$μ_d ∈ E_d ⊗ H_d$ (using the scalar product to
+% \chk{H_{d-1}}$ and~$μ_d ∈ E_d ⊗ H_d$ (using the scalar product to
 % identify~$E_d$ with its dual).
 
 Let~$F$ be an automorphism of~$b$, and define its coefficients
@@ -229,12 +243,12 @@ above.
 The action of~$F$ on the quadratic pencil~$q$ is given as follows:
 \begin{align*}
 q ∘ F\;(u ⊗ f) &= ∑_i q(α_{i,d} (u) f) + 
-  ∑_i q(f^{∨} γ_{i,d} (u)) + ∑_i b(γ_{i,d} (u), α_{i,d} (u) f^2);\\
+  ∑_i q(\chk{f} γ_{i,d} (u)) + ∑_i b(γ_{i,d} (u), α_{i,d} (u) f^2);\\
 q ∘ F\;(u ⊗ φ) &= ∑_i q(β_{i,d} (u) φ).
 \end{align*}
 Define as above~$λ_d$, $μ_d$ as the diagonal parts of~$q$. Also
 let~$γ'_{d,d'} = ∑_i \transpose{α_{i,d}} γ_{i,d'} ∈ \Hom (E_d, E_{d'}) ⊗
-H_{d+d'-1}^{∨}$, so that the anti-symmetry condition on the
+\chk{H_{d+d'-1}}$, so that the anti-symmetry condition on the
 coefficients~$γ$ becomes $\transpose{γ'_{d,d'}} = γ_{d',d}$.
 Write~$γ'_{d,d',j} = ∑_{i,r} \transpose{α_{i,d,r}} · γ_{i,d',r+j}$ for
 the coefficients of~$γ'$, as a linear map on~$H_{d+d'-1}$.
@@ -247,7 +261,7 @@ The diagonal coefficients~$λ'_d$, $μ'_d$ of~$q' = q ∘ F$ are given by
 \end{align*}
 
 
-\begin{prop}
+\begin{prop}\label{prop:ip1s-semilinear}
 The $n$-dimensional IP1S problem for totally irregular pencils over a
 field of characteristic two is equivalent to linears equation of
 dimension~$O(n^2)$ and one semi-linear equation of
@@ -259,9 +273,227 @@ where $A$~is a square matrix and $X, B$~are column matrices of
 dimension~$O(n^2)$.
 \end{prop}
 
+\section{Solving Frobenius equations}
+
+% Part~1 shows how to bring the IP1S problem to an equation of the form
+% \begin{equation}\label{eq:semi-linear}
+% X = A σ(X) + B,
+% \end{equation}
+As the matrix~$A$ of Proposition~\ref{prop:ip1s-semilinear} seems to be
+quite general, we give a generic method for this family of
+\emph{Frobenius equations}. In the IP1S problem, the base field~$k$ has
+characteristic~two; we present here the general case for any base field.
+
+Let~$k[φ]$ be the non-commutative ring of polynomials in~$φ$, with the
+relations~$φ c = σ(c) φ$ for all~$c ∈ k$. This ring is Euclidean.
+More precisely, the (left-side) Euclidean algorithm works: given two
+elements~$a, b ∈ k[φ]$, there exist elements~$u, v$ such that~$u a + v b =
+d$ where $d$~is the gcd of~$a$ and~$b$.
+
+Moreover, the only two-sided ideals of~$k[φ]$ are those generated by the
+powers of~$φ$.
+
+From these two remarks and [Jacobson, Th.~19] we get the following.
+\begin{thm}
+Let~$φ: k^n → k^n$ be a semi-linear endomorphism. There exists a basis
+of~$k^n$ in which the matrix of~$φ$ is the direct sum of cyclic matrices,
+at most one of which is not nilpotent.
+\end{thm}
+
+Assume now that $A$~is cyclic and let~$R = k[a]/f(a)$ be the $k$-algebra
+generated by~$a$; the equation~\eqref{eq:semi-linear} may then be written
+as
+\begin{equation}\label{eq:semi-linear-pol}
+x = a σ(x) + b,
+\end{equation}
+where~$a$, $b$ and~$x$ belong to the finite algebra~$k[a]$, and $σ$~is
+the absolute Frobenius automorphism. To the primary factorization~$f = ∏
+f_i$ of~$f$, there corresponds a factorization~$R = ∏ R_i$ where $R_i$~is
+a local algebra. Using Chinese remainders, we may therefore assume that
+$R$~is a local algebra and~$f = f_0^d$, where $f_0$~is irreducible.
+
+We first see to the case where~$d = 1$, \emph{i.e.} $R$~is an extension
+of the field~$k$. Write~$k_0 = \F_p$ be the field fixed by the
+Frobenius~$σ$ and let~$N_0 = N_{R/k_0}$ and~$\Tr_0 = \Tr_{R/k_0}$ be the
+norm and trace operators. The equation~\eqref{eq:semi-linear-pol} implies
+that
+\begin{equation}
+x = b' + N_0(a) x, \quad\text{where $b' = b + a σ(b) + … + a σ(a) …
+σ^{n-2}(a) σ^{n-1}(b)$.}
+\end{equation}
+If $N_0(a) ≠ 1$, then this gives as a unique solution~$x =
+b'/(1-N_0(a))$. If, on the contrary, $N_0(a) = 1$, then by
+Hilbert's theorem~90~[Lang, VI.6.1], there exists~$u ∈ R^{×}$ such
+that~$a = σ(u)/u$; then~$x' = ux$ satisfies the equation~$x' = σ(x') +
+ub$. This last equation, using the additive form of Hilbert's theorem~90
+[Lang, VI.6.3], has a solution if, and only if, $\Tr_0 (ub) = 0$. We
+note that both forms of Hilbert's theorem are algorithmic.
+
+In the general case where~$d ≥ 1$, let~$\fr m$ be the maximal ideal
+of~$R$. We may use the preceding paragraph to compute a solution~$x_0$ of
+the equation modulo~$\fr m$. Moreover, we notice that~$f(x) = x -  a σ(x)
+- b$ is a polynomial and that~$f'(x) = 1$; therefore, this polynomial is
+separated, and we may use Hensel's lemma to lift the approximate
+solution~$x_0$ to a full solution.
+
+\section{An intrinsic version of regular pencils}
+
+This is an attempt to give a more intrinsic presentation of §2
+of the IP2S document
+\texttt{isomorphism\_polynomials}.
+
+Let~$b_{λ} = b_{∞} (λ - c)$ be a regular (principal) bilinear pencil
+on~$V$. Using primary factorization, we assume that the characteristic
+polynomial~$f$ of~$c$ is primary, \emph{i.e.} of the form~$f = p^d$
+with~$p$ irreducible. We define the local algebras~$R_n = k[c]/p(c)^n$
+and the extension field~$K = R_1 = k[c]/p(c)$. For each~$n$, $R_n$~is
+isomorphic to~$K[π]/π^n$.
+
+\note{pour prouver l'isomorphisme, il suffit de construire un
+morphisme~$K → R_n$, càd de résoudre l'équation~$p(x) = 0$ dans~$R_n$.
+Puisque $c$~est une solution approchée, et $p$~étant séparable, le lemme
+de Hensel prouve qu'il existe une solution exacte.}
+
+The form~$b_{∞}$ is $k$-bilinear on~$V$, and commutes with~$R_n$ in the
+following sense: for all~$a ∈ R_n$, we have~$b_{∞} (x, ay) = b_{∞} (ax,
+y)$. In particular, it commutes with~$K$.
 
 
-\section{Old version}
+\begin{prop}\label{prop:trace-form}
+Let~$K/k$ be a separable field extension, and~$V$ be a finite-dimensional
+vector space over~$K$. Let~$b: V ⊗ V → k$ be a $k$-bilinear form
+commuting with~$K$. Then there exists a unique $K$-bilinear
+form~$b_K: V ⊗ V → K$ such that~$b = \Tr_{K/k} \,∘ \,b_K$.
+\end{prop}
+
+
+\begin{proof}
+We first recall the (classical) proof of result when~$V = K$. In this
+case, let~$z$ be a primitive element of~$K$, $d = [K:k]$. Since~$K/k$ is
+separable, the trace form is non-degenerate~\cite[VI~5.2]{lang} and there
+exists a unique element~$c ∈ K$ such that $\Tr (c z^i) = b(1, z^i)$ for
+all~$i=0, …, d-1$. We immediately see that, for all~$x, y ∈ k$, $\Tr (c x
+y) = b(x, y)$.
+
+Now let~$n = \dim_K V$ and write the matrix of~$b$ as~$(b_{i,j})$,
+where $b_{i,j}: K ⊗ K → k$ is $k$-bilinear. Since $b_{i,j}$ again
+satisfies the hypotheses of the proposition, there exists a
+unique~$c_{i,j} ∈ K$ such that~$b_{i,j} (x,y) = \Tr_{K/k} (c_{i,j} x y)$.
+The bilinear form~$b_K$ is then the form with matrix~$(c_{i,j})$.
+\end{proof}
+
+\note{Noter que la
+construction de Gilles pour la matrice~$T$ telle que $T M = \transpose{M}
+T$ revient à peu près à la construction de la forme trace~$x,y ↦
+\Tr_{K/k} (xy)$, et est donc aussi contenue dans ce résultat.}
+
+\note{il n'est peut-être pas nécessaire que $p$~soit irréductible, mais
+seulement séparable, de même que pour Hensel ci-dessus. On pourrait donc
+vraisemblablement travailler directement avec les diviseurs
+élémentaires ; mais je suis plus à l'aise avec des corps finis que des
+algèbres séparables...}
+
+
+\begin{prop}\label{prop:trace-local}
+Let~$R$ be the local algebra~$R = k[π]/π^d$ and define the $k$-linear
+form~$τ_d$ on~$R$ as the coefficient of~$π^{d-1}$. For any finite free
+$R$-modules~$V, W$ and $k$-bilinear form~$b: V ⊗ W → k$ commuting
+with~$R$, there exists a unique $R$-bilinear form~$b_R: V ⊗ W →
+R$ such that~$b = τ_d ∘ b_R$.
+\end{prop}
+
+\begin{proof}
+We proceed by induction on the length of the modules~$V$ and~$W$.
+If the theorem is true for~$(V', W)$ and~$(V'', W)$ then it is obviously
+true for~$(V' ⊕ V'', W)$. Therefore, using the decomposition of
+$R$-modules, we only need to prove the case where~$(V, W) = (R^m, R^n)$
+with~$n ≤ m ≤ d$. In this case, the bilinear form~$b_R$ is defined
+by~$b_R (x,y) = xy ∑ b(π^i, 1) π^{d-1-i}$.
+\end{proof}
+
+\note{C'est à peu près ce que dit (22) du preprint IP2S.}
+
+Assembling the Propositions~\ref{prop:trace-form}
+and~\ref{prop:trace-local}, we see that for any local pencil~$(b_{∞},
+b_0)$, writing~$R = k[c]$ where $c$~is the characteristic endomorphism
+of~$b$, there exists a unique $R$-bilinear form~$b_R$
+on~$V$ such that~$b_{∞} = \Tr_{K/k} ∘ τ_d ∘ b_R$.
+Local pencils are thus equivalent to $R$-bilinear forms on~$V$.
+Moreover, a morphism of pencils~$s: b → b'$ is a
+$k$-linear map such that~$\transpose{s} ∘ b_{∞} ∘ s = b'_{∞}$
+and~$s^{-1} ∘ c ∘ s = c'$, or in other words a $R$-linear congruence
+between the $R$-bilinear forms~$b_R$ and~$b'_R$. Therefore, solving the
+local IP1S problem amounts to computing a congruence matrix
+for~$R$-bilinear forms on a $R$-module of finite length.
+
+
+% We saw in~§2.1 that any regular bilinear pencil on~$V$ is the orthogonal
+% sum of pencil of the form $b_{λ} = t a (λ - c)$, where $t$~is any
+% prescribed scalar product on~$V$, $a$~is a self-adjoint map relatively
+% to~$t$, and $c$~is the characteristic endomorphism of~$b$.
+% 
+% Using the primary factorization of~$c$, we may assume that its minimal
+% polynomial is primary, \emph{i.e.} of the form~$p^d$ where $p$~is
+% irreducible. In this case, there exists a finite sequence of
+% integers~$n_i$ such that~$V$, as a $k[c]$-module, is isomorphic to~$⨁
+% k^{n_i} ⊗_{k} k[c]/p(c)^{i}$. Write~$R_n = k[c]/p(c)^n$ and~$K = R_1 =
+% k[c]/p(c)$; then $K$~is a finite extension field of~$k$. Consider the equation~$p(y) = 0$ for~$y ∈ R_n =
+% k[c]/p(c)^n$; since $p(c)$~generates the maximal ideal~$\fr m$ of~$R_n$,
+% $c$~is an approximate solution of the equation, and since $p$~is
+% irreducible, the equation is separated. Therefore, by Hensel's lemma,
+% there exists a unique solution~$y ∈ R_n$ of~$p(y) = 0$ such that~$y ≡ c
+% \pmod{\fr m}$. This defines a $k$-algebra morphism~$K → R_n$, and we see
+% that this is an isomorphism between~$R_n$ and the local
+% $K$-algebra~$K[π]/π^n$ sending~$p(c)$ to~$π$.
+% 
+% \note{Je viens de prouver, en d'autres termes, quelque chose qui est déjà
+% dans le papier : on peut, au lieu d'utiliser la forme normale de
+% Frobenius, utiliser celle où les blocs sur-diagonaux sont la matrice
+% identité (ce qui est avant 2.14). Au passage, calculer le commutant
+% de~$c$ devient trivial : c'est le commutant de~$c$, et il suffit donc de
+% demander que tout le monde soit $k[c]$-linéaire...}
+% 
+% \note{Pas besoin du lemme de Hensel pour prouver le résultat qui
+% précède : en effet, $(K[π]/π^n, c)$ et~$(V, c)$ sont deux $k$-espaces
+% vectoriels équipés d'un endomorphisme cyclique de même polynôme
+% caractéristique, et donc forcément isomorphes. Hensel sert à donner une
+% version effective.}
+% 
+% Let~$τ$ be the $k$-linear form on~$R_n$ defined in the following way:
+% for~$u = ∑ u_i π^i ∈ R_n$, with~$u_i ∈ K$, let~$τ(u) = \Tr_{K/k}
+% (u_{n-1})$. Since $p$~is separable, the trace bilinear form~$u, v ↦
+% \Tr_{K/k} (uv)$ is non-degenerate on~$K$. Hence the bilinear form~$t$
+% defined by~$t(u,v) = τ(uv)$ is non-degenerate on~$R_n$. Moreover, the
+% linear map~$c$, corresponding to multiplication by~$c$, is obviously
+% self-adjoint for this bilinear form.
+% 
+% \note{Le paragraphe qui précède est une façon différente et peut-être un
+% peu plus courte de construire la matrice $T$ de Gilles ; ce n'est
+% d'ailleurs pas la même matrice (on a en fait~$T(u, v) = t(u, h v)$ pour
+% un certain~$h ∈ K^{×}$). Pour prouver que $t$~est non-dégénéré : soit~$u
+% = u_r π^r + u_{r+1} π^{r+1} + …$ avec~$r ≤ d-1$; puisque $\Tr$~est
+% non-dégenéré, il existe~$v ∈ K$ tel que~$\Tr (v u_r) = 1$, et on vérifie
+% alors que~$t(u, v π^{d-r-1}) = 1$.}
+% 
+% 
+% \begin{prop}
+% Let~$b$ be a bilinear pencil. Assume that $b$~is local, \emph{i.e.} that
+% its characteristic polynomial is~$p(c)^d$ where $p$~is irreducible. Then
+% there exists a finite sequence of integers~$(n_i)$ such that $(V, b)$~is
+% isomorphic, as a $k$-bilinear pencil, to
+% \begin{equation}
+% (⨁ E_i ⊗_{K} R_i, \quad ⨁ t_i a_i (λ - c)),
+% \end{equation}
+% where $E_i$~is the space~$K^{n_i}$ equipped with its canonical scalar
+% product, $t_i$~is the trace scalar product on~$R_i$ defined above, and
+% $a_i$~is an invertible self-adjoint $k[c]$-linear endomorphism of~$E_i
+% ⊗_{K} R_i$.
+% \end{prop}
+% 
+
+
+
+\section{Old version of §1}
 
 We write~$K_d$ for the Kronecker module of dimension~$2d+1$: its basis
 is~$(e_0, …, e_d, f_1, …, f_d)$, with the bilinear pencil~$b_{λ}$ defined
@@ -390,49 +622,9 @@ E'_i &= X E_i + ∑ D'_j × σ(Y_{i+j}) - λ Y_{2i-1} + Y_{2i}
 where $×$~is the coefficient-wise product of the two column
 vectors~$D'_j$ and~$σ(Y_{i+j})$.
 
-\section{Solving Frobenius equations}
 
-Part~1 shows how to bring the IP1S problem to an equation of the form
-\begin{equation}
-X = A σ(X) + B,
-\end{equation}
-where $A$~is a square matrix of size~$O(nd)$. As this matrices seem to be
-quite general, we present a generic method for solving this family of
-\emph{Frobenius equations}.
-
-
-Let~$R$ be the non-commutative ring~$k[φ]$, with the non-commutative
-relations~$φ c = σ(c) φ$ for all~$c ∈ k$. The ring $R$~has the following
-properties.
-\begin{itemize}
-\item It is Euclidean.
-More precisely, the (left-side) Euclidean algorithm works: given two
-elements~$a, b ∈ k$, there exist elements~$u, v$ such that~$u a + v b =
-d$ where $d$~is the gcd of~$a$ and~$b$.
-\item The only two-sided ideals of~$R$ are those generated by the powers
-of~$φ$.
-\end{itemize}
-
-From these two remarks and [Jacobson, Th.~19] we get the following.
-\begin{thm}
-Let~$φ: k^n → k^n$ be a semi-linear endomorphism. There exists a basid
-of~$k^n$ in which the matrix of~$φ$ is the direct sum of cyclic matrices,
-at most one of which is not nilpotent.
-\end{thm}
-
-% Write one of the cyclic parts of~$φ$ in matrix form as
-% \begin{equation}
-% \mat{y_0\\⋮\\y_{d-1}} = \mat{0&&&a_0\\ 1&⋱&&a_1\\ &⋱&⋱&⋮\\ &&1&a_{d-1}}
-%   φ \mat{y_0\\⋮\\y_{d-1}} + \mat{b_0\\⋮\\b_{d-1}}.
-% \end{equation}
-Each cyclic part of~$φ$ comes down to a semi-polynomial equation in~$k$
-of the form
-\begin{equation}
-a(σ) (y) = b,
-\end{equation}
-where $a$~is an element of the non-commutative ring~$R$. Let~$e = [k:
-\F_2]$, so that $σ^e$~is the identity morphism. Choosing a normal basis
-of~$k$ over~$\F_2$ shows that $k$~is isomorphic, as a $\F_2[φ]$-module,
-to $k[φ]/(φ^e-1)$.
-
+\begin{thebibliography}{m}
+\bibitem{lang} S. Lang, \emph{Algebra}.
+\bibitem{jacobson} N. Jacobson, \emph{The Theory of Rings}
+\end{thebibliography}
 \end{document}
