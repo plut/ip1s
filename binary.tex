@@ -342,6 +342,8 @@ This is an attempt to give a more intrinsic presentation of §2
 of the IP2S document
 \texttt{isomorphism\_polynomials}.
 
+\subsection{Bilinear pencils}
+
 Let~$b_{λ} = b_{∞} (λ - c)$ be a regular (principal) bilinear pencil
 on~$V$. Using primary factorization, we assume that the characteristic
 polynomial~$f$ of~$c$ is primary, \emph{i.e.} of the form~$f = p^d$
@@ -359,27 +361,34 @@ following sense: for all~$a ∈ R_n$, we have~$b_{∞} (x, ay) = b_{∞} (ax,
 y)$. In particular, it commutes with~$K$.
 
 
+
 \begin{prop}\label{prop:trace-form}
 Let~$K/k$ be a separable field extension, and~$V$ be a finite-dimensional
-vector space over~$K$. Let~$b: V ⊗ V → k$ be a $k$-bilinear form
-commuting with~$K$. Then there exists a unique $K$-bilinear
-form~$b_K: V ⊗ V → K$ such that~$b = \Tr_{K/k} \,∘ \,b_K$.
+vector space over~$K$.
+
+For any $k$-bilinear form~$b: V ⊗ V → k$ commuting with~$K$, there
+exists a unique $K$-bilinear form~$b_K: V ⊗ V → K$ such that~$b =
+\Tr_{K/k} \,∘ \,b_K$.
 \end{prop}
 
 
 \begin{proof}
-We first recall the (classical) proof of result when~$V = K$. In this
-case, let~$z$ be a primitive element of~$K$, $d = [K:k]$. Since~$K/k$ is
+We first recall the (classical) proof of the result when~$V = K$. In this
+case, let~$z$ be a primitive element of~$K$ and write $d = [K:k]$.
+
+Since~$K/k$ is
 separable, the trace form is non-degenerate~\cite[VI~5.2]{lang} and there
 exists a unique element~$c ∈ K$ such that $\Tr (c z^i) = b(1, z^i)$ for
 all~$i=0, …, d-1$. We immediately see that, for all~$x, y ∈ k$, $\Tr (c x
 y) = b(x, y)$.
 
-Now let~$n = \dim_K V$ and write the matrix of~$b$ as~$(b_{i,j})$,
-where $b_{i,j}: K ⊗ K → k$ is $k$-bilinear. Since $b_{i,j}$ again
-satisfies the hypotheses of the proposition, there exists a
-unique~$c_{i,j} ∈ K$ such that~$b_{i,j} (x,y) = \Tr_{K/k} (c_{i,j} x y)$.
-The bilinear form~$b_K$ is then the form with matrix~$(c_{i,j})$.
+The general case now follows directly from taking coordinates in~$K$: all
+coordinates of a bilinear form are themselves bilinear forms.
+% We now prove the general case. Let~$n = \dim_K V$ and write the matrix
+% of~$b$ as~$(b_{i,j})$, where $b_{i,j}: K ⊗ K → k$ is $k$-bilinear. Since
+% $b_{i,j}$ again satisfies the hypotheses of the proposition, there exists
+% a unique~$c_{i,j} ∈ K$ such that~$b_{i,j} (x,y) = \Tr_{K/k} (c_{i,j} x
+% y)$. The bilinear form~$b_K$ is then the form with matrix~$(c_{i,j})$.
 \end{proof}
 
 \note{Noter que la
@@ -392,7 +401,6 @@ seulement séparable, de même que pour Hensel ci-dessus. On pourrait donc
 vraisemblablement travailler directement avec les diviseurs
 élémentaires ; mais je suis plus à l'aise avec des corps finis que des
 algèbres séparables...}
-
 
 \begin{prop}\label{prop:trace-local}
 Let~$R$ be the local algebra~$R = k[π]/π^d$ and define the $k$-linear
@@ -411,8 +419,6 @@ with~$n ≤ m ≤ d$. In this case, the bilinear form~$b_R$ is defined
 by~$b_R (x,y) = xy ∑ b(π^i, 1) π^{d-1-i}$.
 \end{proof}
 
-\note{C'est à peu près ce que dit (22) du preprint IP2S.}
-
 Assembling the Propositions~\ref{prop:trace-form}
 and~\ref{prop:trace-local}, we see that for any local pencil~$(b_{∞},
 b_0)$, writing~$R = k[c]$ where $c$~is the characteristic endomorphism
@@ -425,6 +431,104 @@ and~$s^{-1} ∘ c ∘ s = c'$, or in other words a $R$-linear congruence
 between the $R$-bilinear forms~$b_R$ and~$b'_R$. Therefore, solving the
 local IP1S problem amounts to computing a congruence matrix
 for~$R$-bilinear forms on a $R$-module of finite length.
+
+\note{C'est à peu près ce que dit (22) du preprint IP2S.}
+
+
+\subsection{Quadratic pencils}
+
+If~$2 ≠ 0$ in~$k$, then quadratic pencils are the same as bilinear
+pencil. Therefore, we shall only concern ourselves here with the case
+where $k$~has characteristic two.
+
+\begin{prop} \label{prop:trace-quad}
+Let~$K$ be a finite separable extension of~$k$ and~$V$ be a $K$-vector
+space.
+
+For any $k$-quadratic form~$q: V ⊗ V → k$ whose polar form commutes
+with~$K$, there exists a unique $K$-quadratic form~$q_K: V ⊗ V → K$ such
+that~$q = \Tr_{K/k} \, ∘ \, q_K$.
+\end{prop}
+
+\note{À peu près la prop. 5 du papier Asiacrypt.}
+
+\begin{proof}
+Let~$b$ be the polar form of~$q$. By~\ref{prop:trace-form},
+there exists~$b_K ∈ K$
+such that~$b(x,y) = \Tr_{K/k} (b_K xy)$; in particular, since $b$~is
+alternating, for all~$x$ we have~$\Tr_{K/k} (b_K x^2) = 0$ and
+therefore~$b_K = 0$. Therefore, $q$~is a semi-linear form; since the
+trace map is non-degenerate, there exists~$q_K$ such that~$q(x) =
+\Tr_{K/k} (q_K x^2)$.
+
+As in the bilinear case, the $n$-dimensional case directly follows by
+taking coordinates. Here all diagonal entries correspond to quadratic
+forms, and all others to bilinear forms; all of these commute with~$K$.
+\end{proof}
+
+We again define~$R = R_d = k[π]/π^d$. We recall that the Frobenius
+morphism on~$R$ is defined by~$σ(x π^i) = x^2 π^i$; we also define the
+Verschiebung morphism by~$V(x π^i) = x π^{2i}$, and note that both
+maps~$σ$ and~$V$ are ring morphisms and that their composition, in any
+order, is the squaring map. Moreover, we have the decomposition~$R = V(R)
+⊕ π V(R)$.
+
+For any~$x ∈ R$ written as~$x = V(y) + π V(z)$, we define~$δ(x) = π
+σ^{-1} (V(yz))$. Then for all~$u = V(v) + π V(w)$, we have
+\begin{equation}
+ux \;=\; V(vy \:+\: π\,wz) \:+\: π V(wy \:+\: vz)
+\end{equation}
+so that
+\begin{equation}
+\begin{split}
+δ(ux) &= π σ^{-1} V \pa{wv (y^2 + π z^2) \:+\: (v^2 + π w^2) yz}\\
+ &= π σ^{-1} (V(vw)) · σ^{-1} (V(σx))
+  \:+\: σ^{-1} V(σu) · π σ^{-1} (V(yz)) \\
+ &= V(u) δ(x) \:+\: δ(u) V(x).
+\end{split}
+\end{equation}
+Moreover, $δ$~is a contracting map: namely, for all~$i$, $δ(π^i R) ⊂
+π^{2i+1} R$.
+
+\begin{prop}\label{prop:quad-local}
+Let~$q$ be a quadratic form on~$R$, whose polar form commutes to~$R$.
+Then there exists elements~$a, c ∈ R$, satisfying~$c^2 = 0$, such that
+\begin{equation*}\label{eq:q-sigma-1}
+q(σ^{-1}x) = τ (a x \:+\: c\, δ(x)).
+\end{equation*}
+\end{prop}
+
+\begin{proof}[Proof of Prop.~\ref{prop:quad-local}]
+Let~$b$ be the polar form of~$q$. By Prop.~\ref{prop:trace-local}, there
+exists~$r ∈ R$ such that~$b(x,y) = τ (rxy)$. Moreover, since $b$~is
+alternating, for all~$x ∈ R$ we have~$τ(rx^2) = 0$ and therefore, for
+all~$i$, $τ(π^{2i} r) = 0$.
+
+Define~$a = ∑_i π^{d-i-1} q(π^i)$. We then see that $q(x) = τ(a σ(x)) +
+τ( r ∑_{i < j} x_i x_j)$. Write~$x = V(y) + π V(z)$; then in the last
+sum, only the terms of odd degree in~$π$ do not cancel, and their sum is
+exactly~$π V(yz) = π V(δ(σx))$.
+
+Let~$θ: R → R$ be the adjoint map to~$V$, defined by~$τ(x θ(y)) = τ(V(x)
+y)$ for all~$x, y$. Then $τ( πr\, V(δ(x))) = τ(θ(πr) δ(x))$. The
+proposition follows when defining~$c = θ(πr)$ and noticing that this
+element of~$R$ has a null square.
+\end{proof}
+
+Write~$q = [a, c]$ for the quadratic form defined by
+Equation~\eqref{eq:q-sigma-1}. We then immediately see that
+\begin{equation}\label{eq:q-transform}
+[a, c] ∘ u = [a\,u \:+\: c\, δ(u),\; c\,u].
+\end{equation}
+Solving the cyclic case of IP1S in characteristic two is therefore
+equivalent to solving the above equation in~$u ∈ R$. This is possible in
+polynomial time since $δ$~is contracting.
+
+\note{Ceci correspond assez exactement à l'analyse d'IP1S binaire faite à
+Asiacrypt (l'application~$θ$ est la même --- même si je préfère largement
+la définition actuelle comme adjoint du Verschiebung, les autres sont
+nouvelles)}.
+
 
 
 % We saw in~§2.1 that any regular bilinear pencil on~$V$ is the orthogonal
