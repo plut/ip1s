@@ -15,6 +15,9 @@ $\triangle$\hskip -1.25ex}!\;\,}}}
 \def\appli#1#2#3#4{\begin{array}{rcl}#1&\longrightarrow&#2\\
   #3&\longmapsto&#4\end{array}}
 \DeclareMathOperator\GL{GL}
+\def\operp{\mathrel{\vbox{\offinterlineskip\ialign{\hfil##\hfil\cr
+    $\scriptstyle\perp$\cr\noalign{\kern .3ex}$\scriptstyle\bigoplus$\cr
+}}}}
 
 
 % \def\chk#1{#1^{\scriptscriptstyle\vee}}
@@ -22,7 +25,7 @@ $\triangle$\hskip -1.25ex}!\;\,}}}
 \def\chk#1{#1^{\smash{\scalebox{.7}[1.4]{\rotatebox{90}{\guilsinglleft}}}}}
 \let\fr\mathfrak
 
-\long\def\note#1{\textcolor{magenta}{\textbf{Note:} #1}}
+\long\def\note#1{{\color{magenta}{\textbf{Note:} #1}}}
 
 \begin{document}
 \title{Solving IP1S in characteristic two: the fully irregular case}
@@ -356,10 +359,10 @@ morphisme~$K → R_n$, càd de résoudre l'équation~$p(x) = 0$ dans~$R_n$.
 Puisque $c$~est une solution approchée, et $p$~étant séparable, le lemme
 de Hensel prouve qu'il existe une solution exacte.}
 
+
 The form~$b_{∞}$ is $k$-bilinear on~$V$, and commutes with~$R_n$ in the
 following sense: for all~$a ∈ R_n$, we have~$b_{∞} (x, ay) = b_{∞} (ax,
 y)$. In particular, it commutes with~$K$.
-
 
 
 \begin{prop}\label{prop:trace-form}
@@ -375,7 +378,6 @@ exists a unique $K$-bilinear form~$b_K: V ⊗ V → K$ such that~$b =
 \begin{proof}
 We first recall the (classical) proof of the result when~$V = K$. In this
 case, let~$z$ be a primitive element of~$K$ and write $d = [K:k]$.
-
 Since~$K/k$ is
 separable, the trace form is non-degenerate~\cite[VI~5.2]{lang} and there
 exists a unique element~$c ∈ K$ such that $\Tr (c z^i) = b(1, z^i)$ for
@@ -402,21 +404,47 @@ vraisemblablement travailler directement avec les diviseurs
 élémentaires ; mais je suis plus à l'aise avec des corps finis que des
 algèbres séparables...}
 
+For any integer~$m$, we define~$R_m$ as the local $k$-algebra $R_m =
+k[π]/π^m$, and the $k$-linear form~$τ_m$ on~$R_m$ as the coefficient
+of~$π^{d-1}$. We write~$τ$ instead of~$τ_m$ where there is no ambiguity.
+We note that~$τ(xy)$, as a $k$-bilinear form on~$R_m$, is non-degenerate.
+Actually, multiplication by~$π^{d-1}$ defines a (non-canonical)
+$R$-linear isomorphism between~$R$ and its dual (as a $k$-vector
+space)~$R^{∨}$.
+
 \begin{prop}\label{prop:trace-local}
-Let~$R$ be the local algebra~$R = k[π]/π^d$ and define the $k$-linear
-form~$τ_d$ on~$R$ as the coefficient of~$π^{d-1}$. For any finite free
-$R$-modules~$V, W$ and $k$-bilinear form~$b: V ⊗ W → k$ commuting
-with~$R$, there exists a unique $R$-bilinear form~$b_R: V ⊗ W →
-R$ such that~$b = τ_d ∘ b_R$.
+Let~$R = R_m$ and $M, N$ be $R$-modules of finite length. For any
+$k$-bilinear form~$b: M ⊗ N → k$ commuting with~$R$, there exists a
+unique $R$-bilinear form~$b_R: M ⊗ N → R$ such that~$b = τ ∘ b_R$.
+% Let~$R$ be the local algebra~$R = k[π]/π^d$ and define the $k$-linear
+% form~$τ_d$ on~$R$ as the coefficient of~$π^{d-1}$. For any finite free
+% $R$-modules~$V, W$ and $k$-bilinear form~$b: V ⊗ W → k$ commuting
+% with~$R$, there exists a unique $R$-bilinear form~$b_R: V ⊗ W →
+% R$ such that~$b = τ_d ∘ b_R$.
 \end{prop}
 
-\begin{proof}
-We proceed by induction on the length of the modules~$V$ and~$W$.
-If the theorem is true for~$(V', W)$ and~$(V'', W)$ then it is obviously
-true for~$(V' ⊕ V'', W)$. Therefore, using the decomposition of
-$R$-modules, we only need to prove the case where~$(V, W) = (R^m, R^n)$
-with~$n ≤ m ≤ d$. In this case, the bilinear form~$b_R$ is defined
-by~$b_R (x,y) = xy ∑ b(π^i, 1) π^{d-1-i}$.
+Note that we do not demand that $M$, $N$ be \emph{free} as $R$-modules.
+Moreover, the unicity of~$b_R$ shows that both forms~$b$ and~$b_R$ are
+simultaneously symmetric or antisymmetric. However, when $k$~is a field
+of characteristic two, it may happen, as we shall see in~§2, that $b$~is
+alternating whereas $b_R$~is not.
+
+\begin{proof}[\protect{Proof of Prop.~\ref{prop:trace-local}}]
+By the structure theorem of modules over a principal ring, we may
+write~$M = ⊕ R_{m_i}$ for some finite sequence of integers~$m_i$. If the
+result holds for modules~$(M', N)$ and~$(M'', N)$ then it also holds
+for~$(M' ⊕ M'', N)$. Therefore, using induction on the length of both
+modules, we only need to prove the case where~$M = R_m$ and~$N = R_n$
+where~$m ≥ n$. In this case, since $b$~commutes with~$k[π]$, we see that
+for~$x = ∑ x_i π^i$, $y = ∑ y_i π^i$:
+\begin{equation}
+b(x,y) \;=\; ∑_{i,j} x_i y_j\: b(1, π^{i+j})
+  \;=\; ∑_{i+j+r = m-1} x_i y_j\: b(1, π^{m-1-r}).
+\end{equation}
+Let~$c = ∑ b(1, π^{i}) π^{m-1-i}$. Since $b(1, π^{r}) = 0$ for all~$r ≥
+n$, $c$~belongs to the ideal~$π^{m-n} R_m = \Hom_R (R_n, R_m)$, so that
+the product~$c\,y$ is well-defined in~$R_m$. The bilinear form~$b_R$ is
+finally the form defined by~$b_R(x,y) = c\:xy$.
 \end{proof}
 
 Assembling the Propositions~\ref{prop:trace-form}
@@ -430,24 +458,82 @@ $k$-linear map such that~$\transpose{s} ∘ b_{∞} ∘ s = b'_{∞}$
 and~$s^{-1} ∘ c ∘ s = c'$, or in other words a $R$-linear congruence
 between the $R$-bilinear forms~$b_R$ and~$b'_R$. Therefore, solving the
 local IP1S problem amounts to computing a congruence matrix
-for~$R$-bilinear forms on a $R$-module of finite length.
+between two~$R$-bilinear forms on a $R$-module of finite length.
 
 \note{C'est à peu près ce que dit (22) du preprint IP2S.}
 
 
-\subsection{Quadratic pencils}
+\begin{prop}\label{prop:diag-bigblock}
+Let~$M$ be a $R$-module of finite length and $b$~be a $R$-bilinear form
+on~$M$. If the $k$-bilinear form~$τ ∘ b$ is regular, then there exists an
+orthogonal decomposition~$M = \operp M_d$, where $M_d$~is a finite free
+module over~$R_d = R / π^d$ and $b$~is regular, as a
+$R_d$-bilinear form, on each module~$M_d$.
+\end{prop}
+
+
+\begin{proof}
+We reason by induction on the length of~$R$. By the structure theorem for
+modules over the principal ring~$R$, there exists a decomposition~$M = F
+⊕ N$ where $F$~is free over~$R = k[π]/π^m$ and~$π^{m-1} N = 0$. In
+particular, $N$~is a $R'$-module, where~$R' = R / π^{m-1}$; we define~$τ'
+= τ_{m-1}: R' → k$ and note that~$τ'(a) = τ(π a)$ for all~$a ∈ R'$.
+
+We first show that the restriction of~$b$ to~$F$ is regular. Let~$x ∈ F$
+such that~$R x$ is a direct factor: this means that~$π^{m-1} x ≠ 0$.
+Since $τ ∘ b$~is regular, there exists~$y ∈ M$ such that~$τ(b(π^{m-1} x,
+y)) = 1$. This implies that~$b(x, y) ≡ 1 \pmod{π}$. Let~$y = y' + y''$
+where~$y' ∈ F$ and~$y'' ∈ M/F$: since~$π^{m-1} y'' = 0$, we have~$π^{m-1}
+b(x, y'') = 0$ and therefore~$b(x, y'') ∈ π R$. Therefore, $a = b(x, y')
+≡ b(x, y) ≡ 1 \pmod{π}$. In particular, $a ∈ R^{×}$, so that~$b(x, a^{-1}
+y') = 1$, which shows that $b$~is regular on~$F$.
+
+Let now~$y ∈ N$. Since $b$~is regular on~$F$, there exists a unique~$f(y)
+∈ F$ such that, for all~$x ∈ F$, $b(x, y) = b(x, f(y))$. This implies
+that the map~$N → M, y ↦ y - f(y)$ is orthogonal to~$F$, and therefore
+defines a $b$-orthogonal decomposition~$M = F ⊕ N$. Finally,
+since~$π^{m-1} y = 0$, the map~$b$ has its values in~$π R$, which means
+that there exists a $R'$-bilinear form~$b'$ on~$N$ such that~$b = π b'$;
+since $τ ∘ b$~is regular, its orthogonal summand $τ' ∘ b'$~is regular,
+and we may apply the induction hypothesis to the $R'$-bilinear form~$b'$
+on~$N$.
+\end{proof}
+
+We shall generally call $b$ \emph{regular} if $τ ∘ b$~is regular as a
+$k$-bilinear form. If $M$~is free then this does not conflict with the
+standard definition of $R$-regularity.
+
+Note that, if we do not assume $b$~to be regular, then there does not
+necessarily exist a decomposition equivalent to that of
+Prop.~\ref{prop:diag-bigblock}. For example, the $R_2$-bilinear form
+over~$M = R_1 ⊕ R_2$ defined by~$b(x_1 ⊕ x_2, y_1 ⊕ y_2) = (π x_1) y_2 -
+x_1 (π y_2)$ is not diagonalizable.
+
+
+\begin{prop}\label{prop:bilinear-odd}
+Assume that $2 ≠ 0$ in~$k$; let~$R = k[π]/π^m$ and let~$M$ be a free
+$R$-module.
+\begin{enumerate}
+\item Any regular $R$-bilinear form~$b$ on~$M$ is diagonalizable.
+\item Assume that $k$~is finite. Then any regular $R$-bilinear form~$b$
+on~$M$ is equivalent to one of the diagonal forms~$(1, …, 1)$ or~$(1, …,
+d)$, where $d ∈ k^{×}$~is not a square.
+\end{enumerate}
+\end{prop}
+
+
+\subsection{Quadratic pencils in characteristic two}
 
 If~$2 ≠ 0$ in~$k$, then quadratic pencils are the same as bilinear
-pencil. Therefore, we shall only concern ourselves here with the case
-where $k$~has characteristic two.
+pencils. Therefore, we shall only concern ourselves here with the case
+where $k$~has characteristic two. We say that a quadratic form
+\emph{commutes} with~$R$ if its polar form commutes in the above sense.
 
 \begin{prop} \label{prop:trace-quad}
 Let~$K$ be a finite separable extension of~$k$ and~$V$ be a $K$-vector
-space.
-
-For any $k$-quadratic form~$q: V ⊗ V → k$ whose polar form commutes
-with~$K$, there exists a unique $K$-quadratic form~$q_K: V ⊗ V → K$ such
-that~$q = \Tr_{K/k} \, ∘ \, q_K$.
+space. For any $k$-quadratic form~$q: V ⊗ V → k$ commuting with~$K$,
+there exists a unique $K$-quadratic form~$q_K: V ⊗ V → K$ such that~$q =
+\Tr_{K/k} \, ∘ \, q_K$.
 \end{prop}
 
 \note{À peu près la prop. 5 du papier Asiacrypt.}
@@ -466,68 +552,170 @@ taking coordinates. Here all diagonal entries correspond to quadratic
 forms, and all others to bilinear forms; all of these commute with~$K$.
 \end{proof}
 
-We again define~$R = R_d = k[π]/π^d$. We recall that the Frobenius
+We again define~$R = R_n = k[π]/π^n$. We recall that the Frobenius
 morphism on~$R$ is defined by~$σ(x π^i) = x^2 π^i$; we also define the
 Verschiebung morphism by~$V(x π^i) = x π^{2i}$, and note that both
 maps~$σ$ and~$V$ are ring morphisms and that their composition, in any
 order, is the squaring map. Moreover, we have the decomposition~$R = V(R)
 ⊕ π V(R)$.
 
-For any~$x ∈ R$ written as~$x = V(y) + π V(z)$, we define~$δ(x) = π
-σ^{-1} (V(yz))$. Then for all~$u = V(v) + π V(w)$, we have
-\begin{equation}
-ux \;=\; V(vy \:+\: π\,wz) \:+\: π V(wy \:+\: vz)
-\end{equation}
-so that
-\begin{equation}
+\begin{lem}\label{lem:gamma-polar}
+Let~$γ: R → R$ be the application defined, for~$x = V(y) + π V(z)$,
+by~$γ(x) = π V(yz)$. Then, for all~$u, x ∈ R$, we have
+\begin{enumerate}
+\item $γ(ux) = γ(u) x^2 + u^2 γ(x)$;
+\item $γ(u+x) = γ(u) + γ(x) + ux + V(α)$ for some~$α ∈ R$.
+\end{enumerate}
+\end{lem}
+
+
+\begin{proof}
+(i)~Write~$x = V(y) + π V(z)$ and~$u = V(v) + π V(w)$. Noticing
+that~$σ(x) = y^2 + π z^2$, we then have
+\begin{equation}\label{eq:gamma-prod}
 \begin{split}
-δ(ux) &= π σ^{-1} V \pa{wv (y^2 + π z^2) \:+\: (v^2 + π w^2) yz}\\
- &= π σ^{-1} (V(vw)) · σ^{-1} (V(σx))
-  \:+\: σ^{-1} V(σu) · π σ^{-1} (V(yz)) \\
- &= V(u) δ(x) \:+\: δ(u) V(x).
+γ(ux) &= π V\pa{(vy + π wz)(wy+vz)}\\
+ &= π V\pa{vw (y^2 + π z^2)} + π V \pa{(v^2+πw^2) yz}\\
+ &= γ(u) V(σx) \;+\; V(σu) γ(x) \quad = γ(u) x^2 + u^2 γ(x).
 \end{split}
 \end{equation}
-Moreover, $δ$~is a contracting map: namely, for all~$i$, $δ(π^i R) ⊂
-π^{2i+1} R$.
 
-\begin{prop}\label{prop:quad-local}
-Let~$q$ be a quadratic form on~$R$, whose polar form commutes to~$R$.
-Then there exists elements~$a, c ∈ R$, satisfying~$c^2 = 0$, such that
-\begin{equation*}\label{eq:q-sigma-1}
-q(σ^{-1}x) = τ (a x \:+\: c\, δ(x)).
-\end{equation*}
-\end{prop}
-
-\begin{proof}[Proof of Prop.~\ref{prop:quad-local}]
-Let~$b$ be the polar form of~$q$. By Prop.~\ref{prop:trace-local}, there
-exists~$r ∈ R$ such that~$b(x,y) = τ (rxy)$. Moreover, since $b$~is
-alternating, for all~$x ∈ R$ we have~$τ(rx^2) = 0$ and therefore, for
-all~$i$, $τ(π^{2i} r) = 0$.
-
-Define~$a = ∑_i π^{d-i-1} q(π^i)$. We then see that $q(x) = τ(a σ(x)) +
-τ( r ∑_{i < j} x_i x_j)$. Write~$x = V(y) + π V(z)$; then in the last
-sum, only the terms of odd degree in~$π$ do not cancel, and their sum is
-exactly~$π V(yz) = π V(δ(σx))$.
-
-Let~$θ: R → R$ be the adjoint map to~$V$, defined by~$τ(x θ(y)) = τ(V(x)
-y)$ for all~$x, y$. Then $τ( πr\, V(δ(x))) = τ(θ(πr) δ(x))$. The
-proposition follows when defining~$c = θ(πr)$ and noticing that this
-element of~$R$ has a null square.
+(ii) follows from
+$γ(u+x) - γ(u) - γ(x) = π V(vz + wy) = ux - V(vy+πwz)$.
 \end{proof}
 
-Write~$q = [a, c]$ for the quadratic form defined by
-Equation~\eqref{eq:q-sigma-1}. We then immediately see that
-\begin{equation}\label{eq:q-transform}
-[a, c] ∘ u = [a\,u \:+\: c\, δ(u),\; c\,u].
-\end{equation}
-Solving the cyclic case of IP1S in characteristic two is therefore
-equivalent to solving the above equation in~$u ∈ R$. This is possible in
-polynomial time since $δ$~is contracting.
+We recall that $τ(xy)$~is a non-degenerate $k$-bilinear form
+on~$R$, and we write~$R^{†}$ for the $τ$-orthogonal of~$V(R)$: this is
+the space of~$x$ such that, for all~$y ∈ R$, $τ(xV(y)) = 0$ (or
+equivalently, $τ(x y^2) = 0$); this space is linearly spanned by
+the~$π^{n-2i}$ for~$0 ≤ i ≤ n/2$. We call the elements of~$R^{†}$
+\emph{$τ$-alternating}, for reasons made obvious by the following
+proposition.
 
-\note{Ceci correspond assez exactement à l'analyse d'IP1S binaire faite à
-Asiacrypt (l'application~$θ$ est la même --- même si je préfère largement
-la définition actuelle comme adjoint du Verschiebung, les autres sont
-nouvelles)}.
+
+\begin{prop}\label{prop:trace-alt}
+Let~$M = ⨁ R_{n_i}$ be a $R_m$-module of finite length.
+\begin{enumerate}
+\item Let~$b$ be the $R$-bilinear form defined by~$b((x_i), (y_i)) = ∑
+b_{i,j} x_i y_j$. Then $τ ∘ b$~is alternating if, and only if, $b_{i,j} +
+b_{j,i} = 0$ and if the diagonal coefficients $b_{i,i}$ are
+$τ$-alternating.
+\item Let~$q$ be a $k$-quadratic form on~$M$ commuting with~$R$, $b$~its
+polar form, and $b_R$ be the unique $R$-quadratic form such that~$b = τ ∘
+b_R$, and~$b_{i,j}$ the coefficients of~$b_R$; then there exists a
+$σ$-linear form~$a: M → R$ such that, for all~$x = (x_i) ∈ M$,
+\begin{equation}
+q(x) \;=\; τ\pa{a(x) + ∑_{i} b_{i,i} γ(x_i) + ∑_{i < j} b_{i,j} x_i x_j}.
+\end{equation}
+\end{enumerate}
+\end{prop}
+
+\begin{proof}
+(i) follows from a simple computation. To prove~(ii), we see by
+Lemma~\ref{lem:gamma-polar} that for all~$c ∈ R^{†}$, $τ(c γ(x))$~is a
+quadratic form on~$R$ with polar~$τ(c\, xy)$. It follows by linearity
+that~$q' = τ(∑ b_{i,i} γ(x_i) + ∑ b_{i,j} x_i x_j)$ is a $k$-quadratic
+form on~$M$, which has the same polar as~$q$, so that
+the difference~$q - q'$ is a $σ$-linear form.
+\end{proof}
+
+Since the bilinear form~$τ$ is non-degenerate, the linear map~$V: R → R$
+has an adjoint~$θ$, defined by $θ(π^{n-1-2i}) = π^{n-1-i}$: for all~$x,
+y$, we have~$τ(x\, V(y)) = τ(θ(x)\,y)$. A direct computation proves the
+following result.
+
+\note{L'application~$θ$ est la même que celle d'Asiacrypt ; la définition
+ici comme adjoint du Verschiebung est un peu plus naturelle. Cependant,
+la forme canonique n'est pas la même (du tout) que pour Asiacrypt, et
+plus facile à manipuler.
+}
+
+Let~$q$ be a $k$-quadratic form on~$M$ commuting to~$R$, and write~$q$ as
+in Prop.~\ref{prop:trace-alt}; then there exists elements~$a_i ∈ R$ such
+that $a((x_i)) = τ(∑ a_i σ(x_i))$. Let~$u: M' → M$ be a $R$-linear map,
+and define the $k$-quadratic form~$q' = q ∘ u$ on~$M'$ and the
+corresponding elements~$a'_i ∈ R$ and $R$-bilinear form~$b'_R$. Then a
+direct computation shows that, writing~$(u_{i,j})$ for the matrix of~$u$,
+\begin{equation}\label{eq:theta}
+b'_R = b_R ∘ u, \quad
+a'_i = ∑_r a_r σ(u_{r,i}) + θ \pa{
+  ∑_r b_{r,r} γ(u_{r,i}) + ∑_{r<s} b_{r,s} u_{r,i} u_{s,i} }.
+\end{equation}
+
+\note{ Il y a une erreur dans le Lemme~2 d'Asiacrypt ; considérer par
+exemple la forme bilinéaire~$b(x,y) = τ(xy)$ sur~$R_{2m}$, qui est
+non-dégénérée et qui n'a pourtant pas de lagrangien stable par
+multiplication par~$π$ (les seuls sous-espaces stables étant les idéaux,
+soit les~$π^i R$...). Le mieux qu'on puisse faire est de considérer le
+morphisme~$V: R_{2m} → R_{2m}$, qui se factorise en fait en~$V: R_{2m} →
+R_m → R_{2m}$, et écrire~$R_{2m} = V(R_m) ⊕ π V(R_m)$, ou encore~$R_{2m}
+= R_{m}[π_{2m}]/(π_{2m}^2 - π_m)$. Un lagrangien de~$b$ est alors par
+exemple~$V(R_m)$, qui n'est pas stable par multiplication par~$π_{2m}$...
+Dans la preuve, l'erreur est dans l'écriture de~$K[π] x ⊕ K[π] y$, alors
+que ici $x = y$, donc le signe~$⊕$ est faux.
+
+Mais de toute façon la construction donnée ici est plus simple, donc ce
+n'est pas trop grave :-)}
+
+The data of a quadratic pencil on~$M$ with characteristic
+endomorphism~$π$ is then equivalent to the data of the two quadratic
+forms~$b_{∞}$, given by the bilinear form~$b_R$ and a $σ$-linear
+form~$a$, and $b_{0}$, given by~$π b_R$ and a $σ$-linear form~$c$.
+
+
+
+% For any~$x ∈ R$ written as~$x = V(y) + π V(z)$, we define~$δ(x) =
+% σ^{-1} (yz)$. Then for all~$u = V(v) + π V(w)$, we have
+% \begin{equation}
+% ux \;=\; V(vy \:+\: π\,wz) \:+\: π V(wy \:+\: vz)
+% \end{equation}
+% so that
+% \begin{equation}\label{eq:delta-deriv}
+% \begin{split}
+% δ(ux) &= σ^{-1} \pa{wv (y^2 + π z^2) \:+\: (v^2 + π w^2) yz}\\
+%  &= σ^{-1} (vw · σ(x)) \:+\: σ^{-1} (σu · yz)\\
+%  &= δ(u) x + u δ(x).
+% \end{split}
+% \end{equation}
+% 
+% \begin{prop}\label{prop:quad-local}
+% Let~$q$ be a quadratic form on~$R$, commuting with~$R$.
+% Then there exists elements~$a, c ∈ R$, satisfying~$c^2 = 0$, such that
+% \begin{equation*}\label{eq:q-sigma-1}
+% q(σ^{-1}x) = τ (a x \:+\: c\, δ(x)).
+% \end{equation*}
+% \end{prop}
+% 
+% \begin{proof}[Proof of Prop.~\ref{prop:quad-local}]
+% Let~$b$ be the polar form of~$q$. By Prop.~\ref{prop:trace-local}, there
+% exists~$r ∈ R$ such that~$b(x,y) = τ (rxy)$. Moreover, since $b$~is
+% alternating, $r$~is orthogonal to all squares in~$R$: for all~$x ∈ R$ we
+% have~$τ(rx^2) = 0$ and therefore, for all~$i$, $τ(π^{2i} r) = 0$.
+% 
+% Define~$a = ∑_i π^{n-i-1} q(π^i)$. We then see that $q(x) = τ(a σ(x)) +
+% τ( r ∑_{i < j} x_i x_j)$. Write~$x = V(y) + π V(z)$; then in the last
+% sum, only the terms of odd degree in~$π$ are not orthogonal to~$r$, and
+% their sum is exactly~$π V(yz)$.
+% 
+% Let~$θ: R → R$ be the adjoint map to~$V$, defined by~$τ(x\, θ(y)) =
+% τ(V(x)\, y)$ for all~$x, y$. Then $τ( πr\, V(yz)) = τ(θ(πr)\, yz)$.
+% Let~$c = θ(π r)$; since~$θ(π^{n-2i-1}) = π^{n-i-1}$, we have $v_R(c) ≥
+% n/2$, so that $c^2 = 0$ in~$R$. Since~$δ(σ(x)) = yz$, we can now write
+% $q(x) = τ(a σ(x) + c δ(σx))$, from which the proposition follows by
+% applying~$σ^{-1}$.
+% \end{proof}
+% 
+% Write~$q = [a, c]$ for the quadratic form defined by
+% Proposition~\ref{prop:quad-local}. We deduce from \eqref{eq:delta-deriv}
+% that, for all~$u ∈ R$, the form~$q(ux)$ is given by
+% \begin{equation}\label{eq:q-transform}
+% [a, c] ∘ u = [a\,u \:+\: c\, δ(u),\; c\,u].
+% \end{equation}
+
+% Solving the cyclic case of IP1S in characteristic two is therefore
+% equivalent to solving the above equation in~$u ∈ R$. This is possible in
+% polynomial time since $δ$~is contracting.
+
 
 
 
