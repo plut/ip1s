@@ -12,6 +12,7 @@
 \usepackage{algorithm}
 \usepackage{algpseudocode}
 \usepackage[all]{xy}
+\usepackage{graphicx}
 
 \usepackage{amsthm}
 \usepackage[margin=25mm]{geometry}
@@ -27,6 +28,7 @@
 \newthm{prop}{Proposition}
 \newthm{thm}{Theorem}
 \newthm{lem}{Lemma}
+\def\theequation{\thesection.\arabic{equation}}
 
 \def\labelenumi{(\roman{enumi})}
 \def\itemref#1{\expandafter\ifx\csname r@#1\endcsname\relax
@@ -39,15 +41,19 @@
 \let\ro\mathscr
 % \def\transpose{\,{}^{\mathrm{t}\!}}
 \def\transpose#1{{\vphantom{#1}}^{\mathrm{t}}\!#1}
-\def\pa#1{\left(\right)}
+\def\pa#1{\left(#1\right)}
+\def\chev#1{\left\langle#1\right\rangle}
 \def\acco#1{\left\{#1\right\}}
 \def\abs#1{\left|#1\right|}
 \def\mat#1{\begin{pmatrix}#1\end{pmatrix}}
 \def\smat{\def\arraystretch{.66}\mat}
 \def\card#1{\abs{#1}}
+\def\chk#1{#1^{\smash{\scalebox{.7}[1.4]{\rotatebox{90}{\guilsinglleft}}}}}
 \DeclareMathOperator\Ker{Ker}
+\DeclareMathOperator\Hom{Hom}
 \DeclareMathOperator\End{End}
 \DeclareMathOperator\GL{GL}
+\DeclareMathOperator\Tr{Tr}
 \def\F{\mathbb{F}}
 \def\Id{\mathrm{Id}}
 \def\Ot{\widetilde{O}}
@@ -292,9 +298,9 @@ very different from the odd-characteristic case~\cite{milnorhusemoller},
 and relies on symplectic groups and Artin-Schreier type equations,
 \emph{i.e.} of the type~$x^2+x+C = 0$.
 
-Let~$V^{∨}$ be the dual of the vector space~$V$. A bilinear form~$b$
-on~$V$ is the same as a linear map~$b: V → V^{∨}$. The bilinear form is
-\emph{regular} if it defines an invertible linear map~$V → V^{∨}$. In
+Let~$\chk{V}$ be the dual of the vector space~$V$. A bilinear form~$b$
+on~$V$ is the same as a linear map~$b: V → \chk{V}$. The bilinear form is
+\emph{regular} if it defines an invertible linear map~$V → \chk{V}$. In
 this case, to for any endomorphism~$u$ of~$V$, there exists a unique
 endomorphism~$u^{⋆}$ of~$V$ such that~$b(x,u(y)) = b(u^{⋆}(x), y)$; the
 endomorphism~$u^{⋆}$ is called the \emph{left-adjoint} of~$u$. If $b$~is
@@ -338,7 +344,7 @@ polynomials with degree~$< \deg p$.
 
 
 %>>>1
-\section{IP1S in the possibly singular case}%<<<1
+\section{The singular part of quadratic pencils}%<<<1
 \label{S:IP1S-singular}
 \subsection{Regular and singular pencils}%<<<2
 Let~$b = (b_{λ})$ be a bilinear pencil over the space~$V$. The
@@ -548,7 +554,7 @@ We note that this result is the same as the classical result in
 characteristic zero~\cite[XII, §4]{Gantmacher}.
 %>>>
 %>>>1
-\section{IP1S for regular pencils}%<<<1
+\section{Equivalence of regular pencils in the IP1S sense}%<<<1
 \label{S:IP1S-regular}
 
 We give here an algorithm for solving the IP1S problem in the case of two
@@ -598,7 +604,7 @@ to~$W$ are injective.
 (i) Assume that $b_0(y, W) = 0$ and that~$x_0 ≻ x_1 ≻ … ≻ 0$. Then since
 $x_1 ∈ W$, we have~$b_{∞} (y, x_0) = -b_0 (y, x_1) = 0$.
 
-(ii) Let~$V^{∨}$ be the dual space of~$V$. The space~$b_{λ}(W')$ is the set
+(ii) Let~$\chk{V}$ be the dual space of~$V$. The space~$b_{λ}(W')$ is the set
 of linear forms which are zero on all elements~$x$ such that~$b_{λ} (x,
 W') = 0$.
 We have to prove the following: for any vector~$x$, $b_{∞}(x, W') =
@@ -1223,6 +1229,285 @@ same value~$u(p,d) ∈ k^{×}/(k^{×})^2$.
 
 In particular, when $k → k'$~is a quadratic tower, solving the IP1S
 problem over~$k'$ does not solve the decisional form of IP1S over~$k$.
+
+%>>>1
+\section{Equivalence of pencils in characteristic two}%<<<1
+In this section, we assume that the field~$k$ has characteristic two.
+
+\subsection{Quadratic and bilinear pencils}%<<<2
+
+We write~$σ: x ↦ x^2$ for the absolute Frobenius endomorphism of~$k$.
+
+Let~$q$ be a quadratic form over a~$k$-vector space~$V$. Since $2 = 0$
+in~$k$, the polarity equation shows that the associated polar form~$b$ is
+an \emph{alternating} bilinear form; namely, it satisfies~$b(x,x) = 0$
+for all~$x ∈ V$. Moreover, the polarity map is not a bijection from
+quadratic forms to alternating bilinear forms; its kernel is the space of
+\emph{$σ$-linear forms} on~$V$. This means that, if a basis of~$V$ is
+chosen, then a quadratic form is determined by its polar (which is an
+alternating matrix) and its diagonal coefficients (corresponding to a
+$σ$-linear form).
+
+
+\subsection{The fully irregular part}%<<<2
+
+We say that a bilinear pencil is \emph{fully irregular} if
+its regular part, in the sense of Prop.~\ref{prop:kronecker}, is zero.
+Any fully irregular bilinear pencil is isomorphic to an orthogonal sum of
+Kronecker modules~$K_d$. However, in characteristic two, 
+coefficients, this gives a standard form only for
+bilinear pencils and not for quadratic pencils. We explain here how to
+compute an isomorphism, when it exists, between two fully irregular
+quadratic pencils in characteristic two. For this, we give a full
+description of the group of automorphisms of an orthogonal sum of
+Kronecker bilinear modules, and then show how such an automorphism acts
+on the diagonal coefficients of a quadratic pencil.
+
+\paragraph{Intrinsic Kronecker modules.}%<<<3
+We give an intrinsic construction of the Kronecker modules.
+Except where indicated, all tensor products and duals are understood as
+operations on $k$-vector spaces.
+
+For any integer~$d ≥ 0$, let~$H_d$ be the $d+1$-dimensional vector space
+of homogeneous polynomials of degree~$d$ in the variables~$(x:y)$. For
+any $h ∈ H_m$, multiplication by~$m$ defines a linear map, which we again
+write~$h: H_m → H_{m+d}$, and all these maps commute with each other. We
+also write~$\chk{H_d}$ for the vector space dual to~$H_d$, and $\chk{h}:
+\chk{H_{d+m}} → \chk{H_d}$ for the transposed map to~$h$. This means
+that, writing~$\chev{φ, f}$ for the canonical bilinear pairing~$\chk{H_d}
+⊗ H_d → k$, we have~$\chev{\chk{h} φ, f} = \chev{φ, hf}$.
+
+The \emph{Kronecker module} of degree~$d$ is the $2d+1$-dimensional
+vector space~$K_d = H_{d-1} ⊕ \chk{H_{d}}$, equipped with the symmetric
+bilinear pencil~$(b_t)$ defined, for~$f, f' ∈ H_{d-1}$ and~$φ, φ' ∈
+\chk{H_d}$, by:
+\begin{equation}\label{eq:kronecker-bilinear}
+b_t (f, f') \;=\; b_t (φ, φ') \;=\; 0; \qquad
+b_t (f, φ) \;=\; \chev {φ, (ty-x) f}.
+\end{equation}
+
+\paragraph{Kronecker modules with coefficients.}%<<<3
+
+A \emph{coefficient space} is a bilinear space~$E$ isomorphic to~$k^n$,
+together with its standard scalar product~$u, v ↦ u · v = ∑ u_i v_i$. For
+any linear maps~$α: V → E$, $β: W → E$, we write~$α · β$ for the
+corresponding bilinear form on~$V × W$.
+
+For~$E = k^n$, the bilinear module~$K_d^{n}$ is isomorphic to~$E ⊗ K_d$.
+The multiplication maps for homogeneous polynomials defines in a natural
+way a bilinear action of~$E ⊗ H_m$ on~$H_d$ and~$\chk{H_d}$: namely, for
+any~$u ∈ E ⊗ H_m$ written as~$u = ∑ u_i ⊗ x^i$ with~$u_i ∈ k^n$ and~$x^i
+∈ H_m$ and~$f ∈ H_d$ and~$φ ∈ \chk{H_d}$, we define
+\begin{equation}
+u f \;=\; ∑ u_i ⊗ (x^i f) \;∈ E ⊗ H_{d+m} \quad\text{and}\quad
+\chk{u} φ \;=\; ∑ u_i ⊗ (\chk{(x^i)} φ) \;∈ E ⊗ \chk{H_{d-m}}.
+\end{equation}
+Likewise, let~$h ∈ \Hom(E, E') ⊗ H_m$ be written as~$h = ∑ h_i ⊗ x^i$
+with~$h_i ∈ \Hom (E, E')$. For any~$u ⊗ f ∈ E ⊗ H_d$, we define~$h(u ⊗
+f) ∈ E' ⊗ H_{d+m}$ by~$h(u ⊗ f) = ∑ h_i(u) ⊗ (x^i f)$. An element
+of~$\Hom (E ⊗ H_d, E' ⊗ H_{d+m})$ defined in this way is called
+\emph{principal}. In the same way, we define principal elements of~$\Hom
+(E ⊗ \chk{H_{d+m}}, E' ⊗ \chk{H_{d}})$.
+
+Let~$r ≤ s$ be two integers and~$E, E'$ be two coefficient spaces. We say
+that a bilinear form~$B$ on~$(E ⊗ H_r) × (E' ⊗ \chk{H_s})$ is
+\emph{principal} if it is of the form~$B(f, φ) = \chev {φ, hf} = \chev
+{\chk{h} φ, f}$ for some~$h ∈ \Hom (E, E') ⊗ H_{s-r}$.
+
+\begin{lem}\label{lem:principal}
+Let~$r ≤ s$ be two integers and~$E, E'$ be two coefficient spaces.
+\begin{enumerate}
+\item A bilinear form~$B$ on~$(E ⊗ H_r) × (E' ⊗ \chk{H_s})$ is principal
+if, and only if, for any polynomial~$z$, $B(zf, φ) = B(f, \chk{z} φ)$.
+\item Let~$α: E ⊗ H_r → E' ⊗ H_s$ and~$β: E' ⊗ \chk{H_s} → E ⊗ \chk{H_r}$ be
+two linear maps. If $1 · α + β · 1$~is principal, then both~$α$ and~$β$
+are principal.
+\end{enumerate}
+\end{lem}
+
+\begin{proof}
+By taking coordinates on~$E$ and~$E'$, we reduce the proof to the case
+where~$E = E' = k$.
+\end{proof}
+
+\paragraph{The automorphism group of a direct sum of Kronecker modules.}
+
+For any totally irregular pencil of quadrics~$q$ on~$V$, there exists an
+unique finite sequence of integers~$(n_d)$ such that $V$~is isomorphic to
+the orthogonal sum~$⨁ E_d ⊗ K_d$, where $E_d = k^{n_d}$ is a coefficient
+space.
+
+\begin{prop}\label{prop:aut-Ed-Kd}
+The automorphisms of~$⨁ E_d ⊗ K_d$ are exactly the maps of the form
+\[ u ⊗ f ↦ ∑_{d' ≥ d} α_{d',d} (u) f + ∑_{d'} \chk{f} γ_{d',d} (u), \quad
+u ⊗ φ ↦  ∑_{d' ≤ d} \chk{β_{d',d} (u)} φ, \]
+where~$α_{d',d} ∈ \Hom (E_d, E_{d'}) ⊗ H_{d'-d}$, $β_{d',d} ∈ \Hom (E_d,
+E_{d'} ⊗ H_{d-d'})$ and~$γ_{d',d} ∈ \Hom (E_{d}, E_{d'}) ⊗
+\chk{H_{d+d'-1}}$ satisfy the following relations: let~$A, B, C$ be the
+matrices~$(α_{d',d})$, $(β_{d',d})$, and~$(γ_{d',d})$; then
+$\transpose{B} · A = 1$, and $\transpose{C} · A$~is antisymmetric.
+\end{prop}
+
+In the above theorem, we understand the elements~$u ⊗ f$ and~$u ⊗ φ$ to
+belong to the spaces~$E_d ⊗ H_{d-1}$ and~$E_d ⊗ \chk{H_d}$. For~$d > d'$,
+the space~$H_{d' - d}$ is zero, and therefore~$α_{d,d'} = β_{d',d} = 0$.
+
+The relation~$\transpose{A} · B = 1$ means that, for all~$d, d'$, $∑_i
+\transpose{α_{i,d}} · β_{i,d'} ∈ \chk{E_d} ⊗ \chk{E_{d'}} ⊗ H_{d'-d}$ is the standard
+scalar product of~$E_d$ if $d = d'$ and~$0$ else; this product is to be
+interpreted as the collection of the corresponding terms of all degrees
+in~$(x:y)$, and the scalar product is taken in~$E_i$. Therefore, the
+elements~$α_{i,j}$ uniquely determine all of the~$β_{i,j}$. Likewise, the
+relation~$\transpose{A} · C + \transpose{C} · A = 0$ means that $∑_i
+\transpose{α_{i,d}} · γ_{i,d'} + \transpose{γ_{i,d}} · α_{i,d'} = 0 ∈ E_d
+⊗ E_{d'} ⊗ H_{d+d'-1}$, where scalar products are taken in~$E_i$.
+
+
+\begin{proof}[(Sketch of) Proof of Prop.~\ref{prop:aut-Ed-Kd}]
+Let~$F$ be an automorphism of~$V = ⨁ E_d ⊗ K_d$. The space~$V$ is
+filtered by the degrees of its kernel vectors: for all~$d$, the
+sub-space~$⨁ E_{d'} ⊗ \chk{H_{d'}}$ for~$d' ≤ d$ is exactly the linear span
+of all kernel vectors of degree~$≤ d$. Therefore, $F$~is upper triangular
+on these spaces, so that we may write, for~$u ∈ E_d$, $φ ∈ \chk{H_{d}}$
+and~$f ∈ H_{d-1}$:
+\begin{equation}
+F(u ⊗ f) = ∑_{d'} α_{d',d} (u ⊗ f) + ∑_{d'} γ_{d',d} (u ⊗ f), \quad
+F(u ⊗ φ) = ∑_{d' ≤ d} β_{d',d} (u ⊗ φ),
+\end{equation}
+where~$α_{d',d}: E_d ⊗ H_{d-1} → E_{d'} ⊗ H_{d'-1}$, $γ_{d',d}: E_d ⊗
+H_{d-1} → E_{d'} ⊗ \chk{H_{d'}}$ and~$β_{d',d}: E_d ⊗ \chk{H_{d}} → E_d ⊗
+\chk{H_{d'}}$. Moreover, for all~$d$, since $β_{d,d}(u ⊗ φ)$~preserves the
+kernel of~$b$, it is principal, i.e. of the form~$β_{d,d,0} (u) ⊗ φ$
+where $β_{d,d,0}: E_d → E_d$~is a linear map.
+
+The relation~$b(F (u ⊗ f), F(v ⊗ φ)) = b(u ⊗ f, v ⊗ φ)$ implies that the
+matrix~$A$ of all endomorphisms~$α$ is the inverse transpose of the
+matrix~$B$ of the endomorphisms~$β$; since $B$~is upper triangular,
+$A$~is lower triangular. We may then use Lemma~\ref{lem:principal} to
+prove that all the~$α_{d',d}$ and~$β_{d',d}$ are principal, by induction
+on~$d-d'$.
+
+Finally, the relation on the coefficients~$γ_{d',d}$ comes directly from
+the relation $b(F (u ⊗f), F(u' ⊗ f')) = 0$.
+\end{proof}
+
+\paragraph{Action on the diagonal coefficients.}
+Let~$q$ be a quadratic pencil with the corresponding bilinear pencil~$b$
+isomorphic to~$⨁ E_d ⊗ K_d$. With its polar form of known, the
+quadratic pencil is determined by its diagonal coefficients.
+Write~$λ_{d}$ for the restriction of~$σ^{-1} ∘ q$ to~$E_d ⊗ H_{d-1}$ and
+$μ_d$ for its restriction to~$E_d ⊗ \chk{H_d}$; then $λ_d$ and~$μ_d$ are
+pencils of $k$-linear forms and they determine~$q$.
+
+Let~$F$ be an automorphism of~$b$ as in Prop.~\ref{prop:aut-Ed-Kd}, and
+write~$q' = q ∘ F$; also define~$λ'_d, μ'_d$ as the diagonal coefficients
+of~$q'$. We then have, for all~$u ∈ E_d, f ∈ H_{d-1}, φ ∈ \chk{H_d}$:
+\begin{align*}
+q (F (u ⊗ f))
+  &= ∑_{i ≥ d} q(α_{i,d} (u) f) + ∑_{i} q(\chk{f} γ_{i,d} (u))
+  + ∑_{i} b(γ_{i,d} (u), α_{i,d} (u) f^2);\\
+q (F (u ⊗ φ))
+  &= ∑_{i ≤ d} q(β_{i,d} (u) φ),
+\end{align*}
+
+Solving the IP1S problem means computing the values~$α_{d,d'}$,
+$β_{d,d'}$ and~$γ_{d,d'}$ as defined in Prop.~\ref{prop:aut-Ed-Kd}. In
+view of the relation~$\transpose{C} · A + \transpose{A} · C = 0$ of this
+proposition, we replace the unknowns~$γ_{d,d'}$ by~$γ'_{d,d'} = ∑_i
+\transpose{α_{i,d}} γ_{i,d'}$; then $γ_{d,d'}  ∈ \Hom (E_d, E_{d'}) ⊗
+\chk{H_{d+d'-1}}$ and the anti-symmetry condition is
+$\transpose{γ'_{d,d'}} = γ_{d',d}$.
+
+Define~$ξ_{n,n-i}$ as the basis of~$\chk{H_n}$ dual to the basis of~$x^i
+y^{n-i}$, and decompose~$γ_{d,d'}$ as~$∑_{i,j} γ_{d,d',j} ξ_{j,d+d'-1-j}$
+in this basis, where~$γ_{d,d',j} ∈ \Hom (E_d, E_{d'})$. The coefficients
+of~$γ'_{d,d'}$ are then given by $γ'_{d,d',j} = ∑_{i,r}
+\transpose{α_{i,d,r}} · γ_{i,d',r+j}$.
+
+From this we deduce the formula
+for the diagonal coefficients~$λ'_d, μ'_d$ of~$q'$:
+\begin{align*}
+λ'_d &= ∑_i λ_i ∘ α_{i,d} + ∑_i μ_i ∘ γ_{i,d}
+  + ∑_{i,j} σ^{-1} (γ'_{d,d,2j+1} - t γ'_{d,d,2j}) ξ_{j,d-j},\\
+μ'_d &= ∑_i μ_i ∘ β_{i,d}.
+\end{align*}
+
+
+\begin{prop}\label{prop:ip1s-semilinear}
+The $n$-dimensional IP1S problem for totally irregular pencils over a
+field of characteristic two is equivalent to linears equation of
+dimension~$O(n^2)$ and one semi-linear equation of
+the form
+\begin{equation*}
+X = A σ(X) + B,
+\end{equation*}
+where $A$~is a square matrix and $X, B$~are column matrices of
+dimension~$O(n^2)$.
+\end{prop}
+
+\section{Solving Frobenius equations}
+
+% Part~1 shows how to bring the IP1S problem to an equation of the form
+% \begin{equation}\label{eq:semi-linear}
+% X = A σ(X) + B,
+% \end{equation}
+As the matrix~$A$ of Proposition~\ref{prop:ip1s-semilinear} seems to be
+quite general, we give a generic method for this family of
+\emph{Frobenius equations}. In the IP1S problem, the base field~$k$ has
+characteristic~two; we present here the general case for any base field.
+
+Let~$k[φ]$ be the non-commutative ring of polynomials in~$φ$, with the
+relations~$φ c = σ(c) φ$ for all~$c ∈ k$. This ring is Euclidean.
+More precisely, the (left-side) Euclidean algorithm works: given two
+elements~$a, b ∈ k[φ]$, there exist elements~$u, v$ such that~$u a + v b =
+d$ where $d$~is the gcd of~$a$ and~$b$.
+
+Moreover, the only two-sided ideals of~$k[φ]$ are those generated by the
+powers of~$φ$.
+
+From these two remarks and [Jacobson, Th.~19] we get the following.
+\begin{thm}
+Let~$φ: k^n → k^n$ be a semi-linear endomorphism. There exists a basis
+of~$k^n$ in which the matrix of~$φ$ is the direct sum of cyclic matrices,
+at most one of which is not nilpotent.
+\end{thm}
+
+Assume now that $A$~is cyclic and let~$R = k[a]/f(a)$ be the $k$-algebra
+generated by~$a$; the equation~\eqref{eq:semi-linear} may then be written
+as
+\begin{equation}\label{eq:semi-linear-pol}
+x = a σ(x) + b,
+\end{equation}
+where~$a$, $b$ and~$x$ belong to the finite algebra~$k[a]$, and $σ$~is
+the absolute Frobenius automorphism. To the primary factorization~$f = ∏
+f_i$ of~$f$, there corresponds a factorization~$R = ∏ R_i$ where $R_i$~is
+a local algebra. Using Chinese remainders, we may therefore assume that
+$R$~is a local algebra and~$f = f_0^d$, where $f_0$~is irreducible.
+
+We first see to the case where~$d = 1$, \emph{i.e.} $R$~is an extension
+of the field~$k$. Write~$k_0 = \F_p$ be the field fixed by the
+Frobenius~$σ$ and let~$N_0 = N_{R/k_0}$ and~$\Tr_0 = \Tr_{R/k_0}$ be the
+norm and trace operators. The equation~\eqref{eq:semi-linear-pol} implies
+that
+\begin{equation}
+x = b' + N_0(a) x, \quad\text{where $b' = b + a σ(b) + … + a σ(a) …
+σ^{n-2}(a) σ^{n-1}(b)$.}
+\end{equation}
+If $N_0(a) ≠ 1$, then this gives as a unique solution~$x =
+b'/(1-N_0(a))$. If, on the contrary, $N_0(a) = 1$, then by
+Hilbert's theorem~90~[Lang, VI.6.1], there exists~$u ∈ R^{×}$ such
+that~$a = σ(u)/u$; then~$x' = ux$ satisfies the equation~$x' = σ(x') +
+ub$. This last equation, using the additive form of Hilbert's theorem~90
+[Lang, VI.6.3], has a solution if, and only if, $\Tr_0 (ub) = 0$. We
+note that both forms of Hilbert's theorem are algorithmic.
+
+In the general case where~$d ≥ 1$, let~$\fr m$ be the maximal ideal
+of~$R$. We may use the preceding paragraph to compute a solution~$x_0$ of
+the equation modulo~$\fr m$. Moreover, we notice that~$f(x) = x -  a σ(x)
+- b$ is a polynomial and that~$f'(x) = 1$; therefore, this polynomial is
+separated, and we may use Hensel's lemma to lift the approximate
+solution~$x_0$ to a full solution.
+
 
 %>>>1
 \section{Computation of the second secret for IP2S}%<<<1
