@@ -681,20 +681,166 @@ isomorphism between~$\bm{b}$ and~$\bm{b}'$ is the same as computing it on each
 factor of the primary decomposition. Therefore, in what follows, we shall
 assume that both pencils are local (and hence hence finite).
 
-% \medskip
-% 
-% Note that when $k = \F_q$~is a finite field, it may happen that $λ^q μ -
-% λ μ^q$ divides~$f(λ:μ) ≠ 0$, so that~$f(λ) = 0$ for all~$λ ∈ ℙ^1(k)$. In
-% this case, although $(b_{λ})$~is a regular pencil, all forms~$b_{λ}$ are
-% degenerate. However, the decomposition given by
-% Lemma~\ref{lem:decomp-bezout} still applies, and all the local pencils
-% given by this decomposition contain at least one non-degenerate form,
-% namely~$b_{0}$ on~$V_{∞}$ and~$b_{∞}$ in all other cases.
-% Swapping~$b_{∞}$ and~$b_{0}$ when required, we may assume that all local
-% pencils are \emph{finite}, \emph{i.e.} that $b_{∞}$~is a regular bilinear
-% form.
+\subsection{Structure of local bilinear pencils}
 
-\bigskip
+Let~$b_{λ} = λ b_{∞} + b_0$ be a local pencil. We may use the
+characteristic endomorphism~$m = - b_{∞}^{-1} b_0$ to write~$b_{λ}$ in
+the form~$b_{λ} = b_{∞} (λ - m)$. Since $b_{λ}$~is local, we know that
+the minimal polynomial of~$m$ is primary, \emph{i.e.} of the form~$p^d$
+where $p$~is irreducible. In particular, since $k$~is a finite field,
+this implies that $p$~is a separable polynomial.
+
+We define the local algebra~$R_d = k[x] / p(x)^d$
+and the extension field~$K = R_1 = k[x] / p(x)$. For each~$d$, $R_d$~is
+isomorphic to~$K[π]/π^d$. Namely, a morphism~$K → R_d$ is given by a
+root~$z$ of~$p$ in~$R_d$; the root~$x$ of~$p(x)^d$ is an approximate
+solution, and by Hensel's lemma this may be lifted to an exact solution.
+
+
+Let~$A → B$ be a morphism of (commutative) rings and let~$M$ be a
+$B$-module. We say that a $A$-bilinear form~$b: M × M → A$ \emph{commutes
+with~$B$} if, for any~$a ∈ A$ and~$x, y ∈ M$, we have~$b(x, ay) = b(ax,
+y)$.
+
+Using this definition we see that the local pencil~$b$ defines a bilinear
+form~$b_{∞}$ commuting with the ring~$R_d = k[m]$. In particular, it
+commutes with the extension field~$K$. Moreover, the morphisms of pencils
+in the IP1S sense are exactly the $R_d$-linear maps.
+
+\begin{prop}\label{prop:trace-form}
+Let~$K/k$ be a separable field extension, and~$V$ be a finite-dimensional
+vector space over~$K$.
+
+For any $k$-bilinear form~$b: V ⊗ V → k$ commuting with~$K$, there
+exists a unique $K$-bilinear form~$b_K: V ⊗ V → K$ such that~$b =
+\Tr_{K/k} \,∘ \,b_K$.
+\end{prop}
+
+\begin{proof}
+We first recall the (classical) proof of the result when~$V = K$. In this
+case, let~$z$ be a primitive element of~$K$ and write $d = [K:k]$.
+Since~$K/k$ is separable, the trace form is
+non-degenerate~\cite[VI~5.2]{lang} and there exists a unique element~$c ∈
+K$ such that $\Tr (c z^i) = b(1, z^i)$ for all~$i=0, …, d-1$. We
+immediately see that, for all~$x, y ∈ k$, $\Tr (c x y) = b(x, y)$.
+
+The general case now follows directly from taking coordinates in~$K$: all
+coordinates of a bilinear form are themselves bilinear forms.
+\end{proof}
+
+The above proposition reduces the problem to the case where~$K = k$.
+For any integer~$m$, we define~$R_m$ as the local $k$-algebra $R_m =
+k[π]/π^m$, and the $k$-linear form~$τ_m$ on~$R_m$ as the coefficient
+of~$π^{m-1}$. We write~$τ$ instead of~$τ_m$ where there is no ambiguity.
+We note that~$τ(xy)$, as a $k$-bilinear form on~$R_m$, is non-degenerate.
+Actually, multiplication by~$π^{m-1}$ defines a (non-canonical)
+$R$-linear isomorphism between~$R$ and its dual (as a $k$-vector
+space)~$R^{∨}$.
+
+\begin{prop}\label{prop:trace-local}
+Let~$R = R_m$ and $M, N$ be $R$-modules of finite length. For any
+$k$-bilinear form~$b: M ⊗ N → k$ commuting with~$R$, there exists a
+unique $R$-bilinear form~$b_R: M ⊗ N → R$ such that~$b = τ ∘ b_R$.
+\end{prop}
+
+Note that we do not demand that $M$, $N$ be \emph{free} as $R$-modules.
+Moreover, the unicity of~$b_R$ shows that both forms~$b$ and~$b_R$ are
+simultaneously symmetric or antisymmetric. However, when $k$~is a field
+of characteristic two, it may happen (as we shall see in XXX) that $b$~is
+alternating whereas $b_R$~is not.
+
+\begin{proof}[\protect{Proof of Prop.~\ref{prop:trace-local}}]
+By the structure theorem of modules over a principal ring, we may
+write~$M = ⊕ R_{m_i}$ for some finite sequence of integers~$m_i$. If the
+result holds for modules~$(M', N)$ and~$(M'', N)$ then it also holds
+for~$(M' ⊕ M'', N)$. Therefore, using induction on the length of both
+modules, we only need to prove the case where~$M = R_m$ and~$N = R_n$
+where~$m ≥ n$. In this case, since $b$~commutes with~$k[π]$, we see that
+for~$x = ∑ x_i π^i$, $y = ∑ y_i π^i$:
+\begin{equation}
+b(x,y) \;=\; ∑_{i,j} x_i y_j\: b(1, π^{i+j})
+  \;=\; ∑_{i+j+r = m-1} x_i y_j\: b(1, π^{m-1-r}).
+\end{equation}
+Let~$c = ∑ b(1, π^{i}) π^{m-1-i}$. Since $b(1, π^{r}) = 0$ for all~$r ≥
+n$, $c$~belongs to the ideal~$π^{m-n} R_m = \Hom_R (R_n, R_m)$, so that
+the product~$c\,y$ is well-defined in~$R_m$. The bilinear form~$b_R$ is
+finally the form defined by~$b_R(x,y) = c\:xy$.
+\end{proof}
+
+Assembling the Propositions~\ref{prop:trace-form}
+and~\ref{prop:trace-local}, we see that for any local pencil~$(b_{∞},
+b_0)$ with characteristic endomorphism~$c$ and associated local ring~$R =
+k[c]$, there exists a unique $R$-bilinear form~$b_R$
+on~$V$ such that~$b_{∞} = \Tr_{K/k} ∘ τ_d ∘ b_R$.
+Local pencils are thus equivalent to $R$-bilinear forms on~$V$.
+Moreover, a morphism of pencils~$s: b → b'$ is a
+$k$-linear map such that~$\transpose{s} ∘ b_{∞} ∘ s = b'_{∞}$
+and~$s^{-1} ∘ c ∘ s = c'$, or in other words a $R$-linear congruence
+between the $R$-bilinear forms~$b_R$ and~$b'_R$. Therefore, solving the
+local IP1S problem amounts to computing a congruence matrix
+between two~$R$-bilinear forms on a $R$-module of finite length.
+
+\begin{prop}\label{prop:diag-bigblock}
+Let~$M$ be a $R$-module of finite length and $b$~be a $R$-bilinear form
+on~$M$. If the $k$-bilinear form~$τ ∘ b$ is regular, then there exists an
+orthogonal decomposition~$M = \bigperp M_d$, where $M_d$~is a finite free
+module over~$R_d = R / π^d$ and $b$~is regular, as a
+$R_d$-bilinear form, on each module~$M_d$.
+\end{prop}
+
+
+\begin{proof}
+We reason by induction on the length of~$R$. By the structure theorem for
+modules over the principal ring~$R$, there exists a decomposition~$M = F
+⊕ N$ where $F$~is free over~$R = k[π]/π^m$ and~$π^{m-1} N = 0$. In
+particular, $N$~is a $R'$-module, where~$R' = R / π^{m-1}$; we define~$τ'
+= τ_{m-1}: R' → k$ and note that~$τ'(a) = τ(π a)$ for all~$a ∈ R'$.
+
+We first show that the restriction of~$b$ to~$F$ is regular. Let~$x ∈ F$
+such that~$R x$ is a direct factor: this means that~$π^{m-1} x ≠ 0$.
+Since $τ ∘ b$~is regular, there exists~$y ∈ M$ such that~$τ(b(π^{m-1} x,
+y)) = 1$. This implies that~$b(x, y) ≡ 1 \pmod{π}$. Let~$y = y' + y''$
+where~$y' ∈ F$ and~$y'' ∈ M/F$: since~$π^{m-1} y'' = 0$, we have~$π^{m-1}
+b(x, y'') = 0$ and therefore~$b(x, y'') ∈ π R$. Therefore, $a = b(x, y')
+≡ b(x, y) ≡ 1 \pmod{π}$. In particular, $a ∈ R^{×}$, so that~$b(x, a^{-1}
+y') = 1$, which shows that $b$~is regular on~$F$.
+
+Let now~$y ∈ N$. Since $b$~is regular on~$F$, there exists a unique~$f(y)
+∈ F$ such that, for all~$x ∈ F$, $b(x, y) = b(x, f(y))$. This implies
+that the map~$N → M, y ↦ y - f(y)$ is orthogonal to~$F$, and therefore
+defines a $b$-orthogonal decomposition~$M = F ⊕ N$. Finally,
+since~$π^{m-1} y = 0$, the map~$b$ has its values in~$π R$, which means
+that there exists a $R'$-bilinear form~$b'$ on~$N$ such that~$b = π b'$;
+since $τ ∘ b$~is regular, its orthogonal summand $τ' ∘ b'$~is regular,
+and we may apply the induction hypothesis to the $R'$-bilinear form~$b'$
+on~$N$.
+\end{proof}
+
+We shall generally call $b$ \emph{regular} if $τ ∘ b$~is regular as a
+$k$-bilinear form. If $M$~is free then this does not conflict with the
+standard definition of $R$-regularity.
+
+Note that, if we do not assume $b$~to be regular, then there does not
+necessarily exist a decomposition equivalent to that of
+Prop.~\ref{prop:diag-bigblock}. For example, the $R_2$-bilinear form
+over~$M = R_1 ⊕ R_2$ defined by~$b(x_1 ⊕ x_2, y_1 ⊕ y_2) = (π x_1) y_2 -
+x_1 (π y_2)$ is not diagonalizable.
+
+
+\begin{prop}\label{prop:bilinear-odd}
+Assume that $2 ≠ 0$ in~$k$; let~$R = k[π]/π^m$ and let~$M$ be a free
+$R$-module.
+\begin{enumerate}
+\item Any regular $R$-bilinear form~$b$ on~$M$ is diagonalizable.
+\item Assume that $k$~is finite. Then any regular $R$-bilinear form~$b$
+on~$M$ is equivalent to one of the diagonal forms~$(1, …, 1)$ or~$(1, …,
+d)$, where $d ∈ k^{×}$~is not a square.
+\end{enumerate}
+\end{prop}
+
+
+
+------------- début vieille partie
 
 Let~$b_{λ} = λ b_{∞} + b_0$ be a finite pencil. We may use the
 characteristic endomorphism~$m = -b_{∞}^{-1}b_0$ to write~$\bm{b}$ in the form
@@ -1435,9 +1581,8 @@ for the diagonal coefficients~$λ'_d, μ'_d$ of~$q'$:
 
 \begin{prop}\label{prop:ip1s-semilinear}
 The $n$-dimensional IP1S problem for totally irregular pencils over a
-field of characteristic two is equivalent to linears equation of
-dimension~$O(n^2)$ and one semi-linear equation of
-the form
+field of characteristic two is equivalent to a set of~$O(n^2)$ linear
+equations and one semi-linear equation of the form
 \begin{equation*}
 X = A σ(X) + B,
 \end{equation*}
