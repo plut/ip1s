@@ -8,6 +8,7 @@
 \DeclareUnicodeCharacter{2265}{\geqslant}
 \usepackage{amsmath,amssymb,mathrsfs}
 \usepackage{bm}
+\usepackage{lmodern}
 \usepackage{mathdots}
 \usepackage{algorithm}
 \usepackage{algpseudocode}
@@ -828,16 +829,36 @@ x_1 (π y_2)$ is not diagonalizable.
 
 
 \begin{prop}\label{prop:bilinear-odd}
-Assume that $2 ≠ 0$ in~$k$; let~$R = k[π]/π^m$ and let~$M$ be a free
-$R$-module.
-\begin{enumerate}
-\item Any regular $R$-bilinear form~$b$ on~$M$ is diagonalizable.
-\item Assume that $k$~is finite. Then any regular $R$-bilinear form~$b$
+Let~$k$ be a finite field where~$2 ≠ 0$; write~$R = k[π]/π^m$ and let~$M$
+be a free $R$-module.
+Then any regular $R$-bilinear form~$b$
 on~$M$ is equivalent to one of the diagonal forms~$(1, …, 1)$ or~$(1, …,
-d)$, where $d ∈ k^{×}$~is not a square.
-\end{enumerate}
+d)$, where $Δ ∈ k^{×}$~is not a square.
 \end{prop}
 
+\begin{proof}
+The proof follows from applying a Hensel lift to the classical proof over
+finite fields~\cite[IV(1.5)]{milnorhusemoller}.
+By the Gram orthogonalization algorithm~\cite[I(3.4)]{milnorhusemoller},
+$b$~is congruent to a bilinear form with diagonal matrix~$A =
+\mathrm{diag} (a_1,…, a_n)$. Since $x^2$~is a separable
+polynomial over~$R$, two applications of Hensel's lemma in the complete
+ring~$R$ allow the following lifts to~$R$ of results in the finite
+field~$k$:
+\begin{enumerate}
+\item[(a)] for all~$i$, we have either~$a_i = b_i^2$ or~$a_i = b_i^2 Δ$
+in~$R$;
+\item[(b)] the equation~$u^2 + v^2 = Δ$ has a solution with~$u, v ∈ R$.
+\end{enumerate}
+By~(a), we may assume that~$a_i = 1$ or~$a_i = Δ$. From~(b), we deduce
+the matrix relation
+\begin{equation}
+\transpose{\mat{u&-v\\v&u}}·\mat{1&0\\0&1}·\mat{u&-v\\v&u} =
+\mat{Δ&0\\0&Δ}.
+\end{equation}
+This allows canceling all pairs of~$Δ$ appearing in the diagonalization
+of~$A$.
+\end{proof}
 
 
 ------------- début vieille partie
