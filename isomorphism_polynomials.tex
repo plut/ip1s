@@ -1876,21 +1876,23 @@ a'_i \;=\; ∑_r a_r σ(u_{r,i})
 The \emph{hyperbolic plane} is the module $R^2$, equipped with the
 $k$-quadratic form~$q(x) = x_1 x_2$; this form commutes with~$R$. The
 corresponding $τ$-alternating bilinear form~$b_R$ has the
-matrix~$\mat{0&1\\1&0}$. A quadratic module is \emph{hyperbolic} if it is
+matrix~$\mat{0&1\\1&0}$. A quadratic form is \emph{hyperbolic} if it is
 isomorphic to the orthogonal sum of copies of the hyperbolic plane.
+We say that a quadratic form~$q$ \emph{reduces} to a form~$q'$ if $q$~is
+isomorphic to the direct sum of~$q'$ and a hyperbolic space.
 
 \begin{prop}\label{prop:witt-four}
 Let~$M$ be a free $R$-module and $q$~be a $k$-quadratic form on~$M$,
-commuting with~$R$. Then $q$~is isomorphic to the orthogonal direct sum
-of a hyperbolic space and of a quadratic form of dimension at most four.
+commuting with~$R$.
+Then $q$~reduces to a quadratic form of dimension at most four.
 \end{prop}
 
 \begin{proof}
 Using the classification given by Prop.~\ref{prop:eqv-norm}, we see that
-the polar form~$b$ of~$q$ is isomorphic to the direct sum of a hyperbolic
-space and of a bilinear form of dimension at most two. We therefore only
-need to prove that, if $b$~is hyperbolic, then $q$~is isomorphic to a
-hyperbolic space plus a quadratic form of dimension at most two.
+the polar form~$b$ of~$q$ reduces to a bilinear form of dimension at most
+two.
+We therefore only need to prove that, if its polar~$b$ is hyperbolic,
+then $q$~reduces to a quadratic form of dimension at most two.
 
 For any coefficients~$a_1, a_2, a_3, a_4 ∈ R$, write~$[a_1, a_2, a_3,
 a_4]$ for the quadratic form~$q$ on~$R^4$ defined by
@@ -1929,9 +1931,8 @@ transformation, one may have~$a_4 = 0$.
 \end{proof}
 
 Using Prop.~\ref{prop:witt-four} on both quadratic forms of a quadratic
-pencil, we see that any quadratic pencil is isomorphic to the orthogonal
-sum of an hyperbolic space and of a pencil of dimension at most six.
-
+pencil, we see that any quadratic pencil reduces to a pencil of dimension
+at most six.
 %>>>1
 \section{Computation of the second secret for IP2S}%<<<1
 \label{S:IP2S}
