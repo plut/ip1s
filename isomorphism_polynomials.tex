@@ -18,6 +18,7 @@
 \usepackage{amsthm}
 \usepackage[margin=25mm]{geometry}
 
+\usepackage{color}
 % \newnumbered{definition}{Definition}
 \newif\ifapx \apxtrue % If appendix
 
@@ -54,6 +55,7 @@
 \DeclareMathOperator\Hom{Hom}
 \DeclareMathOperator\End{End}
 \DeclareMathOperator\GL{GL}
+\DeclareMathOperator\PGL{PGL}
 \DeclareMathOperator\Tr{Tr}
 \def\F{\mathbb{F}}
 \def\Id{\mathrm{Id}}
@@ -302,17 +304,24 @@ and relies on symplectic groups and Artin-Schreier type equations,
 Let~$\chk{V}$ be the dual of the vector space~$V$. A bilinear form~$b$
 on~$V$ is the same as a linear map~$b: V → \chk{V}$. The bilinear form is
 \emph{regular} if it defines an invertible linear map~$V → \chk{V}$. In
-this case, to for any endomorphism~$u$ of~$V$, there exists a unique
+this case, for any endomorphism~$u$ of~$V$, there exists a unique
 endomorphism~$u^{⋆}$ of~$V$ such that~$b(x,u(y)) = b(u^{⋆}(x), y)$; the
 endomorphism~$u^{⋆}$ is called the \emph{left-adjoint} of~$u$. If $b$~is
 symmetric then left- and right-adjoints coincide.
 
-An \emph{(affine) pencil of symmetric bilinear
-forms} over~$V$, or a \emph{symmetric pencil} in short, is a
-pair of symmetric bilinear forms~$\bm{b} = (b_{∞}, b_{0})$ over~$V$. We
-write this pencil in affine form as~$b_{λ} = λ b_{∞} + b_{0}$, and in
-projective form as~$b_{λ:μ} = λ b_{∞} + μ b_{0}$, where $b_{0}$
-and~$b_{∞}$ are symmetric bilinear forms.
+An \emph{(affine) pencil of symmetric bilinear forms} over~$V$, or a
+\emph{symmetric pencil} in short, is a pair of symmetric bilinear
+forms~$\bm{b} = (b_{∞}, b_{0})$ over~$V$. We write this pencil in affine
+form as~$b_{λ} = λ b_{∞} + b_{0}$, and in projective form as~$b_{λ:μ} = λ
+b_{∞} + μ b_{0}$, where $b_{0}$ and~$b_{∞}$ are symmetric bilinear forms.
+Given two vector spaces equipped with pencils~$(V, b)$ and~$(V', b')$, a
+\emph{linear map} of pencils is a linear map~$s: V → V'$ such
+that~$b'_{λ} ∘ s = b_{λ}$. A \emph{projective map} of pencils is a
+pair~$(s, t)$, where $s: V → V'$ is a linear map and $t ∈ \PGL_2 (k)$~is
+a homography such that~$b'_{λ} ∘ s = b_{t(λ)}$. We define quadratic
+pencils in the same way. The IP1S problem is then the computation of a
+linear isomorphism of quadratic pencils, whereas the IP2S problem is the
+computation of a projective isomorphism.
 
 Two elements~$x$ and~$y$ of~$V$ are \emph{orthogonal} for a
 bilinear form~$b$ if~$b(x,y) = 0$. They are orthogonal
@@ -334,18 +343,8 @@ For any endomorphism~$u$ with matrix~$U$, the adjoint endomorphism
 multiplication by~$p$ in the basis~$\acco{1,x,…,x^{\deg p-1}}$ of
 polynomials with degree~$< \deg p$.
 
-% \begin{definition}%\textbf{[Quadratic IP1S]}% \\
-% The homogeneous quadratic IP1S problem is the following. Given two
-% $m$-uples $\bm{a} = (a_1, \ldots, a_{m})$ and {$\bm{b} = (b_1, \ldots,
-% b_{m})$}  of quadratic forms in $n$ variables over $k$, find a
-% non-singular linear mapping $s \in \mathrm{GL}_n(k)$ (if any) such that
-% $\bm{b} = \bm{a} \circ s$, i.e. $a_i = b_i \circ s$ for $i= 1, \ldots,
-% m$.
-% \end{definition}
-
-
 %>>>1
-\section{The singular part of quadratic pencils}%<<<1
+\section{The singular part of bilinear pencils}%<<<1
 \label{S:IP1S-singular}
 \subsection{Regular and singular pencils}%<<<2
 Let~$b = (b_{λ})$ be a bilinear pencil over the space~$V$. The
@@ -362,9 +361,11 @@ symmetric pencil is reducible to the canonical form of Kronecker. This
 form is described in~\cite[XII(56)]{Gantmacher}; however, the proof
 given there only applies to pencils over~$ℂ$, as it uses the computation
 of square roots of matrices via interpolation on the spectrum. We give
-here an algorithmic proof that applies to any field~$k$.
+here an algorithmic proof that applies to any field~$k$. This proof is
+also true in characteristic two for alternating pencils, which is the
+case for the polar of a quadratic pencil.
 
-\subsection{The Kronecker decomposition of the singular part of a pencil} %<<<2
+\subsection{The Kronecker decomposition} %<<<2
 \label{SS:Kronecker-reduction}
 % Définition: indice minimal%<<<
 The pencil~$(b_{λ})$ defines a symmetric bilinear form on the
@@ -499,7 +500,8 @@ K_{h} = \mat{0&K'_{h}\\\transpose{K'_{h}}&0}.
 \end{equation}
 
 \begin{prop}\label{prop:kronecker-matrix}%<<<
-Let~$(V, b_{λ})$ be a Kronecker module with minimal index~$h$. There
+Let~$(V, b_{λ})$ be a Kronecker module with minimal index~$h$. Assume
+that either~$2 ≠ 0$ in~$k$ or that $b$~is alternating. There
 exists a basis of~$V$ in which the pencil~$(b_{λ})$ has the
 matrix~$K_{h}$.
 \end{prop}
@@ -526,26 +528,23 @@ e_i$. The equations~\eqref{eq:kro-self-orth} then amount to
 w_{i,j} + w_{j,i} = b_{0} (f_i, f_j);\quad
 w_{i-1,j} + w_{j-1,i} = -b_{∞} (f_i, f_j).
 \end{equation}
-This defines the values~$w_{i,i} = \frac{1}{2} b_{0} (f_i, f_i)$
-and~$w_{i-1,i} = -\frac{1}{2} b_{∞} (f_i, f_i)$, which is possible
-since~$2 ∈ k^{×}$. All other values follow
-from the relation~$w_{i,j} - w_{i-1,j+1} = b_{0} (f_i, f_j) + b_{∞} (f_i,
+If~$2 ≠ 0$ in~$k$, then this defines the values~$w_{i,i} = \frac{1}{2} b_{0} (f_i, f_i)$
+and~$w_{i-1,i} = -\frac{1}{2} b_{∞} (f_i, f_i)$; else if $b$~is
+alternating, then $w_{i,i}$ and~$w_{i-1, i}$ may take any value in~$k$.
+All the other coefficients~$w_{i,j}$ then follow from the
+relation~$w_{i,j} - w_{i-1,j+1} = b_{0} (f_i, f_j) + b_{∞} (f_i,
 f_{j+1})$.
 \end{proof}
-
-This last computation shows that the proof also holds in characteristic
-two if we further assume that the pencil~$b$ is alternating, which is the
-case for the polar part of a quadratic pencil.
 %>>>
 
 From Props.~\ref{prop:kronecker-split}, \ref{prop:kronecker-matrix} and
 an induction step on the minimal index of the pencil we deduce the
 following.
 
-\begin{prop}[(Kronecker form)]\label{prop:kronecker}%<<<
-Let~$(b_{λ})$ be a symmetric pencil on~$V$. There exists a basis of~$V$
-in which the pencil has a block-diagonal matrix with diagonal
-blocks~$(K_{h_1}, …, K_{h_r}, B')$, where $K_h$~is
+\begin{prop}[Kronecker decomposition]\label{prop:kronecker}%<<<
+Let~$(b_{λ})$ be a symmetric (or, if $2 = 0$, alternating) pencil on~$V$.
+There exists a basis of~$V$ in which the pencil has a block-diagonal
+matrix with diagonal blocks~$(K_{h_1}, …, K_{h_r}, B')$, where $K_h$~is
 the square matrix of size~$2h+1$ defined by equation~\eqref{eq:def-K},
 the integers~$h_1 ≤ … ≤ h_r$ are the minimal indices of~$(b_{λ})$, and
 $B'$~is the matrix of a regular pencil.
@@ -555,16 +554,16 @@ We note that this result is the same as the classical result in
 characteristic zero~\cite[XII, §4]{Gantmacher}.
 %>>>
 %>>>1
-\section{Equivalence of regular pencils in the IP1S sense}%<<<1
+\section{Linear equivalence of regular bilinear pencils}%<<<1
 \label{S:IP1S-regular}
 
-We give here an algorithm for solving the IP1S problem in the case of two
-regular pencils. Assume that $\bm{b} = (b_{λ})$~is regular, which means
-that its characteristic polynomial~$f(λ) = \det (b_0 + λ b_{∞})$ is not
-zero. Then, for any~$λ$ such that~$f(λ) ≠ 0$, the bilinear form~$b_{λ}$
-is regular.
+We give here an algorithm for computing an isomorphism between two
+regular bilinear pencils. Assume that $\bm{b} = (b_{λ})$~is regular,
+which means that its characteristic polynomial~$f(λ) = \det (b_0 + λ
+b_{∞})$ is not zero. Then, for any~$λ$ such that~$f(λ) ≠ 0$, the bilinear
+form~$b_{λ}$ is regular.
 
-\subsection{Localisation of the IP1S problem}%<<<2
+\subsection{Localisation of regular pencils}%<<<2
 
 We first prove that we may assume that one of the bilinear
 forms~$(b_{λ})$ is regular.
@@ -649,22 +648,22 @@ V_{∞}$~are regular and $b_{0}^{-1} b_{∞} | V_{∞}$~is nilpotent. The
 space~$V_{∞}$ corresponds to the largest divisor~$μ^{e}$ of~$f(λ:μ)$.
 
 Replacing~$V$ by~$V'$, we may assume that~$b_{∞}$~is regular. This
-implies that $b_0$~has an adjoint endomorphism~$m = -b_{∞}^{-1} b_0$ such
-that~$b_0(x,y) = -b_{∞}(x, m y) = -b_{∞}(m x, y)$; in particular, all
-elements of the algebra~$k[m]$ are self-adjoint with respect to~$b_{∞}$.
+implies that $b_0$~has an adjoint endomorphism~$c = -b_{∞}^{-1} b_0$ such
+that~$b_0(x,y) = -b_{∞}(x, c y) = -b_{∞}(c x, y)$; in particular, all
+elements of the algebra~$k[c]$ are self-adjoint with respect to~$b_{∞}$.
 
 Let~$f(λ) = f(λ: 1)$ be the affine characteristic polynomial. It is
 enough to prove the result for the decomposition~$f = gh$ where $g, h$
 are mutually prime. Let~$u, v$ be polynomials such that~$ug + vh = 1$, and
-$x, y ∈ V$ such that~$g(m)(x) = 0$ and~$h(m)(y) = 0$; we may then write
+$x, y ∈ V$ such that~$g(c)(x) = 0$ and~$h(c)(y) = 0$; we may then write
 \begin{equation}\label{eq:bezout}
 \begin{split}
-b_{∞} (x, y) & = b_{∞} (x,\: u(m) g(m) y + v(m) h(m) y ) \\
-&= b_{∞} (u(m) g(m) x, y) \,+\, b_{∞} (x, v(m) h(m) y) \\
+b_{∞} (x, y) & = b_{∞} (x,\: u(c) g(c) y + v(c) h(c) y ) \\
+&= b_{∞} (u(c) g(c) x, y) \,+\, b_{∞} (x, v(c) h(c) y) \\
 &= 0.
 \end{split}
 \end{equation}
-Since~$y' = m y$ also verifies~$h(m)(y') = 0$, equation~\eqref{eq:bezout}
+Since~$y' = c y$ also verifies~$h(c)(y') = 0$, equation~\eqref{eq:bezout}
 also proves that~$b_{0}(x,y) = b_{∞}(x,y') = 0$, and hence~$x, y$ are
 orthogonal for all forms~$b_{λ}$.
 \end{proof}%>>>
@@ -682,33 +681,29 @@ isomorphism between~$\bm{b}$ and~$\bm{b}'$ is the same as computing it on each
 factor of the primary decomposition. Therefore, in what follows, we shall
 assume that both pencils are local (and hence hence finite).
 
-\subsection{Structure of local bilinear pencils}
+\subsection{Symmetric forms commuting with a local algebra}%<<<2
+\label{ss:commute}
 
-Let~$b_{λ} = λ b_{∞} + b_0$ be a local pencil. We may use the
-characteristic endomorphism~$m = - b_{∞}^{-1} b_0$ to write~$b_{λ}$ in
-the form~$b_{λ} = b_{∞} (λ - m)$. Since $b_{λ}$~is local, we know that
-the minimal polynomial of~$m$ is primary, \emph{i.e.} of the form~$p^d$
+Let~$b_{λ} = λ b_{∞} + b_0$ be a local pencil on~$V$, with characteristic
+endomorphism~$c = - b_{∞}^{-1} b_0$.
+Defining $R = k[c]$ makes~$V$ into a $R$-module, and we see that the
+$k$-bilinear form~$b_{∞}$ on~$V$ \emph{commutes with~$R$} in the
+following sense: for all~$a ∈ R$, we have~$b_{∞} (a x, y) = b_{∞} (x, a
+y)$.
+Moreover, the morphisms of pencils preserving the characteristic
+polynomial are exactly the $R$-linear maps preserving this $k$-bilinear
+form.
+
+Since $b_{λ}$~is local, we know that
+the minimal polynomial of~$c$ is primary, \emph{i.e.} of the form~$p^d$
 where $p$~is irreducible. In particular, since $k$~is a finite field,
 this implies that $p$~is a separable polynomial.
+Let~$K$ be the extension field~$k[x] / p(x)$.
+We note that $c$~is an approximate root of~$p$ in the (complete) local
+algebra~$R$, so that, by Hensel's lemma, $R$~contains an exact root~$x'$
+of~$p$; this turns $R$~into a $K$-algebra isomorphic to~$R_d = K[π]/π^d$.
 
-We define the local algebra~$R_d = k[x] / p(x)^d$
-and the extension field~$K = R_1 = k[x] / p(x)$. For each~$d$, $R_d$~is
-isomorphic to~$K[π]/π^d$. Namely, a morphism~$K → R_d$ is given by a
-root~$z$ of~$p$ in~$R_d$; the root~$x$ of~$p(x)^d$ is an approximate
-solution, and by Hensel's lemma this may be lifted to an exact solution.
-
-
-Let~$A → B$ be a morphism of (commutative) rings and let~$M$ be a
-$B$-module. We say that a $A$-bilinear form~$b: M × M → A$ \emph{commutes
-with~$B$} if, for any~$a ∈ A$ and~$x, y ∈ M$, we have~$b(x, ay) = b(ax,
-y)$.
-
-Using this definition we see that the local pencil~$b$ defines a bilinear
-form~$b_{∞}$ commuting with the ring~$R_d = k[m]$. In particular, it
-commutes with the extension field~$K$. Moreover, the morphisms of pencils
-in the IP1S sense are exactly the $R_d$-linear maps.
-
-\begin{prop}\label{prop:trace-form}
+\begin{prop}\label{prop:trace-form}%<<<
 Let~$K/k$ be a separable field extension, and~$V$ be a finite-dimensional
 vector space over~$K$.
 
@@ -718,30 +713,33 @@ exists a unique $K$-bilinear form~$b_K: V ⊗ V → K$ such that~$b =
 \end{prop}
 
 \begin{proof}
-We first recall the (classical) proof of the result when~$V = K$. In this
-case, let~$z$ be a primitive element of~$K$ and write $d = [K:k]$.
-Since~$K/k$ is separable, the trace form is
-non-degenerate~\cite[VI~5.2]{lang} and there exists a unique element~$c ∈
-K$ such that $\Tr (c z^i) = b(1, z^i)$ for all~$i=0, …, d-1$. We
-immediately see that, for all~$x, y ∈ k$, $\Tr (c x y) = b(x, y)$.
+We first recall the (classical) proof of the result when~$V = K$.
+In this case, let~$z$ be a primitive element of~$K$ and write $d =
+[K:k]$. Since~$K/k$ is separable, the trace form is
+non-degenerate~\cite[VI~5.2]{lang-algebra} and there exists a unique
+element~$a ∈ K$ such that $\Tr (a z^i) = b(1, z^i)$ for all~$i=0, …,
+d-1$.
+We immadiately see that, for all~$x, y ∈ k$, $\Tr (a x y) = b(x, y)$.
 
 The general case now follows directly from taking coordinates in~$K$: all
 coordinates of a bilinear form are themselves bilinear forms.
-\end{proof}
+\end{proof}%>>>
 
 The above proposition reduces the problem to the case where~$K = k$.
-For any integer~$m$, we define~$R_m$ as the local $k$-algebra $R_m =
-k[π]/π^m$, and the $k$-linear form~$τ_m$ on~$R_m$ as the coefficient
-of~$π^{m-1}$. We write~$τ$ instead of~$τ_m$ where there is no ambiguity.
-We note that~$τ(xy)$, as a $k$-bilinear form on~$R_m$, is non-degenerate.
-Actually, multiplication by~$π^{m-1}$ defines a (non-canonical)
+For any integer~$d$, we define the $k$-linear form~$τ_d$ on~$R_d =
+k[π]/π^d$ as the coefficient of~$π^{d-1}$; we write~$R$ and~$τ$ instead
+of~$R_d$ and~$τ_d$ when there is no ambiguity.
+We note that $τ(xy)$, as a $k$-bilinear form on~$R$, is regular and
+commutes to~$R$.
+Actually, multiplication by~$π^{d-1}$ defines a (non-canonical)
 $R$-linear isomorphism between~$R$ and its dual (as a $k$-vector
 space)~$R^{∨}$.
 
-\begin{prop}\label{prop:trace-local}
-Let~$R = R_m$ and $M, N$ be $R$-modules of finite length. For any
-$k$-bilinear form~$b: M ⊗ N → k$ commuting with~$R$, there exists a
-unique $R$-bilinear form~$b_R: M ⊗ N → R$ such that~$b = τ ∘ b_R$.
+\begin{prop}\label{prop:trace-local}%<<<
+Let~$M, N$ be $R$-modules of finite length.
+For any $k$-bilinear form~$b: M ⊗ N → k$ commuting with~$R$,
+there exists a unique $R$-bilinear form~$b_R: M ⊗ N → R$ such that~$b = τ
+∘ b_R$.
 \end{prop}
 
 Note that we do not demand that $M$, $N$ be \emph{free} as $R$-modules.
@@ -762,46 +760,49 @@ for~$x = ∑ x_i π^i$, $y = ∑ y_i π^i$:
 b(x,y) \;=\; ∑_{i,j} x_i y_j\: b(1, π^{i+j})
   \;=\; ∑_{i+j+r = m-1} x_i y_j\: b(1, π^{m-1-r}).
 \end{equation}
-Let~$c = ∑ b(1, π^{i}) π^{m-1-i}$. Since $b(1, π^{r}) = 0$ for all~$r ≥
-n$, $c$~belongs to the ideal~$π^{m-n} R_m = \Hom_R (R_n, R_m)$, so that
-the product~$c\,y$ is well-defined in~$R_m$. The bilinear form~$b_R$ is
-finally the form defined by~$b_R(x,y) = c\:xy$.
-\end{proof}
+Let~$a = ∑ b(1, π^{i}) π^{m-1-i}$. Since $b(1, π^{r}) = 0$ for all~$r ≥
+n$, $a$~belongs to the ideal~$π^{m-n} R_m = \Hom_R (R_n, R_m)$, so that
+the product~$a\,y$ is well-defined in~$R_m$. The bilinear form~$b_R$ is
+finally the form defined by~$b_R(x,y) = a\:x y$.
+\end{proof}%>>>
 
 Assembling the Propositions~\ref{prop:trace-form}
 and~\ref{prop:trace-local}, we see that for any local pencil~$(b_{∞},
 b_0)$ with characteristic endomorphism~$c$ and associated local ring~$R =
 k[c]$, there exists a unique $R$-bilinear form~$b_R$
 on~$V$ such that~$b_{∞} = \Tr_{K/k} ∘ τ_d ∘ b_R$.
-Local pencils are thus equivalent to $R$-bilinear forms on~$V$.
-Moreover, a morphism of pencils~$s: b → b'$ is a
-$k$-linear map such that~$\transpose{s} ∘ b_{∞} ∘ s = b'_{∞}$
-and~$s^{-1} ∘ c ∘ s = c'$, or in other words a $R$-linear congruence
-between the $R$-bilinear forms~$b_R$ and~$b'_R$. Therefore, solving the
-local IP1S problem amounts to computing a congruence matrix
-between two~$R$-bilinear forms on a $R$-module of finite length.
+Local pencils and linear morphisms are thus equivalent to $R$-bilinear
+forms on~$V$ and $R$-linear maps.
+% Moreover, a morphism of pencils~$s: b → b'$ is a
+% $k$-linear map such that~$\transpose{s} ∘ b_{∞} ∘ s = b'_{∞}$
+% and~$s^{-1} ∘ c ∘ s = c'$, or in other words a $R$-linear congruence
+% between the $R$-bilinear forms~$b_R$ and~$b'_R$. Therefore, solving the
+% local IP1S problem amounts to computing a congruence matrix
+% between two~$R$-bilinear forms on a $R$-module of finite length.
 
-\begin{prop}\label{prop:diag-bigblock}
+\subsection{Structure of bilinear forms over a local algebra}%<<<2
+\begin{prop}\label{prop:diag-bigblock}%<<<
 Let~$M$ be a $R$-module of finite length and $b$~be a $R$-bilinear form
-on~$M$. If the $k$-bilinear form~$τ ∘ b$ is regular, then there exists an
-orthogonal decomposition~$M = \bigperp M_d$, where $M_d$~is a finite free
-module over~$R_d = R / π^d$ and $b$~is regular, as a
-$R_d$-bilinear form, on each module~$M_d$.
+on~$M$.
+If the $k$-bilinear form~$τ ∘ b$ is regular,
+then there exists an orthogonal decomposition~$M = ⨁ M_m$,
+where for $m ≤ d$, $M_m$~is a finite free module over~$R_m = R / π^m$
+and $b$~is regular, as a $R_m$-bilinear form, on each module~$M_m$.
 \end{prop}
 
 
 \begin{proof}
 We reason by induction on the length of~$R$. By the structure theorem for
 modules over the principal ring~$R$, there exists a decomposition~$M = F
-⊕ N$ where $F$~is free over~$R = k[π]/π^m$ and~$π^{m-1} N = 0$. In
-particular, $N$~is a $R'$-module, where~$R' = R / π^{m-1}$; we define~$τ'
-= τ_{m-1}: R' → k$ and note that~$τ'(a) = τ(π a)$ for all~$a ∈ R'$.
+⊕ N$ where $F$~is free over~$R = R_d$ and~$π^{d-1} N = 0$. In
+particular, $N$~is a $R'$-module, where~$R' = R_{d-1}$; we define~$τ'
+= τ_{d-1}: R' → k$ and note that~$τ'(a) = τ(π a)$ for all~$a ∈ R'$.
 
 We first show that the restriction of~$b$ to~$F$ is regular. Let~$x ∈ F$
-such that~$R x$ is a direct factor: this means that~$π^{m-1} x ≠ 0$.
-Since $τ ∘ b$~is regular, there exists~$y ∈ M$ such that~$τ(b(π^{m-1} x,
+such that~$R x$ is a direct factor: this means that~$π^{d-1} x ≠ 0$.
+Since $τ ∘ b$~is regular, there exists~$y ∈ M$ such that~$τ(b(π^{d-1} x,
 y)) = 1$. This implies that~$b(x, y) ≡ 1 \pmod{π}$. Let~$y = y' + y''$
-where~$y' ∈ F$ and~$y'' ∈ M/F$: since~$π^{m-1} y'' = 0$, we have~$π^{m-1}
+where~$y' ∈ F$ and~$y'' ∈ M/F$: since~$π^{d-1} y'' = 0$, we have~$π^{d-1}
 b(x, y'') = 0$ and therefore~$b(x, y'') ∈ π R$. Therefore, $a = b(x, y')
 ≡ b(x, y) ≡ 1 \pmod{π}$. In particular, $a ∈ R^{×}$, so that~$b(x, a^{-1}
 y') = 1$, which shows that $b$~is regular on~$F$.
@@ -815,7 +816,7 @@ that there exists a $R'$-bilinear form~$b'$ on~$N$ such that~$b = π b'$;
 since $τ ∘ b$~is regular, its orthogonal summand $τ' ∘ b'$~is regular,
 and we may apply the induction hypothesis to the $R'$-bilinear form~$b'$
 on~$N$.
-\end{proof}
+\end{proof}%>>>
 
 We shall generally call $b$ \emph{regular} if $τ ∘ b$~is regular as a
 $k$-bilinear form. If $M$~is free then this does not conflict with the
@@ -825,15 +826,14 @@ Note that, if we do not assume $b$~to be regular, then there does not
 necessarily exist a decomposition equivalent to that of
 Prop.~\ref{prop:diag-bigblock}. For example, the $R_2$-bilinear form
 over~$M = R_1 ⊕ R_2$ defined by~$b(x_1 ⊕ x_2, y_1 ⊕ y_2) = (π x_1) y_2 -
-x_1 (π y_2)$ is not diagonalizable.
+x_2 (π y_1)$ is not diagonalizable.
 
 
 \begin{prop}\label{prop:bilinear-odd}
-Let~$k$ be a finite field where~$2 ≠ 0$; write~$R = k[π]/π^m$ and let~$M$
-be a free $R$-module.
-Then any regular $R$-bilinear form~$b$
-on~$M$ is equivalent to one of the diagonal forms~$(1, …, 1)$ or~$(1, …,
-d)$, where $Δ ∈ k^{×}$~is not a square.
+Assume that $k$~is finite and~$2 ≠ 0$; let~$Δ$ be a non-square element
+of~$k^{×}$.
+Then any regular symmetric $R$-bilinear form~$b$ on a free $R$-module~$M$
+is equivalent to one of the diagonal forms~$(1, …, 1)$ or~$(1, …, Δ)$.
 \end{prop}
 
 \begin{proof}
@@ -861,7 +861,8 @@ of~$A$.
 \end{proof}
 
 
-------------- début vieille partie
+------------- début vieille partie%<<<2
+\color{blue}
 
 Let~$b_{λ} = λ b_{∞} + b_0$ be a finite pencil. We may use the
 characteristic endomorphism~$m = -b_{∞}^{-1}b_0$ to write~$\bm{b}$ in the form
@@ -1260,6 +1261,7 @@ the identity matrix, or the diagonal matrix~$(1, …, 1, δ)$.
 Use propositions~\ref{prop:bb-diag} and~\ref{prop:local-diag}.
 \end{proof}%>>>
 
+\color{black}
 \subsection{Solving the general case of IP1S}%<<<2
 \begin{thm}\label{thm:IP1S}
 Let~$k$ be a finite field of characteristic~$≠2$ and~$(b_{λ})$ be a
@@ -1398,8 +1400,9 @@ In particular, when $k → k'$~is a quadratic tower, solving the IP1S
 problem over~$k'$ does not solve the decisional form of IP1S over~$k$.
 
 %>>>1
-\section{Equivalence of pencils in characteristic two}%<<<1
-In this section, we assume that the field~$k$ has characteristic two.
+\section{Quadratic pencils in characteristic two: the fully singular part}%<<<1
+In this section and the following one, we assume that the field~$k$ has
+characteristic two.
 
 \subsection{Quadratic and bilinear pencils}%<<<2
 
@@ -1415,22 +1418,21 @@ chosen, then a quadratic form is determined by its polar (which is an
 alternating matrix) and its diagonal coefficients (corresponding to a
 $σ$-linear form).
 
+\bigbreak
 
-\subsection{The fully irregular part}%<<<2
-
-We say that a bilinear pencil is \emph{fully irregular} if
+We say that a bilinear pencil is \emph{fully singular} if
 its regular part, in the sense of Prop.~\ref{prop:kronecker}, is zero.
-Any fully irregular bilinear pencil is isomorphic to an orthogonal sum of
+Any fully singular bilinear pencil is isomorphic to an orthogonal sum of
 Kronecker modules~$K_d$. However, in characteristic two, 
 coefficients, this gives a standard form only for
 bilinear pencils and not for quadratic pencils. We explain here how to
-compute an isomorphism, when it exists, between two fully irregular
+compute an isomorphism, when it exists, between two fully singular
 quadratic pencils in characteristic two. For this, we give a full
 description of the group of automorphisms of an orthogonal sum of
 Kronecker bilinear modules, and then show how such an automorphism acts
 on the diagonal coefficients of a quadratic pencil.
 
-\paragraph{Intrinsic Kronecker modules.}%<<<3
+\subsection{An intrinsic description of Kronecker modules}%<<<2
 We give an intrinsic construction of the Kronecker modules.
 Except where indicated, all tensor products and duals are understood as
 operations on $k$-vector spaces.
@@ -1453,7 +1455,7 @@ b_t (f, f') \;=\; b_t (φ, φ') \;=\; 0; \qquad
 b_t (f, φ) \;=\; \chev {φ, (ty-x) f}.
 \end{equation}
 
-\paragraph{Kronecker modules with coefficients.}%<<<3
+\subsection{Kronecker modules with coefficients}%<<<2
 
 A \emph{coefficient space} is a bilinear space~$E$ isomorphic to~$k^n$,
 together with its standard scalar product~$u, v ↦ u · v = ∑ u_i v_i$. For
@@ -1497,14 +1499,14 @@ By taking coordinates on~$E$ and~$E'$, we reduce the proof to the case
 where~$E = E' = k$.
 \end{proof}
 
-\paragraph{The automorphism group of a direct sum of Kronecker modules.}
+\subsection{Automorphisms of a direct sum of Kronecker modules}%<<<2
 
 For any totally irregular pencil of quadrics~$q$ on~$V$, there exists an
 unique finite sequence of integers~$(n_d)$ such that $V$~is isomorphic to
 the orthogonal sum~$⨁ E_d ⊗ K_d$, where $E_d = k^{n_d}$ is a coefficient
 space.
 
-\begin{prop}\label{prop:aut-Ed-Kd}
+\begin{prop}\label{prop:aut-Ed-Kd}%<<<
 The automorphisms of~$⨁ E_d ⊗ K_d$ are exactly the maps of the form
 \[ u ⊗ f ↦ ∑_{d' ≥ d} α_{d',d} (u) f + ∑_{d'} \chk{f} γ_{d',d} (u), \quad
 u ⊗ φ ↦  ∑_{d' ≤ d} \chk{β_{d',d} (u)} φ, \]
@@ -1515,19 +1517,22 @@ matrices~$(α_{d',d})$, $(β_{d',d})$, and~$(γ_{d',d})$; then
 $\transpose{B} · A = 1$, and $\transpose{C} · A$~is antisymmetric.
 \end{prop}
 
-In the above theorem, we understand the elements~$u ⊗ f$ and~$u ⊗ φ$ to
-belong to the spaces~$E_d ⊗ H_{d-1}$ and~$E_d ⊗ \chk{H_d}$. For~$d > d'$,
-the space~$H_{d' - d}$ is zero, and therefore~$α_{d,d'} = β_{d',d} = 0$.
+In the above proposition, we understand the elements~$u ⊗ f$ and~$u ⊗ φ$ to
+belong to the spaces~$E_d ⊗ H_{d-1}$ and~$E_d ⊗ \chk{H_d}$.
+For~$d > d'$, the space~$H_{d' - d}$ is zero,
+and therefore~$α_{d,d'} = β_{d',d} = 0$.
 
-The relation~$\transpose{A} · B = 1$ means that, for all~$d, d'$, $∑_i
-\transpose{α_{i,d}} · β_{i,d'} ∈ \chk{E_d} ⊗ \chk{E_{d'}} ⊗ H_{d'-d}$ is the standard
-scalar product of~$E_d$ if $d = d'$ and~$0$ else; this product is to be
-interpreted as the collection of the corresponding terms of all degrees
-in~$(x:y)$, and the scalar product is taken in~$E_i$. Therefore, the
-elements~$α_{i,j}$ uniquely determine all of the~$β_{i,j}$. Likewise, the
-relation~$\transpose{A} · C + \transpose{C} · A = 0$ means that $∑_i
-\transpose{α_{i,d}} · γ_{i,d'} + \transpose{γ_{i,d}} · α_{i,d'} = 0 ∈ E_d
-⊗ E_{d'} ⊗ H_{d+d'-1}$, where scalar products are taken in~$E_i$.
+The relation~$\transpose{A} · B = 1$ means that, for all~$d, d'$,
+$∑_i \transpose{α_{i,d}} · β_{i,d'} ∈ \chk{E_d} ⊗ \chk{E_{d'}} ⊗ H_{d'-d}$
+is the standard scalar product of~$E_d$ if $d = d'$ and~$0$ else;
+this product is to be interpreted as
+the collection of the corresponding terms of all degrees in~$(x:y)$,
+and the scalar product is taken in~$E_i$.
+Therefore, the elements~$α_{i,j}$ uniquely determine all of the~$β_{i,j}$.
+Likewise, the relation~$\transpose{A} · C + \transpose{C} · A = 0$
+means that $∑_i \transpose{α_{i,d}} · γ_{i,d'} +
+\transpose{γ_{i,d}} · α_{i,d'} = 0 ∈ E_d ⊗ E_{d'} ⊗ H_{d+d'-1}$,
+where scalar products are taken in~$E_i$.
 
 
 \begin{proof}[(Sketch of) Proof of Prop.~\ref{prop:aut-Ed-Kd}]
@@ -1556,9 +1561,9 @@ on~$d-d'$.
 
 Finally, the relation on the coefficients~$γ_{d',d}$ comes directly from
 the relation $b(F (u ⊗f), F(u' ⊗ f')) = 0$.
-\end{proof}
+\end{proof}%>>>
 
-\paragraph{Action on the diagonal coefficients.}
+\subsection{Action on the diagonal coefficients}%<<<2
 Let~$q$ be a quadratic pencil with the corresponding bilinear pencil~$b$
 isomorphic to~$⨁ E_d ⊗ K_d$. With its polar form of known, the
 quadratic pencil is determined by its diagonal coefficients.
@@ -1599,8 +1604,10 @@ for the diagonal coefficients~$λ'_d, μ'_d$ of~$q'$:
 μ'_d &= ∑_i μ_i ∘ β_{i,d}.
 \end{align*}
 
+Up to a replacement of~$σ$ by its inverse~$σ^{-1}$, we obtain the
+following proposition.
 
-\begin{prop}\label{prop:ip1s-semilinear}
+\begin{prop}\label{prop:ip1s-semilinear}%<<<
 The $n$-dimensional IP1S problem for totally irregular pencils over a
 field of characteristic two is equivalent to a set of~$O(n^2)$ linear
 equations and one semi-linear equation of the form
@@ -1609,18 +1616,15 @@ X = A σ(X) + B,
 \end{equation*}
 where $A$~is a square matrix and $X, B$~are column matrices of
 dimension~$O(n^2)$.
-\end{prop}
+\end{prop}%>>>
 
-\section{Solving Frobenius equations}
+\subsection{Solving Frobenius equations}%<<<2
 
-% Part~1 shows how to bring the IP1S problem to an equation of the form
-% \begin{equation}\label{eq:semi-linear}
-% X = A σ(X) + B,
-% \end{equation}
 As the matrix~$A$ of Proposition~\ref{prop:ip1s-semilinear} seems to be
 quite general, we give a generic method for this family of
-\emph{Frobenius equations}. In the IP1S problem, the base field~$k$ has
-characteristic~two; we present here the general case for any base field.
+\emph{Frobenius equations}.
+In the IP1S problem, the base field~$k$ has characteristic~two; we
+present here the general case for any base field.
 
 Let~$k[φ]$ be the non-commutative ring of polynomials in~$φ$, with the
 relations~$φ c = σ(c) φ$ for all~$c ∈ k$. This ring is Euclidean.
@@ -1674,6 +1678,259 @@ the equation modulo~$\fr m$. Moreover, we notice that~$f(x) = x -  a σ(x)
 separated, and we may use Hensel's lemma to lift the approximate
 solution~$x_0$ to a full solution.
 
+%>>>1
+\section{Quadratic pencils in characteristic two: the regular part}%<<<1
+\subsection{Quadratic pencils and extensions of scalars}%<<<2
+Let~$k$ be a finite field of characteristic two and $q$~be a regular
+quadratic pencil on a $k$-vector space~$V$;
+let~$b$ be the polar pencil of~$q$ and~$c$ be its characteristic endomorphism.
+We say that a quadratic form \emph{commutes} with a $k$-algebra~$R$ if
+its polar form commutes with~$R$ in the sense of
+section~\ref{ss:commute}.
+In this way, the pencil~$q$ determines a quadratic form~$q_{∞}$
+commuting with the local algebra~$R = k[c]$.
+In particular, the polar form~$b_{∞}$ is an alternating bilinear form
+commuting with~$R$.
+
+The following proposition is an intrinsic, and more general, form
+of~\cite[Prop.~5]{MPG2013}.
+
+\begin{prop} \label{prop:trace-quad}%<<<
+Let~$K$ be a finite separable extension of~$k$ and~$V$ be a $K$-vector
+space. For any $k$-quadratic form~$q: V ⊗ V → k$ commuting with~$K$,
+there exists a unique $K$-quadratic form~$q_K: V ⊗ V → K$ such that~$q =
+\Tr_{K/k} \, ∘ \, q_K$.
+\end{prop}
+
+\begin{proof}
+Let~$b$ be the polar form of~$q$. By~\ref{prop:trace-form},
+there exists~$b_K ∈ K$
+such that~$b(x,y) = \Tr_{K/k} (b_K xy)$; in particular, since $b$~is
+alternating, for all~$x$ we have~$\Tr_{K/k} (b_K x^2) = 0$ and
+therefore~$b_K = 0$. Therefore, $q$~is a semi-linear form; since the
+trace map is non-degenerate, there exists~$q_K$ such that~$q(x) =
+\Tr_{K/k} (q_K x^2)$.
+
+As for Prop.~\ref{prop:trace-form}, the $n$-dimensional case directly follows by
+taking coordinates. Here all diagonal entries correspond to quadratic
+forms, and all others to bilinear forms; all of these commute with~$K$.
+\end{proof}%>>>
+
+\subsection{Alternating forms commuting with a local algebra}%<<<2
+
+Using Prop.~\ref{prop:trace-quad},
+we assume that~$K = k$ and write~$R = k[π] / π^d$.
+We equip this algebra with the Frobenius and Verschiebung automorphisms
+defined for~$x ∈ k$ by~$σ(x) = x^2$ and~$V(x) = x$,
+and by~$σ(π) = π$ and~$V(π) = π^2$.
+We note that we have~$V σ(x) = σ V(x) = x^2$ for all~$x ∈ R$; moreover,
+$R$~decomoses over~$k$ as~$R = V(R) ⊕ π V(R)$.
+
+We recall that the map~$τ: R → k$ given by the coefficient of~$π^{d-1}$
+produces the regular $k$-bilinear form~$τ(x y)$ on~$R$.
+We call a $R$-bilinear form~$b$ \emph{$τ$-alternating} if $τ ∘ b$~is
+alternating, and say that an element~$a$ of~$R$ is $τ$-alternating if the
+bilinear form~$a x y$ is.
+The space~$R^{τ}$ of $τ$-alternating elements of~$R$ is linearly spanned
+by the~$π^{n-2i}$ for~$0 ≤ i ≤ n/2$.
+A $R$-bilinear form~$b$ with matrix~$B$ is $τ$-alternating if, and only if,
+$B$~is anti-symmetric and all its diagonal coefficients are $τ$-alternating.
+
+Prop.~\ref{prop:diag-bigblock} applies to $τ$-alternating forms and shows
+that they are an orthogonal sum of regular $τ$-alternating forms on free
+modules over quotient rings of~$R$. We therefore assume that $V$~is free
+as a $R$-module.
+
+For any bilinear form~$b$ on a free $R$-module~$M$, we define the
+\emph{norm} of~$b$ as the ideal~$\fr{n} b$ of~$R$
+generated by the elements~$b(x, x)$ for~$x ∈ M$.
+
+\begin{prop}\label{prop:eqv-norm}
+Two non-degenerate, $τ$-alternating forms are equivalent if and only
+if they have the same norm.
+\end{prop}
+
+\begin{proof}
+We show that the bilinear form~$b$ is equivalent to either the form with
+identity matrix, if $\fr n b = R$; or the orthogonal direct sum
+\[ \mat{a & 1\\1&0} ⟂ \mat{0 & 1\\1&0} ⟂ … ⟂ \mat {0 & 1\\ 1 & 0}, \]
+where $a$~is a generator of~$\fr n b$, if $\fr n b ⊂ π R$.
+
+We write~$[u]$ for the one-dimensional form with coefficient~$u$
+and~$H_{v, w}$ for the form with matrix~$\mat{v&1\\1&w}$.
+We also write~$H = H_{0,0}$.
+
+By~\cite[§2]{milnor2}, the $k$-bilinear form~$b_k = b ⊗_R k$ has a
+decomposition~$b_k ≃ [d_1] ⟂ … ⟂ [d_r] ⟂ H^s$, where all~$d_i$ are
+non-zero since $b$~is non-degenerate. We distinguish two cases.
+
+\subparagraph{Case 1: $\fr n b = R$.}
+Then the list of~$d_i$ in the above
+decomposition is not empty. Moreover, since the field $k$~is perfect, all
+elements~$d_i$ are squares in~$k$, so that up to a coordinate change we
+may assume that~$d_i = 1$. Finally, we note that the
+matrix~$\mat{1&1&0\\1&0&-1\\1&1&-1}$ is an isomorphism between the
+forms~$[1] ⟂ [1] ⟂ [-1]$ and~$[1] ⟂ H$, so that if $r ≥ 1$ we may cancel
+all the direct factors~$H$ and in this case $b_k$~is isomorphic to the
+bilinear form with identity matrix.
+
+By~\cite[Corollary 3.4]{baeza1978quadratic},
+the diagonalization of~$b_k$ lifts to a diagonalization
+$b ≃ [a_1] ⟂ … ⟂ [a_r]$ over~$R$.
+Since $b$~is $τ$-alternating, all coefficients~$a_i$ are $τ$-alternating.
+If the length of~$R$ is odd, then the set of $τ$-alternating elements of~$R$
+is~$π V(R)$, which contradicts the regularity of~$b$.
+Therefore, the length of~$R$ is even, which means that $a_i ∈ V(R)$ and they are
+therefore squares in~$R$.
+From this we deduce that $b$~is isomorphic to the identity bilinear form.
+
+\subparagraph{Case 2: $\fr n b ⊂ π R$.}
+This means that the form~$b_k$ is alternating, so that~$b_k ≃ H^s$.
+By~\cite[Corollary 3.4]{baeza1978quadratic}, this decomposition again lifts to a
+decomposition $b ≃ H_{u_1, v_1} ⟂ … ⟂ H_{u_s, v_s}$, where all
+coefficients~$u_i, v_i$ are $τ$-alternating.
+
+Let $b = H_{u,v}$ be $τ$-alternating and regular; up to a swap of~$u, v$, we
+may write it as~$H_{u, u a^2}$ for some~$a ∈ R$. Since $b$~is
+regular, $1 + a u ∈ R^{×}$. Therefore, the coordinate
+change $P = \mat{1+a u & a/(1+a u) \\ u & 1/(1+a u)}$ transforms the
+bilinear form~$b$ to~$H_{u, 0}$.
+
+Finally, we note that the bilinear form~$b = H_{u, 0} ⟂ H_{u a^2 u, 0}$ is
+isomorphic to~$H_{v, 0} ⟂ H_{0,0}$ via the coordinate change
+% \begin{equation}
+$\mat{1 & 0 & a & 0\\0&1&0&0\\0&0&1&0\\au & a & 0 & 1}$.
+% \end{equation}
+\end{proof}
+
+\subsection{Structure of local quadratic pencils}%<<<2
+
+\begin{lem}\label{lem:gamma-polar}%<<<
+Let~$γ: R → R$ be the application defined, for~$x = V(y) + π V(z)$,
+by~$γ(x) = π V(yz)$. Then, for all~$u, x ∈ R$, we have
+\begin{enumerate}
+\item $γ(ux) = γ(u) x^2 + u^2 γ(x)$;
+\item $γ(u+x) = γ(u) + γ(x) + ux + V(α)$ for some~$α ∈ R$.
+\end{enumerate}
+\end{lem}
+
+
+\begin{proof}
+(i)~Write~$x = V(y) + π V(z)$ and~$u = V(v) + π V(w)$. Noticing
+that~$σ(x) = y^2 + π z^2$, we then have
+\begin{equation}\label{eq:gamma-prod}
+\begin{split}
+γ(ux) &= π V\pa{(vy + π wz)(wy+vz)}\\
+ &= π V\pa{vw (y^2 + π z^2)} + π V \pa{(v^2+πw^2) yz}\\
+ &= γ(u) V(σx) \;+\; V(σu) γ(x) \quad = γ(u) x^2 + u^2 γ(x).
+\end{split}
+\end{equation}
+
+(ii) follows from
+$γ(u+x) - γ(u) - γ(x) = π V(vz + wy) = ux - V(vy+πwz)$.
+\end{proof}%>>>
+
+\begin{prop}\label{prop:quad-tau}%<<<
+Let~$M = ⨁ R_{n_i}$ be a $R_m$-module of finite length.
+Let~$q$ be a $k$-quadratic form on~$M$ commuting with~$R$, $b$~its
+polar form, and $b_R$ be the unique $R$-quadratic form such that~$b = τ ∘
+b_R$; write~$b_{i,j}$ for the coefficients of~$b_R$.
+Then there exists a $σ$-linear form~$a: M → R$ such that, for all~$x =
+(x_i) ∈ M$,
+\begin{equation}
+q(x) \;=\; τ\pa{a(x) + ∑_{i} b_{i,i} γ(x_i) + ∑_{i < j} b_{i,j} x_i x_j}.
+\end{equation}
+\end{prop}
+
+\begin{proof}
+By Lemma~\ref{lem:gamma-polar}, for all~$c ∈ R^{τ}$,
+$τ(c γ(x))$~is a quadratic form on~$R$ with polar~$τ(c\, xy)$.
+It follows by linearity that
+$q' = τ(∑ b_{i,i} γ(x_i) + ∑ b_{i,j} x_i x_j)$~is a $k$-quadratic form on~$M$,
+which has the same polar as~$q$,
+so that the difference~$q - q'$ is a $σ$-linear form.
+\end{proof}%>>>
+
+Since the bilinear form~$τ(x y)$ is regular on~$R$, the $k$-linear
+map~$V: R → R$ has an adjoint~$θ$, such that~$τ(x\, V(y)) = τ(θ(x)\, y)$.
+This map is defined by~$θ(π^{d-1-2i}) = π^{d-1-i}$ and~$θ(π^{d-2i}) = 0$.
+
+When computing the effect of a $R$-linear change of variable on a
+$k$-quadratic form commuting with~$R$, we obtain the following result.
+
+\begin{prop}\label{prop:quad-changevar}%<<<
+Let~$u: M' → M$ be a $R$-linear map between two $R$-modules of finite length.
+Let~$q$ be a $k$-quadratic form on~$M$, commuting with~$R$, and~$q' = q ∘ u$.
+Let~$b$ be the polar form of~$q$ and~$a = (a_i)$ be the $σ$-linear form defined
+as in Prop.~ref{prop:quad-tau}; then the corresponding values~$b', a' =
+(a'_i)$
+for~$q'$ are
+\begin{equation*}
+b' = b ∘ u, \quad
+a'_i \;=\; ∑_r a_r σ(u_{r,i})
+  + θ \pa{ ∑_r b_{r,r} γ(u_{r,i}) + ∑_{r < s} b_{r,s} u_{r,i} u_{s,i} }.
+\end{equation*}
+\end{prop}%>>>
+
+
+The \emph{hyperbolic plane} is the module $R^2$, equipped with the
+$k$-quadratic form~$q(x) = x_1 x_2$; this form commutes with~$R$. The
+corresponding $τ$-alternating bilinear form~$b_R$ has the
+matrix~$\mat{0&1\\1&0}$. A quadratic module is \emph{hyperbolic} if it is
+isomorphic to the orthogonal sum of copies of the hyperbolic plane.
+
+\begin{prop}\label{prop:witt-four}
+Let~$M$ be a free $R$-module and $q$~be a $k$-quadratic form on~$M$,
+commuting with~$R$. Then $q$~is isomorphic to the orthogonal direct sum
+of a hyperbolic space and of a quadratic form of dimension at most four.
+\end{prop}
+
+\begin{proof}
+Using the classification given by Prop.~\ref{prop:eqv-norm}, we see that
+the polar form~$b$ of~$q$ is isomorphic to the direct sum of a hyperbolic
+space and of a bilinear form of dimension at most two. We therefore only
+need to prove that, if $b$~is hyperbolic, then $q$~is isomorphic to a
+hyperbolic space plus a quadratic form of dimension at most two.
+
+For any coefficients~$a_1, a_2, a_3, a_4 ∈ R$, write~$[a_1, a_2, a_3,
+a_4]$ for the quadratic form~$q$ on~$R^4$ defined by
+\begin{equation}
+q(x_1, x_2, x_3, x_4) \;=\;
+  τ(∑ a_i σ(x_i) + θ(x_1 x_3 + x_2 x_4)).
+\end{equation}
+We need to prove that, for any~$a_i$, this form is isomorphic to a
+form~$[a, 0, b, 0]$.
+The polar of~$q$ is the hyperbolic form on~$R_4$
+\begin{equation}
+H_4 = \mat{0&0&1&0\\0&0&0&1\\-1&0&0&0\\0&-1&0&0}.
+\end{equation}
+The automorphism group of~$H_4$ contains the following transformations,
+with the corresponding effect on the values~$(a_i)$:
+\begin{equation}\begin{array}{ll}
+% \mat{0 & 1_{2×2}\\ 1_{2×2} & 0} &
+\mat{ & & 1 &\\ &&&1\\ 1&&&\\ &1&&} &
+\begin{cases}a_1 \leftrightarrow a_3\\
+  a_2 \leftrightarrow a_4\\\end{cases} \\
+\mat{M & 0\\ 0 & \transpose{M}^{-1}}, M ∈ \GL_2(R) &
+\begin{cases} (a_1, a_2) ← (a_1, a_2) σ(M)\\
+(a_3, a_4) ← (a_3, a_4) σ(M^{-1}) \end{cases}\\
+\mat{1&&u\\&1&&v\\ &&1&\\ &&&1} &
+\begin{cases} a_3 ← a_3 + a_1 σ(u) + θ(u) \\
+a_4 ← a_4 + a_2 σ(u) + θ(v)\end{cases}\\
+\mat{1&&&w\\&1&w&\\ &&1&\\ &&&1} &
+\begin{cases} a_3 ← a_3 + a_2 σ(w) \\
+a_4 ← a_4 + a_1 σ(w) \end{cases}
+\end{array}\end{equation}
+
+Using the first transformation, we may assume that the ideal~$(a_1, a_2)$
+contains~$(a_3, a_4)$. Using the second one, we may assume that $a_2 =
+0$, so that $a_1$~divides $a_3$ and~$a_4$. Finally, using the last
+transformation, one may have~$a_4 = 0$.
+\end{proof}
+
+Using Prop.~\ref{prop:witt-four} on both quadratic forms of a quadratic
+pencil, we see that any quadratic pencil is isomorphic to the orthogonal
+sum of an hyperbolic space and of a pencil of dimension at most six.
 
 %>>>1
 \section{Computation of the second secret for IP2S}%<<<1
