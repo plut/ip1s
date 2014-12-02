@@ -91,6 +91,8 @@ Universitaire de France}
 \and Gilles Macario-Rat\footnote{Orange Labs}}
 \maketitle
 
+\centerline{$ $Id$ $}
+
 \begin{abstract}%<<<
 We study the Isomorphism of Polynomial (IP2S) problem
 with~$m=2$ homogeneous quadratic polynomials of $n$ variables over a finite field of odd
@@ -1497,11 +1499,11 @@ All the maps~$h$ and~$\chk{h}$ commute with each other.
 
 The \emph{Kronecker module} of degree~$d$ is the $2d+1$-dimensional
 vector space~$K_d = H_{d-1} ⊕ \chk{H_{d}}$, equipped with the symmetric
-bilinear pencil~$(b_t)$ defined, for~$f, f' ∈ H_{d-1}$ and~$φ, φ' ∈
+bilinear pencil~$(b_{λ})$ defined, for~$f, f' ∈ H_{d-1}$ and~$φ, φ' ∈
 \chk{H_d}$, by:
 \begin{equation}\label{eq:kronecker-bilinear}
-b_t (f, f') \;=\; b_t (φ, φ') \;=\; 0; \qquad
-b_t (f, φ) \;=\; \chev {φ, (t y - x) f}.
+b_{λ} (f, f') \;=\; b_{λ} (φ, φ') \;=\; 0; \qquad
+b_{λ} (f, φ) \;=\; \chev {φ, (λ y - x) f}.
 \end{equation}
 
 The next proposition shows that multiplication by polynomial essentially
@@ -1653,45 +1655,49 @@ satisfy the relations~\eqref{eq:aut-Ed-Kd-ABC}.
 \end{proof}%>>>
 
 \subsection{Action on the diagonal coefficients}%<<<2
-Let~$q$ be a quadratic pencil with the corresponding bilinear pencil~$b$
-isomorphic to~$⨁ E_d ⊗ K_d$. With its polar form of known, the
-quadratic pencil is determined by its diagonal coefficients.
-Write~$λ_{d}$ for the restriction of~$σ^{-1} ∘ q$ to~$E_d ⊗ H_{d-1}$ and
-$μ_d$ for its restriction to~$E_d ⊗ \chk{H_d}$; then $λ_d$ and~$μ_d$ are
-pencils of $k$-linear forms and they determine~$q$.
+Let~$(q_{λ})$ be a quadratic pencil with polar pencil~$(b_{λ})$
+isomorphic to~$⨁ E_d ⊗ K_d$ for some coefficient spaces~$E_d$.
 
-Let~$F$ be an automorphism of~$b$ as in Prop.~\ref{prop:aut-Ed-Kd}, and
-write~$q' = q ∘ F$; also define~$λ'_d, μ'_d$ as the diagonal coefficients
-of~$q'$. We then have, for all~$u ∈ E_d, f ∈ H_{d-1}, φ ∈ \chk{H_d}$:
-\begin{align*}
-q (F (u ⊗ f))
-  &= ∑_{i ≥ d} q(α_{i,d} (u) f) + ∑_{i} q(\chk{f} γ_{i,d} (u))
+Let~$F$ be an automorphism of~$(b_{λ})$ as in Prop.~\ref{prop:aut-Ed-Kd},
+and write~$q' = q ∘ F$.
+We then have, for all~$u ∈ E_d, f ∈ H_{d-1}, φ ∈ \chk{H_d}$:
+\begin{equation}\begin{split}
+q_{λ} (F (u ⊗ f))
+  &= ∑_{i ≥ d} q(α_{i,d} (u) f) + ∑_{i} q(γ_{i,d} (f u))
   + ∑_{i} b(γ_{i,d} (u), α_{i,d} (u) f^2);\\
-q (F (u ⊗ φ))
+q_{λ} (F (u ⊗ φ))
   &= ∑_{i ≤ d} q(β_{i,d} (u) φ),
-\end{align*}
-
+\end{split}\end{equation}
 Solving the IP1S problem means computing the values~$α_{d,d'}$,
-$β_{d,d'}$ and~$γ_{d,d'}$ as defined in Prop.~\ref{prop:aut-Ed-Kd}. In
-view of the relation~$\transpose{C} · A + \transpose{A} · C = 0$ of this
-proposition, we replace the unknowns~$γ_{d,d'}$ by~$γ'_{d,d'} = ∑_i
-\transpose{α_{i,d}} γ_{i,d'}$; then $γ_{d,d'}  ∈ \Hom (E_d, E_{d'}) ⊗
-\chk{H_{d+d'-1}}$ and the anti-symmetry condition is
-$\transpose{γ'_{d,d'}} = γ_{d',d}$.
+$β_{d,d'}$ and~$γ_{d,d'}$ as defined in Prop.~\ref{prop:aut-Ed-Kd}.
+In view of the relation~$\transpose{C} · A + \transpose{A} · C = 0$
+of this proposition,
+we replace the unknowns~$γ_{d,d'}$
+by~$γ'_{d,d'} = ∑_i \transpose{α_{i,d}} γ_{i,d'}$;
+then $γ_{d,d'}  ∈ \Hom (E_d, E_{d'}) ⊗ \chk{H_{d+d'-1}}$
+and the anti-symmetry condition is $\transpose{γ'_{d,d'}} = γ_{d',d}$.
 
-Define~$ξ_{n,n-i}$ as the basis of~$\chk{H_n}$ dual to the basis of~$x^i
-y^{n-i}$, and decompose~$γ_{d,d'}$ as~$∑_{i,j} γ_{d,d',j} ξ_{j,d+d'-1-j}$
-in this basis, where~$γ_{d,d',j} ∈ \Hom (E_d, E_{d'})$. The coefficients
-of~$γ'_{d,d'}$ are then given by $γ'_{d,d',j} = ∑_{i,r}
-\transpose{α_{i,d,r}} · γ_{i,d',r+j}$.
+With its polar form known,
+the quadratic pencil is determined by its diagonal coefficients.
+Write~$ψ_{d}$ for the restriction of~$σ^{-1} ∘ q$ to~$E_d ⊗ H_{d-1}$
+and $ω_d$ for its restriction to~$E_d ⊗ \chk{H_d}$;
+then $ψ_d$ and~$ω_d$ are pencils of $k$-linear forms and they determine~$q$.
+We likewise define~$ψ'_d, ω'_d$ as the diagonal coefficients of~$q'$.
+
+Let~$(ξ_{i,d-i})$ be the basis of~$\chk{H_d}$ dual to
+the basis~$(x^i y^{n-i})$ of~$H_D$,
+and decompose~$γ_{d,d'}$ in this basis as~$∑_{i,j} γ_{d,d',j} ξ_{j,d+d'-1-j}$,
+where~$γ_{d,d',j} ∈ \Hom (E_d, E_{d'})$.
+The coefficients of~$γ'_{d,d'}$ are then given by
+$γ'_{d,d',j} = ∑_{i,r} \transpose{α_{i,d,r}} · γ_{i,d',r+j}$.
 
 From this we deduce the formula
-for the diagonal coefficients~$λ'_d, μ'_d$ of~$q'$:
-\begin{align*}
-λ'_d &= ∑_i λ_i ∘ α_{i,d} + ∑_i μ_i ∘ γ_{i,d}
-  + ∑_{i,j} σ^{-1} (γ'_{d,d,2j+1} - t γ'_{d,d,2j}) ξ_{j,d-j},\\
-μ'_d &= ∑_i μ_i ∘ β_{i,d}.
-\end{align*}
+for the diagonal coefficients~$ψ'_d, ω'_d$ of~$q'$:
+\begin{equation}\begin{split}
+ψ'_d &= ∑_i ψ_i ∘ α_{i,d} + ∑_i ω_i ∘ γ_{i,d}
+  + ∑_{i,j} σ^{-1} (γ'_{d,d,2j+1} - λ γ'_{d,d,2j}) ξ_{j,d-j},\\
+ω'_d &= ∑_i ω_i ∘ β_{i,d}.
+\end{split}\end{equation}
 
 Up to a replacement of~$σ$ by its inverse~$σ^{-1}$, we obtain the
 following proposition.
@@ -1811,6 +1817,7 @@ forms, and all others to bilinear forms; all of these commute with~$K$.
 \end{proof}%>>>
 
 \subsection{Alternating forms commuting with a local algebra}%<<<2
+\label{SS:alt-pencil}
 
 Using Prop.~\ref{prop:trace-quad},
 we assume that~$K = k$ and write~$R = k[π] / π^ℓ$.
@@ -1924,7 +1931,7 @@ by~$γ(x) = π V(yz)$. Then, for all~$u, x ∈ R$, we have
 \begin{enumerate}
 \item $γ(ux) = γ(u) x^2 + u^2 γ(x)$;
 \item $γ(u+x) = γ(u) + γ(x) + ux + V(α)$ for some~$α ∈ R$.
-\item For all~$c ∈ R$, $τ(c γ (x))$~is a quadratic form on~$R$
+\item For all~$c ∈ R$, $τ(c γ (x))$~is a $k$-quadratic form on~$R$
 with polar~$τ(c x y)$.
 \end{enumerate}
 \end{lem}
@@ -2004,42 +2011,45 @@ form of dimension at most two.
 \end{prop}
 
 \begin{proof}
-Since the polar form of~$q$ is hyperbolic, there exist some
-coefficients~$a_1, …, a_{2m} ∈ R$ such that $q$~is isomorphic to the form
-$[a_1, …, a_{2m}]$ on~$R^{2m}$ defined by
+Since the polar form of~$q$ is hyperbolic,
+there exist some coefficients~$a_1, …, a_{m}; a'_1, …, a'_{m} ∈ R$
+such that $q$~is isomorphic to the form
+$q' = [a_1, …, a'_m]$ defined on~$R^{2m}$ by
 \begin{equation}
-q(x_1, x_2, x_3, x_4) \;=\;
-  τ(∑_{i ≤ 2m} a_i σ(x_i) + ∑_{i ≤ m} γ(x_{i} x_{i+m})).
+q' (x_1, …, x_m, x'_1, …, x'_{m}) \;=\;
+  τ\pa{∑_{i ≤ m} a_i σ(x_i) + a'_i σ(x'_i) + γ(x_i x'_i)}.
+%   τ(∑_{i ≤ 2m} a_i σ(x_i) + ∑_{i ≤ m} γ(x_{i} x_{i+m})).
 \end{equation}
-To prove the proposition, it is enough to show that any form~$[a_1, a_2,
-a_3, a_4]$ is isomorphic to a form~$[a, 0, b, 0]$ for some~$a, b ∈ R$.
-
-The polar of~$q$ is the hyperbolic form on~$R^4$
-\begin{equation}
-H_4 = \mat{0&1&0&0\\-1&0&0&0\\0&0&0&1\\0&0&-1&0}.
-\end{equation}
-The automorphism group of~$H_4$ contains the following transformations,
+To prove the proposition, we show that
+any form~$q = [a_1, a_2; a'_1, a'_2]$ is isomorphic to
+a form~$[b, 0; b', 0]$ for some~$b, b' ∈ R$.
+The polar of~$q$ is the hyperbolic form on~$R^4$,
+and its automorphism group
+% \begin{equation}
+% H_4 = \mat{0&1&0&0\\-1&0&0&0\\0&0&0&1\\0&0&-1&0}.
+% \end{equation}
+% The automorphism group of~$H_4$
+contains the following transformations,
 with the corresponding effect on the values~$(a_i)$:
 \begin{equation}\begin{array}{ll}
-% \mat{0 & 1_{2×2}\\ 1_{2×2} & 0} &
 \mat{ & & 1 &\\ &&&1\\ 1&&&\\ &1&&} &
-\begin{cases}a_1 \leftrightarrow a_3\\
-  a_2 \leftrightarrow a_4\\\end{cases} \\
+\begin{cases}a_1 \leftrightarrow a'_1\\
+  a_2 \leftrightarrow a'_2\\\end{cases} \\
 \mat{M & 0\\ 0 & \transpose{M}^{-1}}, M ∈ \GL_2(R) &
-\begin{cases} (a_1, a_2) ← (a_1, a_2) σ(M)\\
-(a_3, a_4) ← (a_3, a_4) σ(\transpose{M}^{-1}) \end{cases}\\
+\begin{cases} (a_1, a_2) ← (a_1, a_2) · σ(M)\\
+(a'_1, a'_2) ← (a'_1, a'_2) · σ(\transpose{M}^{-1}) \end{cases}\\
 \mat{1&&u\\&1&&v\\ &&1&\\ &&&1} &
-\begin{cases} a_3 ← a_3 + a_1 σ(u) + θ(u) \\
-a_4 ← a_4 + a_2 σ(u) + θ(v)\end{cases}\\
+\begin{cases} a'_1 ← a'_1 + a_1 \, σ(u) \,+\, θ(u) \\
+a'_2 ← a'_2 + a_2 \, σ(u) \,+\, θ(v)\end{cases}\\
 \mat{1&&&w\\&1&w&\\ &&1&\\ &&&1} &
-\begin{cases} a_3 ← a_3 + a_2 σ(w) \\
-a_4 ← a_4 + a_1 σ(w) \end{cases}
+\begin{cases} a'_1 ← a'_1 + a_2 \, σ(w) \\
+a'_2 ← a'_2 + a_1 \, σ(w) \end{cases}
 \end{array}\end{equation}
-
-Using the first transformation, we may assume that the ideal~$(a_1, a_2)$
-contains~$(a_3, a_4)$. Using the second one, we may assume that $a_2 =
-0$, so that $a_1$~divides $a_3$ and~$a_4$. Finally, using the last
-transformation, one may have~$a_4 = 0$.
+Using the first transformation, we may assume that
+the ideal~$(a_1, a_2)$ of~$R$ contains~$(a'_1, a'_2)$.
+Using the second one, we may assume that $a_2 = 0$,
+so that $a_1$~divides $a'_1$ and~$a'_2$.
+Finally, using the last transformation, one may have~$a'_2 = 0$.
 \end{proof}%>>>
 
 Using Prop.~\ref{prop:witt-four} on both quadratic forms of a quadratic
@@ -2049,36 +2059,51 @@ Therefore, to compute a linear equivalence between any two quadratic
 pencils, we may assume that the dimension of the ambient $R$-module is at
 most four.
 
-
-\begin{prop}\label{prop:ip1s-bin-polynomial}
-There exists a polynomial algorithm computing linear equivalence between
-quadratic pencils in characteristic two.
+\begin{prop}\label{prop:ip1s-bin-polynomial}%<<<
+Let~$k$ be a finite field of characteristic two.
+There exists a polynomial algorithm computing a linear isomorphism between
+two equivalent quadratic pencils over~$k$.
 \end{prop}
 
 \begin{proof}
-As shown by what precedes, this reduces to computing equivalence between
-two $K$-quadratic forms computing with~$R$ on a free $R$-module of
-bounded rank. Moreover, we may assume that both modules are hyperbolic.
+Let~$(q_{λ})$, $(q'_{λ})$ be two equivalent quadratic pencils.
+By subsection~\ref{SS:alt-pencil}, we may assume that
+the associated polar pencils~$(b_{λ})$, $(b'_{λ})$
+define an hyperbolic alternating form on~$R^{2n}$.
+
+Using Prop.~\ref{prop:witt-four} for the form~$q_{∞}$,
+we may assume that $q_{∞}$~is of the form~$[a, 0, …, 0; a', 0, …, 0]$.
+Using Prop.~\ref{prop:witt-four} again for the restriction of~$q_{0}$
+to the coordinates with index~$(2, …,  n; n+2, …, 2n)$ of~$R^{2n}$,
+we may further assume that
+$q_{0}$~is of the form~$[b, c, 0, …, 0; b', c', 0, …, 0]$.
+This shows that the pencil~$(q_{λ})$ is isomorphic to
+the direct sum of a pencil of dimension at most~$4$
+and a hyperbolic pencil.
+The same applies to~$(q'_{λ})$.
+Since both hyperbolic parts are isomorphic,
+we only need to compute the isomorphism for pencils of dimension~$≤ 4$.
 
 Let~$q$ be the quadratic form defined by
 \begin{equation}
 q(x_1, …, x_4) = τ (∑_{i} a_i σ(x_i) + x_1 x_3 + x_2 x_4)
 \end{equation}
 and likewise, let~$q'$ be a quadratic form linearly equivalent to~$q$,
-with the same hyperbolic polar form~$b$, and with diagonal
-coefficients~$a'_i$.
+with the same hyperbolic polar form~$b$,
+and with diagonal coefficients~$a'_i$.
 
-An isomorphism~$u: q → q'$ is given by coefficients~$u_{i,j}$ satisfying
-the equations of Prop.~\ref{prop:quad-changevar}. Writing~$u = V(v) + π
-V(w)$, and likewise for~$u'$ and~$u_{i,j}$, we have
+An isomorphism~$u: q → q'$ is given by coefficients~$u_{i,j}$
+satisfying the equations of Prop.~\ref{prop:quad-changevar}.
+Writing~$u = V(v) + π V(w)$, and likewise for~$u'$ and~$u_{i,j}$, we have
 \begin{equation}
 σ (u) = v^2 + π w^2, \qquad
 θ(a u u') = (v v' + π w w') θ(a) + (v w' + w v') θ(π a),
 \quad\text{and}\quad
 θ(a γ (u)) = v\, w\, θ(a π),
 \end{equation}
-so that the equations on the variables~$u_{i,j}$ are equivalent to the
-following polynomial equations in the variables~$v_{i,j}$ and~$w_{i,j}$:
+so that the equations on the 16 variables~$u_{i,j}$ are equivalent to
+the following polynomial equations
+in the 32 variables~$v_{i,j}$ and~$w_{i,j}$:
 \begin{align}\label{eq:ip1s-polynomial}
 σ (b_{i,j}) &= ∑_{r,s} σ (b_{r,s})\: (v_{r,i}^2 + π w_{r,i}^2)\:
   (v_{s,j}^2 + π v_{s,j}^2),\\
@@ -2086,27 +2111,28 @@ a'_{i} &= ∑_{r} a_{r} (v_{r,i}^2 + π w_{r,i}^2)
   + ∑_{r < s} (v_{r,i} v_{s,i} + π w_{r,i} w_{s,i}) θ (b_{r,s})
   + (v_{r,i} w_{s,i} + w_{r,i} v_{s,i}) θ (π b_{r,s}).
 \end{align}
-
-This shows that the IP1S problem is equivalent to a bounded number of
-polynomial equations in a bounded number of variables in the ring~$R =
-R_{ℓ} = K[π] /π^{ℓ}$
-(more precisely, it is enough to determine~$v_{i,j}$ up to
-precision~$\floor{ℓ/2}$ and~$w_{i,j}$ up to precision $\floor{(ℓ-1)/2}$).
-Since $R$~is a discrete valuation ring, linear equations are solvable
-in~$R$ in the sense of~\cite[4.1.5]{adams1994grobner};
+This shows that the IP1S problem is equivalent to
+a bounded number of polynomial equations
+in a bounded number of variables in the ring~$R = R_{ℓ} = K[π] /π^{ℓ}$
+(more precisely, it is enough
+to determine~$v_{i,j}$ up to precision~$\floor{ℓ/2}$
+and~$w_{i,j}$ up to precision $\floor{(ℓ-1)/2}$).
+Since $R$~is a discrete valuation ring,
+linear equations are solvable in~$R$
+in the sense of~\cite[4.1.5]{adams1994grobner};
 therefore, it is possible to compute a Gröbner basis of
 the ideal generated by the equations~\ref{eq:ip1s-polynomial}
 in~$R[v_{i,j}, w_{i,j}]$.
 Computing this basis is possible with a number of ring operations
 polynomial in the degree of the equations
 and doubly exponential in the number of variables~\cite{dube1990grobner}.
-However, in our case there are exactly 32~variables
+However, in our case there are only 32~variables
 and the equations are homogeneous of degree~two.
 Therefore, the computation of the Gröbner basis
 requires a bounded number of computations in the ring~$R$;
 each of these computations requires a polynomial in~$n$
 number of computations in the base field~$k$.
-\end{proof}
+\end{proof}%>>>
 
 % \subsection{Solving the equations}%<<<2
 
