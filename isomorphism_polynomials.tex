@@ -63,7 +63,7 @@
 \def\Id{\mathrm{Id}}
 \def\Ot{\widetilde{O}}
 \def\plusort{\stackrel{⟂}{⊕}}
-\def\gitkw$#1:#2${{\small \textbf{#1:}\texttt{#2}}}
+\def\gitkw$#1:#2${{\small \textbf{#1: }\texttt{#2}}}
 %>>>
 % Stretching diagonal dots%<<<
 \makeatletter
@@ -201,9 +201,10 @@ IP1S problem, the Gröbner basis approach works
 well~\cite{DBLP:conf/pkc/BouillaguetFFP11} since the number of solutions
 is known to be small. For all other instances, the number of solutions is
 empirically large and such algorithms are then well known to be less
-efficient. Macario-Rat, Plût and Gilbert explained in 2013~\cite{MPG2013}
-how to algebraically solve the cyclic instances of the IP1S problem for
-$m=2$ over finite fields of any characteristic.
+efficient.
+Macario-Rat, Plût and Gilbert gave in 2013~\cite{MPG2013}
+an algebraic solution to the cyclic instances of the IP1S problem
+for $m=2$ over finite fields of any characteristic.
 % Macario-Rat, Plût and Gilbert explained in 2013~\cite{MPG2013} how to
 % solve cyclic instances of the IP1S problem for~$m=2$ over finite fields
 % of any characteristic. A pencil~$\bm{b} = (b_{∞}, b_0)$ is \emph{cyclic}
@@ -219,13 +220,13 @@ $m=2$ over finite fields of any characteristic.
 % less efficient.
 
 Finally, Berthomieu, Faugère and Perret
-recently proposed~\cite{DBLP:journals/corr/BerthomieuFP13}
+proposed in 2014~\cite{DBLP:journals/corr/BerthomieuFP13}
 a polynomial algorithm for IP1S with any number of equations when~$2 ≠ 0$.
 Given two families of polynomials over a field~$k$,
 they give a solution to the IP1S problem
-over a tower~$k'$ of real quadratic extensions
+over a tower~$k'$ of real quadratic extensions of~$k$
 (a \emph{real quadratic extension} being obtained by
-adjoining the square root of a sum of squares) of~$k$.
+adjoining the square root of a sum of squares).
 This solves the IP1S problem over the original field~$k$ only if
 $k$~is \emph{Euclidean}, \emph{i.e.} has no real quadratic extension.
 This is the case for example if $k$~is a closed real field such as~$ℝ$
@@ -244,9 +245,9 @@ This work covers the IP1S and IP2S problems
 for~$m = 2$ homogeneous quadratic equations (\emph{quadratic pencils})
 over a finite field of any characteristic.
 
-For the IP1S problem, we introduce three new tools.
+For the IP1S problem in odd characteristic, we introduce three new tools.
 A quadratic pencil is \emph{regular}
-if its characteristic polynomial is not zero.
+if its characteristic polynomial is not zero, and \emph{singular} otherwise.
 We first give a full description of the \emph{singular part}
 of all quadratic pencils in section~\ref{S:bil-sing}.
 This is the same as the classical Kronecker classification of quadratic
@@ -271,18 +272,18 @@ The characteristic-two case is different from the odd-characteristic case
 in that quadratic forms are no longer determined by their polar forms.
 Although we were unable to give a full classification
 for quadratic pencils in characteristic two,
-we may study the automorphisms of the polar forms
-and give a polynomial algorithm computing isomorphisms between the
-quadratic pencils~\ref{S:quad-reg}.
+we use the description of automorphisms of the polar pencil
+to give a polynomial-time algorithm computing isomorphisms
+between the quadratic pencils in section~\ref{S:quad-reg}.
 
 \medskip
 
-The last section explains how we recover the second (``outer'') secret in
-the two-secret IP2S problem. As applying an outer linear combination to a
-pencil leaves the singular part of the pencil unchanged (up to
-isomorphism), we can use the regular part alone to recover the inner
-secret. This is done using the factorization of the characteristic
-polynomial.
+The last section explains how we recover the second (``outer'') secret
+in the two-secret IP2S problem.
+Since applying an outer linear combination to a pencil
+leaves the singular part of the pencil unchanged (up to isomorphism),
+we can use the regular part alone to recover the outer secret.
+This is done using the factorization of the characteristic polynomial.
 
 \subsection*{Mathematical background and notations}%<<<2
 Throughout this document, $k$~is a finite field.
@@ -346,10 +347,10 @@ of a matrix~$A$. A \emph{symmetric} matrix is a matrix such that~$A =
 \transpose{A}$. Symmetric bilinear forms~$b$ correspond to symmetric
 matrices~$B$. A bilinear form is regular iff its matrix is invertible.
 For any endomorphism~$u$ with matrix~$U$, the adjoint endomorphism
-(relatively to~$B$) has matrix~$U^{⋆} = B^{-1} · \transpose{U} · B$. The
-\emph{companion matrix} of a polynomial~$p$ is the matrix of
-multiplication by~$p$ in the basis~$\acco{1,x,…,x^{\deg p-1}}$ of
-polynomials with degree~$< \deg p$.
+(relatively to~$B$) has matrix~$U^{⋆} = B^{-1} · \transpose{U} · B$.
+The \emph{companion matrix}~$M_f$ of a polynomial~$f$
+is the matrix of multiplication by~$x$
+in the basis~$\acco{1,x,…,x^{\deg f-1}}$ of the quotient ring~$k[x]/f(x)$.
 
 \medbreak
 
@@ -378,8 +379,9 @@ and \emph{singular} otherwise.
 We solve the isomorphism problem for regular
 pencils in section~\ref{S:bil-regular} below.
 
-We reduce to the regular case by proving that the singular part of a
-symmetric pencil is reducible to the canonical form of Kronecker.
+In this section, we reduce to the regular case by proving that
+the singular part of a symmetric pencil is reducible to
+the canonical form of Kronecker.
 This form is described in the tome of Gantmacher~\cite[XII(56)]{Gantmacher};
 however, the proof given there only applies to pencils over~$ℂ$,
 as it uses the computation of square roots of matrices
@@ -392,7 +394,7 @@ which is the case for the polar of a quadratic pencil.
 \label{SS:Kronecker-reduction}
 % Définition: indice minimal%<<<
 The pencil~$(b_{λ})$ defines a symmetric $k[λ]$-bilinear form on the
-module~$V_{∞} = V ⊗_{k} k[λ]$; if $(b_{λ})$~is singular, then this form
+module~$V_{λ} = V ⊗_{k} k[λ]$; if $(b_{λ})$~is singular, then this form
 has a non-trivial kernel~$W$. Elements of~$W$ are called \emph{isotropic}
 for~$(b_{λ})$. An element~$e = e_0 + λ e_1 + … + λ^h e_h$ is isotropic iff
 \begin{equation}\label{eq:isotropic}
@@ -404,11 +406,12 @@ b_{∞} e_{h} = 0.
 A \emph{minimal isotropic vector} for~$(b_{λ})$ is one with minimal
 degree~$h$; this degree is the \emph{minimal index} of~$(b_{λ})$. If
 $(b_{λ})$~is regular, then the minimal index is~$+∞$.
-By choosing a basis of~$W$
-adapted to the filtration of~$V_{∞}$ by the degree of polynomials, we see
-that $W$~as a basis~$(w_1, …,w_r)$ such that, if $h_i$~is the degree of
-the isotropic vector~$w_i$, then $(w_i, …,w_r)$~generate no isotropic
-vector of degree~$< h_i$. The degrees~$h_i$, with their multiplicity,
+By choosing a basis of~$W$ adapted to
+the filtration of~$V_{λ}$ by the degree of polynomials,
+we see that $W$~has a basis~$(w_1, …,w_r)$ such that,
+if $h_i$~is the degree of the isotropic vector~$w_i$,
+then $(w_i, …,w_r)$~generate no isotropic vector of degree~$< h_i$.
+The degrees~$h_i$, with their multiplicity,
 are called the \emph{minimal indices} of the pencil~$(b_{λ})$.
 %>>>
 \begin{prop}\label{prop:minimal-indep}%<<<
@@ -506,7 +509,7 @@ Define a map~$∂_h: (E^{⟂})^h → ((E^{⟂})^{∨})^{h-1}$ by
 ∂_h (v_1,…,v_h) = (b_{0}(v_1) + b_{∞}(v_2),…,b_{0} (v_h) + b_{∞}
 (v_{h-1})).
 \end{equation}
-Elements of the cokernel of~$∂_h$ are exactly isotropic vectors of
+The elements of the cokernel of~$∂_h$ are exactly the isotropic vectors of
 degree~$≤ h-1$ in~$E^{⟂}$; since $b$~has minimal index~$≥ h$, the
 map~$∂_h$ is surjective. This proves that the map $V^h → (V/E^{⟂})^h ⊕
 ((E^{⟂})^{∨})^{h-1}$ defined by the relations between the~$v_j$ is
@@ -568,7 +571,7 @@ following.
 Let~$(b_{λ})$ be a symmetric pencil on~$V$; if $2 = 0$ in~$k$, further
 assume that $(b_{λ})$~is alternating.
 
-Then there exists a finite sequence of integers~$(n_h)$ and 
+There exists a finite sequence of integers~$(n_h)$ and 
 an orthogonal isomorphism~$V ≃ ⨁ K_h^{n_h} ⊕ V'$,
 where $K_h$~is the Kronecker module of index~$h$
 and the restriction of~$(b_{λ})$ to~$V'$ is regular.
@@ -700,7 +703,7 @@ b_{∞} (x, y) & = b_{∞} (x,\: u(c) g(c) y + v(c) h(c) y ) \\
 &= 0.
 \end{split}
 \end{equation}
-Since~$y' = c y$ also verifies~$h(c)(y') = 0$, equation~\eqref{eq:bezout}
+Since~$y' = c(y)$ also verifies~$h(c)(y') = 0$, equation~\eqref{eq:bezout}
 also proves that~$b_{0}(x,y) = b_{∞}(x,y') = 0$, and hence~$x, y$ are
 orthogonal for all forms~$b_{λ}$.
 \end{proof}%>>>
@@ -709,7 +712,7 @@ The decomposition of~$V$ obtained by applying
 Lemma~\ref{lem:decomp-bezout} to the full factorisation of~$f$
 over~$k[x]$ is the \emph{primary decomposition} of the pencil~$(b_{λ})$.
 The restriction of the pencil to each summand~$V_i$ has as its
-characteristic polynomial a power of a prime polynomial;
+characteristic polynomial a power of an irreducible polynomial;
 such a pencil is called \emph{local}.
 
 If two regular pencils~$\bm{b}, \bm{b}'$ are isomorphic (in the IP1S sense),
@@ -820,12 +823,16 @@ to $R$-bilinear forms on~$V$ and $R$-linear maps.
 % local IP1S problem amounts to computing a congruence matrix
 % between two~$R$-bilinear forms on a $R$-module of finite length.
 
-\subsection{Structure of bilinear forms over a local algebra}%<<<2
+\subsection{Classification of bilinear forms over a local algebra}%<<<2
 
 We conclude the proof of the odd-characteristic case with the
 classification of bilinear forms over a local algebra.
 We provide slightly adapted proofs of the classical
 theory~\cite{milnorhusemoller,omeara}.
+The result over the local algebra is a variant of
+the classification over the (finite) residue field;
+the reduction algorithm itself is a version of Gauß' reduction algorithm
+for quadratic forms.
 
 \begin{prop}\label{prop:diag-bigblock}%<<<
 Let~$M$ be a $R$-module of finite length and $b$~be a $R$-bilinear form
@@ -1359,31 +1366,35 @@ block as an orthogonal direct factor, according to
 Prop.~\ref{prop:kronecker-split}.
 \item \label{it:alg-factor} Now~$\bm{b}$~is regular. Compute and factor
 its characteristic polynomial~$f(λ)$ and split~$V$ as an orthogonal direct
-sum of primary components~$V_p$ for each prime divisor~$p$.
-\item \label{it:alg-local} For each prime divisor~$p$, write the local
-pencil~$\bm{b}_p$ at~$p$ as a matrix with entries in~$K = k[θ]/p(θ)$.
-Perform big-block reduction to write~$\bm{b}_p$ as an orthogonal direct
-sum of quadratic forms over~$K[H]/H^{n_i}$, and then reduce
-each of these forms to one of the two canonical diagonal forms.
+sum of primary components~$V_f$ for each prime divisor~$f$.
+\item \label{it:alg-local} For each prime divisor~$f$, write the local
+pencil~$\bm{b}|V_f$ at~$f$ as a matrix with entries in~$K = k[x]/f(x)$.
+Perform the reduction of~\ref{prop:diag-bigblock} and write~$\bm{b}|V_f$
+as an orthogonal direct sum of quadratic forms over algebras~$K[π]/π^{ℓ}$,
+and then reduce each of these forms to
+one of the two canonical diagonal forms.
 \end{enumerate}
 
 Most of the linear algebra steps, including computing the
 rational normal form of the regular part of the pencil, may be done
-in~$\Ot(n^3)$ field operations~\cite{kaltoffen11compute}. In particular,
-the Frobenius rational normal form covers the factoring of the
-characteristic polynomial. This may also be done, again in cubic time,
-using a dedicated factoring algorithm. The reduction of quadratic forms
-over the local algebras is just the reduction over the residual field
-(which uses a square root computation in said finite field), followed by
-a Hensel lift.
+in~$\Ot(n^3)$ field operations~\cite{kaltoffen11compute}.
+In particular, computing the  Frobenius rational normal form
+includes factoring the characteristic polynomial.
+This factorization may also be done, again in cubic time,
+using a dedicated factoring algorithm.
+Reduction of quadratic forms over the local algebras is just
+reduction over the residue field
+(which uses a square root computation in this finite field),
+followed by a Hensel lift.
 
-The only part not covered by classic algorithms is the reduction to
-Kronecker normal form performed in Step~\itemref{it:alg-kronecker}. Computing
-the minimal isotropic vectors requires solving a chain of~$h$ equations
-of the form~$b_{∞}(x) = b_0(y)$ and hence has a complexity~$O(n^3(h+1))$.
+The only step not covered by standard algorithms is the reduction to
+Kronecker normal form performed in Step~\itemref{it:alg-kronecker}.
+Computing the minimal isotropic vectors requires solving
+a chain of~$h$ linear equations of the form~$b_{∞}(x) = b_0(y)$
+and hence has a complexity~$O(n^3(h+1))$.
 The same applies to the computation of a preimage by the map~$∂_h$
-of~\eqref{eq:deriv-surj}. \ifapx This algorithm is detailed in
-Appendix~\ref{A:algo} below. \fi
+of~\eqref{eq:deriv-surj}.
+\ifapx This algorithm is detailed in Appendix~\ref{A:algo} below. \fi
 
 \paragraph{Remarks.}
 
@@ -1416,35 +1427,51 @@ question: given two pencils~$\bm{a}$, $\bm{b}$ defined over a field~$k$
 and IP1S-equivalent over an extension~$k'$ of~$k$, are they always
 equivalent over the base field~$k$?
 
-The structure given by theorem~\ref{thm:IP1S} gives an easy answer
-to this question. As the Kronecker blocks are invariant by extension of
+The structure given by theorem~\ref{thm:IP1S} gives a simple answer
+to this question. Since the Kronecker blocks are invariant by extension of
 scalars, the problem reduces to the finite and infinite local
-blocks~$L_{f,ℓ,u}$. For an irreducible polynomial~$f$, we have
-\begin{equation}\label{local-extension}
-L_{f,ℓ,u} ⊗_{k} k' = %\begin{cases}
-%L_{p,d,u'},&\text{if $p$~is irreducible over~$k'$;}\\
-⨁ L_{f_i, ℓ,u'}, %&
-\text{if $f$~splits as~$∏_i f_i$ over~$k'$,}
-%\end{cases}
-\end{equation}
-where $u'$~is the image in~$k'^{×}/(k'^{×})^2$ of~$u$. The
-map~$k^{×}/(k^{×})^2 → k'^{×}/(k'^{×})^2$ is bijective when $[k':k]$~is
-odd and zero when it is even. From this we deduce:
+blocks~$L_{f,ℓ,u}$.
+% For any irreducible polynomial~$f$ factoring over~$k'$ as~$f = ∏ f_i$,
+% we have $L_{f,ℓ,u} ⊗_{k} k' = ∏ L_{f_i, ℓ, u'_i}$,
+% where $u'_i$~is the image of~$u$
+% by the projection map~$k[x]/f(x) → k'[x]/f_i(x)$.
+This implies that $\bm{a}$ and~$\bm{b}$ are equivalent over~$k$
+if and only if, for all local factors~$f$, they have the same value
+$u(f, ℓ) ∈ k^{×}/(k^{×})^2$.
 
-\begin{prop}\label{prop:IP1S-extension}
-Let~$\bm{a}, \bm{b}$ be two pencils which are IP1S-equivalent over a
-field extension~$k'$ of the finite field~$k$.
-\begin{enumerate}
-\item If the degree~$[k':k]$~is odd, then $\bm{a}$ and~$\bm{b}$ are
-equivalent over~$k$.
-\item If the degree~$[k':k]$~is even, them $\bm{a}$ and~$\bm{b}$ are
-equivalent over~$k$ iff, for all local factors~$L_{f,ℓ,u}$, they have the
-same value~$u(f,ℓ) ∈ k^{×}/(k^{×})^2$.
-\end{enumerate}
-\end{prop}
+% For an irreducible polynomial~$f$, we have
+% \begin{equation}\label{local-extension}
+% L_{f,ℓ,u} ⊗_{k} k' = %\begin{cases}
+% %L_{p,d,u'},&\text{if $p$~is irreducible over~$k'$;}\\
+% ⨁ L_{f_i, ℓ,u'}, %&
+% \text{if $f$~splits as~$∏_i f_i$ over~$k'$,}
+% %\end{cases}
+% \end{equation}
+% where $u'$~is the image in~$k'^{×}/(k'^{×})^2$ of~$u$. The
+% map~$k^{×}/(k^{×})^2 → k'^{×}/(k'^{×})^2$ is bijective when $[k':k]$~is
+% odd and zero when it is even. From this we deduce:
+% 
+% \begin{prop}\label{prop:IP1S-extension}
+% Let~$\bm{a}, \bm{b}$ be two pencils which are IP1S-equivalent over a
+% field extension~$k'$ of the finite field~$k$.
+% \begin{enumerate}
+% \item If the degree~$[k':k]$~is odd, then $\bm{a}$ and~$\bm{b}$ are
+% equivalent over~$k$.
+% \item If the degree~$[k':k]$~is even, them $\bm{a}$ and~$\bm{b}$ are
+% equivalent over~$k$ iff, for all local factors~$L_{f,ℓ,u}$, they have the
+% same value~$u(f,ℓ) ∈ k^{×}/(k^{×})^2$.
+% \end{enumerate}
+% \end{prop}
 
-In particular, when $k → k'$~is a quadratic tower, solving the IP1S
-problem over~$k'$ does not solve the decisional form of IP1S over~$k$.
+In particular, when $k → k'$~has even degree,
+solving the IP1S problem over~$k'$
+does not, in general, solve the decisional form of IP1S over~$k$.
+For example, let~$a ∈ k$ and define the two-dimensional
+quadratic pencils~$\bm{a} = (2 x y, x^2 + a y^2)$
+and~$\bm{b} = (x^2 + y^2/a, 2 x y)$.
+These two pencils are equivalent only over any extension of~$k$
+containing a root of the equation~$x^4 + 4 a = 0$.
+
 
 %>>>1
 \section{Fully singular quadratic pencils in characteristic two}%<<<1
@@ -1494,7 +1521,7 @@ We also write~$\chk{H_d}$ for the vector space dual to~$H_d$
 and~$\chev{φ,f}: \chk{H_d} × H_d → k$ for the standard bilinear pairing.
 
 For any $h ∈ H_m$, multiplication by~$h$ defines a linear map,
-which we again write~$h: H_m → H_{m+d}$,
+which we again write~$h: H_d → H_{m+d}$,
 as well as a transposed map~$\chk{h}: \chk{H_{d+m}} → \chk{H_d}$.
 This means that~$\chev{\chk{h} φ, f} = \chev{φ, hf}$ for all~$φ ∈
 \chk{H_{d+m}}$ and~$f ∈ H_d$.
@@ -1509,7 +1536,7 @@ b_{λ} (f, f') \;=\; b_{λ} (φ, φ') \;=\; 0; \qquad
 b_{λ} (f, φ) \;=\; \chev {φ, (λ y - x) f}.
 \end{equation}
 
-The next proposition shows that multiplication by polynomial essentially
+The next proposition shows that multiplication by polynomials essentially
 defines all homomorphisms between the bilinear spaces~$K_d$.
 As in Subsection~\ref{SS:bil-reg-local},
 we write~$f ≻ g$ for the relation~$b_{∞} f + b_0 g = 0$.
