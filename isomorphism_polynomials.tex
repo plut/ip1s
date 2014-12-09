@@ -1419,6 +1419,84 @@ corresponding problem over a finite field has not been much studied, the
 existence of a faster algorithm for computing the Kronecker decomposition is not
 unlikely.
 
+\paragraph{Comparison to the “polar decomposition” algorithm}
+
+Berthomieu et al. suggested a “polar decomposition” algorithm for
+the IP1S problem~\cite{DBLP:journals/corr/BerthomieuFP13}.
+This algorithm, inspired by real analysis techniques,
+decomposes in two steps.
+Let~$D$ be a regular invertible matrix and $H$~be any matrix.
+For any matrix~$M$, write~$M^{⋆}$ for the $D$-adjoint to~$M$, namely
+$M^{⋆} = D^{-1} · \transpose{M} · D$.
+The algorithm makes the two following claims.
+\begin{enumerate}
+\item[(A)] Let~$Y$ be a regular matrix commuting to both~$H$ and~$H^{⋆}$.
+Then the matrix~$Z = D· Y · \transpose{Y} · D^{-1}$ has a square root~$W$.
+\item[(B)] Define $X = Y · W^{-1}$. Then $X$~is a solution to the IP1S
+problem $H· X = X · H$ and~$X^{⋆} · X = 1$.
+\end{enumerate}
+We give here counter-examples to both claims above
+in the finite field case.
+In the IP1S case, $D$~is the matrix of the bilinear form~$b_{∞}$, and
+$H$~is the matrix of the characteristic endomorphism~$b_{∞}^{-1} b_0$.
+This gives an extra condition, not used
+in~\cite{DBLP:journals/corr/BerthomieuFP13}:
+namely, since $b_0$~is symmetric, we must have~$H^{⋆} = H$.
+% We note that the authors of~\cite{DBLP:journals/corr/BerthomieuFP13}
+% further assume that $D$~is diagonal (they show that the general case is
+% reducible to this one).
+
+\medskip
+
+For claim A, let~$d$ be a non-square element of~$k$.
+Since $k$~is finite, there exist~$u, v ∈ k$ such that~$d = u^2 + v^2$.
+Let~$t ∈ k$ such that~$t^2 ≠ 1$ and define
+\[ D = \mat{t & 0 \\ 0 & 1}, \quad
+H = \mat{0 & 1 \\ t & -\frac{u}{v}(t+1)}. \]
+We then see that~$H^{⋆} = H$ and that
+the matrix~$Y = \mat{u & v \\ t v & -t u}$ commutes with~$H$.
+However, we easily check that
+$Z = D · Y · \transpose{Y} · D^{-1} = \mat{d & 0 \\ 0 & t^2 d}$~has no square
+root.
+
+Since the only hypothesis on~$d$ is that it is a sum of squares,
+this counterexample shows that the “polar decomposition” algorithm
+requires a (tower of) \emph{real quadratic extensions} of the base field,
+where a real quadratic extension is obtained by adjoining
+the square root of a sum of squares.
+The fields having no non-trivial real quadratic extensions
+are the \emph{Euclidean fields};
+this includes any algebraically closed field
+or the fields~$ℝ$ of real numbers
+and~$\overline{ℚ} ∩ ℝ$ of real algebraic numbers,
+but since any element in a finite field is a sum of squares,
+no finite field is Euclidesn.
+
+\medskip
+
+For claim B, let~$d$ be any element of~$k$ and again write~$d = u^2 + v^2$.
+We keep the first example but now use the case where~$t = -1$: let
+\[ D = \mat{-1 & 0 \\ 0 & 1}, \quad
+H = \mat{0 & 1 \\ -1 & 0}. \]
+We again have $H^{⋆} = H$, and $Y = \mat{u & -v\\v & u}$~commutes
+with~$H$. However, This time,
+$Z = D · Y · \transpose{Y} · D^{-1} = \mat{d & 0 \\ 0 & d} = W^2$
+where $W = \mat{0 & d \\ 1 & 0}$;
+if $d$~is not a square in $k$, then the only roots are $± W$.
+We now easily check that
+$X = Y · W^{-1}$~is not a solution of the IP1S problem.
+
+The original proof of the “polar decomposition” method computed the
+square root of the matrix~$Z$ by analytic interpolation on its spectrum;
+this root then belongs to the algebra~$k[Z]$
+and therefore commutes to any matrix commuting to~$Z$.
+The square root we gave above does not belong to the algebra~$k[Z]$,
+thus making this proof fail.
+Note that in an example over the real numbers, since $d = u^2 + v^2 > 0$,
+the analytic interpolation method for~$√Z$ will never compute
+the matrix~$W$ above, but instead one of the roots~$±√{d}.1_{2}$.
+
+
 \paragraph{Decisional IP1S and extensions of scalars.}
 
 The solution of IP1S over an extension field
