@@ -1426,9 +1426,9 @@ the IP1S problem~\cite{DBLP:journals/corr/BerthomieuFP13}.
 This algorithm, inspired by real analysis techniques,
 decomposes in two steps.
 Let~$D$ be a regular invertible matrix and $H$~be any matrix.
-For any matrix~$M$, write~$M^{⋆}$ for the $D$-adjoint to~$M$, namely
-$M^{⋆} = D^{-1} · \transpose{M} · D$.
-The algorithm makes the two following claims.
+We recall that the $D$-adjoint of a matrix~$M$
+is~$M^{⋆} = D^{-1} · \transpose{M} · D$.
+The “polar decomposition” algorithm makes the two following claims.
 \begin{enumerate}
 \item[(A)] Let~$Y$ be a regular matrix commuting to both~$H$ and~$H^{⋆}$.
 Then the matrix~$Z = D· Y · \transpose{Y} · D^{-1}$ has a square root~$W$.
@@ -1436,7 +1436,7 @@ Then the matrix~$Z = D· Y · \transpose{Y} · D^{-1}$ has a square root~$W$.
 problem $H· X = X · H$ and~$X^{⋆} · X = 1$.
 \end{enumerate}
 We give here counter-examples to both claims above
-in the finite field case.
+over any finite field with odd characteristic.
 In the IP1S case, $D$~is the matrix of the bilinear form~$b_{∞}$, and
 $H$~is the matrix of the characteristic endomorphism~$b_{∞}^{-1} b_0$.
 This gives an extra condition, not used
@@ -1466,11 +1466,10 @@ where a real quadratic extension is obtained by adjoining
 the square root of a sum of squares.
 The fields having no non-trivial real quadratic extensions
 are the \emph{Euclidean fields};
-this includes any algebraically closed field
-or the fields~$ℝ$ of real numbers
-and~$\overline{ℚ} ∩ ℝ$ of real algebraic numbers,
-but since any element in a finite field is a sum of squares,
-no finite field is Euclidesn.
+this includes quadratically closed fields
+and real closed fields such as~$ℝ$ or~$\overline{ℚ} ∩ ℝ$,
+but since any element in a finite field is a sum of (two) squares,
+no finite field is Euclidean.
 
 \medskip
 
@@ -1478,7 +1477,7 @@ For claim B, let~$d$ be any element of~$k$ and again write~$d = u^2 + v^2$.
 We keep the first example but now use the case where~$t = -1$: let
 \[ D = \mat{-1 & 0 \\ 0 & 1}, \quad
 H = \mat{0 & 1 \\ -1 & 0}. \]
-We again have $H^{⋆} = H$, and $Y = \mat{u & -v\\v & u}$~commutes
+We again have $H^{⋆} = H$, and $Y = \mat{u & v\\-v & u}$~commutes
 with~$H$. However, This time,
 $Z = D · Y · \transpose{Y} · D^{-1} = \mat{d & 0 \\ 0 & d} = W^2$
 where $W = \mat{0 & d \\ 1 & 0}$;
