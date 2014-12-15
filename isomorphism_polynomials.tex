@@ -777,7 +777,7 @@ For any integer~$ℓ$, we define the $k$-linear form~$τ_ℓ$ on~$R_ℓ =
 k[π]/π^ℓ$ as the coefficient of~$π^{ℓ-1}$; we write~$R$ and~$τ$ instead
 of~$R_ℓ$ and~$τ_ℓ$ when there is no ambiguity.
 We note that $τ(xy)$, as a $k$-bilinear form on~$R$, is regular and
-commutes to~$R$.
+commutes with~$R$.
 Actually, multiplication by~$π^{ℓ-1}$ defines a (non-canonical)
 $R$-linear isomorphism between~$R$ and its dual (as a $k$-vector
 space)~$R^{∨}$.
@@ -971,6 +971,8 @@ Prop.~\ref{prop:kronecker-split}.
 \item \label{it:alg-factor} Now~$\bm{b}$~is regular. Compute and factor
 its characteristic polynomial~$f(λ)$ and split~$V$ as an orthogonal direct
 sum of primary components~$V_f$ for each prime divisor~$f$.
+On the the “infinite” factor corresponding to the divisor~$μ$ of~$f(λ:μ)$,
+swap the forms~$b_{∞}$ and~$b_0$.
 \item \label{it:alg-local} For each prime divisor~$f$, write the local
 pencil~$\bm{b}|V_f$ at~$f$ as a matrix with entries in~$K = k[x]/f(x)$.
 Perform the reduction of~\ref{prop:diag-bigblock} and write~$\bm{b}|V_f$
@@ -1034,7 +1036,7 @@ We recall that the $D$-adjoint of a matrix~$M$
 is~$M^{⋆} = D^{-1} · \transpose{M} · D$.
 The “polar decomposition” algorithm makes the two following claims.
 \begin{enumerate}
-\item[(A)] Let~$Y$ be a regular matrix commuting to both~$H$ and~$H^{⋆}$.
+\item[(A)] Let~$Y$ be a regular matrix commuting with both~$H$ and~$H^{⋆}$.
 Then the matrix~$Z = D· Y · \transpose{Y} · D^{-1}$ has a square root~$W$.
 \item[(B)] Define $X = Y · W^{-1}$. Then $X$~is a solution to the IP1S
 problem $H· X = X · H$ and~$X^{⋆} · X = 1$.
@@ -1082,22 +1084,20 @@ We keep the first example but now use the case where~$t = -1$: let
 \[ D = \mat{-1 & 0 \\ 0 & 1}, \quad
 H = \mat{0 & 1 \\ -1 & 0}. \]
 We again have $H^{⋆} = H$, and $Y = \mat{u & v\\-v & u}$~commutes
-with~$H$. However, This time,
-$Z = D · Y · \transpose{Y} · D^{-1} = \mat{d & 0 \\ 0 & d} = W^2$
-where $W = \mat{0 & d \\ 1 & 0}$;
-if $d$~is not a square in $k$, then the only roots are $± W$.
+with~$H$.
+However, $Z = D · Y · \transpose{Y} · D^{-1} = \mat{d & 0 \\ 0 & d} = W^2$
+where $W = \mat{0 & d/w \\ w & 0}$ for any~$w ≠ 0$.
 We now easily check that
 $X = Y · W^{-1}$~is not a solution of the IP1S problem.
 
-The original proof of the “polar decomposition” method computed the
+In the real case, the “polar decomposition” method computedsthe
 square root of the matrix~$Z$ by analytic interpolation on its spectrum;
 this root then belongs to the algebra~$k[Z]$
-and therefore commutes to any matrix commuting to~$Z$.
-The square root we gave above does not belong to the algebra~$k[Z]$,
-thus making this proof fail.
-Note that in an example over the real numbers, since $d = u^2 + v^2 > 0$,
-the analytic interpolation method for~$√Z$ will never compute
-the matrix~$W$ above, but instead one of the roots~$±√{d}.1_{2}$.
+and therefore commutes with any matrix commuting with~$Z$.
+In the case above, since $Z = d · 1_{2}$ with~$d = u^2 + v^2 ≥ 0$,
+the analytic interpolation will compute one of the roots~$±√{d} · 1_2$.
+The square root~$W$ we give above does not belong to the algebra~$k[Z]$,
+thus making this method fail.
 
 
 \paragraph{Decisional IP1S and extensions of scalars.}
@@ -2180,7 +2180,7 @@ In particular, the case~$x = 0$ tells us that $\Ker A_0 = \Ker B_0$. By
 using the \emph{upper} row echelon form, we likewise compute a matrix~$G$
 such that~$B_{∞} x = B_0 y$ implies~$x ∈ G y + \Ker B_{∞}$.
 
-A \emph{chain} of length~$h$ is a solution~$(e_0,…,e_h)$ of te
+A \emph{chain} of length~$h$ is a solution~$(e_0,…,e_h)$ of the
 equations~$b_0(e_i) + b_{∞}(e_{i-1}) = 0$ and~$b_{∞}(e_h) = 0$.
 We define by induction a sequence~$(U_i)$ of vector spaces such that the
 $h$-chains are defined by the relations~$e_0 ∈ U_h$ and~$e_i ∈ F(e_{i-1})
