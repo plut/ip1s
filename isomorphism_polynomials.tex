@@ -1,4 +1,4 @@
-\documentclass{article}%<<<1
+\documentclass{amsart}%<<<1
 %\usepackage[margin=30mm]{geometry}
 %\usepackage[letterpaper,hmargin=1.4in,vmargin=1.4in]{geometry}
 \usepackage{unicode}
@@ -84,18 +84,33 @@
 
 % $Date:$
 \begin{document}
-\title%[Solving ``Isomorphism of Polynomials with Two Secrets'']%
+\title[Solving ``Isomorphism of Polynomials with Two Secrets'']%
 {Solving the ``Isomorphism of Polynomials with Two Secrets'' Problem
 for All Pairs of Quadratic Forms}%<<<1
-\author{Jérôme Plût\footnote{ANSSI}
-\and Pierre-Alain Fouque\footnote{Université Rennes 1 and Institut
-Universitaire de France}
-\and Gilles Macario-Rat\footnote{Orange Labs}}
-\maketitle
+\keywords{Quadratic forms, pencils of quadratic forms,
+isomorphism of polynomials, multivariate cryptography}
+\subjclass[2000]{15A63, 15A22, 15A21, 11T71}
+\author{Jérôme Plût}
+\email{jerome.plut@ssi.gouv.fr}
+\address{Agence Nationale de la Sécurité des Systèmes d'Information --- 51,
+boulevard de La Tour-Maubourg, 75007 Paris, France}
+\author{Pierre-Alain Fouque}
+\email{pierre-alain.fouque@ens.fr}
+\address{Université Rennes 1, Campus de Beaulieu ---
+263, avenue du Général Leclerc - Batiment 12
+35042 Rennes Cedex, France}
+\author{Gilles Macario-Rat}
+\email{gilles.macariorat@orange.com}
+\address{Orange Labs --- 38-40, rue du Général Leclerc,
+92130 Issy-les-Moulineaux, France}
+% \author{Jérôme Plût\footnote{ANSSI}
+% \and Pierre-Alain Fouque\footnote{Université Rennes 1 and Institut
+% Universitaire de France}
+% \and Gilles Macario-Rat\footnote{Orange Labs}}
 
-\centerline{\gitkw $Id:$
-\gitkw $Author:$
-\gitkw $Date:$}
+% \centerline{\gitkw $Id:$
+% \gitkw $Author:$
+% \gitkw $Date:$}
 
 \begin{abstract}%<<<
 We study the Isomorphism of Polynomial (IP2S) problem
@@ -121,6 +136,7 @@ quadratic pencil, and the reduction of bilinear forms over a non-commutative
 algebra. Finally, we show that the second secret in the IP2S problem may
 be recovered in cubic time.
 \end{abstract}%>>>
+\maketitle
 \section*{Introduction}%<<<1
 \subsection*{The IP1S and IP2S problems}%<<<2
 
@@ -2149,7 +2165,7 @@ geometric study of the hypersurface defined by this characteristic
 polynomial.
 
 %>>>1
-\bibliographystyle{plain}
+\bibliographystyle{amsalpha}
 \bibliography{biblio}
 \ifapx \appendix
 \section{An algorithm reducing a matrix pencil to Kronecker normal form}%<<<1
