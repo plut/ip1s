@@ -12,17 +12,27 @@
 \usepackage{mathdots}
 \usepackage{algorithm}
 \usepackage{algpseudocode}
-% \usepackage[all]{xy}
 \usepackage{graphicx}
 \usepackage{lineno}\linenumbers
 \usepackage{booktabs,multirow}
 
-% \usepackage{amsthm}
-% \usepackage[margin=25mm]{geometry}
-
-% \newnumbered{definition}{Definition}
 \newif\ifapx \apxtrue % If appendix
 
+% Colors%<<<
+\usepackage{color}
+\definecolor{purple}{rgb}{.49,.11,.61}
+\definecolor{green}{rgb}{.08,.69,.10}
+\definecolor{blue}{rgb}{.01,.26,.87}
+\definecolor{pink}{rgb}{1,.5,.75}
+\definecolor{brown}{rgb}{.39,.21,.00}
+\definecolor{red}{rgb}{.89,0,0}
+\definecolor{lightblue}{rgb}{.58,.81,.98} 
+\definecolor{teal}{rgb}{0,.57,.52}
+\definecolor{orange}{rgb}{.97,.45,.02}
+\definecolor{lightgreen}{rgb}{.53,.99,.01}
+\definecolor{magenta}{rgb}{.76,0,.47}
+%>>>
+\def\todo#1{{\color{orange}TODO: #1}}
 % Theorems, equations, counters%<<<
 \def\linkcounter#1#2{\edef\magic{\noexpand\let
   \expandafter\noexpand\csname c@#1\endcsname
@@ -83,9 +93,10 @@
 %>>>1
 
 % $Date:$
-\title[Solving IP2S]%<<<1
-{Solving the ``Isomorphism of Polynomials with Two Secrets'' Problem
-for All Pairs of Quadratic Forms}
+\title[Pairs of quadratic forms]%<<<1
+{Computing Isomorphisms between Pairs of Quadratic Forms}
+% {Solving the ``Isomorphism of Polynomials with Two Secrets'' Problem
+% for All Pairs of Quadratic Forms}
 % \keywords{Quadratic forms, pencils of quadratic forms,
 % isomorphism of polynomials, multivariate cryptography}
 % \subjclass[2000]{15A63, 15A22, 15A21, 11T71}
@@ -117,27 +128,30 @@ for All Pairs of Quadratic Forms}
 \maketitle
 \begin{abstract}%<<<
 We study the Isomorphism of Polynomial (IP2S) problem
-with~$m=2$ homogeneous quadratic polynomials of $n$ variables over a finite field of odd
-characteristic: given two quadratic polynomials $(\bm{a},\bm{b})$ 
-on $n$ variables, we find two bijective linear maps $(s,t)$ such that
-$\bm{b}=t\circ \bm{a}\circ s$. We give an algorithm computing~$s$ and~$t$
-in time complexity~$\Ot(n^4)$ for all instances.
-
-The IP2S problem was introduced in cryptography by Patarin back in 1996.
-The special case of this problem when $t$ is the identity is called
-the isomorphism with one secret (IP1S) problem.
-Generic algebraic equation solvers (for example using Gröbner bases)
-solve quite well random instances of the IP1S problem. For the particular
-\emph{cyclic} instances of IP1S, a cubic-time algorithm was later
-given~\cite{MPG2013} and explained in terms of pencils of quadratic forms
-over all finite fields; in particular, the cyclic IP1S problem in odd
-characteristic reduces to the computation of the square root of a matrix.
-
-We give here an algorithm solving all cases of the IP1S problem in odd
-characteristic using two new tools, the Kronecker form for a singular
-quadratic pencil, and the reduction of bilinear forms over a non-commutative
-algebra. Finally, we show that the second secret in the IP2S problem may
-be recovered in cubic time.
+with~$m=2$ homogeneous quadratic polynomials of $n$ variables over a finite field
+characteristic: given two pairs~$(\bm{a}, \bm{b})$
+of quadratic forms on $n$~variables,
+we compute two bijective linear maps $(s,t)$ such that
+$\bm{b}=t\circ \bm{a}\circ s$.
+We give an algorithm computing~$s$ and~$t$
+in time complexity~$\Ot(n^6)$ in the worst case,
+and~$\Ot(n^3)$ on average.
+% 
+% The IP2S problem was introduced in cryptography by Patarin back in 1996.
+% The special case of this problem when $t$ is the identity is called
+% the isomorphism with one secret (IP1S) problem.
+% Generic algebraic equation solvers (for example using Gröbner bases)
+% solve quite well random instances of the IP1S problem. For the particular
+% \emph{cyclic} instances of IP1S, a cubic-time algorithm was later
+% given~\cite{MPG2013} and explained in terms of pencils of quadratic forms
+% over all finite fields; in particular, the cyclic IP1S problem in odd
+% characteristic reduces to the computation of the square root of a matrix.
+% 
+% We give here an algorithm solving all cases of the IP1S problem in odd
+% characteristic using two new tools, the Kronecker form for a singular
+% quadratic pencil, and the reduction of bilinear forms over a non-commutative
+% algebra. Finally, we show that the second secret in the IP2S problem may
+% be recovered in cubic time.
 \end{abstract}%>>>
 \maketitle
 \section*{Introduction}
@@ -161,10 +175,10 @@ as an alternative to the Graph Isomorphism Problem (GI) proposed by Goldreich, M
 The IP problem was appealing since 
 it seems more difficult than the Graph Isomorphism problem~\cite{DBLP:conf/eurocrypt/PatarinGC98}. 
 Agrawal and Saxena reduced~\cite{DBLP:conf/stacs/AgrawalS06} the Graph
-Isomorphism problem to the particular case of IP1S using two polynomials,
-one of them being a quadratic form encoding the adjacency matrix of the
-graph, and the other one being the cubic~$\sum x_i^3$, over a finite field of
-odd characteristic.
+Isomorphism problem to a particular case of IP1S using two polynomials.
+% one of them being a quadratic form encoding the adjacency matrix of the
+% graph, and the other one being the cubic~$\sum x_i^3$, over a finite field of
+% odd characteristic.
 For the case of quadratic polynomials, the status of this problem is unclear despite recent 
 intensive research in the cryptographic community since this case is the most interesting 
 for practical schemes. There exists a claimed reduction between the quadratic IP1S problem and the GI
@@ -184,7 +198,7 @@ For efficiency reasons, the degree is generally small:
 only quadratic and cubic equations are involved.
 To our knowledge, no significant progress has been done on the cubic case.
 
-We limit ourselves to the special case of two equations, both of which
+We limit ourselves to the special case of two equations, both
 being homogeneous polynomials of degree~two. According to previous
 literature~\cite{DBLP:conf/eurocrypt/Perret05,DBLP:conf/eurocrypt/FaugereP06,DBLP:conf/pkc/BouillaguetFFP11,DBLP:conf/eurocrypt/BouillaguetFV13},
 this is the most difficult case.
@@ -216,8 +230,8 @@ The following table gives a summary of proofs of the various cases
 of reduction of a pair of symmetric bilinear forms.
 Another report is given in~\cite{olomouc2004fv}.
 
-\medskip
-\hfil\begin{tabular}{l|lll}
+\setlength\tabcolsep{.5em}\smallbreak
+\begin{center}\begin{tabular}{l|lll}
 Characteristic & zero & odd & two \\
 \toprule
 regular & Weierstraß 1858\cite{1858weierstrass}
@@ -226,8 +240,7 @@ regular & Weierstraß 1858\cite{1858weierstrass}
 singular & Kronecker 1890\cite{1890kronecker}
   & Waterhouse 1976\cite{inventiones1976waterhouse} & \\
 \bottomrule
-\end{tabular}
-\medskip
+\end{tabular}\end{center}\medbreak
 
 % Despite the different techniques used in the proof,
 % depending on the characteristic
@@ -241,7 +254,7 @@ singular & Kronecker 1890\cite{1890kronecker}
 % 
 After the proposal of using pairs of quadratic forms by Patarin,
 there were also some advances by cryptographers,
-most of them unaware the previous work cited above.
+most of them unaware of the previous work cited above.
 
 Bouillaguet, Fouque and Macario-Rat solved
 in 2011~\cite{DBLP:conf/asiacrypt/BouillaguetFM11}
@@ -286,19 +299,21 @@ for $m=2$ over finite fields of any characteristic.
 
 Finally, Berthomieu, Faugère and Perret
 proposed in 2014~\cite{DBLP:journals/corr/BerthomieuFP13}
-a polynomial algorithm for IP1S with any number of equations when~$2 ≠ 0$.
-Given two families of polynomials over a field~$k$,
-they give a solution to the IP1S problem
-over a tower~$k'$ of real quadratic extensions of~$k$
-(where a \emph{real quadratic extension} is obtained by
-adjoining the square root of a sum of squares).
-This solves the IP1S problem over the original field~$k$ only when
-$k$~is \emph{Euclidean}, \emph{i.e.} has no real quadratic extension.
-This is the case for example if $k$~is a closed real field such as~$ℝ$
-or the field~$ℝ_{\mathrm{alg}}$ of real algebraic numbers,
-or an algebraically closed field;
-however, since any quadratic extension of a finite field is real,
-no finite field is Euclidean.
+a polynomial algorithm for IP1S with any number of equations when~$2 ≠ 0$,
+inspired by the characteristic-zero methods.
+We evaluate their algorithm in Appendix~\ref{ap:polar}.
+% Given two families of polynomials over a field~$k$,
+% they give a solution to the IP1S problem
+% over a tower~$k'$ of real quadratic extensions of~$k$
+% (where a \emph{real quadratic extension} is obtained by
+% adjoining the square root of a sum of squares).
+% This solves the IP1S problem over the original field~$k$ only when
+% $k$~is \emph{Euclidean}, \emph{i.e.} has no real quadratic extension.
+% This is the case for example if $k$~is a closed real field such as~$ℝ$
+% or the field~$ℝ_{\mathrm{alg}}$ of real algebraic numbers,
+% or an algebraically closed field;
+% however, since any quadratic extension of a finite field is real,
+% no finite field is Euclidean.
 
 % Over the
 % original field, this solves the \emph{decisional} IP1S problem:
@@ -307,12 +322,13 @@ no finite field is Euclidean.
 
 \subsection*{Our contributions}
 
-We first review the mathematical theory behind the IP1S problem.
-Since this is a solved problem, we have been able to omit most proofs in
-this part.
-
-We start by studying the bilinear forms associated to
-a pair of quadratic forms.
+We first review the mathematical theory behind pairs of \emph{bilinear} forms,
+adding an algorithmic point of view to the classic theorems.
+% Since this is a solved problem, we have been able to omit most proofs in
+% this part.
+% 
+% We start by studying the bilinear forms associated to
+% a pair of quadratic forms.
 Such a bilinear pair decomposes canonically as the orthogonal sum of
 a regular and a ``fully singular'' part,
 which is itself canonically isomorphic to a sum of standard objects
@@ -383,10 +399,10 @@ for solving algebraic systems.
 
 The last section explains how to recover the second (``outer'') secret
 in the two-secret IP2S problem.
-Since applying an outer linear combination to a Kronecker module
-leaves it unchanged (up to almost-unique isomorphism),
-the regular part is enough to recover the outer secret.
-This is done using the factorization of the characteristic polynomial.
+% Since applying an outer linear combination to a Kronecker module
+% leaves it unchanged (up to almost-unique isomorphism),
+% the regular part is enough to recover the outer secret.
+% This is done using the factorization of the characteristic polynomial.
 
 \subsection*{Mathematical background and notations}
 Throughout this document, $k$~is a finite field.
@@ -552,7 +568,7 @@ Since~$2h+1 ≤ n$, this algorithm has a worst-case complexity of~$O(n^4)$,
 and, given that a generic bilinear pencil is regular,
 an average-case complexity of~$O(n^3)$.
 
-\begin{proof}[Proof of Proposition~\ref{prop:kronecker-decomposition}]
+\begin{proof}[of Proposition~\ref{prop:kronecker-decomposition}]
 The proof of the Kronecker decomposition published
 by Waterhouse in 1976~\cite[Theorem 3.1]{inventiones1976waterhouse}
 gives an algorithm for computing it.
@@ -1003,7 +1019,7 @@ for the place at infinity.}
 of~$k[λ]$ as the summand corresponding to
 the place zero for the pencil~$B - λ A$.
 
-\begin{proof}[Proof of Proposition~\ref{prop:primary-decomposition}]
+\begin{proof}[of Proposition~\ref{prop:primary-decomposition}]
 Following~\cite[Lemma 4.1]{inventiones1976waterhouse},
 we first decompose the pencil~$A - λ B$ as the orthogonal sum of
 a pencil $A' - λ B'$ such that $B'$~is regular,
@@ -1127,7 +1143,7 @@ However, when $k$~is a field of characteristic two, it may happen (as we
 shall see in Section~\ref{S:quad-reg}) that $b$~is alternating whereas
 $b_R$~is not.
 
-\begin{proof}[\protect{Proof of Lemma~\ref{lem:trace-local}}]
+\begin{proof}[{of Lemma~\ref{lem:trace-local}}]
 By the structure theorem of modules over a principal ring,
 we have~$M = ⊕ R_{m_i}$ for some finite sequence of integers~$m_i$.
 If the result holds for modules~$(M', N)$ and~$(M'', N)$ then
@@ -1347,7 +1363,7 @@ finally the form defined by~$b_R(x,y) = a\:x y$.
 % shall see in Section~\ref{S:quad-reg}) that $b$~is alternating whereas
 % $b_R$~is not.
 % 
-% \begin{proof}[\protect{Proof of Prop.~\ref{prop:trace-local}}]
+% \begin{proof}[\protect{of Prop.~\ref{prop:trace-local}}]
 % By the structure theorem of modules over a principal ring, we may
 % write~$M = ⊕ R_{m_i}$ for some finite sequence of integers~$m_i$. If the
 % result holds for modules~$(M', N)$ and~$(M'', N)$ then it also holds
@@ -1576,187 +1592,11 @@ finally the form defined by~$b_R(x,y) = a\:x y$.
 % existence of a faster algorithm for computing the Kronecker decomposition is not
 % unlikely.
 % 
-\paragraph{Comparison to the ``polar decomposition'' algorithm.}
-
-Berthomieu et al. suggested~\cite{DBLP:journals/corr/BerthomieuFP13}
-solving the IP1S problem with a ``polar decomposition'' algorithm,
-inspired by real analysis techniques.
-Let~$B$ be an invertible symmetric matrix.
-We recall that the $B$-adjoint of a matrix~$M$
-is~$M^{⋆} = B^{-1} · \transpose{M} · B$.
-The ``polar decomposition'' algorithm makes the two following claims.
-\begin{enumerate}
-\item[(A)] Let~$Y$ be a regular matrix commuting with both~$H$ and~$H^{⋆}$.
-Then the matrix~$Z = B· Y · \transpose{Y} · B^{-1}$ has a square root~$W$.
-\item[(B)] Define $X = Y · W^{-1}$.
-Then $X$~is a solution to the IP1S problem : $H· X = X · H$ and~$X^{⋆} · X = 1$.
-\end{enumerate}
-In the IP1S case, $H$~is the matrix of the characteristic
-endomorphism~$B^{-1} A$.
-This provides us with the extra hypothesis that, since $A$~is symmetric,
-$H^{⋆} = H$; this hypothesis is not used
-in~\cite{DBLP:journals/corr/BerthomieuFP13}.
-
-% We note that the authors of~\cite{DBLP:journals/corr/BerthomieuFP13}
-% further assume that $B$~is diagonal (they show that the general case is
-% reducible to this one).
-
-\medskip
-We give here counter-examples to both claims above,
-over (almost) any finite field with odd characteristic,
-and under the hypothesis~$H^{⋆} = H$.
-
-For claim (A), let~$d$ be a non-square element of~$k$.
-Since $k$~is finite, there exist~$u, v ∈ k$ such that~$d = u^2 + v^2$.
-Let~$t ∈ k ∖ \acco {0, 1, -1}$ and define
-\[ B = \mat{t & 0 \\ 0 & 1}, \quad
-H = \mat{0 & 1 \\ t & -\frac{u}{v}(t+1)}. \]
-We then see that~$H^{⋆} = H$ and that
-the matrix~$Y = \mat{u & v \\ t v & -t u}$ commutes with~$H$.
-However, we easily check that
-$Z = B · Y · \transpose{Y} · B^{-1} = \mat{d & 0 \\ 0 & t^2 d}$~has no square
-root.
-
-Since the only hypothesis on~$d$ is that it is a sum of squares,
-this counterexample shows that the ``polar decomposition'' algorithm
-requires a (tower of) \emph{real quadratic extensions} of the base field,
-where a real quadratic extension is obtained by adjoining
-the square root of a sum of squares.
-The fields having no non-trivial real quadratic extensions
-are the \emph{Euclidean fields};
-this includes quadratically closed fields
-and real closed fields such as~$ℝ$ or~$\overline{ℚ} ∩ ℝ$,
-but since any element in a finite field is a sum of (two) squares,
-no finite field is Euclidean.
-
-\medskip
-
-For claim B, let~$d$ be any element of~$k$ and again write~$d = u^2 + v^2$.
-We modify the previous example by setting~$t = -1$: let
-\[ B = \mat{-1 & 0 \\ 0 & 1}, \quad
-H = \mat{0 & 1 \\ -1 & 0}. \]
-We again have $H^{⋆} = H$, and $Y = \mat{u & v\\-v & u}$~commutes
-with~$H$.
-However, $Z = B · Y · \transpose{Y} · B^{-1} = \mat{d & 0 \\ 0 & d} = W^2$
-where $W = \mat{0 & d \\ 1 & 0}$ (or any of its conjugates).
-We now easily check that
-$X = Y · W^{-1}$~is not a solution of the IP1S problem.
-
-In the real case, the ``polar decomposition'' method computes the
-square root of the matrix~$Z$ by analytic interpolation on its spectrum;
-this root then belongs to the algebra~$k[Z]$
-and therefore commutes with any matrix commuting with~$Z$.
-In the case above, since $Z = d · 1_{2}$ with~$d = u^2 + v^2 ≥ 0$,
-the analytic interpolation will compute one of the roots~$±√{d} · 1_2$.
-The square root~$W$ we give above does not belong to the algebra~$k[Z]$,
-thus making this method fail.
-
-
-XXX et que dire de Kronecker ?
-
-
-\paragraph{Decisional IP1S and extensions of scalars.}
-
-The solution of IP1S over an extension field
-in~\cite{DBLP:journals/corr/BerthomieuFP13} raises the following
-question: given two pencils defined over a field~$k$
-and IP1S-equivalent over an extension~$k'$ of~$k$, are they always
-equivalent over the base field~$k$?
-
-The structure given by theorem~\ref{thm:IP1S}
-gives a simple, negative answer to this question.
-Since the Kronecker blocks are invariant by extension of scalars,
-the problem is determined by the regular pencils.
-In this case, two pencils are $k$-equivalent
-if and only if, for all primary factors~$R =k[λ]/p(λ)^e$,
-the corresponding $R$-bilinear forms are equivalent.
-% For any irreducible polynomial~$f$ factoring over~$k'$ as~$f = ∏ f_i$,
-% we have $L_{f,ℓ,u} ⊗_{k} k' = ∏ L_{f_i, ℓ, u'_i}$,
-% where $u'_i$~is the image of~$u$
-% by the projection map~$k[x]/f(x) → k'[x]/f_i(x)$.
-% This implies that $\bm{a}$ and~$\bm{b}$ are equivalent over~$k$
-% if and only if, for all irreducible factors~$f$, they have the same value
-% $u_{(f, ℓ)} (\bm{a}) = u_{(f, ℓ)} (\bm{b}) ∈ K_f^{×}/(K_f^{×})^2$,
-% where $K_f = k[x]/f(x)$~is the extension of~$k$ generated by~$f$.
-% Since the norm map defines
-% an isomorphism~$K_f^{×}/(K_f^{×})^{2} → k^{×} / (k^{×})^2$,
-% this condition is equivalent to: $\bm{a}$ and~$\bm{b}$ have the same
-% characters~$χ_{f,ℓ} (\bm{a}) = N_{K_f/k} (u_{(f,ℓ)} (\bm{a}))$.
-
-% For an irreducible polynomial~$f$, we have
-% \begin{equation}\label{local-extension}
-% L_{f,ℓ,u} ⊗_{k} k' = %\begin{cases}
-% %L_{p,d,u'},&\text{if $p$~is irreducible over~$k'$;}\\
-% ⨁ L_{f_i, ℓ,u'}, %&
-% \text{if $f$~splits as~$∏_i f_i$ over~$k'$,}
-% %\end{cases}
-% \end{equation}
-% where $u'$~is the image in~$k'^{×}/(k'^{×})^2$ of~$u$. The
-% map~$k^{×}/(k^{×})^2 → k'^{×}/(k'^{×})^2$ is bijective when $[k':k]$~is
-% odd and zero when it is even. From this we deduce:
-% 
-% \begin{prop}\label{prop:IP1S-extension}
-% Let~$\bm{a}, \bm{b}$ be two pencils which are IP1S-equivalent over a
-% field extension~$k'$ of the finite field~$k$.
-% \begin{enumerate}
-% \item If the degree~$[k':k]$~is odd, then $\bm{a}$ and~$\bm{b}$ are
-% equivalent over~$k$.
-% \item If the degree~$[k':k]$~is even, them $\bm{a}$ and~$\bm{b}$ are
-% equivalent over~$k$ iff, for all local factors~$L_{f,ℓ,u}$, they have the
-% same value~$u(f,ℓ) ∈ k^{×}/(k^{×})^2$.
-% \end{enumerate}
-% \end{prop}
-
-% In particular, when $k → k'$~has even degree,
-% solving the IP1S problem over~$k'$
-% does not, in general, solve the decisional form of IP1S over~$k$.
-For example, let~$a ∈ k$ and define the two-dimensional
-quadratic pencils~$(A,B) = (2 x y, x^2 + a y^2)$
-and~$(A', B') = (x^2 + y^2/a, 2 x y)$.
-These two pencils are equivalent only over any extension of~$k$
-containing a root of the equation~$x^4 + 4 a = 0$.
-% Although this fact is easy to check by hand,
-% we also provide an interpretation using our work.
-% The characteristic endomorphism of~$\bm{b}$ is
-% \begin{equation*}
-% c = -\mat{0&1\\1&0}^{-1} · \mat{1&0\\0&a} \;=\; \mat{0 & -a\\-1 & 0};
-% \end{equation*}
-% its characteristic polynomial is~$x^2 - a$.
-% Let~$R = k[c]$.
-% The space~$V = k^2$ is cyclic as a $R$-module and generated by the
-% vector~$e = \def\arraystretch{.5}\mat{1\\0}$,
-% with~$c · e = \def\arraystretch{.5}\mat{0\\-1}$.
-% Since $R$~is a separable $k$-algebra,
-% we may apply Prop.~\ref{prop:trace-form} even when it is not a field.
-% Let~$b_R = (x, y) ↦ b_R x y$ be the lift of~$b_{∞}$ to~$R$; then
-% \begin{equation}
-% \Tr_{R/k} b_R = b_{∞} (e, e) = 0
-% \quad\text{and}\quad
-% \Tr_{R/k} (c b_R) = b_{∞} (e, c·e) = -1,
-% \end{equation}
-% which means that~$b_R = -\frac{1}{2 a} c$.
-% 
-% The same computations for the pencil~$\bm{b'}$
-% yield~$k[c'] ≃ k[c]$ and~$b'_R = \frac{1}{2}$.
-% Therefore, the pencils~$\bm{b}$ and~$\bm{b'}$
-% are isomorphic exactly over the extensions~$k'$ of~$k$
-% where $b'_R/b_R = -c$~is a square.
-% When writing~$-c = (u/2 + v c)^{2}$,
-% this means that $u^4 + 4 a = 0$ as above.
-% Depending on the precise value of~$a$, the pencils~$\bm{b}$ and~$\bm{b'}$
-% may become isomorphic over an extension of degree~$1$, $2$ or~$4$ of~$k$.
-% 
-
-
-
 %>>>1
 \section{Fully singular quadratic pencils in characteristic two}
 \label{S:quad-sing}
 In this section and the following one, we assume that the field~$k$ has
 characteristic two.
-
-\subsection{Quadratic and bilinear pencils}
-
 We write~$σ: x ↦ x^2$ for the absolute Frobenius automorphism of~$k$.
 
 Let~$q$ be a quadratic form over a~$k$-vector space~$V$. Since $2 = 0$
@@ -1769,18 +1609,21 @@ chosen, then a quadratic form is determined by its polar (which is an
 alternating matrix) and its diagonal coefficients (corresponding to a
 $σ$-linear form).
 
-\bigbreak
 
-We say that a bilinear pencil is \emph{fully singular} if
-its regular part, in the sense of Prop.~\ref{prop:kronecker}, is zero.
-Any fully singular alternating bilinear pencil is isomorphic to
-an orthogonal sum of Kronecker modules~$K_d$.
-However, in characteristic two, this gives a standard form only for
-bilinear pencils and not for quadratic pencils. We explain here how to
+\subsection{Quadratic and bilinear pencils}
+
+% We say that a bilinear pencil is \emph{fully singular} if
+% its regular part, in the sense of Prop.~\ref{prop:kronecker}, is zero.
+% Any fully singular alternating bilinear pencil is isomorphic to
+% an orthogonal sum of Kronecker modules~$K_d$.
+In characteristic two, Prop.~\ref{prop:kronecker-decomposition} gives a standard form only for
+bilinear pencils and not for quadratic pencils.
+
+We explain here how to
 compute an isomorphism, when it exists, between two fully singular
 quadratic pencils in characteristic two. For this, we give a full
 description of the group of automorphisms of an orthogonal sum of
-Kronecker bilinear modules, and then show how such an automorphism acts
+Kronecker bilinear modules, and compute how these automorphisms act
 on the diagonal coefficients of a quadratic pencil.
 We conclude the proof by showing that the corresponding equations
 may be solved in polynomial time.
@@ -1944,8 +1787,7 @@ means that $∑_i \transpose{α_{i,d}} · γ_{i,d'} +
 where scalar products are taken in~$E_i$.
 
 
-% \begin{proof}[(Sketch of) Proof of Prop.~\ref{prop:aut-Ed-Kd}]
-\begin{proof}[Proof of Prop.~\ref{prop:aut-Ed-Kd}]
+\begin{proof}[of Prop.~\ref{prop:aut-Ed-Kd}]
 Let~$F$ be an orthogonal automorphism of~$V = ⨁ E_d ⊗ K_d$.
 For any basis of the coefficient spaces~$E_d$,
 the restrictions of~$F$ to maps~$K_d → K_{d'}$
@@ -2084,7 +1926,7 @@ separated, and we may use Hensel's lemma to lift the approximate
 solution~$x_0$ to a full solution.
 
 %>>>1
-\section{Regular quadratic pencils in characteristic two: the regular part}
+\section{Regular quadratic pencils in characteristic two}
 \label{S:quad-reg}
 \subsection{Quadratic pencils and extensions of scalars}
 Let~$k$ be a finite field of characteristic two and $q$~be a regular
@@ -2155,76 +1997,6 @@ Prop.~\ref{prop:diag-bigblock} applies to $τ$-alternating forms and shows
 that they are an orthogonal sum of regular $τ$-alternating forms on free
 modules over quotient rings of~$R$. We therefore assume that $V$~is free
 as a $R$-module.
-
-\paragraph{Classification of $τ$-alternating forms.}
-% Classification by the norm
-Although this is not directly useful for the IP1S problem,
-$τ$-alternating forms have an elegant classification up to congruence.
-For any bilinear form~$b$ on a free $R$-module~$M$, we define the
-\emph{norm} of~$b$ as the ideal~$\fr{n} b$ of~$R$
-generated by the elements~$b(x, x)$ for~$x ∈ M$.
-
-\begin{prop}\label{prop:eqv-norm}
-Two non-degenerate, $τ$-alternating forms are equivalent if and only
-if they have the same norm.
-\end{prop}
-
-\begin{proof}
-We show that the bilinear form~$b$ is equivalent to either the form with
-identity matrix, if $\fr n b = R$; or the orthogonal direct sum
-\[ N_a = \mat{a & 1\\1&0} ⟂ \mat{0 & 1\\1&0} ⟂ … ⟂ \mat {0 & 1\\ 1 & 0}, \]
-where $a$~is a generator of~$\fr n b$, if $\fr n b ⊂ π R$.
-We note that, when the dimension of~$V$ is odd, the identity form is
-congruent to the form~$N_1$, since the transformation~$\mat{1&1\\0&1}$
-maps the identity matrix to the form~$\mat{1&1\\1&0}$.
-
-We write~$[u]$ for the one-dimensional form with coefficient~$u$
-and~$H_{v, w}$ for the form with matrix~$\mat{v&1\\1&w}$.
-We also write~$H = H_{0,0}$.
-
-By~\cite[§2]{milnor2}, the $k$-bilinear form~$b_k = b ⊗_R k$ has a
-decomposition~$b_k ≃ [d_1] ⟂ … ⟂ [d_r] ⟂ H^s$, where all~$d_i$ are
-non-zero since $b$~is non-degenerate. We distinguish two cases.
-
-\subparagraph{Case 1: $\fr n b = R$.}
-We first show that the reduced form~$b_k$ is isomorphic, over~$k$, to the
-identity form. Since $\fr n b = R$, the list of~$d_i$ in the above
-decomposition is not empty. Moreover, since the field $k$~is perfect, all
-elements~$d_i$ are squares in~$k$, so that up to a coordinate change we
-may assume that~$d_i = 1$. Finally, we note that the
-matrix~$\mat{1&1&0\\1&0&-1\\1&1&-1}$ is an isomorphism between the
-forms~$[1] ⟂ [1] ⟂ [-1]$ and~$[1] ⟂ H$, so that if $r ≥ 1$ we may cancel
-all the direct factors~$H$ and in this case $b_k$~is isomorphic to the
-bilinear form with identity matrix.
-
-By~\cite[Corollary 3.4]{baeza1978quadratic},
-the diagonalization of~$b_k$ lifts to a diagonalization
-$b ≃ [a_1] ⟂ … ⟂ [a_r]$ over~$R$.
-Since $b$~is $τ$-alternating, all coefficients~$a_i$ are $τ$-alternating.
-If the length of~$R$ is odd, then the set of $τ$-alternating elements of~$R$
-is~$π V(R)$, which contradicts the regularity of~$b$.
-Therefore, the length of~$R$ is even, which means that $a_i ∈ V(R)$ and they are
-therefore squares in~$R$.
-From this we deduce that $b$~is isomorphic to the identity bilinear form.
-
-\subparagraph{Case 2: $\fr n b ⊂ π R$.}
-This means that the form~$b_k$ is alternating, so that~$b_k ≃ H^s$.
-By~\cite[Corollary 3.4]{baeza1978quadratic}, this decomposition again lifts to a
-decomposition $b ≃ H_{u_1, v_1} ⟂ … ⟂ H_{u_s, v_s}$, where all
-coefficients~$u_i, v_i$ are $τ$-alternating.
-
-Let $b = H_{u,v}$ be $τ$-alternating and regular; up to a swap of~$u, v$, we
-may write it as~$H_{u, u a^2}$ for some~$a ∈ R$. Since $b$~is
-regular, $1 + a u ∈ R^{×}$. Therefore, the coordinate
-change $P = \mat{1+a u & a/(1+a u) \\ u & 1/(1+a u)}$ transforms the
-bilinear form~$b$ to~$H_{u, 0}$.
-
-Finally, we note that the bilinear form~$b = H_{u, 0} ⟂ H_{u a^2 u, 0}$ is
-isomorphic to~$H_{v, 0} ⟂ H_{0,0}$ via the coordinate change
-% \begin{equation}
-$\mat{1 & 0 & a & 0\\0&1&0&0\\0&0&1&0\\au & a & 0 & 1}$.
-% \end{equation}
-\end{proof}
 
 \subsection{Reduction of local quadratic pencils}
 
@@ -2682,27 +2454,14 @@ than~$O(n^3)$ operations in~$k$.
 \section*{Conclusion}
 
 In this paper, we show that we can solve in polynomial-time the IP
-problem with two quadratic forms in a finite field of odd characteristic.
+problem with two quadratic forms over any finite field.
 The obvious questions are whether it is possible to generalize this to
-fields of characteristic two and to more than two equations.
-
-The case of a binary base field is very important for cryptographic
-applications. The cyclic case was solved in~\cite{MPG2013}. To solve
-the general case, at least two roadblocks remain:
-% the Kronecker form
-% for the singular part of a bilinear pencil does not apply, as the proof
-% of Prop.~\ref{prop:kronecker1} above requires that~$2 ≠ 0$;
-quadratic
-forms over a local algebra behave differently~\cite[§93]{omeara};
-finally, extending from bilinear to quadratic forms requires a study of
-the action of a symplectic group on the diagonal coefficients, and this
-group becomes quite impractical in the non-cyclic case.
-
-On the other hand, studying the general problem with $m ≥ 3$~quadratic
-equations departs from the classic results about pencils of quadratic
-forms; therefore, fewer tools are available. Even in the regular
-case, our work heavily uses the factorization of the characteristic
-polynomial. An analogous strategy for~$m ≥ 3$ would require a detailed
+more than two equations.
+This would depart from the classic results about bilinear pencils;
+therefore, fewer tools are available.
+Even in the regular case, our work heavily uses the factorization of
+the characteristic polynomial.
+An analogous strategy for~$m ≥ 3$ would require a detailed
 geometric study of the hypersurface defined by this characteristic
 polynomial.
 
@@ -2832,4 +2591,277 @@ polynomial.
 % 
 % \fi
 % 
+
+%>>>1
+\appendix
+\section{Comparison to the ``polar decomposition'' algorithm.}
+\label{ap:polar}
+
+Berthomieu, Faugère and Perret suggested~\cite{DBLP:journals/corr/BerthomieuFP13}
+solving the IP1S problem with a ``polar decomposition'' algorithm,
+inspired by real analysis techniques.
+
+Given two families of polynomials over a field~$k$,
+they give a solution to the IP1S problem
+over a tower~$k'$ of real quadratic extensions of~$k$
+(where a \emph{real quadratic extension} is obtained by
+adjoining the square root of a sum of squares).
+This solves the IP1S problem over the original field~$k$ only when
+$k$~is \emph{Euclidean}, \emph{i.e.} has no real quadratic extension.
+This is the case for example if $k$~is a closed real field such as~$ℝ$
+or the field~$ℝ_{\mathrm{alg}}$ of real algebraic numbers,
+or an algebraically closed field;
+however, since any quadratic extension of a finite field is real,
+no finite field is Euclidean.
+
+We found a number of flaws in the ``polar decomposition'' algorithm,
+which we detail below.
+
+% Over the
+% original field, this solves the \emph{decisional} IP1S problem:
+% determining whether two families of polynomials are isomorphic. This
+% latter problem does not have many cryptographic applications.
+
+\subsection{Matrix square roots.}
+
+Let~$B$ be an invertible symmetric matrix.
+We recall that the $B$-adjoint of a matrix~$M$
+is~$M^{⋆} = B^{-1} · \transpose{M} · B$.
+The ``polar decomposition'' algorithm makes the two following claims.
+\begin{enumerate}
+\item[(A)] Let~$Y$ be a regular matrix commuting with both~$H$ and~$H^{⋆}$.
+Then the matrix~$Z = B· Y · \transpose{Y} · B^{-1}$ has a square root~$W$.
+\item[(B)] Define $X = Y · W^{-1}$.
+Then $X$~is a solution to the IP1S problem : $H· X = X · H$ and~$X^{⋆} · X = 1$.
+\end{enumerate}
+In the IP1S case, $H$~is the matrix of the characteristic
+endomorphism~$B^{-1} A$.
+This provides us with the extra hypothesis that, since $A$~is symmetric,
+$H^{⋆} = H$; this hypothesis is not used
+in~\cite{DBLP:journals/corr/BerthomieuFP13}.
+
+% We note that the authors of~\cite{DBLP:journals/corr/BerthomieuFP13}
+% further assume that $B$~is diagonal (they show that the general case is
+% reducible to this one).
+
+\medskip
+We give here counter-examples to both claims above,
+over (almost) any finite field with odd characteristic,
+and under the hypothesis~$H^{⋆} = H$.
+
+For claim (A), let~$d$ be a non-square element of~$k$.
+Since $k$~is finite, there exist~$u, v ∈ k$ such that~$d = u^2 + v^2$.
+Let~$t ∈ k ∖ \acco {0, 1, -1}$ and define
+\[ B = \mat{t & 0 \\ 0 & 1}, \quad
+H = \mat{0 & 1 \\ t & -\frac{u}{v}(t+1)}. \]
+We then see that~$H^{⋆} = H$ and that
+the matrix~$Y = \mat{u & v \\ t v & -t u}$ commutes with~$H$.
+However, we easily check that
+$Z = B · Y · \transpose{Y} · B^{-1} = \mat{d & 0 \\ 0 & t^2 d}$~has no square
+root.
+
+Since the only hypothesis on~$d$ is that it is a sum of squares,
+this counterexample shows that the ``polar decomposition'' algorithm
+requires a (tower of) \emph{real quadratic extensions} of the base field,
+where a real quadratic extension is obtained by adjoining
+the square root of a sum of squares.
+The fields having no non-trivial real quadratic extensions
+are the \emph{Euclidean fields};
+this includes quadratically closed fields
+and real closed fields such as~$ℝ$ or~$\overline{ℚ} ∩ ℝ$,
+but since any element in a finite field is a sum of (two) squares,
+no finite field is Euclidean.
+
+\medskip
+
+For claim B, let~$d$ be any element of~$k$ and again write~$d = u^2 + v^2$.
+We modify the previous example by setting~$t = -1$: let
+\[ B = \mat{-1 & 0 \\ 0 & 1}, \quad
+H = \mat{0 & 1 \\ -1 & 0}. \]
+We again have $H^{⋆} = H$, and $Y = \mat{u & v\\-v & u}$~commutes
+with~$H$.
+However, $Z = B · Y · \transpose{Y} · B^{-1} = \mat{d & 0 \\ 0 & d} = W^2$
+where $W = \mat{0 & d \\ 1 & 0}$ (or any of its conjugates).
+We now easily check that
+$X = Y · W^{-1}$~is not a solution of the IP1S problem.
+
+In the real case, the ``polar decomposition'' method computes the
+square root of the matrix~$Z$ by analytic interpolation on its spectrum;
+this root then belongs to the algebra~$k[Z]$
+and therefore commutes with any matrix commuting with~$Z$.
+In the case above, since $Z = d · 1_{2}$ with~$d = u^2 + v^2 ≥ 0$,
+the analytic interpolation will compute one of the roots~$±√{d} · 1_2$.
+The square root~$W$ we give above does not belong to the algebra~$k[Z]$,
+thus making this method fail.
+
+
+\subsection{Singular pencils.}
+\todo{ils ont raté aussi les modules de Kronecker}
+
+
+\subsection{Decisional IP1S and extensions of scalars.}
+
+The solution of IP1S over an extension field
+in~\cite{DBLP:journals/corr/BerthomieuFP13} raises the following
+question: given two pencils defined over a field~$k$
+and IP1S-equivalent over an extension~$k'$ of~$k$, are they always
+equivalent over the base field~$k$?
+
+The structure given by theorem~\ref{thm:IP1S}
+gives a simple, negative answer to this question.
+Since the Kronecker blocks are invariant by extension of scalars,
+the problem is determined by the regular pencils.
+In this case, two pencils are $k$-equivalent
+if and only if, for all primary factors~$R =k[λ]/p(λ)^e$,
+the corresponding $R$-bilinear forms are equivalent.
+% For any irreducible polynomial~$f$ factoring over~$k'$ as~$f = ∏ f_i$,
+% we have $L_{f,ℓ,u} ⊗_{k} k' = ∏ L_{f_i, ℓ, u'_i}$,
+% where $u'_i$~is the image of~$u$
+% by the projection map~$k[x]/f(x) → k'[x]/f_i(x)$.
+% This implies that $\bm{a}$ and~$\bm{b}$ are equivalent over~$k$
+% if and only if, for all irreducible factors~$f$, they have the same value
+% $u_{(f, ℓ)} (\bm{a}) = u_{(f, ℓ)} (\bm{b}) ∈ K_f^{×}/(K_f^{×})^2$,
+% where $K_f = k[x]/f(x)$~is the extension of~$k$ generated by~$f$.
+% Since the norm map defines
+% an isomorphism~$K_f^{×}/(K_f^{×})^{2} → k^{×} / (k^{×})^2$,
+% this condition is equivalent to: $\bm{a}$ and~$\bm{b}$ have the same
+% characters~$χ_{f,ℓ} (\bm{a}) = N_{K_f/k} (u_{(f,ℓ)} (\bm{a}))$.
+
+% For an irreducible polynomial~$f$, we have
+% \begin{equation}\label{local-extension}
+% L_{f,ℓ,u} ⊗_{k} k' = %\begin{cases}
+% %L_{p,d,u'},&\text{if $p$~is irreducible over~$k'$;}\\
+% ⨁ L_{f_i, ℓ,u'}, %&
+% \text{if $f$~splits as~$∏_i f_i$ over~$k'$,}
+% %\end{cases}
+% \end{equation}
+% where $u'$~is the image in~$k'^{×}/(k'^{×})^2$ of~$u$. The
+% map~$k^{×}/(k^{×})^2 → k'^{×}/(k'^{×})^2$ is bijective when $[k':k]$~is
+% odd and zero when it is even. From this we deduce:
+% 
+% \begin{prop}\label{prop:IP1S-extension}
+% Let~$\bm{a}, \bm{b}$ be two pencils which are IP1S-equivalent over a
+% field extension~$k'$ of the finite field~$k$.
+% \begin{enumerate}
+% \item If the degree~$[k':k]$~is odd, then $\bm{a}$ and~$\bm{b}$ are
+% equivalent over~$k$.
+% \item If the degree~$[k':k]$~is even, them $\bm{a}$ and~$\bm{b}$ are
+% equivalent over~$k$ iff, for all local factors~$L_{f,ℓ,u}$, they have the
+% same value~$u(f,ℓ) ∈ k^{×}/(k^{×})^2$.
+% \end{enumerate}
+% \end{prop}
+
+% In particular, when $k → k'$~has even degree,
+% solving the IP1S problem over~$k'$
+% does not, in general, solve the decisional form of IP1S over~$k$.
+For example, let~$a ∈ k$ and define the two-dimensional
+quadratic pencils~$(A,B) = (2 x y, x^2 + a y^2)$
+and~$(A', B') = (x^2 + y^2/a, 2 x y)$.
+These two pencils are equivalent only over any extension of~$k$
+containing a root of the equation~$x^4 + 4 a = 0$.
+% Although this fact is easy to check by hand,
+% we also provide an interpretation using our work.
+% The characteristic endomorphism of~$\bm{b}$ is
+% \begin{equation*}
+% c = -\mat{0&1\\1&0}^{-1} · \mat{1&0\\0&a} \;=\; \mat{0 & -a\\-1 & 0};
+% \end{equation*}
+% its characteristic polynomial is~$x^2 - a$.
+% Let~$R = k[c]$.
+% The space~$V = k^2$ is cyclic as a $R$-module and generated by the
+% vector~$e = \def\arraystretch{.5}\mat{1\\0}$,
+% with~$c · e = \def\arraystretch{.5}\mat{0\\-1}$.
+% Since $R$~is a separable $k$-algebra,
+% we may apply Prop.~\ref{prop:trace-form} even when it is not a field.
+% Let~$b_R = (x, y) ↦ b_R x y$ be the lift of~$b_{∞}$ to~$R$; then
+% \begin{equation}
+% \Tr_{R/k} b_R = b_{∞} (e, e) = 0
+% \quad\text{and}\quad
+% \Tr_{R/k} (c b_R) = b_{∞} (e, c·e) = -1,
+% \end{equation}
+% which means that~$b_R = -\frac{1}{2 a} c$.
+% 
+% The same computations for the pencil~$\bm{b'}$
+% yield~$k[c'] ≃ k[c]$ and~$b'_R = \frac{1}{2}$.
+% Therefore, the pencils~$\bm{b}$ and~$\bm{b'}$
+% are isomorphic exactly over the extensions~$k'$ of~$k$
+% where $b'_R/b_R = -c$~is a square.
+% When writing~$-c = (u/2 + v c)^{2}$,
+% this means that $u^4 + 4 a = 0$ as above.
+% Depending on the precise value of~$a$, the pencils~$\bm{b}$ and~$\bm{b'}$
+% may become isomorphic over an extension of degree~$1$, $2$ or~$4$ of~$k$.
+% 
+
+
+\section{Classification of $τ$-alternating forms.}
+
+\todo{XXX rappeler que caractéristique 2}
+% Classification by the norm
+Although this is not directly useful for the IP1S problem,
+$τ$-alternating forms have an elegant classification up to congruence.
+For any bilinear form~$b$ on a free $R$-module~$M$, we define the
+\emph{norm} of~$b$ as the ideal~$\fr{n} b$ of~$R$
+generated by the elements~$b(x, x)$ for~$x ∈ M$.
+
+\begin{prop}\label{prop:eqv-norm}
+Two non-degenerate, $τ$-alternating forms are equivalent if and only
+if they have the same norm.
+\end{prop}
+\begin{proof}
+We show that the bilinear form~$b$ is equivalent to either the form with
+identity matrix, if $\fr n b = R$; or the orthogonal direct sum
+\[ N_a = \mat{a & 1\\1&0} ⟂ \mat{0 & 1\\1&0} ⟂ … ⟂ \mat {0 & 1\\ 1 & 0}, \]
+where $a$~is a generator of~$\fr n b$, if $\fr n b ⊂ π R$.
+We note that, when the dimension of~$V$ is odd, the identity form is
+congruent to the form~$N_1$, since the transformation~$\mat{1&1\\0&1}$
+maps the identity matrix to the form~$\mat{1&1\\1&0}$.
+
+We write~$[u]$ for the one-dimensional form with coefficient~$u$
+and~$H_{v, w}$ for the form with matrix~$\mat{v&1\\1&w}$.
+We also write~$H = H_{0,0}$.
+
+By~\cite[§2]{milnor2}, the $k$-bilinear form~$b_k = b ⊗_R k$ has a
+decomposition~$b_k ≃ [d_1] ⟂ … ⟂ [d_r] ⟂ H^s$, where all~$d_i$ are
+non-zero since $b$~is non-degenerate. We distinguish two cases.
+
+\subparagraph{Case 1: $\fr n b = R$.}
+We first show that the reduced form~$b_k$ is isomorphic, over~$k$, to the
+identity form. Since $\fr n b = R$, the list of~$d_i$ in the above
+decomposition is not empty. Moreover, since the field $k$~is perfect, all
+elements~$d_i$ are squares in~$k$, so that up to a coordinate change we
+may assume that~$d_i = 1$. Finally, we note that the
+matrix~$\mat{1&1&0\\1&0&-1\\1&1&-1}$ is an isomorphism between the
+forms~$[1] ⟂ [1] ⟂ [-1]$ and~$[1] ⟂ H$, so that if $r ≥ 1$ we may cancel
+all the direct factors~$H$ and in this case $b_k$~is isomorphic to the
+bilinear form with identity matrix.
+
+By~\cite[Corollary 3.4]{baeza1978quadratic},
+the diagonalization of~$b_k$ lifts to a diagonalization
+$b ≃ [a_1] ⟂ … ⟂ [a_r]$ over~$R$.
+Since $b$~is $τ$-alternating, all coefficients~$a_i$ are $τ$-alternating.
+If the length of~$R$ is odd, then the set of $τ$-alternating elements of~$R$
+is~$π V(R)$, which contradicts the regularity of~$b$.
+Therefore, the length of~$R$ is even, which means that $a_i ∈ V(R)$ and they are
+therefore squares in~$R$.
+From this we deduce that $b$~is isomorphic to the identity bilinear form.
+
+\subparagraph{Case 2: $\fr n b ⊂ π R$.}
+This means that the form~$b_k$ is alternating, so that~$b_k ≃ H^s$.
+By~\cite[Corollary 3.4]{baeza1978quadratic}, this decomposition again lifts to a
+decomposition $b ≃ H_{u_1, v_1} ⟂ … ⟂ H_{u_s, v_s}$, where all
+coefficients~$u_i, v_i$ are $τ$-alternating.
+
+Let $b = H_{u,v}$ be $τ$-alternating and regular; up to a swap of~$u, v$, we
+may write it as~$H_{u, u a^2}$ for some~$a ∈ R$. Since $b$~is
+regular, $1 + a u ∈ R^{×}$. Therefore, the coordinate
+change $P = \mat{1+a u & a/(1+a u) \\ u & 1/(1+a u)}$ transforms the
+bilinear form~$b$ to~$H_{u, 0}$.
+
+Finally, we note that the bilinear form~$b = H_{u, 0} ⟂ H_{u a^2 u, 0}$ is
+isomorphic to~$H_{v, 0} ⟂ H_{0,0}$ via the coordinate change
+% \begin{equation}
+$\mat{1 & 0 & a & 0\\0&1&0&0\\0&0&1&0\\au & a & 0 & 1}$.
+% \end{equation}
+\end{proof}
+
+
 \end{document}%<<<1
