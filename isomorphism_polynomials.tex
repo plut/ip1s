@@ -46,6 +46,24 @@
 \def\labelenumi{(\roman{enumi})}
 \def\itemref#1{\expandafter\ifx\csname r@#1\endcsname\relax
   {\bfseries ??}\else{\setcounter{enumi}{\ref{#1}}\labelenumi}\fi}
+% Bib aliases
+\makeatletter%<<<
+\def\@citex[#1]#2{\leavevmode
+  \let\@citea\@empty
+  \@cite{\@for\@citeb:=#2\do
+    {\@citea\def\@citea{,\penalty\@m\ }%
+\edef\magic##1{\let##1\expandafter\noexpand\csname bibalias@\@citeb\endcsname}%
+\magic\tmp \ifx\tmp\relax\else \let\@citeb\tmp\fi
+     \edef\@citeb{\expandafter\@firstofone\@citeb\@empty}%
+     \if@filesw\immediate\write\@auxout{\string\citation{\@citeb}}\fi
+     \@ifundefined{b@\@citeb}{\hbox{\reset@font\bfseries ?}%
+       \G@refundefinedtrue
+       \@latex@warning
+         {Citation `\@citeb' on page \thepage \space undefined}}%
+       {\@cite@ofmt{\csname b@\@citeb\endcsname}}}}{#1}}
+\def\bibalias#1#2{\expandafter\def\csname bibalias@#1\endcsname{#2}}
+\makeatother%>>>
+\bibalias{2013bfp}{DBLP:journals/corr/BerthomieuFP13}
 %>>>
 % Misc. math stuff%<<<
 \def\bigperp{\mathop{\vcenter{\hbox{\scalebox{2}{\ensuremath{\perp}}}}}%
@@ -134,8 +152,9 @@ of quadratic forms on $n$~variables,
 we compute two bijective linear maps $(s,t)$ such that
 $\bm{b}=t\circ \bm{a}\circ s$.
 We give an algorithm computing~$s$ and~$t$
-in time complexity~$\Ot(n^6)$ in the worst case,
-and~$\Ot(n^3)$ on average.
+in worst-case time complexity~$\Ot(n^4)$ in odd characteristic
+and~$\Ot(n^6)$ in characteristic two,
+and~$\Ot(n^3)$ on average in all characteristics.
 % 
 % The IP2S problem was introduced in cryptography by Patarin back in 1996.
 % The special case of this problem when $t$ is the identity is called
@@ -216,10 +235,11 @@ the systems~\cite{DBLP:conf/pkc/BouillaguetFFP11}.
 
 \subsection*{Previous work}
 
-The problem of finding a normal form for pairs of symmetric bilinear forms
+The (closely related) problem of finding a normal form
+for pairs of symmetric bilinear forms
 has been studied since the second half of the 19\textsuperscript{th} century.
 The problem depends on both the characteristic of the base field,
-and on the regularity of the pair of quadratic forms
+and on the regularity of the bilinear forms
 (\emph{i.e.} whether one of the forms in the pair is invertible).
 Since bilinear and quadratic pairs over the real numbers occur naturally
 in a large class of physics and optimization problems,
@@ -299,9 +319,11 @@ for $m=2$ over finite fields of any characteristic.
 
 Finally, Berthomieu, Faugère and Perret
 proposed in 2014~\cite{DBLP:journals/corr/BerthomieuFP13}
-a polynomial algorithm for IP1S with any number of equations when~$2 ≠ 0$,
+a polynomial algorithm for the regular instances of IP1S
+with any number of equations when~$2 ≠ 0$,
 inspired by the characteristic-zero methods.
 We evaluate their algorithm in Appendix~\ref{ap:polar}.
+
 % Given two families of polynomials over a field~$k$,
 % they give a solution to the IP1S problem
 % over a tower~$k'$ of real quadratic extensions of~$k$
@@ -322,6 +344,11 @@ We evaluate their algorithm in Appendix~\ref{ap:polar}.
 
 \subsection*{Our contributions}
 
+These previous works left open the case of singular pencils,
+as well as the characteristic-two case
+and the IP2S problem.
+We give here a solution to these three problems.
+
 We first review the mathematical theory behind pairs of \emph{bilinear} forms,
 adding an algorithmic point of view to the classic theorems.
 % Since this is a solved problem, we have been able to omit most proofs in
@@ -330,7 +357,7 @@ adding an algorithmic point of view to the classic theorems.
 % We start by studying the bilinear forms associated to
 % a pair of quadratic forms.
 Such a bilinear pair decomposes canonically as the orthogonal sum of
-a regular and a ``fully singular'' part,
+a regular and a ``totally singular'' part,
 which is itself canonically isomorphic to a sum of standard objects
 called Kronecker modules.
 The regular parts are classified by invariant factors.
@@ -340,10 +367,10 @@ the map from quadratic to bilinear forms is bijective.
 Therefore this theory gives a full classification of quadratic forms.
 In that case, the mathematics of bilinear pairs
 directly translate to a polynomial algorithm for solving the IP1S problem.
-In these first two parts, we follow the previous treatment of
+In this first part, we follow the previous treatment of
 the bilinear case given by Waterhouse~\cite{inventiones1976waterhouse};
 our contributions consist in detailing some algorithms
-as well as clarifying the case of characteristic~two.
+as well as clarifying the status of characteristic~two.
 
 We then cover the case of characteristic two.
 We use elementary transformations of the quadratic forms
@@ -355,7 +382,7 @@ for solving algebraic systems.
 % if its characteristic polynomial $\det (b_{∞} - x b_{0})$ is not zero,
 % and \emph{singular} otherwise.
 % Any bilinear pencil decomposes canonically as the sum of a regular
-% and a ``fully singular'' pencil.
+% and a ``totally singular'' pencil.
 % Regular pencils arer classified by invariant factors,
 % and singular pencils are classified by 
 % XXX
@@ -405,8 +432,8 @@ in the two-secret IP2S problem.
 % This is done using the factorization of the characteristic polynomial.
 
 \subsection*{Mathematical background and notations}
-Throughout this document, $k$~is a finite field.
-Let~$V$ be a $n$-dimensional vector space over the field~$k$.
+Throughout this document, $k$~is a finite field
+and $V$~is a $n$-dimensional vector space over~$k$.
 We study the IP1S and IP2S problems for \emph{quadratic forms} on~$V$,
 which are homogeneous polynomials of degree~$2$ in coordinates on~$V$.
 To a quadratic form~$q$,
@@ -533,16 +560,16 @@ thus, matrix inversion has a cost of~$O(n^3)$,
 and polynomial multiplication has a cost of~$O(n^2)$.
 
 %>>>1
-\section{The Kronecker decomposition of polar pencils}
+\section{A review of results on bilinear pencils}
+\label{s:bilinear}
+\subsection{The Kronecker decomposition}
 
-In this section, we review the mathematical theory
-of symmetric bilinear pencils.
 
 For any integer~$h ≥ 0$, we define the \emph{Kronecker module}
 of degree~$h$ as the vector space~$k^{2h+1}$
 equipped with the bilinear pencil with matrix
 \begin{equation}\label{eq:def-K}
-{\def\arraystretch{.9}
+{\def\arraystretch{.8}
 A - λ B = K_{h} = \mat{0&K'_{h}\\\transpose{K'_{h}}&0},
 \quad \text{where}\quad
 K'_h = \mat{-λ&&0\\1&\sddots{-λ}&\\&\sddots{-λ}&-λ\\0&&1}}.
@@ -552,22 +579,17 @@ This is a singular symmetric bilinear pencil.
 We know~\cite[§3]{inventiones1976waterhouse}
 that any pencil has a unique \emph{Kronecker decomposition},
 that is, as an orthogonal sum of a regular pencil and of Kronecker modules.
-Moreover, the multiplicities of the Kronecker modules in this
+Moreover, the multiplicity of each Kronecker module~$K_h$ in this
 decomposition are also unique.
 
 \begin{prop}\label{prop:kronecker-decomposition}
 Let~$(A, B)$ be a symmetric bilinear pencil on~$k^n$.
 Further assume that either~$2 ≠ 0$ in~$k$,
 or that both $A$~and~$B$ are alternating.
-There exist an algorithm computing the Kronecker decomposition
-of the pencil~$(A, B)$ with complexity~$O(h\, n^3)$,
+There exists a polynomial algorithm computing the Kronecker decomposition
+of the pencil~$(A, B)$.
 where $h$~is the maximal degree of a Kronecker module factor of the pencil.
 \end{prop}
-
-Since~$2h+1 ≤ n$, this algorithm has a worst-case complexity of~$O(n^4)$,
-and, given that a generic bilinear pencil is regular,
-an average-case complexity of~$O(n^3)$.
-
 \begin{proof}[of Proposition~\ref{prop:kronecker-decomposition}]
 The proof of the Kronecker decomposition published
 by Waterhouse in 1976~\cite[Theorem 3.1]{inventiones1976waterhouse}
@@ -578,72 +600,19 @@ involve halving some diagonal coefficients~$A(x,x)$ and~$B(x,x)$,
 and it is therefore still valid in characteristic two
 if we assume that $A$~and~$B$ are alternating.
 
-\medbreak
-
 The 1976 algorithm begins by computing (a Hermite normal form of)
 the kernel of the matrix~$A - λ B$,
 with coefficients in the polynomial ring~$k[λ]$.
 Since the maximum degree appearing in the coefficients is~$n$,
 and assuming that school-book multiplication is used in~$k[λ]$,
 this requires at most~$O(n^5)$~operations in the field~$k$.
-
-The kernel of~$A - λ B$, as a $k[λ]$-module,
-is equipped by an increasing filtration by polynomial degrees,
-and in its decomposition as a sum of Kronecker modules~$⨁ K_h^{e_h}$,
-this filtration corresponds to the filtration by the increasing
-indexes~$h$.
-We show here that it is possible to compute this filtration
-with at most $O(n^4)$ operations.
-
-\medbreak
-
-We consider the lower echelon form
-of the concatenated $n × (2n)$-matrix $(B A)$, written as
-\begin{equation}
-(B \; A) \;=\; U · \mat{C & 0 \\ M & A'},
-% (B_{∞} \; B_0) \;=\; (⋆) · \mat{A_{∞} & 0\\ C & A_0},
-\end{equation}
-where $U$~is an invertible matrix of size~$n$
-and $0$~is a $r × n$-block, with $r$~being the largest possible value.
-This implies that $C'$~has rank~$n-r$ and hence that
-there exists~$F$ such that~$M = A' F$.
-Moreover, since $\smat{0\\A'} = U A$, we have~$\Ker A' = \Ker A$.
-From this we deduce that
-\begin{equation}
-B x - A y \;=\; 0 \quad ⇔ \quad
-  \begin{cases} C x = 0 \\ A (y - F x) = 0.\end{cases}
-\end{equation}
-Likewise, the upper echelon form of $(A\;B)$
-gives matrices $D$ and~$G$ such that
-$B x - A y = 0 ⇔ (D y = 0, B (x - G y) = 0)$.
-We also define an increasing sequence~$(E_h)$ of subspaces of~$V$
-by~$E_0 = \Ker B$, $E_{h+1} = (\Ker B) + G(E_h)$.
-Then $E_h$ is exactly the set of elements~$x ∈ V$ such that there exists
-a sequence~$x_0 = x, …, x_h$ satisfying $B x_i = A x_{i+1}$ for all~$i$
-and~$B x_h = 0$.
-Moreover, such a sequence is determined by the choices
-of~$x_0 ∈ E_h$ and~$x_{i} ∈ F(x_{i-1}) + (\Ker B)$ for all~$i ≥ 1$.
-
-We now see that the elements~$x_0 + x_1 λ + … + x_h λ^h$
-of degree~$h$ of~$\Ker(A - λ B)$
-are determined by the relations~$x_0 ∈ E_{h} ∩ (\Ker A)$
-and~$x_{i+1} - F (x_i) ∈ (\Ker B)$.
-Since the filtration of~$(\Ker A)$ by~$E_{h} ∩ (\Ker A)$
-has at most $n$~steps, we can compute it with at most~$O(n^4)$ operations.
-
-Once this filtration is computed,
-all remaining steps of the 1976 algorithm use only linear algebra in~$k^n$,
-with a total cost of at most~$O(n^3)$ operations.
 \end{proof}
 
-Over the real and complex numbers,
-there exist cubic algorithms computing the Kronecker decomposition
-of pencils of linear maps~\cite{beelen1988improved}.
-These algorithms use real rotations and floating-point arithmetic
-and are therefore not applicable to exact arithmetic.
-We do not know whether there also exists cubic algorithms
-computing the Kronecker decomposition over finite fields.
-
+We give in Appendix~\ref{ap:kronecker} an algorithm
+with complexity~$O((h+1)\,n^3)$.
+Since~$2h+1 ≤ n$, this algorithm has a worst-case complexity of~$O(n^4)$,
+and, given that a generic bilinear pencil is regular,
+an average-case complexity of~$O(n^3)$.
 
 % Let~$h$ be the smallest degree such that $E_{h} ∩ (\Ker A)$ is not zero.%<<<
 % By \cite[Lemma 3.2]{inventiones1976waterhouse}, we know that
@@ -725,228 +694,7 @@ computing the Kronecker decomposition over finite fields.
 % this basis on the quotient~$V/K$ to directly obtain a (sorted) basis of
 % the isotropic vectors of~$V/K$.
 %%>>>
-% \section{The singular part of bilinear pencils}%<<<1
-% \label{S:bil-sing}
-% \subsection{Regular and singular pencils}%<<<2
-% Let~$b = (b_{λ})$ be a bilinear pencil over the space~$V$. The
-% \emph{characteristic polynomial} of the symmetric pencil~$(b_{λ})$ is
-% either the polynomial~$f(λ) = \det (λ b_{∞} + b_{0})$, or its homogeneous
-% form~$f(λ: μ) = \det (λ b_{∞} + μ b_{0})$. If $\dim_{k} V = n$, then
-% $f(λ: μ)$~is homogeneous of degree~$n$ (and possibly zero).
-% The pencil~$(b_{λ})$ is called \emph{regular}
-% if the characteristic polynomial is not zero,
-% and \emph{singular} otherwise.
-% We solve the isomorphism problem for regular
-% pencils in section~\ref{S:bil-regular} below.
-% 
-% In this section, we reduce to the regular case by proving that
-% the singular part of a symmetric pencil is reducible to
-% the canonical form of Kronecker.
-% This form is described in the tome of Gantmacher~\cite[XII(56)]{Gantmacher};
-% however, the proof given there only applies to pencils over~$ℂ$,
-% as it uses the computation of square roots of matrices
-% via analytic interpolation on the spectrum.
-% We give here an algorithmic proof that applies to any field~$k$.
-% This proof is also true in characteristic two for alternating pencils,
-% which is the case for the polar of a quadratic pencil.
-% 
-% \subsection{The Kronecker decomposition} %<<<2
-% \label{SS:Kronecker-reduction}
-% % Définition: indice minimal%<<<
-% The pencil~$(b_{λ})$ defines a symmetric $k[λ]$-bilinear form on the
-% module~$V_{λ} = V ⊗_{k} k[λ]$; if $(b_{λ})$~is singular, then this form
-% has a non-trivial kernel~$W$. Elements of~$W$ are called \emph{isotropic}
-% for~$(b_{λ})$. An element~$e = e_0 + λ e_1 + … + λ^h e_h$ is isotropic iff
-% \begin{equation}\label{eq:isotropic}
-% b_0 e_0 = 0, \qquad
-% b_0 e_1 + b_{∞} e_0 = 0, \quad … \quad
-% b_0 e_h + b_{∞} e_{h-1} = 0, \qquad
-% b_{∞} e_{h} = 0.
-% \end{equation}
-% A \emph{minimal isotropic vector} for~$(b_{λ})$ is one with minimal
-% degree~$h$; this degree is the \emph{minimal index} of~$(b_{λ})$. If
-% $(b_{λ})$~is regular, then the minimal index is~$+∞$.
-% By choosing a basis of~$W$ adapted to
-% the filtration of~$V_{λ}$ by the degree of polynomials,
-% we see that $W$~has a basis~$(w_1, …,w_r)$ such that,
-% if $h_i$~is the degree of the isotropic vector~$w_i$,
-% then $w_i, …,w_r$~generate no isotropic vector of degree~$< h_i$.
-% The degrees~$h_i$, with their multiplicity,
-% are called the \emph{minimal indices} of the pencil~$(b_{λ})$.
-% %>>>
-% \begin{prop}\label{prop:minimal-indep}%<<<
-% Let~$e = ∑ λ^i e_i$ be a minimal isotropic vector for~$(b_{λ})$. Then
-% \begin{enumerate}
-% \item The~$h+1$ vectors~$e_0, …, e_h$ are $k$-linearly independent.
-% \item The~$h$ linear forms~$b_{0} e_1, …, b_{0} e_h$ are $k$-linearly
-% independent.
-% \item For all~$i, j$, $b_{0}(e_i, e_j) = b_{∞}(e_i, e_j) = 0$.
-% \end{enumerate}
-% \end{prop}%>>>
-% 
-% \begin{proof}%<<<
-% We first prove~(ii). Assume that there exists a non-trivial linear
-% relation~$α_1 b_0 e_1 + … + α_h b_0 e_{h} = 0$ and define
-% vectors~$e'_0,…,e'_{h-1}$ by $e'_i = α_{h-i} e_0 + … + α_{h} e_i$. These
-% vectors satisfy the relations
-% \begin{equation}\label{eq:relation-e'}
-% \begin{split}
-% b_0 e'_0 &= α_h b_0 e_0 = 0, \\
-% b_0 e'_{i+1} + b_{∞} e'_i
-%   &= b_0 (α_{h-i} e_1 + … + α_h e_{i+1})
-%   + b_{∞} (α_{h-i} e_0 + … + α_h e_i) = 0, \\
-% b_{∞} e'_{h-1} &= b_{∞} (α_1 e_{0} + … + α_{h} e_{h-1}) \\
-%  &= -b_{0} (α_1 e_{1} + … + α_{h} e_{h}) \\
-%  &= 0.
-% \end{split}
-% \end{equation}
-% This means that~$(e'_0+…+λ^{h-1} e'_{h-1})$ is isotropic and of degree~$≤
-% h-1$ for~$b_{λ}$, which contradicts the minimality of~$e$.
-% 
-% To prove~(i), let~$α_0 e_0 + … + α_h e_h = 0$ be a non-trivial linear
-% relation. Then since $α_1 b_0(e_1) + … + α_h b_0(e_h) = 0$, by~(ii) we
-% must have~$α_1 = … = α_h = 0$, which in turn implies~$e_0 = 0$. However,
-% in this case we see that~$e_1+…+ λ^{h-1} e_h$ is isotropic of degree~$≤
-% h-1$.
-% 
-% We now prove~(iii). For all~$i, j$, note that we have
-% \begin{equation}\label{eq:zero-bij}
-% b_{∞}(e_i,e_j) = -b_0(e_i, e_{j+1}) = -b_0(e_{j+1}, e_i) =
-%   b_{∞} (e_{j+1}, e_{i-1}) = b_{∞} (e_{i-1}, e_{j+1}).
-% \end{equation}
-% From this and the fact that~$b_{∞} (e_i, e_h) = b_{∞} (e_h, e_i) = 0$
-% and~$b_0 (e_i, e_0) = b_0 (e_0, e_i) = 0$, we deduce that for all~$0 ≤
-% i,j ≤ h$, we have~$b_{∞} (e_i, e_j) = b_0 (e_i, e_j) = 0$.
-% \end{proof}%>>>
-% %>>>
-% 
-% A \emph{Kronecker module} is a vector space~$V$ with a symmetric
-% pencil~$(b_{λ})$ such that the coordinates~$e_i$ of a minimal isotropic
-% vector~$∑ λ^i e_i$ span a space~$E$ satisfying~$E = E^{⟂}$.
-% 
-% \begin{prop}\label{prop:kronecker-split}%<<<
-% Let~$(b_{λ})$ be a symmetric pencil with minimal isotropic vector~$e =
-% e_0 + … + λ^h e_h$. Then $V$~has, as an orthogonal direct factor,
-% a Kronecker module~$K_E$ containing the vectors~$e_i$.
-% \end{prop}%>>>
-% 
-% \begin{proof}%<<<
-% Let $E ⊂ V$~be the subspace spanned by the vectors~$e_i$ and~$E^{⟂}$ be
-% its orthogonal. Prop.~\ref{prop:minimal-indep} shows that
-% $\dim E = h+1$, 
-% $\dim V/E^{⟂} = h$, %ce point n'est pas immédiat pour moi. Gilles
-%  and~$E ⊂ E^{⟂}$. We show
-% that~$E^{⟂}/E$~is an orthogonal direct factor of~$V$; its orthogonal
-% supplement will be the required Kronecker module.
-% \begin{equation}\label{eq:diagram}
-% \xymatrix@R-=3ex{
-% E\ar[r]\ar@{=}[d] \ar@<1ex>@/^/@{<.}[r]^{u} & E^{⟂}\ar[r]\ar[d]
-%   & E^{⟂}/E \ar[d] \\
-% E\ar[r] & V\ar[r]\ar[d] & V/E\ar[d]\\
-%  & V/E^{⟂} \ar@{=}[r] \ar@<1ex>@/^/@{.>}[u]^{v} & V/E^{⟂} \\
-% }\end{equation}
-% A split extension~$0 → K_E → V → E^{⟂}/E → 0$ is given by a
-% retraction~$u$ of the injection~$E ↪ E^{⟂}$ and a section~$v$ of the
-% projection~$V → V/E^{⟂}$; this extension is orthogonal if, for
-% all~$x ∈ E^{⟂}, y ∈ V/E^{⟂}$, $(x-u(x)) ⟂ v(y)$.
-% 
-% Write~$u(x) = ∑ u_i(x) e_i$ where~$u_0,…,u_h ∈ (E^{⟂})^{∨}$ and let the
-% section~$v$ be defined by elements~$v_1,…,v_h ∈ V$ such that~$b_0(e_i,
-% v_j) = 1$ if~$i = j$ and~$0$ otherwise.
-% The orthogonality condition then becomes
-% \begin{equation}\label{eq:orth2}
-% b_0 (v_j,x) = u_j(x), \quad b_{∞} (v_j,x) = -u_{j-1}(x), \qquad
-% \text{for all~$x ∈ E^{⟂}$, $j = 1,…,h$.}
-% % \text{(as elements of~$(E^{⟂})^{∨}$) for~$i=1,…,d$.}
-% \end{equation}
-% These relations uniquely determine~$u_0$ and~$u_h$, and
-% solutions~$(u_1,…,u_{h-1})$ exist iff the values~$v_i$ also satisfy the
-% relations~$b_{0} (v_{j},x) = -b_{∞} (v_{j+1},x)$ for~$j = 1,…,h-1$ and~$x
-% ∈ E^{⟂}$.
-% 
-% Define a map~$∂_h: (E^{⟂})^h → ((E^{⟂})^{∨})^{h-1}$ by
-% \begin{equation} \label{eq:deriv-surj}
-% ∂_h (v_1,…,v_h) = (b_{0}(v_1) + b_{∞}(v_2),…,b_{0} (v_h) + b_{∞}
-% (v_{h-1})).
-% \end{equation}
-% The elements of the cokernel of~$∂_h$ are exactly the isotropic vectors of
-% degree~$≤ h-1$ in~$E^{⟂}$; since $b$~has minimal index~$≥ h$, the
-% map~$∂_h$ is surjective. This proves that the map $V^h → (V/E^{⟂})^h ⊕
-% ((E^{⟂})^{∨})^{h-1}$ defined by the relations between the~$v_j$ is
-% surjective, and therefore that suitable~$v_j$ exist. This proves the
-% orthogonality of the  decomposition~$V = K_E ⊕ (E^{⟂}/E)$.
-% \end{proof}%>>>
-% 
-% Define matrices~$K'_{h}$ of size~$(h+1) × h$
-% and~$K_{h}$ of size~$(2h+1) × (2h+1)$ by
-% \begin{equation}\label{eq:def-K}
-% {\def\arraystretch{.9}
-% K'_h = \mat{λ&&0\\1&\sddots{λ}&\\&\sddots{λ}&λ\\0&&1}}, \quad
-% K_{h} = \mat{0&K'_{h}\\\transpose{K'_{h}}&0}.
-% \end{equation}
-% 
-% \begin{prop}\label{prop:kronecker-matrix}%<<<
-% Let~$(V, b_{λ})$ be a Kronecker module with minimal index~$h$. Assume
-% that either~$2 ≠ 0$ in~$k$ or that $b$~is alternating. There
-% exists a basis of~$V$ in which the pencil~$(b_{λ})$ has the
-% matrix~$K_{h}$.
-% \end{prop}%>>>
-% 
-% Note in particular that the case~$h = 0$ corresponds to the matrix~$K_0$,
-% which is the zero matrix of size~$1 × 1$, and to a vector belonging to
-% all the kernels of~$b_{λ}$.
-% 
-% \begin{proof}%<<<
-% Let~$e_0 + … + λ^{h} e_h$ be a minimal isotropic vector for~$(b_{λ})$ and
-% $E$~be the span of the~$e_i$; we need to prove that $E$~has a supplement
-% which is self-orthogonal for the pencil~$(b_{λ})$. Such a supplement
-% corresponds to a retraction~$w$ of~$V ↪ E$ such that, for all~$x,y ∈ V$,
-% $(x - w(x)) ⟂ (y-w(y))$; given that~$E ⟂ E$, this amounts to
-% \begin{equation}\label{eq:kro-self-orth}
-% b_{λ} (x, y) = b_{λ} (x, w(y)) + b_{λ} (w(x), y)
-% \quad \text{for all~$λ$ and for $x,y ∈ V$.}
-% \end{equation}
-% A basis of~$V/E^{⟂}$ is given by vectors~$f_1,…,f_d ∈ V$ such that
-% $b_0(e_i, f_j) = 1$ if~$i = j$ and $0$~otherwise. Since $E = E^{⟂}$, the
-% family~$e_0,…,e_h;f_1,…,f_h$ is a basis of~$V$. Write~$w(f_j) = ∑ w_{ij}
-% e_i$. The equations~\eqref{eq:kro-self-orth} then amount to
-% \begin{equation}\label{eq:wij}
-% w_{i,j} + w_{j,i} = b_{0} (f_i, f_j);\quad
-% w_{i-1,j} + w_{j-1,i} = -b_{∞} (f_i, f_j).
-% \end{equation}
-% If~$2 ≠ 0$ in~$k$, then this defines the values~$w_{i,i} = \frac{1}{2} b_{0} (f_i, f_i)$
-% and~$w_{i-1,i} = -\frac{1}{2} b_{∞} (f_i, f_i)$; else if $b$~is
-% alternating, then $w_{i,i}$ and~$w_{i-1, i}$ may take any value in~$k$.
-% All the other coefficients~$w_{i,j}$ then follow from the
-% relation~$w_{i,j} - w_{i-1,j+1} = b_{0} (f_i, f_j) + b_{∞} (f_i,
-% f_{j+1})$.
-% \end{proof}%>>>
-% 
-% From Props.~\ref{prop:kronecker-split}, \ref{prop:kronecker-matrix} and
-% an induction step on the minimal index of the pencil we deduce the
-% following.
-% 
-% \begin{prop}[Kronecker decomposition]\label{prop:kronecker}%<<<
-% Let~$(b_{λ})$ be a symmetric pencil on~$V$; if $2 = 0$ in~$k$, further
-% assume that $(b_{λ})$~is alternating.
-% 
-% There exists a finite sequence of integers~$(n_h)$ and 
-% an orthogonal isomorphism~$V ≃ ⨁ K_h^{n_h} ⊕ V'$,
-% where $K_h$~is the Kronecker module of index~$h$
-% and the restriction of~$(b_{λ})$ to~$V'$ is regular.
-% % Let~$(b_{λ})$ be a symmetric (or, if $2 = 0$, alternating) pencil on~$V$.
-% % There exists a basis of~$V$ in which the pencil has a block-diagonal
-% % matrix with diagonal blocks~$(K_{h_1}, …, K_{h_r}, B')$, where $K_h$~is
-% % the square matrix of size~$2h+1$ defined by equation~\eqref{eq:def-K},
-% % the integers~$h_1 ≤ … ≤ h_r$ are the minimal indices of~$(b_{λ})$, and
-% % $B'$~is the matrix of a regular pencil.
-% \end{prop}%>>>
-% 
-% We note that this result extends to general fields
-% the classical result over the real numbers~\cite[XII, §4]{Gantmacher}.
-% %>>>
-% %>>>1
-\section{Primary decomposition of regular bilinear pencils}
+\subsection{The primary decomposition of regular bilinear pencils}
 \label{S:bil-regular}
 
 Any regular bilinear pencil~$A - λ B$ is canonically isomorphic to
@@ -971,7 +719,7 @@ local rings~\cite[Proposition~1.2]{inventiones1976waterhouse}.
 
 \bigbreak
 
-For clarity, we give here a result covering all cases.
+For clarity, we state here a result covering all cases.
 \begin{prop}\label{prop:primary-decomposition}
 Let~$A - λ B$ be a symmetric bilinear pencil on~$k^n$.
 \begin{enumerate}
@@ -1013,586 +761,14 @@ we define the summand corresponding to the place at infinity%
 \footnote{This could also be done in a way consistent with the finite places,
 by considering the \emph{homogeneous} characteristic polynomial
 $f(λ: μ) = \det (μ A - λ B)$.
-However, we think that using the inhomogeneous polynomial
-makes a simpler proof, at the cost of this \emph{ad hoc} definition
-for the place at infinity.}
+However, using the inhomogeneous polynomial yields a simpler proof,
+at the cost of this \emph{ad hoc} definition for the place at infinity.}
 of~$k[λ]$ as the summand corresponding to
 the place zero for the pencil~$B - λ A$.
 
-\begin{proof}[of Proposition~\ref{prop:primary-decomposition}]
-Following~\cite[Lemma 4.1]{inventiones1976waterhouse},
-we first decompose the pencil~$A - λ B$ as the orthogonal sum of
-a pencil $A' - λ B'$ such that $B'$~is regular,
-and of the summand corresponding to the place at infinity.
-We note that the information for this decomposition is given
-by the limit~$E_{∞}$ of the increasing sequence of spaces~$(E_{h})$
-already computed by the algorithm of Prop.~\ref{prop:kronecker-decomposition}.
+An algorithm computing this decomposition
+is given in Appendix~\ref{ap:primary}.
 
-We now assume that $B$~is regular and define the endomorphism~$H = B^{-1} A$.
-Then the primary decomposition in~(i) is given by
-the Frobenius rational normal form of~$H$.
-We may compute this normal form, and in particular
-the prime factorization of the characteristic polynomial $\det (A - λ B)$,
-with at most~$\Ot(n^3)$ field operations~\cite{kaltoffen11compute}.
-
-\medbreak
-
-We now prove point~(ii) of the Proposition.
-Without loss of generality, we replace the space~$V$
-by the summand~$V_{p^e}$ associated to~$p(λ)^e$.
-The action of~$H = B^{-1} A$ makes $V$ into a free module over~$R = k[λ]$.
-Since both $B$ and~$A=BC$~are symmetric, for any~$x, y ∈ V$ we have
-\begin{equation}
-B(x, H y) = A(x, y) = A(y, x) = B(y, H x) = B(H x, y).
-\end{equation}
-This implies that, for all~$α ∈ R$, $B(α x, y) = B(x, α y)$.
-Therefore, by Lemmas~\ref{lem:trace-form} and~\ref{lem:trace-local},
-there exists a unique $R$-bilinear form~$B_R$ over~$V$ whose trace is~$B$.
-
-Moreover, we see in the proof of these lemmas
-that computing each coefficient of the matrix of~$B_R$
-requires computing $e$~coefficients in~$K$,
-each of which needs linear algebra in the $k$-vector space~$K$;
-therefore, the total computational cost of this step
-is at most~$O(d^3 · e · m^2) ≤ O(n^3)$,
-where $d$~is the degree of~$p$ and $m$~is the $R$-rank of~$V$.
-
-\medbreak
-
-We conclude the proof by reducing the $R$-bilinear form~$B_R$
-to a canonical form.
-This result is already known over
-a finite field of odd characteristic~\cite[IV(1.5)]{milnorhusemoller},
-and lifts via Hensel's lemma to the ring~$R$.
-By the Gram orthogonalization algorithm~\cite[I(3.4)]{milnorhusemoller},
-$B_R$~is congruent to a bilinear form with diagonal
-matrix~$B_R = \mathrm{diag} (b_1, …, b_n)$.
-Since the field~$k$ has odd characteristic,
-$x^2$~is a separable polynomial over~$R$,
-and two applications of Hensel's lemma in the complete ring~$R$ allow
-the following lifts to~$R$ of results in the finite field~$k$:
-\begin{enumerate}
-\item[(a)] let~$δ$ be a non-square element of~$k[λ]/p(λ)$;
-then for all~$i$, either~$b_i$ or $b_i/δ$ is a square in~$R$;
-\item[(b)] the equation~$u^2 + v^2 = δ$ has a solution with~$u, v ∈ R$.
-\end{enumerate}
-By~(a), we may assume that~$b_i = 1$ or~$b_i = δ$.
-From~(b), we deduce the matrix relation
-\begin{equation}
-\transpose{\mat{u&-v\\v&u}}·\mat{1&0\\0&1}·\mat{u&-v\\v&u} =
-\mat{δ&0\\0&δ}.
-\end{equation}
-This allows canceling all pairs of~$δ$ appearing in the diagonalization
-of~$A$.
-
-The computations needed in this part of the algorithm are
-a Gram orthogonalization of dimension~$m$
-and at most~$O(m)$ Hensel lifts to a ring of length~$e$.
-Therefore, the computational cost is again at most~$O(n^3)$ operations.
-\end{proof}
-
-We now state the two lemmas used in the proof of the proposition.
-Let~$A → B$ be a ring morphism and $M$~be a $B$-module.
-Then $M$~is also a $A$-module.
-We say that a $A$-bilinear form~$b: M ⊗ M → A$ \emph{commutes with~$B$}
-if, for any~$c ∈ B$, we have~$b(cx, y) = b(x, cy)$.
-
-\begin{lem}\label{lem:trace-form}
-Let~$K/k$ be a separable field extension,
-and~$V$ be a finite-dimensional vector space over~$K$.
-
-For any $k$-bilinear form~$b: V ⊗ V → k$ commuting with~$K$, there
-exists a unique $K$-bilinear form~$b_K: V ⊗ V → K$ such that~$b =
-\Tr_{K/k} \,∘ \,b_K$.
-\end{lem}
-
-\begin{proof}
-By choosing a $K$-basis of~$V$ and noticing that
-all coordinates of a bilinear form are themselves bilinear forms,
-we may assume that~$V = K$.
-
-In that case, the result is classical. We recall the proof here.
-Let~$z$ be a primitive element of~$K$ and write $d = [K:k]$.
-Since~$K/k$ is separable, the trace form is
-non-degenerate~\cite[VI~5.2]{lang-algebra}
-and there exists a unique element~$a ∈ K$ such that
-$\Tr (a z^i) = b(1, z^i)$ for all~$i=0, …, d-1$.
-We immadiately see that, for all~$x, y ∈ k$, $\Tr (a x y) = b(x, y)$.
-
-\end{proof}
-
-
-Let~$K$ be a field and $R$~be the local ring~$R = k[π]/π^e$.
-Define the $K$-linear map~$τ: R → K$ by~$τ(∑ x_i π^i) = x_{e-1}$.
-Then $(x, y) ↦ τ(xy)$ is a $K$-bilinear map on~$R$,
-non-degenerate and commuting with~$R$.
-(It is also a natural choice of an isomorphism
-between $R$ and its dual $k$-vector space).
-
-\begin{lem}\label{lem:trace-local}
-Let~$M, N$ be $R$-modules of finite length.
-For any $k$-bilinear form~$b: M ⊗ N → k$ commuting with~$R$,
-there exists a unique $R$-bilinear form~$b_R: M ⊗ N → R$
-such that~$b = τ ∘ b_R$.
-\end{lem}
-
-Note that we do not demand that $M$, $N$ be \emph{free} as $R$-modules.
-Moreover, the unicity of~$b_R$ shows that both forms~$b$ and~$b_R$ are
-simultaneously symmetric or antisymmetric.
-However, when $k$~is a field of characteristic two, it may happen (as we
-shall see in Section~\ref{S:quad-reg}) that $b$~is alternating whereas
-$b_R$~is not.
-
-\begin{proof}[{of Lemma~\ref{lem:trace-local}}]
-By the structure theorem of modules over a principal ring,
-we have~$M = ⊕ R_{m_i}$ for some finite sequence of integers~$m_i$.
-If the result holds for modules~$(M', N)$ and~$(M'', N)$ then
-it also holds for~$(M' ⊕ M'', N)$.
-Therefore, using induction on the length of both modules,
-we only need to prove the case where~$M = R_m$ and~$N = R_n$ where~$m ≥ n$.
-In this case, since $b$~commutes with~$k[π]$,
-we see that for~$x = ∑ x_i π^i$, $y = ∑ y_i π^i$:
-\begin{equation}
-b(x,y) \;=\; ∑_{i,j} x_i y_j\: b(1, π^{i+j})
-  \;=\; ∑_{i+j+r = m-1} x_i y_j\: b(1, π^{m-1-r}).
-\end{equation}
-Let~$a = ∑ b(1, π^{i}) π^{m-1-i}$. Since $b(1, π^{r}) = 0$ for all~$r ≥
-n$, $a$~belongs to the ideal~$π^{m-n} R_m = \Hom_R (R_n, R_m)$, so that
-the product~$a\,y$ is well-defined in~$R_m$. The bilinear form~$b_R$ is
-finally the form defined by~$b_R(x,y) = a\:x y$.
-\end{proof}
-
-
-% We give here an algorithm for computing an isomorphism between two
-% regular bilinear pencils. Assume that $\bm{b} = (b_{λ})$~is regular,
-% which means that its characteristic polynomial~$f(λ) = \det (b_0 + λ
-% b_{∞})$ is not zero. Then, for any~$λ$ such that~$f(λ) ≠ 0$, the bilinear
-% form~$b_{λ}$ is regular.
-% 
-% \subsection{Localisation of regular pencils}
-% \label{SS:bil-reg-local}
-% 
-% We first prove that we may assume that one of the bilinear
-% forms~$(b_{λ})$ is regular.
-% Note that when $k = \F_q$~is a finite field, it may happen that $λ^q μ -
-% λ μ^q$ divides~$f(λ:μ) ≠ 0$, so that~$f(λ) = 0$ for all~$λ ∈ ℙ^1(k)$. In
-% this case, although $(b_{λ})$~is a regular pencil, all forms~$b_{λ}$ are
-% degenerate. However, the decomposition given by
-% Lemma~\ref{lem:decomp-bezout} below still applies.
-% 
-% We first isolate the subspace where $b_{∞}$~is not regular.
-% If $b_{0}$~is regular, then this is the subspace where
-% the endomorphism~$b_{0}^{-1} b_{∞}$~is nilpotent.
-% To make the proof work in the general case,
-% we replace this endomorphism by the relation~$≻$ below.
-% 
-% \begin{lem}\label{lem:finite}
-% Let~$\bm{b}$ be a symmetric pencil on~$V$. For any two vectors
-% $x,y ∈ V$, we write~$x ≻ y$ if~$b_{∞} x + b_0 y = 0$.
-% \begin{enumerate}
-% \item Let~$W$ be the set of~$x ∈ V$ such that there exists a chain~$x ≻ …
-% ≻ 0$. For all~$y ∈ V$, if $b_0(y, W) = 0$ then $b_{∞}(y, W) = 0$.
-% \item Let~$W'$~be the $b_0$-orthogonal of~$W$. Then $b_0(W') ⊂ b_{∞}
-% (W')$.
-% \end{enumerate}
-% Further assume that $\bm{b}$~is regular; this means that there exists no
-% non-trivial chain~$0 ≻ x_0 ≻ … ≻ x_h ≻ 0$.
-% \begin{enumerate}
-% \setcounter{enumi}{2}
-% \item The space~$V$ decomposes as the orthogonal direct sum~$V = W ⊕ W'$.
-% \item The restriction of~$b_{∞}$ to~$W'$ and the restriction of~$b_{0}$
-% to~$W$ are injective.
-% \end{enumerate}
-% % There exists an
-% % orthogonal direct sum decomposition~$V = W ⊕ W'$ such that $b_{0}$~is
-% % injective on~$W$, and $b_{∞}$~is injective on~$W'$.
-% \end{lem}
-% 
-% \begin{proof}
-% (i) Assume that $b_0(y, W) = 0$ and let~$x_0 ∈ W$,
-% so that there exists a chain~$x_0 ≻ x_1 ≻ … ≻ 0$.
-% Then since $x_1 ∈ W$, we have~$b_{∞} (y, x_0) = -b_0 (y, x_1) = 0$.
-% 
-% (ii) Let~$\chk{V}$ be the dual space of~$V$. The space~$b_{λ}(W')$ is the set
-% of linear forms which are zero on all elements~$x$ such that~$b_{λ} (x,
-% W') = 0$.
-% We have to prove the following: for any vector~$x$, $b_{∞}(x, W') =
-% 0$ implies~$b_0 (x, W') = 0$. The relation~$b_{∞} (x, W') = 0$ means
-% that, for all~$y ∈ V$, $b_0(W, y) = 0$~implies~$b_{∞} (x, y) = 0$; in
-% other words, we have~$b_{∞} (x) ∈ b_0(W)$. This means that there
-% exists~$w ∈ W$ such that~$x ≻ w$, which in turn implies that~$x ∈ W$. It
-% follows by definition of~$W'$ that~$b_0(x, W') = 0$.
-% 
-% (iii) Let~$y_0 ∈ W ∩ W'$. By~(ii), there exists~$y_1 ∈ W'$ such that~$y_1
-% ≻ y_0$; this implies that~$y_1 ∈ W$. It follows that there exists an
-% infinite sequence~$y = (y_i) ∈ W ∩ W'$ such that~$y_{i+1} ≻ y_i$. Since
-% $V$~is finite-dimensional, this family is not free. Assume that~$α_0 y_0
-% + … + α_m y_m = 0$ with~$α_m ≠ 0$ and define vectors~$y'_i = α_m y_i + …
-% + α_0 y_{m-i}$; then we again have~$y'_i ∈ W ∩ W'$, $y'_{i+1} ≻ y'_i$,
-% and~$y'_m = 0$. This implies that~$0 ≻ y'_{m-1} ≻ … ≻ y'_0 ≻ 0$. Since
-% $\bm{b}$~is regular and~$α_m ≠ 0$, we deduce that~$y_0 = 0$ and that~$W ∩
-% W' = 0$. Since $\dim W' = n - \dim b_0(W) ≥ n - \dim W$, this proves
-% that~$W ⊕ W' = V$.
-% 
-% (iv) Let~$x ∈ W$ such that~$b_0(x) = 0$. Then~$0 ≻ x$. Since $\bm{b}$~is
-% regular, this implies~$x = 0$. 
-% Let~$y ∈ W'$ such that~$b_{∞} (y) = 0$. This means that~$y ≻ 0$, and
-% therefore~$y ∈ W$. By~(iii), this implies~$y = 0$.
-% \end{proof}
-% \begin{lem}\label{lem:decomp-bezout}
-% Let~$\bm{b}$ be a regular symmetric pencil on the vector space~$V$.
-% Let~$f(λ: μ) = \det (λ b_{∞} + μ b_0)$~be the homogeneous characteristic
-% polynomial of~$\bm{b}$, and let~$f = ∏ g_i$ be a factorisation of~$f$ in
-% mutually coprime factors.
-% 
-% Then there exists a unique decomposition~$V = ⨁ V_i$ such that the
-% spaces~$V_i$ are pairwise orthogonal for all forms of~$\bm{b}$ and the
-% restriction~$\bm{b}|_{V_i}$ has characteristic polynomial~$g_i$.
-% \end{lem}
-% 
-% \begin{proof}
-% By Lemma~\ref{lem:finite}, there exists
-% a unique orthogonal decomposition~$V = V_{∞} ⊕ V'$
-% such that $b_{∞} | V'$ and~$b_{0} | V_{∞}$~are regular
-% and $b_{0}^{-1} b_{∞} | V_{∞}$~is nilpotent.
-% The space~$V_{∞}$ corresponds to the largest power of~$μ$ dividing~$f(λ:μ)$.
-% 
-% Replacing~$V$ by~$V'$, we may assume that~$b_{∞}$~is regular.
-% This implies that $b_0$~has an adjoint endomorphism~$c = -b_{∞}^{-1} b_0$
-% such that~$b_0(x,y) = -b_{∞}(x, c y) = -b_{∞}(c x, y)$;
-% in particular, all elements of the algebra~$k[c]$
-% are self-adjoint with respect to~$b_{∞}$.
-% 
-% Let~$f(λ) = f(λ: 1)$ be the affine characteristic polynomial.
-% It is enough to prove the result for the decomposition~$f = gh$
-% where $g, h$ are mutually prime.
-% Let~$u, v$ be polynomials such that~$ug + vh = 1$,
-% and $x, y ∈ V$ such that~$g(c)(x) = 0$ and~$h(c)(y) = 0$;
-% we may then write
-% \begin{equation}\label{eq:bezout}
-% \begin{split}
-% b_{∞} (x, y) & = b_{∞} (x,\: u(c) g(c) y + v(c) h(c) y ) \\
-% &= b_{∞} (u(c) g(c) x, y) \,+\, b_{∞} (x, v(c) h(c) y) \\
-% &= 0.
-% \end{split}
-% \end{equation}
-% Since~$y' = c(y)$ also verifies~$h(c)(y') = 0$, equation~\eqref{eq:bezout}
-% also proves that~$b_{0}(x,y) = b_{∞}(x,y') = 0$, and hence~$x, y$ are
-% orthogonal for all forms~$b_{λ}$.
-% \end{proof}
-% 
-% The decomposition of~$V$ obtained by applying
-% Lemma~\ref{lem:decomp-bezout} to the full factorisation of~$f$
-% over~$k[x]$ is the \emph{primary decomposition} of the pencil~$(b_{λ})$.
-% The restriction of the pencil to each summand~$V_i$ has as its
-% characteristic polynomial a power of an irreducible polynomial;
-% such a pencil is called \emph{local}.
-% 
-% If two regular pencils~$\bm{b}, \bm{b}'$ are isomorphic (in the IP1S sense),
-% then they have the same characteristic polynomial,
-% and computing an isomorphism between~$\bm{b}$ and~$\bm{b}'$
-% is the same as computing it on each factor of the primary decomposition.
-% Therefore, in what follows, we shall assume that
-% both pencils are local (and hence finite).
-% 
-% \subsection{Symmetric forms commuting with a local algebra}
-% \label{ss:commute}
-% 
-% Let~$b_{λ} = λ b_{∞} + b_0$ be a local pencil on~$V$, with characteristic
-% endomorphism~$c = - b_{∞}^{-1} b_0$.
-% Defining $R = k[c]$ makes~$V$ into a $R$-module, and we see that the
-% $k$-bilinear form~$b_{∞}$ on~$V$ \emph{commutes with~$R$} in the
-% following sense: for all~$a ∈ R$, we have~$b_{∞} (a x, y) = b_{∞} (x, a
-% y)$.
-% Moreover, the morphisms of pencils preserving the characteristic
-% polynomial are exactly the $R$-linear maps preserving this $k$-bilinear
-% form.
-% 
-% Since $b_{λ}$~is local, we know that
-% the minimal polynomial of~$c$ is of the form~$f^ℓ$ where $f$~is irreducible.
-% In particular, since $k$~is a finite field,
-% this implies that $f$~is a separable polynomial.
-% Let~$K$ be the extension field~$k[x] / f(x)$.
-% We note that $c$~is an approximate root of~$f$ in the (complete) local
-% algebra~$R$, so that, by Hensel's lemma, $R$~contains an exact root~$x'$
-% of~$f$; this turns $R$~into a $K$-algebra isomorphic to~$R_ℓ = K[π]/π^ℓ$.
-% 
-% \begin{prop}\label{prop:trace-form}
-% Let~$K/k$ be a separable field extension, and~$V$ be a finite-dimensional
-% vector space over~$K$.
-% 
-% For any $k$-bilinear form~$b: V ⊗ V → k$ commuting with~$K$, there
-% exists a unique $K$-bilinear form~$b_K: V ⊗ V → K$ such that~$b =
-% \Tr_{K/k} \,∘ \,b_K$.
-% \end{prop}
-% 
-% \begin{proof}
-% We first recall the (classical) proof of the result when~$V = K$.
-% In this case, let~$z$ be a primitive element of~$K$ and write $d =
-% [K:k]$. Since~$K/k$ is separable, the trace form is
-% non-degenerate~\cite[VI~5.2]{lang-algebra} and there exists a unique
-% element~$a ∈ K$ such that $\Tr (a z^i) = b(1, z^i)$ for all~$i=0, …,
-% d-1$.
-% We immadiately see that, for all~$x, y ∈ k$, $\Tr (a x y) = b(x, y)$.
-% 
-% The general case now follows directly from choosing a $K$-basis of~$V$:
-% all coordinates of a bilinear form are themselves bilinear forms.
-% \end{proof}
-% 
-% The above proposition reduces the problem to the case where~$K = k$.
-% For any integer~$ℓ$, we define the $k$-linear form~$τ_ℓ$ on~$R_ℓ =
-% k[π]/π^ℓ$ as the coefficient of~$π^{ℓ-1}$; we write~$R$ and~$τ$ instead
-% of~$R_ℓ$ and~$τ_ℓ$ when there is no ambiguity.
-% We note that $τ(xy)$, as a $k$-bilinear form on~$R$, is regular and
-% commutes with~$R$.
-% Actually, multiplication by~$π^{ℓ-1}$ defines a (non-canonical)
-% $R$-linear isomorphism between~$R$ and its dual (as a $k$-vector
-% space)~$R^{∨}$.
-% 
-% \begin{prop}\label{prop:trace-local}
-% Let~$M, N$ be $R$-modules of finite length.
-% For any $k$-bilinear form~$b: M ⊗ N → k$ commuting with~$R$,
-% there exists a unique $R$-bilinear form~$b_R: M ⊗ N → R$ such that~$b = τ
-% ∘ b_R$.
-% \end{prop}
-% 
-% Note that we do not demand that $M$, $N$ be \emph{free} as $R$-modules.
-% Moreover, the unicity of~$b_R$ shows that both forms~$b$ and~$b_R$ are
-% simultaneously symmetric or antisymmetric.
-% However, when $k$~is a field of characteristic two, it may happen (as we
-% shall see in Section~\ref{S:quad-reg}) that $b$~is alternating whereas
-% $b_R$~is not.
-% 
-% \begin{proof}[\protect{of Prop.~\ref{prop:trace-local}}]
-% By the structure theorem of modules over a principal ring, we may
-% write~$M = ⊕ R_{m_i}$ for some finite sequence of integers~$m_i$. If the
-% result holds for modules~$(M', N)$ and~$(M'', N)$ then it also holds
-% for~$(M' ⊕ M'', N)$. Therefore, using induction on the length of both
-% modules, we only need to prove the case where~$M = R_m$ and~$N = R_n$
-% where~$m ≥ n$. In this case, since $b$~commutes with~$k[π]$, we see that
-% for~$x = ∑ x_i π^i$, $y = ∑ y_i π^i$:
-% \begin{equation}
-% b(x,y) \;=\; ∑_{i,j} x_i y_j\: b(1, π^{i+j})
-%   \;=\; ∑_{i+j+r = m-1} x_i y_j\: b(1, π^{m-1-r}).
-% \end{equation}
-% Let~$a = ∑ b(1, π^{i}) π^{m-1-i}$. Since $b(1, π^{r}) = 0$ for all~$r ≥
-% n$, $a$~belongs to the ideal~$π^{m-n} R_m = \Hom_R (R_n, R_m)$, so that
-% the product~$a\,y$ is well-defined in~$R_m$. The bilinear form~$b_R$ is
-% finally the form defined by~$b_R(x,y) = a\:x y$.
-% \end{proof}
-% 
-% By Propositions~\ref{prop:trace-form} and~\ref{prop:trace-local},
-% we see that for any local pencil~$(b_{∞}, b_0)$
-% with characteristic endomorphism~$c$
-% and associated local ring~$R = k[c]$,
-% there exists a unique $R$-bilinear form~$b_R$ on~$V$
-% such that~$b_{∞} = \Tr_{K/k} ∘ τ_ℓ ∘ b_R$.
-% Local pencils and linear morphisms are thus equivalent
-% to $R$-bilinear forms on~$V$ and $R$-linear maps.
-% % Moreover, a morphism of pencils~$s: b → b'$ is a
-% % $k$-linear map such that~$\transpose{s} ∘ b_{∞} ∘ s = b'_{∞}$
-% % and~$s^{-1} ∘ c ∘ s = c'$, or in other words a $R$-linear congruence
-% % between the $R$-bilinear forms~$b_R$ and~$b'_R$. Therefore, solving the
-% % local IP1S problem amounts to computing a congruence matrix
-% % between two~$R$-bilinear forms on a $R$-module of finite length.
-% 
-% \subsection{Classification of bilinear forms over a local algebra}
-% 
-% We conclude the proof of the odd-characteristic case with the
-% classification of bilinear forms over a local algebra.
-% We provide slightly adapted proofs of the classical
-% theory~\cite{milnorhusemoller,omeara}.
-% The result over the local algebra is a variant of
-% the classification over the (finite) residue field;
-% the reduction algorithm itself is a version of Gauß' reduction algorithm
-% for quadratic forms.
-% 
-% \begin{prop}\label{prop:diag-bigblock}
-% Let~$M$ be a $R$-module of finite length and $b$~be a $R$-bilinear form
-% on~$M$.
-% If the $k$-bilinear form~$τ ∘ b$ is regular,
-% then there exists an orthogonal decomposition~$M = ⨁ M_m$,
-% where for $m ≤ ℓ$, $M_m$~is a finite free module over~$R_m = R / π^m$
-% and $b$~is regular, as a $R_m$-bilinear form, on each module~$M_m$.
-% \end{prop}
-% 
-% 
-% \begin{proof}
-% We reason by induction on the length~$ℓ$ of~$R$. By the structure theorem for
-% modules over the principal ring~$R$, there exists a decomposition~$M = F
-% ⊕ N$ where $F$~is free over~$R = R_ℓ$ and~$π^{ℓ-1} N = 0$. In
-% particular, $N$~is a $R'$-module, where~$R' = R_{ℓ-1}$; we define~$τ'
-% = τ_{ℓ-1}: R' → k$ and note that~$τ'(a) = τ(π a)$ for all~$a ∈ R'$.
-% 
-% We first show that the restriction of~$b$ to~$F$ is regular. Let~$x ∈ F$
-% such that~$R x$ is a direct factor: this means that~$π^{ℓ-1} x ≠ 0$.
-% Since $τ ∘ b$~is regular, there exists~$y ∈ M$ such that~$τ(b(π^{ℓ-1} x,
-% y)) = 1$. This implies that~$b(x, y) ≡ 1 \pmod{π}$. Let~$y = y' + y''$
-% where~$y' ∈ F$ and~$y'' ∈ M/F$: since~$π^{ℓ-1} y'' = 0$, we have~$π^{ℓ-1}
-% b(x, y'') = 0$ and therefore~$b(x, y'') ∈ π R$. Therefore, $a = b(x, y')
-% ≡ b(x, y) ≡ 1 \pmod{π}$. In particular, $a ∈ R^{×}$, so that~$b(x, a^{-1}
-% y') = 1$, which shows that $b$~is regular on~$F$.
-% 
-% Let now~$y ∈ N$. Since $b$~is regular on~$F$, there exists a unique~$f(y)
-% ∈ F$ such that, for all~$x ∈ F$, $b(x, y) = b(x, f(y))$. This implies
-% that the map~$N → M, y ↦ y - f(y)$ is orthogonal to~$F$, and therefore
-% defines a $b$-orthogonal decomposition~$M = F ⊕ N$. Finally,
-% since~$π^{m-1} y = 0$, the map~$b$ has its values in~$π R$, which means
-% that there exists a $R'$-bilinear form~$b'$ on~$N$ such that~$b = π b'$;
-% since $τ ∘ b$~is regular, its orthogonal summand $τ' ∘ b'$~is regular,
-% and we may apply the induction hypothesis to the $R'$-bilinear form~$b'$
-% on~$N$.
-% \end{proof}
-% 
-% We shall generally call $b$ \emph{regular} if $τ ∘ b$~is regular as a
-% $k$-bilinear form. If $M$~is free then this does not conflict with the
-% standard definition of $R$-regularity.
-% 
-% Note that, if we do not assume $b$~to be regular, then there does not
-% necessarily exist a decomposition equivalent to that of
-% Prop.~\ref{prop:diag-bigblock}. For example, the $R_2$-bilinear form
-% over~$M = R_1 ⊕ R_2$ defined by~$b(x_1 ⊕ x_2, y_1 ⊕ y_2) = (π x_1) y_2 -
-% x_2 (π y_1)$ is not diagonalizable.
-% 
-% \begin{prop}\label{prop:bilinear-odd}
-% Assume that $k$~is finite and~$2 ≠ 0$; let~$Δ$ be a non-square element
-% of~$k^{×}$.
-% Then any regular symmetric $R$-bilinear form~$b$ on a free $R$-module~$M$
-% is equivalent to one of the diagonal forms~$(1, …, 1)$ or~$(1, …, Δ)$.
-% \end{prop}
-% 
-% \begin{proof}
-% The proof follows from applying a Hensel lift to the classical proof over
-% finite fields~\cite[IV(1.5)]{milnorhusemoller}.
-% By the Gram orthogonalization algorithm~\cite[I(3.4)]{milnorhusemoller},
-% $b$~is congruent to a bilinear form with diagonal matrix~$A =
-% \mathrm{diag} (a_1, …, a_n)$. Since $x^2$~is a separable
-% polynomial over~$R$, two applications of Hensel's lemma in the complete
-% ring~$R$ allow the following lifts to~$R$ of results in the finite
-% field~$k$:
-% \begin{enumerate}
-% \item[(a)] for all~$i$, we have either~$a_i = b_i^2$ or~$a_i = b_i^2 Δ$
-% in~$R$;
-% \item[(b)] the equation~$u^2 + v^2 = Δ$ has a solution with~$u, v ∈ R$.
-% \end{enumerate}
-% By~(a), we may assume that~$a_i = 1$ or~$a_i = Δ$. From~(b), we deduce
-% the matrix relation
-% \begin{equation}
-% \transpose{\mat{u&-v\\v&u}}·\mat{1&0\\0&1}·\mat{u&-v\\v&u} =
-% \mat{Δ&0\\0&Δ}.
-% \end{equation}
-% This allows canceling all pairs of~$Δ$ appearing in the diagonalization
-% of~$A$.
-% \end{proof}
-% 
-% \subsection{Solving the general case of IP1S}
-% \begin{thm}\label{thm:IP1S}
-% Let~$k$ be a finite field of characteristic~$≠2$ and~$(b_{λ})$ be a
-% pencil of $n$-dimensional symmetric bilinear forms over~$k$.
-% It is possible, using no more than~$\Ot(n^3(h+1)) ≤ \Ot(n^4)$ operations
-% in~$k$, where $h ≤ n$~is the largest of the minimal indices of~$(b_{λ})$,
-% to compute an isomorphism between~$(b_{λ})$ and a (unique) block-diagonal
-% pencil with diagonal blocks of the following form:
-% \begin{enumerate}
-% \item \emph{Kronecker blocks}~$K_{h} =
-% \mat{0&K'_{h}\\\transpose{K'_h}&0}$ for integers~$h ≥ 0$, as defined in
-% Prop.~\ref{prop:kronecker};
-% \item \emph{finite local blocks}~$L_{f,ℓ,u}$, defined as the~$ℓ ×
-% ℓ$-block matrix
-% \[ L_{f,ℓ,u} \;=\; \mat{0&&-T_f u&T_f u (λ - M_f)\\
-%   &\siddots{-T_f u}&\siddots{-T_f u}&\\
-%   -T_f u&\siddots{-T_f u}&\\T_f u(λ-M_f)&&&0}, \]
-% where $f$~is an irreducible polynomial, $M_f$~is the companion matrix
-% of~$f$, $T_f$~is a prescribed invertible matrix such that both~$T_f$
-% and~$T_f M_f$~are symmetric, $ℓ$~is an integer, and $u$~is either the
-% identity matrix or a prescribed non-square element of the field~$k[M_f]$,
-% with the extra condition that for fixed~$(f, ℓ)$, at most one of the
-% values~$u$ may be different from~$1$;
-% \item \emph{infinite local blocks}~$L_{∞,ℓ,u}$, defined as
-% the~$ℓ×ℓ$-matrix
-% \[ L_{∞,ℓ,u} \;=\; u\mat{0&&-λ&1\\&\siddots{-λ}&\siddots{-λ}&\\
-%   -λ&\siddots{-λ}&&\\1&&&0}, \]
-% where $ℓ$~is an integer, $u$~is either 1 or a prescribed non-square
-% element of~$k$, and for fixed~$ℓ$, at most one of the values~$u$ may be
-% different from~$1$.
-% \end{enumerate}
-% \end{thm}
-% 
-% This theorem solves the IP1S problem in time~$O(n^4)$: given two
-% pencils~$\bm{a}$ and~$\bm{b}$, we transform both of them to
-% the canonical form above. This form will be the same iff the two pencils
-% are isomorphic in the IP1S sense, and in this case, composing the two
-% transformations gives an answer to the computational IP1S problem.
-% 
-% \paragraph{Algorithm and complexity.}
-% 
-% The algorithm corresponding to Theorem~\ref{thm:IP1S} for a
-% pencil~$\bm{b}$ decomposes in the three following steps.
-% 
-% \begin{enumerate}
-% \item \label{it:alg-kronecker} Compute the Kronecker decomposition: as
-% long as the kernel of the matrix~$b_{λ}$ is not trivial, compute a
-% minimal isotropic vector~$e = ∑ λ^i e_i$ and the according Kronecker
-% block as an orthogonal direct factor, according to
-% Prop.~\ref{prop:kronecker-split}.
-% \item \label{it:alg-factor} Now~$\bm{b}$~is regular. Compute and factor
-% its characteristic polynomial~$f(λ)$ and split~$V$ as an orthogonal direct
-% sum of primary components~$V_f$ for each prime divisor~$f$.
-% On the the ``infinite'' factor corresponding to the divisor~$μ$ of~$f(λ:μ)$,
-% swap the forms~$b_{∞}$ and~$b_0$.
-% \item \label{it:alg-local} For each prime divisor~$f$, write the local
-% pencil~$\bm{b}|V_f$ at~$f$ as a matrix with entries in~$K = k[x]/f(x)$.
-% Perform the reduction of~\ref{prop:diag-bigblock} and write~$\bm{b}|V_f$
-% as an orthogonal direct sum of quadratic forms over algebras~$K[π]/π^{ℓ}$,
-% and then reduce each of these forms to
-% one of the two canonical diagonal forms.
-% \end{enumerate}
-% 
-% Most of the linear algebra steps, including computing the
-% rational normal form of the regular part of the pencil, may be done
-% in~$\Ot(n^3)$ field operations~\cite{kaltoffen11compute}.
-% In particular, computing the  Frobenius rational normal form
-% includes factoring the characteristic polynomial.
-% This factorization may also be done, again in cubic time,
-% using a dedicated factoring algorithm.
-% Reduction of quadratic forms over the local algebras is just
-% reduction over the residue field
-% (which uses a square root computation in this finite field),
-% followed by a Hensel lift.
-% 
-% The only step not covered by standard algorithms is the reduction to
-% Kronecker normal form performed in Step~\itemref{it:alg-kronecker}.
-% Computing the minimal isotropic vectors requires solving
-% a chain of~$h$ linear equations of the form~$b_{∞}(x) = b_0(y)$
-% and hence has a complexity~$O(n^3(h+1))$.
-% The same applies to the computation of a preimage by the map~$∂_h$
-% of~\eqref{eq:deriv-surj}.
-% \ifapx This algorithm is detailed in Appendix~\ref{A:algo} below. \fi
-% 
-% \paragraph{Remarks.}
-% 
-% The only place where the finiteness of~$k$ is required in the proof of
-% this theorem is for the structure of quadratic forms over~$k$ in
-% Prop.~\ref{prop:bilinear-odd}. Even when $k$~is infinite, if it is perfect
-% and has a good theory of quadratic forms,
-% we expect it to translate to a good theory of the IP1S problem over~$k$.
-% 
-% We also note that, if $(b_{λ})$~is regular,
-% then~$h = 0$ and the algorithm in this case has complexity~$\Ot(n^3)$. As
-% explained before, this is the dominant case and we therefore expect any
-% implementation on random pencils to run in average time~$\Ot(n^3)$.
-% 
-% There exist cubic algorithms computing the Kronecker decomposition of pencils of
-% linear maps over a characteristic zero field~\cite{beelen1988improved}.
-% These algorithms are not directly applicable over a finite field as they
-% use some rotations over the real numbers and are mostly concerned with
-% numerical stability; more importantly, they work with linear maps up to
-% equivalence, whereas we need quadratic forms up to congruence. However, as the
-% corresponding problem over a finite field has not been much studied, the
-% existence of a faster algorithm for computing the Kronecker decomposition is not
-% unlikely.
-% 
-%>>>1
 \section{Fully singular quadratic pencils in characteristic two}
 \label{S:quad-sing}
 In this section and the following one, we assume that the field~$k$ has
@@ -1606,38 +782,32 @@ for all~$x ∈ V$. Moreover, the polarity map is not a bijection from
 quadratic forms to alternating bilinear forms; its kernel is the space of
 \emph{$σ$-linear forms} on~$V$. This means that, if a basis of~$V$ is
 chosen, then a quadratic form is determined by its polar (which is an
-alternating matrix) and its diagonal coefficients (corresponding to a
+alternating bilinear form) and its diagonal coefficients (corresponding to a
 $σ$-linear form).
 
-
-\subsection{Quadratic and bilinear pencils}
-
-% We say that a bilinear pencil is \emph{fully singular} if
-% its regular part, in the sense of Prop.~\ref{prop:kronecker}, is zero.
-% Any fully singular alternating bilinear pencil is isomorphic to
-% an orthogonal sum of Kronecker modules~$K_d$.
-In characteristic two, Prop.~\ref{prop:kronecker-decomposition} gives a standard form only for
-bilinear pencils and not for quadratic pencils.
-
-We explain here how to
-compute an isomorphism, when it exists, between two fully singular
-quadratic pencils in characteristic two. For this, we give a full
-description of the group of automorphisms of an orthogonal sum of
-Kronecker bilinear modules, and compute how these automorphisms act
+The classification of section~\ref{s:bilinear} still applies to
+the polar part of quadratic pencils.
+To compute an isomorphism between two such pencils,
+we write down an explicit description of the group of automorphisms
+preserving this polar part,
+and compute how these automorphisms act
 on the diagonal coefficients of a quadratic pencil.
 We conclude the proof by showing that the corresponding equations
 may be solved in polynomial time.
+
+This section solves the case of totally singular pencils;
+regular pencils are studied in the next one.
 
 \subsection{An intrinsic description of Kronecker modules}
 We give an intrinsic construction of the Kronecker modules.
 Except where indicated, all tensor products and duals are understood as
 operations on $k$-vector spaces.
-
 For any integer~$d ≥ 0$, let~$H_d$ be
 the $d+1$-dimensional vector space of homogeneous polynomials
-of degree~$d$ in the variables~$(x:y)$.
-We also write~$\chk{H_d}$ for the vector space dual to~$H_d$
-and~$\chev{φ,f}: \chk{H_d} × H_d → k$ for the standard bilinear pairing.
+of degree~$d$ in the variables~$(x:y)$,
+$\chk{H_d}$ be the vector space dual to~$H_d$,
+and~$\chev{φ,f}: \chk{H_d} × H_d → k$ be the standard bilinear pairing.
+(For consistency, we let~$H_d = 0$ when~$d < 0$).
 
 For any $h ∈ H_m$, multiplication by~$h$ defines a linear map,
 which we again write~$h: H_d → H_{m+d}$,
@@ -1646,36 +816,36 @@ This means that~$\chev{\chk{h} φ, f} = \chev{φ, hf}$ for all~$φ ∈
 \chk{H_{d+m}}$ and~$f ∈ H_d$.
 All the maps~$h$ and~$\chk{h}$ commute with each other.
 
-The \emph{Kronecker module} of degree~$d$ is the $2d+1$-dimensional
-vector space~$K_d = H_{d-1} ⊕ \chk{H_{d}}$, equipped with the symmetric
-bilinear pencil~$(b_{λ})$ defined, for~$f, f' ∈ H_{d-1}$ and~$φ, φ' ∈
-\chk{H_d}$, by:
+The \emph{Kronecker module} of degree~$d$ is
+the $2d+1$-dimensional vector space~$K_d = H_{d-1} ⊕ \chk{H_{d}}$,
+equipped with the symmetric bilinear pencil~$A-λB$ such that,
+for~$f, f' ∈ H_{d-1}$ and~$φ, φ' ∈ \chk{H_d}$:
 \begin{equation}\label{eq:kronecker-bilinear}
-b_{λ} (f, f') \;=\; b_{λ} (φ, φ') \;=\; 0; \qquad
-b_{λ} (f, φ) \;=\; \chev {φ, (λ y - x) f}.
+(A-λB) (f, f') \;=\; b_{λ} (φ, φ') \;=\; 0; \qquad
+(A-λB) (f, φ) \;=\; \chev {φ, (λ y - x) f}.
 \end{equation}
 
-The next proposition shows that multiplication by polynomials essentially
-defines all homomorphisms between the bilinear spaces~$K_d$.
-As in Subsection~\ref{SS:bil-reg-local},
-we write~$f ≻ g$ for the relation~$b_{∞} f + b_0 g = 0$.
-
-\begin{prop}\label{prop:hom-Kd}
+% The next proposition shows that multiplication by polynomials essentially
+% defines all homomorphisms between the bilinear spaces~$K_d$.
+% As in Subsection~\ref{SS:bil-reg-local},
+% we write~$f ≻ g$ for the relation~$b_{∞} f + b_0 g = 0$.
+\begin{prop}\label{prop:end-Kd}
 For any integers~$d, d'$, the homomorphisms from~$K_d$ to~$K_{d'}$
-preserving the binary relation~$≻$ are the maps of the form
+preserving the bilinear pencil~$A - λ B$ are the maps of the form
 \begin{equation*}
 \begin{array}{lclclcl}H_{d-1} &⊕& \chk{H_d} &→&H_{d'-1} &⊕& \chk{H_{d'}}\\
-(f,&& φ) & ↦ & (α f + \chk{f} γ,&& \chk{β} φ)
+(f,&& φ) & ↦ & (u f + \chk{f} w,&& \chk{v} φ)
 \end{array},
 \end{equation*}
-where $α ∈ H_{d'-d}$, $β ∈ H_{d-d'}$, and~$γ ∈ \chk{H_{d+d'-1}}$.
+where $u ∈ H_{d'-d}$, $v ∈ H_{d-d'}$, and~$w ∈ \chk{H_{d+d'-1}}$.
 \end{prop}
-
 \begin{proof}
-We see that, for all~$f, g ∈ H_{d-1}$ and~$φ, ψ ∈ \chk{H_d}$,
+(This is independent of the characteristic).
+Define the relation~$≻$ on~$K_{d}$ by: $u ≻ v$ if $B u = A v$.
+In particular, for all~$f, g ∈ H_{d-1}$ and~$φ, ψ ∈ \chk{H_d}$,
 \begin{equation}\label{eq:chain-Kd}
-f ≻ g \text{ iff } y f = x g; \quad
-φ ≻ ψ \text{ iff } \chk{y} φ = \chk{x} ψ.
+f ≻ g \;\text{ iff }\; y f = x g; \quad
+φ ≻ ψ \;\text{ iff }\; \chk{y} φ = \chk{x} ψ.
 \end{equation}
 Let~$(x^{i} y^{d-1-i})$ be a basis of~$H_{d-1}$
 and write~$ξ_{j,d-j}$ for the dual basis of~$\chk{H_d}$.
@@ -1693,34 +863,52 @@ Applying~$F$ to the relation~\eqref{eq:chain-Kd-zero}, we see that
 \end{equation}
 This and~\eqref{eq:chain-Kd} imply that~$g_j = 0$ for all~$j$.
 From this we deduce that $F(\chk{H_d}) ⊂ \chk{H_{d'}}$.
+In the same way, we see that~$F(H_{d-1}) ⊂ H_{d'-1}$.% à vérifier
 
-Write~$β_j = \chev{F(ξ_{j,d-j}), y^{d'}}$ and~$β = ∑ β_j x^j y^{d-d'-j}$.
+Let~$v_j = \chev{F(ξ_{j,d-j}), y^{d'}}$ and~$v = ∑ v_j x^j y^{d-d'-j}$.
 By~\eqref{eq:chain-Kd-zero},
-we see that $β_j = \chev{F(ξ_{0,d}), x^{j} y^{d'-j}}$,
-so that~$F(ξ_{0,d}) = ∑ β_j ξ_{j,d'-j} = \chk{β} ξ_{0,d}$.
+we see that $v_j = \chev{F(ξ_{0,d}), x^{j} y^{d'-j}}$,
+so that~$F(ξ_{0,d}) = ∑ v_j ξ_{j,d'-j} = \chk{v} ξ_{0,d}$.
 Applying~\eqref{eq:chain-Kd-zero} once more,
-we deduce from this that $F(ξ_{j,d-j}) = \chk{β} ξ_{j,d-j}$ for all~$j$,
-and therefore~$F(φ) = \chk{β} φ$ for all~$φ ∈ \chk{H_{d'}}$.
+we deduce from this that $F(ξ_{j,d-j}) = \chk{v} ξ_{j,d-j}$ for all~$j$,
+and therefore~$F(φ) = \chk{v} φ$ for all~$φ ∈ \chk{H_{d'}}$.
+\todo{preuve pas finie}
 \end{proof}
 \subsection{Kronecker modules with coefficients}
 
-A \emph{coefficient space} is a bilinear space~$E$ isomorphic to~$k^n$,
-together with its standard scalar product~$u, v ↦ u · v = ∑ u_i v_i$. For
-any linear maps~$α: V → E$, $β: W → E$, we write~$α · β$ for the
-corresponding bilinear form on~$V × W$.
 
-For~$E = k^n$, the bilinear module~$K_d^{n}$ is isomorphic to~$E ⊗ K_d$.
-The multiplication maps for homogeneous polynomials defines in a natural
-way a bilinear action of~$E ⊗ H_m$ on~$H_d$ and~$\chk{H_d}$: namely, for
-any~$u ∈ E ⊗ H_m$ written as~$u = ∑ u_i ⊗ x^i$ with~$u_i ∈ k^n$ and~$x^i
-∈ H_m$ and~$f ∈ H_d$ and~$φ ∈ \chk{H_d}$, we define
+Let~$E = k^{n}$ equipped with its diagonal scalar product.
+Then $E ⊗ K_d = K_d^n$ is a bilinear space in a natural way.
+% $(x, y) ↦ x · y = ∑ x_i y_i$;
+% For any linear maps~$α: V → E$, $β: W → E$,
+% we write~$α · β$ for the bilinear form on~$V × W$
+% defined by~$(α · β) (x, y) = (α(x) · β(y))$.
+The multiplication maps for homogeneous polynomials extends as
+a natural map on~$E ⊗ H_m$ on~$H_d$ and~$\chk{H_d}$,
+defined for~$a ∈ E, h ∈ H_m$ and~$f ∈ H_d$, $φ ∈ \chk{H_d}$ by
 \begin{equation}
-u f \;=\; ∑ u_i ⊗ (x^i f) \;∈ E ⊗ H_{d+m} \quad\text{and}\quad
-\chk{u} φ \;=\; ∑ u_i ⊗ (\chk{(x^i)} φ) \;∈ E ⊗ \chk{H_{d-m}}.
+(a ⊗ h) f = a ⊗ (h f) \;∈ E ⊗ H_{d+m} \quad\text{and}\quad
+(a ⊗ h) φ = a ⊗ (\chk{h} φ) \;∈ E ⊗ \chk{H_{d-m}}.
 \end{equation}
-Likewise, let~$h ∈ \Hom(E, E') ⊗ H_m$ be written as~$h = ∑ h_i ⊗ x^i$
-with~$h_i ∈ \Hom (E, E')$. For any~$u ⊗ f ∈ E ⊗ H_d$, we define~$h(u ⊗
-f) ∈ E' ⊗ H_{d+m}$ by~$h(u ⊗ f) = ∑ h_i(u) ⊗ (x^i f)$.
+Likewise, the space~$\Hom (E, E') ⊗ H_m$ acts
+on~$E ⊗ H_d$ and~$\chk{E ⊗ H_d}$ by
+\begin{equation}
+(u ⊗ h) (a ⊗ f) = u(a) ⊗ (hf) \;∈ E' ⊗ H_{d+m},\quad
+(u ⊗ h) (a ⊗ φ) = u(a) ⊗ (\chk{h} φ) \;∈ E' ⊗ \chk{H_{d-m}}.
+\end{equation}
+
+% a natural bilinear action of~$E_d ⊗ H_m$ on~$H_d$ and~$\chk{H_d}$:
+% namely
+% way a bilinear action of~$E ⊗ H_m$ on~$H_d$ and~$\chk{H_d}$: namely, for
+% any~$u ∈ E ⊗ H_m$ written as~$u = ∑ u_i ⊗ x^i$ with~$u_i ∈ k^n$ and~$x^i
+% ∈ H_m$ and~$f ∈ H_d$ and~$φ ∈ \chk{H_d}$, we define
+% \begin{equation}
+% u f \;=\; ∑ u_i ⊗ (x^i f) \;∈ E ⊗ H_{d+m} \quad\text{and}\quad
+% \chk{u} φ \;=\; ∑ u_i ⊗ (\chk{(x^i)} φ) \;∈ E ⊗ \chk{H_{d-m}}.
+% \end{equation}
+% Likewise, let~$h ∈ \Hom(E, E') ⊗ H_m$ be written as~$h = ∑ h_i ⊗ x^i$
+% with~$h_i ∈ \Hom (E, E')$. For any~$u ⊗ f ∈ E ⊗ H_d$, we define~$h(u ⊗
+% f) ∈ E' ⊗ H_{d+m}$ by~$h(u ⊗ f) = ∑ h_i(u) ⊗ (x^i f)$.
 % An element
 % of~$\Hom (E ⊗ H_d, E' ⊗ H_{d+m})$ defined in this way is called
 % \emph{principal}. In the same way, we define principal elements of~$\Hom
@@ -1748,24 +936,28 @@ f) ∈ E' ⊗ H_{d+m}$ by~$h(u ⊗ f) = ∑ h_i(u) ⊗ (x^i f)$.
 % \end{proof}
 % \subsection{Automorphisms of a direct sum of Kronecker modules}%<<<2
 
-For any totally irregular pencil of quadrics~$q$ on~$V$, there exists an
-unique finite sequence of integers~$(n_d)$ such that $V$~is isomorphic to
-the orthogonal sum~$⨁ E_d ⊗ K_d$, where $E_d = k^{n_d}$ is a coefficient
-space.
+We now consider a totally irregular pencil of bilinear forms,
+isomorphic to the orthogonal sum~$⨁ K_d^{n_d} = ⨁ E_d ⊗ K_d$
+for a unique finite sequence of integers~$(n_d)$,
+where we write~$E_d = k^{n_d}$.
+
+We give without a proof the following generalization
+of Proposition~\ref{prop:end-Kd} to $⨁ E_d ⊗ K_d$.
+\todo{xxx par contre améliorer la preuve de 2.2...}
 
 \begin{prop}\label{prop:aut-Ed-Kd}
 The automorphisms of~$⨁ E_d ⊗ K_d$ are exactly the maps of the form
 \begin{equation}\label{eq:aut-Ed-Kd}
-u ⊗ f ↦ ∑_{d' ≥ d} α_{d',d} (u) f + ∑_{d'} \chk{f} γ_{d',d} (u), \quad
-u ⊗ φ ↦  ∑_{d' ≤ d} \chk{β_{d',d} (u)} φ,
+a ⊗ f ↦ ∑_{d' ≥ d} u_{d',d} (a) f + ∑_{d'} \chk{f} w_{d',d} (a), \quad
+a ⊗ φ ↦  ∑_{d' ≤ d} \chk{v_{d',d} (a)} φ,
 \end{equation}
-where~$α_{d',d} ∈ \Hom (E_d, E_{d'}) ⊗ H_{d'-d}$, $β_{d',d} ∈ \Hom (E_d,
-E_{d'} ⊗ H_{d-d'})$ and~$γ_{d',d} ∈ \Hom (E_{d}, E_{d'}) ⊗
-\chk{H_{d+d'-1}}$ satisfy the following relations: let~$A, B, C$ be the
-matrices~$(α_{d',d})$, $(β_{d',d})$, and~$(γ_{d',d})$; then
+where~$u_{d',d} ∈ \Hom (E_d, E_{d'}) ⊗ H_{d'-d}$, $v_{d',d} ∈ \Hom (E_d,
+E_{d'} ⊗ H_{d-d'})$ and~$w_{d',d} ∈ \Hom (E_{d}, E_{d'}) ⊗
+\chk{H_{d+d'-1}}$ satisfy the following relations: let~$U, V, W$ be the
+matrices~$(u_{d',d})$, $(v_{d',d})$, and~$(w_{d',d})$; then
 \begin{equation}\label{eq:aut-Ed-Kd-ABC}
-\transpose{B} · A = 1, \quad\text{and}\quad
-\transpose{C} · A + \transpose{A} · C = 0.
+\transpose{V} · U = 1, \quad\text{and}\quad
+\transpose{W} · U + \transpose{U} · W = 0.
 \end{equation}
 \end{prop}
 
@@ -1791,8 +983,8 @@ where scalar products are taken in~$E_i$.
 Let~$F$ be an orthogonal automorphism of~$V = ⨁ E_d ⊗ K_d$.
 For any basis of the coefficient spaces~$E_d$,
 the restrictions of~$F$ to maps~$K_d → K_{d'}$
-are $≻$-preserving in the sense of~\ref{prop:hom-Kd}.
-Applying Prop.~\ref{prop:hom-Kd}, we see that
+are $≻$-preserving in the sense of~\ref{prop:end-Kd}.
+Applying Prop.~\ref{prop:end-Kd}, we see that
 $F$~is of the form given in~\eqref{eq:aut-Ed-Kd}.
 
 Let now $F$~be any linear map defined as in~\eqref{eq:aut-Ed-Kd}.
@@ -2451,33 +1643,24 @@ find a bounded number of candidate homographies using no more
 than~$O(n^3)$ operations in~$k$.
 
 % Conclusion
-\section*{Conclusion}
-
-In this paper, we show that we can solve in polynomial-time the IP
-problem with two quadratic forms over any finite field.
-The obvious questions are whether it is possible to generalize this to
-more than two equations.
-This would depart from the classic results about bilinear pencils;
-therefore, fewer tools are available.
-Even in the regular case, our work heavily uses the factorization of
-the characteristic polynomial.
-An analogous strategy for~$m ≥ 3$ would require a detailed
-geometric study of the hypersurface defined by this characteristic
-polynomial.
-
-%>>>1
+% \section*{Conclusion}%<<<1
+% 
+% In this paper, we show that we can solve in polynomial-time the IP
+% problem with two quadratic forms over any finite field.
+% The obvious questions are whether it is possible to generalize this to
+% more than two equations.
+% This would depart from the classic results about bilinear pencils;
+% therefore, fewer tools are available.
+% Even in the regular case, our work heavily uses the factorization of
+% the characteristic polynomial.
+% An analogous strategy for~$m ≥ 3$ would require a detailed
+% geometric study of the hypersurface defined by this characteristic
+% polynomial.
+% 
+% %>>>1
 \bibliographystyle{plain}
-\bibliography{biblio}
-% \ifapx \appendix
-% \section{An algorithm reducing a matrix pencil to Kronecker normal form}
-% \label{A:algo}
-% 
-% We explain how, given a pencil~$B = (B_{0}, B_{∞})$ in matrix form, we
-% can compute the Kronecker blocks of~$B$. This algorithm is a direct
-% translation of part~\ref{SS:Kronecker-reduction}.
-% \newcounter{step}
-% \def\step#1{\paragraph{Step \arabic{step}: #1.}\stepcounter{step}}
-% 
+\bibliography{biblio}%>>>1
+\message{******************** PAGE=\thepage *****************^^J}
 % \step{Compute the minimal isotropic vectors~$(e_1,…,e_h)$}%<<<2
 % 
 % Write the~$n × (2n)$-matrix~$(B_{∞} \; B_0)$ in lower row echelon form as
@@ -2594,202 +1777,226 @@ polynomial.
 
 %>>>1
 \appendix
-\section{Comparison to the ``polar decomposition'' algorithm.}
-\label{ap:polar}
+\section{Algorithms for pencils of bilinear forms}
+\label{ap:bilinear}
+\subsection{Kronecker decomposition}
+\label{ap:kronecker}
 
-Berthomieu, Faugère and Perret suggested~\cite{DBLP:journals/corr/BerthomieuFP13}
-solving the IP1S problem with a ``polar decomposition'' algorithm,
-inspired by real analysis techniques.
+\begin{prop}
+Let~$A - λ B$ be a pencil of bilinear forms.
+There exists an algorithm computing the Kronecker decomposition of~$A-λB$
+with time complexity~$O(h\, n^3)$ field operations,
+where $n$~is the dimension of the matrices~$A, B$,
+and $h$~is the maximal degree of a Kronecker module factor.
+\end{prop}
+\begin{proof}
+The kernel of~$A - λ B$, as a $k[λ]$-module,
+is equipped by an increasing filtration by polynomial degrees,
+and in its decomposition as a sum of Kronecker modules~$⨁ K_h^{e_h}$,
+this filtration corresponds to the filtration by the increasing
+indexes~$h$.
+% We show here that it is possible to compute this filtration
+% with at most $O(n^4)$ operations.
 
-Given two families of polynomials over a field~$k$,
-they give a solution to the IP1S problem
-over a tower~$k'$ of real quadratic extensions of~$k$
-(where a \emph{real quadratic extension} is obtained by
-adjoining the square root of a sum of squares).
-This solves the IP1S problem over the original field~$k$ only when
-$k$~is \emph{Euclidean}, \emph{i.e.} has no real quadratic extension.
-This is the case for example if $k$~is a closed real field such as~$ℝ$
-or the field~$ℝ_{\mathrm{alg}}$ of real algebraic numbers,
-or an algebraically closed field;
-however, since any quadratic extension of a finite field is real,
-no finite field is Euclidean.
+\medbreak
 
-We found a number of flaws in the ``polar decomposition'' algorithm,
-which we detail below.
+We consider the lower echelon form
+of the concatenated $n × (2n)$-matrix $(B A)$, written as
+\begin{equation}
+(B \; A) \;=\; U · \mat{C & 0 \\ M & A'},
+% (B_{∞} \; B_0) \;=\; (⋆) · \mat{A_{∞} & 0\\ C & A_0},
+\end{equation}
+where $U$~is an invertible matrix of size~$n$
+and $0$~is a $r × n$-block, with $r$~being the largest possible value.
+This implies that $A'$~has rank~$n-r$ and hence that
+there exists~$F$ such that~$M = A' F$.
+Moreover, since $\smat{0\\A'} = U A$, we have~$\Ker A' = \Ker A$.
+From this we deduce that
+\begin{equation}
+B x - A y \;=\; 0 \quad ⇔ \quad
+  \begin{cases} C x = 0 \\ A (y - F x) = 0.\end{cases}
+\end{equation}
+Likewise, the upper echelon form of $(A\;B)$
+gives matrices $D$ and~$G$ such that
+$B x - A y = 0 ⇔ (D y = 0, B (x - G y) = 0)$.
+We also define an increasing sequence~$(E_h)$ of subspaces of~$V$
+by~$E_0 = \Ker B$, $E_{h+1} = (\Ker B) + G(E_h)$.
+Then $E_h$ is exactly the set of elements~$x ∈ V$ such that there exists
+a sequence~$x_0 = x, …, x_h$ satisfying $B x_i = A x_{i+1}$ for all~$i$
+and~$B x_h = 0$.
+Moreover, such a sequence is determined by the choices
+of~$x_0 ∈ E_h$ and~$x_{i} ∈ F(x_{i-1}) + (\Ker B)$ for all~$i ≥ 1$.
 
-% Over the
-% original field, this solves the \emph{decisional} IP1S problem:
-% determining whether two families of polynomials are isomorphic. This
-% latter problem does not have many cryptographic applications.
+We now see that the elements~$x_0 + x_1 λ + … + x_h λ^h$
+of degree~$h$ of~$\Ker(A - λ B)$
+are determined by the relations~$x_0 ∈ E_{h} ∩ (\Ker A)$
+and~$x_{i+1} - F (x_i) ∈ (\Ker B)$.
+Since the filtration of~$(\Ker A)$ by~$E_{h} ∩ (\Ker A)$
+has at most $n$~steps, we can compute it with at most~$O(n^4)$ operations.
 
-\subsection{Matrix square roots.}
+Once this filtration is computed,
+all remaining steps of the 1976 algorithm use only linear algebra in~$k^n$,
+with a total cost of at most~$O(n^3)$ operations.
+\end{proof}
 
-Let~$B$ be an invertible symmetric matrix.
-We recall that the $B$-adjoint of a matrix~$M$
-is~$M^{⋆} = B^{-1} · \transpose{M} · B$.
-The ``polar decomposition'' algorithm makes the two following claims.
+Over the real and complex numbers,
+there exist cubic algorithms computing the Kronecker decomposition
+of pencils of linear maps~\cite{beelen1988improved}.
+These algorithms use real rotations and floating-point arithmetic,
+and are therefore not applicable to finite fields.
+We do not know whether there also exists a cubic algorithm
+for the Kronecker decomposition over finite fields.
+
+
+\subsection{Primary decomposition}
+\label{ap:primary}
+
+We give an algorithm that proves
+Proposition~\ref{prop:primary-decomposition}.
+
+% \begin{proof}[of Proposition~\ref{prop:primary-decomposition}]%<<<
+Following~\cite[Lemma 4.1]{inventiones1976waterhouse},
+we first decompose the pencil~$A - λ B$ as the orthogonal sum of
+a pencil $A' - λ B'$ such that $B'$~is regular,
+and of the summand corresponding to the place at infinity.
+The latter summand is exactly
+the limit~$E_{∞}$ of the increasing sequence of spaces~$(E_{h})$
+already computed by the algorithm of Prop.~\ref{prop:kronecker-decomposition}.
+
+We now assume that $B$~is regular and define the endomorphism~$H = B^{-1} A$.
+Then the primary decomposition in~(i) is given by
+the Frobenius rational normal form of~$H$.
+We may compute this normal form, and in particular
+the prime factorization of the characteristic polynomial $\det (A - λ B)$,
+with at most~$\Ot(n^3)$ field operations~\cite{kaltoffen11compute}.
+
+\medbreak
+
+% We now prove point~(ii) of the Proposition.
+Without loss of generality, we replace the space~$V$
+by the summand~$V_{p^e}$ associated to~$p(λ)^e$.
+The action of~$H = B^{-1} A$ makes $V$ into a free module over~$R = k[λ]$.
+Since both $B$ and~$A=BC$~are symmetric, for any~$x, y ∈ V$ we have
+\begin{equation}
+B(x, H y) = A(x, y) = A(y, x) = B(y, H x) = B(H x, y).
+\end{equation}
+This implies that, for all~$α ∈ R$, $B(α x, y) = B(x, α y)$.
+Therefore, by Lemmas~\ref{lem:trace-form} and~\ref{lem:trace-local},
+we can compute the unique $R$-bilinear form~$B_R$ over~$V$ whose trace is~$B$.
+\todo{coût...}
+
+Moreover, we see in the proof of these lemmas
+that computing each coefficient of the matrix of~$B_R$
+requires computing $e$~coefficients in~$K$,
+each of which needs linear algebra in the $k$-vector space~$K$;
+therefore, the total computational cost of this step
+is at most~$O(d^3 · e · m^2) ≤ O(n^3)$,
+where $d$~is the degree of~$p$ and $m$~is the $R$-rank of~$V$.
+
+\medbreak
+
+We conclude the proof by reducing the $R$-bilinear form~$B_R$
+to a canonical form.
+This result is already known over
+a finite field of odd characteristic~\cite[IV(1.5)]{milnorhusemoller},
+and lifts via Hensel's lemma to the ring~$R$.
+By the Gram orthogonalization algorithm~\cite[I(3.4)]{milnorhusemoller},
+$B_R$~is congruent to a bilinear form with diagonal
+matrix~$B_R = \mathrm{diag} (b_1, …, b_n)$.
+Since the field~$k$ has odd characteristic,
+$x^2$~is a separable polynomial over~$R$,
+and two applications of Hensel's lemma in the complete ring~$R$ allow
+the following lifts to~$R$ of results in the finite field~$k$:
 \begin{enumerate}
-\item[(A)] Let~$Y$ be a regular matrix commuting with both~$H$ and~$H^{⋆}$.
-Then the matrix~$Z = B· Y · \transpose{Y} · B^{-1}$ has a square root~$W$.
-\item[(B)] Define $X = Y · W^{-1}$.
-Then $X$~is a solution to the IP1S problem : $H· X = X · H$ and~$X^{⋆} · X = 1$.
+\item[(a)] let~$δ$ be a non-square element of~$k[λ]/p(λ)$;
+then for all~$i$, either~$b_i$ or $b_i/δ$ is a square in~$R$;
+\item[(b)] the equation~$u^2 + v^2 = δ$ has a solution with~$u, v ∈ R$.
 \end{enumerate}
-In the IP1S case, $H$~is the matrix of the characteristic
-endomorphism~$B^{-1} A$.
-This provides us with the extra hypothesis that, since $A$~is symmetric,
-$H^{⋆} = H$; this hypothesis is not used
-in~\cite{DBLP:journals/corr/BerthomieuFP13}.
+By~(a), we may assume that~$b_i = 1$ or~$b_i = δ$.
+From~(b), we deduce the matrix relation
+\begin{equation}
+\transpose{\mat{u&-v\\v&u}}·\mat{1&0\\0&1}·\mat{u&-v\\v&u} =
+\mat{δ&0\\0&δ}.
+\end{equation}
+This allows canceling all pairs of~$δ$ appearing in the diagonalization
+of~$A$.
 
-% We note that the authors of~\cite{DBLP:journals/corr/BerthomieuFP13}
-% further assume that $B$~is diagonal (they show that the general case is
-% reducible to this one).
+The computations needed in this part of the algorithm are
+a Gram orthogonalization of dimension~$m$
+and at most~$O(m)$ Hensel lifts to a ring of length~$e$.
+Therefore, the computational cost is again at most~$O(n^3)$ operations.
+% \end{proof}%>>>
 
-\medskip
-We give here counter-examples to both claims above,
-over (almost) any finite field with odd characteristic,
-and under the hypothesis~$H^{⋆} = H$.
+We now state the two lemmas used in the algorithm.% proof of the proposition.
+Let~$A → B$ be a ring morphism and $M$~be a $B$-module.
+Then $M$~is also a $A$-module.
+We say that a $A$-bilinear form~$b: M ⊗ M → A$ \emph{commutes with~$B$}
+if, for any~$c ∈ B$, we have~$b(cx, y) = b(x, cy)$.
 
-For claim (A), let~$d$ be a non-square element of~$k$.
-Since $k$~is finite, there exist~$u, v ∈ k$ such that~$d = u^2 + v^2$.
-Let~$t ∈ k ∖ \acco {0, 1, -1}$ and define
-\[ B = \mat{t & 0 \\ 0 & 1}, \quad
-H = \mat{0 & 1 \\ t & -\frac{u}{v}(t+1)}. \]
-We then see that~$H^{⋆} = H$ and that
-the matrix~$Y = \mat{u & v \\ t v & -t u}$ commutes with~$H$.
-However, we easily check that
-$Z = B · Y · \transpose{Y} · B^{-1} = \mat{d & 0 \\ 0 & t^2 d}$~has no square
-root.
+\begin{lem}\label{lem:trace-form}
+Let~$K/k$ be a separable field extension,
+and~$V$ be a finite-dimensional vector space over~$K$.
 
-Since the only hypothesis on~$d$ is that it is a sum of squares,
-this counterexample shows that the ``polar decomposition'' algorithm
-requires a (tower of) \emph{real quadratic extensions} of the base field,
-where a real quadratic extension is obtained by adjoining
-the square root of a sum of squares.
-The fields having no non-trivial real quadratic extensions
-are the \emph{Euclidean fields};
-this includes quadratically closed fields
-and real closed fields such as~$ℝ$ or~$\overline{ℚ} ∩ ℝ$,
-but since any element in a finite field is a sum of (two) squares,
-no finite field is Euclidean.
+For any $k$-bilinear form~$b: V ⊗ V → k$ commuting with~$K$, there
+exists a unique $K$-bilinear form~$b_K: V ⊗ V → K$ such that~$b =
+\Tr_{K/k} \,∘ \,b_K$.
+\end{lem}
 
-\medskip
+\begin{proof}
+By choosing a $K$-basis of~$V$ and noticing that
+all coordinates of a bilinear form are themselves bilinear forms,
+we may assume that~$V = K$.
 
-For claim B, let~$d$ be any element of~$k$ and again write~$d = u^2 + v^2$.
-We modify the previous example by setting~$t = -1$: let
-\[ B = \mat{-1 & 0 \\ 0 & 1}, \quad
-H = \mat{0 & 1 \\ -1 & 0}. \]
-We again have $H^{⋆} = H$, and $Y = \mat{u & v\\-v & u}$~commutes
-with~$H$.
-However, $Z = B · Y · \transpose{Y} · B^{-1} = \mat{d & 0 \\ 0 & d} = W^2$
-where $W = \mat{0 & d \\ 1 & 0}$ (or any of its conjugates).
-We now easily check that
-$X = Y · W^{-1}$~is not a solution of the IP1S problem.
+In that case, the result is classical. We recall the proof here.
+Let~$z$ be a primitive element of~$K$ and write $d = [K:k]$.
+Since~$K/k$ is separable, the trace form is
+non-degenerate~\cite[VI~5.2]{lang-algebra}
+and there exists a unique element~$a ∈ K$ such that
+$\Tr (a z^i) = b(1, z^i)$ for all~$i=0, …, d-1$.
+We immadiately see that, for all~$x, y ∈ k$, $\Tr (a x y) = b(x, y)$.
 
-In the real case, the ``polar decomposition'' method computes the
-square root of the matrix~$Z$ by analytic interpolation on its spectrum;
-this root then belongs to the algebra~$k[Z]$
-and therefore commutes with any matrix commuting with~$Z$.
-In the case above, since $Z = d · 1_{2}$ with~$d = u^2 + v^2 ≥ 0$,
-the analytic interpolation will compute one of the roots~$±√{d} · 1_2$.
-The square root~$W$ we give above does not belong to the algebra~$k[Z]$,
-thus making this method fail.
+\end{proof}
 
 
-\subsection{Singular pencils.}
-\todo{ils ont raté aussi les modules de Kronecker}
+Let~$K$ be a field and $R$~be the local ring~$R = k[π]/π^e$.
+Define the $K$-linear map~$τ: R → K$ by~$τ(∑ x_i π^i) = x_{e-1}$.
+Then $(x, y) ↦ τ(xy)$ is a $K$-bilinear map on~$R$,
+non-degenerate and commuting with~$R$.
+(It is also a natural choice of an isomorphism
+between $R$ and its dual $k$-vector space).
 
+\begin{lem}\label{lem:trace-local}
+Let~$M, N$ be $R$-modules of finite length.
+For any $k$-bilinear form~$b: M ⊗ N → k$ commuting with~$R$,
+there exists a unique $R$-bilinear form~$b_R: M ⊗ N → R$
+such that~$b = τ ∘ b_R$.
+\end{lem}
 
-\subsection{Decisional IP1S and extensions of scalars.}
+Note that we do not demand that $M$, $N$ be \emph{free} as $R$-modules.
+Moreover, the unicity of~$b_R$ shows that both forms~$b$ and~$b_R$ are
+simultaneously symmetric or antisymmetric.
+However, when $k$~is a field of characteristic two, it may happen (as we
+shall see in Section~\ref{S:quad-reg}) that $b$~is alternating whereas
+$b_R$~is not.
 
-The solution of IP1S over an extension field
-in~\cite{DBLP:journals/corr/BerthomieuFP13} raises the following
-question: given two pencils defined over a field~$k$
-and IP1S-equivalent over an extension~$k'$ of~$k$, are they always
-equivalent over the base field~$k$?
-
-The structure given by theorem~\ref{thm:IP1S}
-gives a simple, negative answer to this question.
-Since the Kronecker blocks are invariant by extension of scalars,
-the problem is determined by the regular pencils.
-In this case, two pencils are $k$-equivalent
-if and only if, for all primary factors~$R =k[λ]/p(λ)^e$,
-the corresponding $R$-bilinear forms are equivalent.
-% For any irreducible polynomial~$f$ factoring over~$k'$ as~$f = ∏ f_i$,
-% we have $L_{f,ℓ,u} ⊗_{k} k' = ∏ L_{f_i, ℓ, u'_i}$,
-% where $u'_i$~is the image of~$u$
-% by the projection map~$k[x]/f(x) → k'[x]/f_i(x)$.
-% This implies that $\bm{a}$ and~$\bm{b}$ are equivalent over~$k$
-% if and only if, for all irreducible factors~$f$, they have the same value
-% $u_{(f, ℓ)} (\bm{a}) = u_{(f, ℓ)} (\bm{b}) ∈ K_f^{×}/(K_f^{×})^2$,
-% where $K_f = k[x]/f(x)$~is the extension of~$k$ generated by~$f$.
-% Since the norm map defines
-% an isomorphism~$K_f^{×}/(K_f^{×})^{2} → k^{×} / (k^{×})^2$,
-% this condition is equivalent to: $\bm{a}$ and~$\bm{b}$ have the same
-% characters~$χ_{f,ℓ} (\bm{a}) = N_{K_f/k} (u_{(f,ℓ)} (\bm{a}))$.
-
-% For an irreducible polynomial~$f$, we have
-% \begin{equation}\label{local-extension}
-% L_{f,ℓ,u} ⊗_{k} k' = %\begin{cases}
-% %L_{p,d,u'},&\text{if $p$~is irreducible over~$k'$;}\\
-% ⨁ L_{f_i, ℓ,u'}, %&
-% \text{if $f$~splits as~$∏_i f_i$ over~$k'$,}
-% %\end{cases}
-% \end{equation}
-% where $u'$~is the image in~$k'^{×}/(k'^{×})^2$ of~$u$. The
-% map~$k^{×}/(k^{×})^2 → k'^{×}/(k'^{×})^2$ is bijective when $[k':k]$~is
-% odd and zero when it is even. From this we deduce:
-% 
-% \begin{prop}\label{prop:IP1S-extension}
-% Let~$\bm{a}, \bm{b}$ be two pencils which are IP1S-equivalent over a
-% field extension~$k'$ of the finite field~$k$.
-% \begin{enumerate}
-% \item If the degree~$[k':k]$~is odd, then $\bm{a}$ and~$\bm{b}$ are
-% equivalent over~$k$.
-% \item If the degree~$[k':k]$~is even, them $\bm{a}$ and~$\bm{b}$ are
-% equivalent over~$k$ iff, for all local factors~$L_{f,ℓ,u}$, they have the
-% same value~$u(f,ℓ) ∈ k^{×}/(k^{×})^2$.
-% \end{enumerate}
-% \end{prop}
-
-% In particular, when $k → k'$~has even degree,
-% solving the IP1S problem over~$k'$
-% does not, in general, solve the decisional form of IP1S over~$k$.
-For example, let~$a ∈ k$ and define the two-dimensional
-quadratic pencils~$(A,B) = (2 x y, x^2 + a y^2)$
-and~$(A', B') = (x^2 + y^2/a, 2 x y)$.
-These two pencils are equivalent only over any extension of~$k$
-containing a root of the equation~$x^4 + 4 a = 0$.
-% Although this fact is easy to check by hand,
-% we also provide an interpretation using our work.
-% The characteristic endomorphism of~$\bm{b}$ is
-% \begin{equation*}
-% c = -\mat{0&1\\1&0}^{-1} · \mat{1&0\\0&a} \;=\; \mat{0 & -a\\-1 & 0};
-% \end{equation*}
-% its characteristic polynomial is~$x^2 - a$.
-% Let~$R = k[c]$.
-% The space~$V = k^2$ is cyclic as a $R$-module and generated by the
-% vector~$e = \def\arraystretch{.5}\mat{1\\0}$,
-% with~$c · e = \def\arraystretch{.5}\mat{0\\-1}$.
-% Since $R$~is a separable $k$-algebra,
-% we may apply Prop.~\ref{prop:trace-form} even when it is not a field.
-% Let~$b_R = (x, y) ↦ b_R x y$ be the lift of~$b_{∞}$ to~$R$; then
-% \begin{equation}
-% \Tr_{R/k} b_R = b_{∞} (e, e) = 0
-% \quad\text{and}\quad
-% \Tr_{R/k} (c b_R) = b_{∞} (e, c·e) = -1,
-% \end{equation}
-% which means that~$b_R = -\frac{1}{2 a} c$.
-% 
-% The same computations for the pencil~$\bm{b'}$
-% yield~$k[c'] ≃ k[c]$ and~$b'_R = \frac{1}{2}$.
-% Therefore, the pencils~$\bm{b}$ and~$\bm{b'}$
-% are isomorphic exactly over the extensions~$k'$ of~$k$
-% where $b'_R/b_R = -c$~is a square.
-% When writing~$-c = (u/2 + v c)^{2}$,
-% this means that $u^4 + 4 a = 0$ as above.
-% Depending on the precise value of~$a$, the pencils~$\bm{b}$ and~$\bm{b'}$
-% may become isomorphic over an extension of degree~$1$, $2$ or~$4$ of~$k$.
-% 
+\begin{proof}[{of Lemma~\ref{lem:trace-local}}]
+By the structure theorem of modules over a principal ring,
+we have~$M = ⊕ R_{m_i}$ for some finite sequence of integers~$m_i$.
+If the result holds for modules~$(M', N)$ and~$(M'', N)$ then
+it also holds for~$(M' ⊕ M'', N)$.
+Therefore, using induction on the length of both modules,
+we only need to prove the case where~$M = R_m$ and~$N = R_n$ where~$m ≥ n$.
+In this case, since $b$~commutes with~$k[π]$,
+we see that for~$x = ∑ x_i π^i$, $y = ∑ y_i π^i$:
+\begin{equation}
+b(x,y) \;=\; ∑_{i,j} x_i y_j\: b(1, π^{i+j})
+  \;=\; ∑_{i+j+r = m-1} x_i y_j\: b(1, π^{m-1-r}).
+\end{equation}
+Let~$a = ∑ b(1, π^{i}) π^{m-1-i}$. Since $b(1, π^{r}) = 0$ for all~$r ≥
+n$, $a$~belongs to the ideal~$π^{m-n} R_m = \Hom_R (R_n, R_m)$, so that
+the product~$a\,y$ is well-defined in~$R_m$. The bilinear form~$b_R$ is
+finally the form defined by~$b_R(x,y) = a\:x y$.
+\end{proof}
 
 
 \section{Classification of $τ$-alternating forms.}
@@ -2797,7 +2004,7 @@ containing a root of the equation~$x^4 + 4 a = 0$.
 \todo{XXX rappeler que caractéristique 2}
 % Classification by the norm
 Although this is not directly useful for the IP1S problem,
-$τ$-alternating forms have an elegant classification up to congruence.
+$τ$-alternating forms have a nice classification up to congruence.
 For any bilinear form~$b$ on a free $R$-module~$M$, we define the
 \emph{norm} of~$b$ as the ideal~$\fr{n} b$ of~$R$
 generated by the elements~$b(x, x)$ for~$x ∈ M$.
@@ -2864,4 +2071,194 @@ $\mat{1 & 0 & a & 0\\0&1&0&0\\0&0&1&0\\au & a & 0 & 1}$.
 \end{proof}
 
 
-\end{document}%<<<1
+\section{Comparison to the ``polar decomposition'' algorithm.}
+\label{ap:polar}
+
+The “polar decomposition” algorithm was proposed as a solution to
+the odd-characteristic IP1S problem by
+Berthomieu, Faugère and Perret~\cite{2013bfp}.
+This method uses ideas coming from quadratic forms over the reals.
+In that case, one has the following useful property:
+any positive definite symmetric matrix~$M$ has a square root
+which is a polynomial in~$M$
+(and therefore commuting with any matrix that commutes with~$M$).
+
+This property is a consequence of the fact
+that a sum of squares is again a square in~$ℝ$.
+More generally, we say that a \emph{real quadratic extension} of a field~$k$
+is an extension obtained by adjoining the square root of a sum of squares.
+Then the “polar decomposition” algorithm solves the IP1S problem
+over a tower of real quadratic extensions of the base field.
+
+This solves the original problem only when the base field is \emph{Euclidean},
+\emph{i.e.} when it has no real quadratic extensions.
+For example, algebraically closed fields are Euclidean,
+as are real closed fields, such as~$ℝ$
+or the field~$ℝ_{\mathrm{alg}}$ of real algebraic numbers.
+However, since any element of a finite field is a sum of (two) squares,
+all quadratic extensions of a finite field are real
+and no finite field is Euclidean.
+
+\medskip
+Let~$B$ be an invertible symmetric matrix.
+We recall that the $B$-adjoint of a matrix~$M$
+is~$M^{⋆} = B^{-1} · \transpose{M} · B$.
+The two following claims about matrix square roots
+are made in~\cite[(3)]{2013bfp}:
+\begin{enumerate}
+\item[(A)] Let~$Y$ be a regular matrix commuting with both~$H$ and~$H^{⋆}$.
+Then the matrix~$Z = B· Y · \transpose{Y} · B^{-1}$ has a square root~$W$.
+\item[(B)] Define $X = Y · W^{-1}$.
+Then $X$~is a solution to the IP1S problem : $H· X = X · H$ and~$X^{⋆} · X = 1$.
+\end{enumerate}
+In the IP1S case, $H$~is the matrix of the characteristic
+endomorphism~$B^{-1} A$.
+This provides us with the extra hypothesis that, since $A$~is symmetric,
+$H^{⋆} = H$; this hypothesis is not used in~\cite{2013bfp}.
+We give here counter-examples to both claims above,
+over (almost) any finite field with odd characteristic,
+and under the hypothesis~$H^{⋆} = H$.
+
+For claim (A), let~$d$ be a non-square element of~$k$.
+Since $k$~is finite, there exist~$u, v ∈ k$ such that~$d = u^2 + v^2$.
+Let~$t ∈ k ∖ \acco {0, 1, -1}$ and define
+\[ B = \mat{t & 0 \\ 0 & 1}, \quad
+H = \mat{0 & 1 \\ t & -\frac{u}{v}(t+1)}. \]
+Then~$H^{⋆} = H$ and $Y = \mat{u & v \\ t v & -t u}$ commutes with~$H$.
+However,
+$Z = B · Y · \transpose{Y} · B^{-1} = \mat{d & 0 \\ 0 & t^2 d}$~has no square
+root.
+
+We note that, since the only hypothesis needed on~$b$
+is that it is a sum of squares,
+this counter-example shows that
+the “polar decomposition” algorithm really needs
+a generic tower of real quadratic extensions.
+
+\medskip
+
+For claim B, let~$d$ be any element of~$k$ and again write~$d = u^2 + v^2$.
+We modify the previous example by setting~$t = -1$: let
+\[ B = \mat{-1 & 0 \\ 0 & 1}, \quad
+H = \mat{0 & 1 \\ -1 & 0}. \]
+We again have $H^{⋆} = H$, and $Y = \mat{u & v\\-v & u}$~commutes
+with~$H$.
+However, $Z = B · Y · \transpose{Y} · B^{-1} = \mat{d & 0 \\ 0 & d} = W^2$
+where $W = \mat{0 & d \\ 1 & 0}$ (or any of its conjugates).
+We now easily check that
+$X = Y · W^{-1}$~is not a solution of the IP1S problem.
+
+% In the real case, the ``polar decomposition'' method computes the
+% square root of the matrix~$Z$ by analytic interpolation on its spectrum;
+% this root then belongs to the algebra~$k[Z]$
+% and therefore commutes with any matrix commuting with~$Z$.
+% In the case above, since $Z = d · 1_{2}$ with~$d = u^2 + v^2 ≥ 0$,
+% the analytic interpolation will compute one of the roots~$±√{d} · 1_2$.
+% The square root~$W$ we give above does not belong to the algebra~$k[Z]$,
+% thus making this method fail.
+% 
+
+\paragraph{Decisional IP1S and extensions of scalars.}
+
+When replacing the field~$k$ by a suitable extension,
+a version of both claims above becomes true,
+as was noticed in~\cite[6.1]{2013bfp}.
+This raises the following question: given a field~$k$,
+for which extensions~$k'$ of~$k$ is it true that
+any two pencils that are IP1S-equivalent over~$k'$
+are always equivalent over~$k$?
+
+The structure given by Propositions~\ref{prop:kronecker-decomposition}
+and~\ref{prop:primary-decomposition} gives a simple answer.
+Namely, since the Kronecker degrees are invariant by extension of scalars,
+any totally singular pencils which are $k'$-equivalent are $k$-equivalent.
+On the other hand, two regular pencils are $k$-equivalent
+if and only if, for all primary factors~$R =k[λ]/p(λ)^e$,
+the corresponding bilinear forms on~$k[λ]/p(λ)$ are equivalent.
+This means that the answer is positive exactly when
+the extension degree~$[k':k]$ is odd.
+This excludes the case where $k'$~is a
+real quadratic extension of~$k$.
+
+% For any irreducible polynomial~$f$ factoring over~$k'$ as~$f = ∏ f_i$,
+% we have $L_{f,ℓ,u} ⊗_{k} k' = ∏ L_{f_i, ℓ, u'_i}$,
+% where $u'_i$~is the image of~$u$
+% by the projection map~$k[x]/f(x) → k'[x]/f_i(x)$.
+% This implies that $\bm{a}$ and~$\bm{b}$ are equivalent over~$k$
+% if and only if, for all irreducible factors~$f$, they have the same value
+% $u_{(f, ℓ)} (\bm{a}) = u_{(f, ℓ)} (\bm{b}) ∈ K_f^{×}/(K_f^{×})^2$,
+% where $K_f = k[x]/f(x)$~is the extension of~$k$ generated by~$f$.
+% Since the norm map defines
+% an isomorphism~$K_f^{×}/(K_f^{×})^{2} → k^{×} / (k^{×})^2$,
+% this condition is equivalent to: $\bm{a}$ and~$\bm{b}$ have the same
+% characters~$χ_{f,ℓ} (\bm{a}) = N_{K_f/k} (u_{(f,ℓ)} (\bm{a}))$.
+
+% For an irreducible polynomial~$f$, we have
+% \begin{equation}\label{local-extension}
+% L_{f,ℓ,u} ⊗_{k} k' = %\begin{cases}
+% %L_{p,d,u'},&\text{if $p$~is irreducible over~$k'$;}\\
+% ⨁ L_{f_i, ℓ,u'}, %&
+% \text{if $f$~splits as~$∏_i f_i$ over~$k'$,}
+% %\end{cases}
+% \end{equation}
+% where $u'$~is the image in~$k'^{×}/(k'^{×})^2$ of~$u$. The
+% map~$k^{×}/(k^{×})^2 → k'^{×}/(k'^{×})^2$ is bijective when $[k':k]$~is
+% odd and zero when it is even. From this we deduce:
+% 
+% \begin{prop}\label{prop:IP1S-extension}
+% Let~$\bm{a}, \bm{b}$ be two pencils which are IP1S-equivalent over a
+% field extension~$k'$ of the finite field~$k$.
+% \begin{enumerate}
+% \item If the degree~$[k':k]$~is odd, then $\bm{a}$ and~$\bm{b}$ are
+% equivalent over~$k$.
+% \item If the degree~$[k':k]$~is even, them $\bm{a}$ and~$\bm{b}$ are
+% equivalent over~$k$ iff, for all local factors~$L_{f,ℓ,u}$, they have the
+% same value~$u(f,ℓ) ∈ k^{×}/(k^{×})^2$.
+% \end{enumerate}
+% \end{prop}
+
+% In particular, when $k → k'$~has even degree,
+% solving the IP1S problem over~$k'$
+% does not, in general, solve the decisional form of IP1S over~$k$.
+For example, let~$a ∈ k$ and define the two-dimensional
+quadratic pencils~$(A,B) = (2 x y, x^2 + a y^2)$
+and~$(A', B') = (x^2 + y^2/a, 2 x y)$.
+These two pencils are equivalent only over a field
+containing a root of the equation~$x^4 + 4 a = 0$.
+In general, they are inequivalent over~$k$
+but equivalent over an extension of degree~$4$ of~$k$.
+
+% Although this fact is easy to check by hand,
+% we also provide an interpretation using our work.
+% The characteristic endomorphism of~$\bm{b}$ is
+% \begin{equation*}
+% c = -\mat{0&1\\1&0}^{-1} · \mat{1&0\\0&a} \;=\; \mat{0 & -a\\-1 & 0};
+% \end{equation*}
+% its characteristic polynomial is~$x^2 - a$.
+% Let~$R = k[c]$.
+% The space~$V = k^2$ is cyclic as a $R$-module and generated by the
+% vector~$e = \def\arraystretch{.5}\mat{1\\0}$,
+% with~$c · e = \def\arraystretch{.5}\mat{0\\-1}$.
+% Since $R$~is a separable $k$-algebra,
+% we may apply Prop.~\ref{prop:trace-form} even when it is not a field.
+% Let~$b_R = (x, y) ↦ b_R x y$ be the lift of~$b_{∞}$ to~$R$; then
+% \begin{equation}
+% \Tr_{R/k} b_R = b_{∞} (e, e) = 0
+% \quad\text{and}\quad
+% \Tr_{R/k} (c b_R) = b_{∞} (e, c·e) = -1,
+% \end{equation}
+% which means that~$b_R = -\frac{1}{2 a} c$.
+% 
+% The same computations for the pencil~$\bm{b'}$
+% yield~$k[c'] ≃ k[c]$ and~$b'_R = \frac{1}{2}$.
+% Therefore, the pencils~$\bm{b}$ and~$\bm{b'}$
+% are isomorphic exactly over the extensions~$k'$ of~$k$
+% where $b'_R/b_R = -c$~is a square.
+% When writing~$-c = (u/2 + v c)^{2}$,
+% this means that $u^4 + 4 a = 0$ as above.
+% Depending on the precise value of~$a$, the pencils~$\bm{b}$ and~$\bm{b'}$
+% may become isomorphic over an extension of degree~$1$, $2$ or~$4$ of~$k$.
+% 
+
+
+\end{document}
