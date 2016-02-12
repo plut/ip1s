@@ -1068,7 +1068,7 @@ quadratic pencil on a $k$-vector space~$V$;
 let~$b$ be the polar pencil of~$q$ and~$c$ be its characteristic endomorphism.
 We say that a quadratic form \emph{commutes} with a $k$-algebra~$R$ if
 its polar form commutes with~$R$ in the sense of
-section~\ref{ss:commute}.
+Appendix~\ref{ap:commute}.
 In this way, the pencil~$q$ determines a quadratic form~$q_{∞}$
 commuting with the local algebra~$R = k[c]$.
 In particular, the polar form~$b_{∞}$ is an alternating bilinear form
@@ -1085,7 +1085,8 @@ there exists a unique $K$-quadratic form~$q_K: V ⊗ V → K$ such that~$q =
 \end{prop}
 
 \begin{proof}
-Let~$b$ be the polar form of~$q$. By~\ref{prop:trace-form},
+First assume that~$V = K$.
+Let~$b$ be the polar form of~$q$. By Proposition~\ref{prop:trace-ext},
 there exists~$b_K ∈ K$
 such that~$b(x,y) = \Tr_{K/k} (b_K xy)$; in particular, since $b$~is
 alternating, for all~$x$ we have~$\Tr_{K/k} (b_K x^2) = 0$ and
@@ -1093,7 +1094,7 @@ therefore~$b_K = 0$. Therefore, $q$~is a semi-linear form; since the
 trace map is non-degenerate, there exists~$q_K$ such that~$q(x) =
 \Tr_{K/k} (q_K x^2)$.
 
-As for Prop.~\ref{prop:trace-form}, the $n$-dimensional case directly follows by
+As for Prop.~\ref{prop:trace-ext}, the $n$-dimensional case directly follows by
 taking coordinates. Here all diagonal entries correspond to quadratic
 forms, and all others to bilinear forms; all of these commute with~$K$.
 \end{proof}
@@ -1823,7 +1824,7 @@ Since both $B$ and~$A=BC$~are symmetric, for any~$x, y ∈ V$ we have
 B(x, H y) = A(x, y) = A(y, x) = B(y, H x) = B(H x, y).
 \end{equation}
 This implies that, for all~$α ∈ R$, $B(α x, y) = B(x, α y)$.
-Therefore, by Lemmas~\ref{lem:trace-form} and~\ref{lem:trace-local},
+Therefore, by Propositions~\ref{prop:trace-ext} and~\ref{prop:trace-local},
 we can compute the unique $R$-bilinear form~$B_R$ over~$V$ whose trace is~$B$.
 \todo{coût...}
 
@@ -1869,23 +1870,23 @@ and at most~$O(m)$ Hensel lifts to a ring of length~$e$.
 Therefore, the computational cost is again at most~$O(n^3)$ operations.
 % \end{proof}%>>>
 
-\subsection{Bilinear form commuting with an algebra}
-\label{ap:commuting}
-We now state the two lemmas used in
+\subsection{Bilinear forms commuting with an algebra}
+\label{ap:commute}
+We now state the two propositions used in
 the algorithm of Appendix~\ref{ap:primary}.
 Let~$A → B$ be a ring morphism and $M$~be a $B$-module.
 Then $M$~is also a $A$-module.
 We say that a $A$-bilinear form~$b: M ⊗ M → A$ \emph{commutes with~$B$}
 if, for any~$c ∈ B$, we have~$b(cx, y) = b(x, cy)$.
 
-\begin{lem}\label{lem:trace-form}
+\begin{prop}\label{prop:trace-ext}
 Let~$K/k$ be a separable field extension,
 and~$V$ be a finite-dimensional vector space over~$K$.
 
 For any $k$-bilinear form~$b: V ⊗ V → k$ commuting with~$K$, there
 exists a unique $K$-bilinear form~$b_K: V ⊗ V → K$ such that~$b =
 \Tr_{K/k} \,∘ \,b_K$.
-\end{lem}
+\end{prop}
 
 \begin{proof}
 By choosing a $K$-basis of~$V$ and noticing that
@@ -1910,12 +1911,12 @@ non-degenerate and commuting with~$R$.
 (It is also a natural choice of an isomorphism
 between $R$ and its dual $k$-vector space).
 
-\begin{lem}\label{lem:trace-local}
+\begin{prop}\label{prop:trace-local}
 Let~$M, N$ be $R$-modules of finite length.
 For any $k$-bilinear form~$b: M ⊗ N → k$ commuting with~$R$,
 there exists a unique $R$-bilinear form~$b_R: M ⊗ N → R$
 such that~$b = τ ∘ b_R$.
-\end{lem}
+\end{prop}
 
 Note that we do not demand that $M$, $N$ be \emph{free} as $R$-modules.
 Moreover, the unicity of~$b_R$ shows that both forms~$b$ and~$b_R$ are
@@ -1924,7 +1925,7 @@ However, when $k$~is a field of characteristic two, it may happen (as we
 shall see in Section~\ref{S:quad-reg}) that $b$~is alternating whereas
 $b_R$~is not.
 
-\begin{proof}[{of Lemma~\ref{lem:trace-local}}]
+\begin{proof}[{of Proposition~\ref{prop:trace-local}}]
 By the structure theorem of modules over a principal ring,
 we have~$M = ⊕ R_{m_i}$ for some finite sequence of integers~$m_i$.
 If the result holds for modules~$(M', N)$ and~$(M'', N)$ then
@@ -2187,7 +2188,7 @@ but equivalent over an extension of degree~$4$ of~$k$.
 % vector~$e = \def\arraystretch{.5}\mat{1\\0}$,
 % with~$c · e = \def\arraystretch{.5}\mat{0\\-1}$.
 % Since $R$~is a separable $k$-algebra,
-% we may apply Prop.~\ref{prop:trace-form} even when it is not a field.
+% we may apply Prop.~\ref{prop:trace-ext} even when it is not a field.
 % Let~$b_R = (x, y) ↦ b_R x y$ be the lift of~$b_{∞}$ to~$R$; then
 % \begin{equation}
 % \Tr_{R/k} b_R = b_{∞} (e, e) = 0
