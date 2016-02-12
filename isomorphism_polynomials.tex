@@ -1,6 +1,5 @@
 \documentclass{lms}
 %\usepackage[margin=30mm]{geometry}
-%\usepackage[letterpaper,hmargin=1.4in,vmargin=1.4in]{geometry}
 \usepackage{unicode}
 \DeclareUnicodeCharacter{22F1}{\smash\ddots}
 \DeclareUnicodeCharacter{22F0}{\smash\iddots}
@@ -13,7 +12,7 @@
 \usepackage{algorithm}
 \usepackage{algpseudocode}
 \usepackage{graphicx}
-\usepackage{lineno}\linenumbers
+% \usepackage{lineno}\linenumbers
 \usepackage{booktabs,multirow}
 
 \newif\ifapx \apxtrue % If appendix
@@ -186,9 +185,10 @@ and~$t ∈ \GL_m(k)$ of the polynomials~$a_i$ such that
 \bm{b} = t ∘ \bm{a} ∘ s.
 \end{equation*}
 The particular case where we restrict~$t$ to the identity transformation
-is also known as the \emph{Isomorphism of Polynomials with One Secret}
-(IP1S). Both these problems have been introduced in cryptography by
-Patarin in~\cite{DBLP:conf/eurocrypt/Patarin96} to construct an efficient
+is also known as \emph{Isomorphism of Polynomials with One Secret}
+(IP1S).
+Both these problems were introduced in cryptography by
+Patarin~\cite{DBLP:conf/eurocrypt/Patarin96} to construct an efficient
 authentication scheme, 
 as an alternative to the Graph Isomorphism Problem (GI) proposed by Goldreich, Micali and Wigderson~\cite{DBLP:journals/jacm/GoldreichMW91}.
 The IP problem was appealing since 
@@ -272,6 +272,9 @@ singular & Kronecker 1890\cite{1890kronecker}
 % which is classified by invariant factors;
 % and of a \emph{singular} part, which is classified by dimensions.
 % 
+Since if $2 ≠ 0$, quadratic and bilinear forms coincide,
+the odd-characteristic case of the problem
+was solved before it was even proposed.
 After the proposal of using pairs of quadratic forms by Patarin,
 there were also some advances by cryptographers,
 most of them unaware of the previous work cited above.
@@ -357,16 +360,16 @@ adding an algorithmic point of view to the classic theorems.
 % We start by studying the bilinear forms associated to
 % a pair of quadratic forms.
 Such a bilinear pair decomposes canonically as the orthogonal sum of
-a regular and a ``totally singular'' part,
-which is itself canonically isomorphic to a sum of standard objects
-called Kronecker modules.
-The regular parts are classified by invariant factors.
+a “totally singular” and a regular part.
+The totally singular part is canonically isomorphic to a sum of
+standard objects called Kronecker modules,
+while the regular parts is classified by invariant factors
+and some quadratic invariants.
 
 In characteristic different from two,
-the map from quadratic to bilinear forms is bijective.
-Therefore this theory gives a full classification of quadratic forms.
-In that case, the mathematics of bilinear pairs
-directly translate to a polynomial algorithm for solving the IP1S problem.
+this theory gives a full classification of quadratic forms.
+% In that case, the mathematics of bilinear pairs
+% directly translate to a polynomial algorithm for solving the IP1S problem.
 In this first part, we follow the previous treatment of
 the bilinear case given by Waterhouse~\cite{inventiones1976waterhouse};
 our contributions consist in detailing some algorithms
@@ -378,51 +381,6 @@ to bring the problem down to bounded dimension.
 This allows us to conclude by using generic methods
 for solving algebraic systems.
 
-% Such pair of bilinear forms~$(b_∞, b_0)$ is \emph{regular}
-% if its characteristic polynomial $\det (b_{∞} - x b_{0})$ is not zero,
-% and \emph{singular} otherwise.
-% Any bilinear pencil decomposes canonically as the sum of a regular
-% and a ``totally singular'' pencil.
-% Regular pencils arer classified by invariant factors,
-% and singular pencils are classified by 
-% XXX
-% 
-% This work covers the IP1S and IP2S problems
-% for~$m = 2$ homogeneous quadratic equations (\emph{quadratic pencils})
-% over a finite field of any characteristic.
-% 
-% For the IP1S problem in odd characteristic, we introduce three new tools.
-% A quadratic pencil is \emph{regular}
-% if its characteristic polynomial is not zero, and \emph{singular} otherwise.
-% We first give a full description of the \emph{singular part}
-% of all quadratic pencils in section~\ref{S:bil-sing}.
-% This is the same as the classical Kronecker classification of quadratic
-% pencils.
-% Although this dates back to Kronecker, the original proof used real and
-% complex analysis (square roots of matrices);
-% our new proof is algorithmic and valid over any field.
-% 
-% For regular pencils, we then give a decomposition as the orthogonal
-% direct sum of \emph{local pencils}, for which we know that at least one
-% of the quadratic forms is regular.
-% 
-% We finally prove that the IP1S problem
-% for a local, regular pencil over a non-binary field
-% amounts to a reduction problem for some quadratic forms over a local algebra.
-% As this is a well-known theory (in odd characteristic), we are able to
-% give a polynomial-time answer to all instances of IP1S in
-% section~\ref{S:bil-regular}. Our proof here specializes to that
-% of~\cite{MPG2013} in the particular case of a cyclic pencil.
-% 
-% The characteristic-two case is different from the odd-characteristic case
-% in that quadratic forms are no longer determined by their polar forms.
-% Although we were unable to give a full classification
-% for quadratic pencils in characteristic two,
-% we use the description of automorphisms of the polar pencil
-% to give a polynomial-time algorithm computing isomorphisms
-% between the quadratic pencils in section~\ref{S:quad-reg}.
-% 
-% \medskip
 
 The last section explains how to recover the second (``outer'') secret
 in the two-secret IP2S problem.
@@ -721,7 +679,7 @@ local rings~\cite[Proposition~1.2]{inventiones1976waterhouse}.
 
 For clarity, we state here a result covering all cases.
 \begin{prop}\label{prop:primary-decomposition}
-Let~$A - λ B$ be a symmetric bilinear pencil on~$k^n$.
+Let~$A - λ B$ be a regular symmetric bilinear pencil on~$k^n$.
 \begin{enumerate}
 \item There exists a unique decomposition of~$k^n$ as
 an orthogonal sum~$⨁ V_{p^e}$,
@@ -821,7 +779,7 @@ the $2d+1$-dimensional vector space~$K_d = H_{d-1} ⊕ \chk{H_{d}}$,
 equipped with the symmetric bilinear pencil~$A-λB$ such that,
 for~$f, f' ∈ H_{d-1}$ and~$φ, φ' ∈ \chk{H_d}$:
 \begin{equation}\label{eq:kronecker-bilinear}
-(A-λB) (f, f') \;=\; b_{λ} (φ, φ') \;=\; 0; \qquad
+(A-λB) (f, f') \;=\; (A-λ B) (φ, φ') \;=\; 0; \qquad
 (A-λB) (f, φ) \;=\; \chev {φ, (λ y - x) f}.
 \end{equation}
 
@@ -829,50 +787,65 @@ for~$f, f' ∈ H_{d-1}$ and~$φ, φ' ∈ \chk{H_d}$:
 % defines all homomorphisms between the bilinear spaces~$K_d$.
 % As in Subsection~\ref{SS:bil-reg-local},
 % we write~$f ≻ g$ for the relation~$b_{∞} f + b_0 g = 0$.
-\begin{prop}\label{prop:end-Kd}
-For any integers~$d, d'$, the homomorphisms from~$K_d$ to~$K_{d'}$
-preserving the bilinear pencil~$A - λ B$ are the maps of the form
-\begin{equation*}
-\begin{array}{lclclcl}H_{d-1} &⊕& \chk{H_d} &→&H_{d'-1} &⊕& \chk{H_{d'}}\\
-(f,&& φ) & ↦ & (u f + \chk{f} w,&& \chk{v} φ)
-\end{array},
-\end{equation*}
-where $u ∈ H_{d'-d}$, $v ∈ H_{d-d'}$, and~$w ∈ \chk{H_{d+d'-1}}$.
-\end{prop}
-\begin{proof}
-(This is independent of the characteristic).
-Define the relation~$≻$ on~$K_{d}$ by: $u ≻ v$ if $B u = A v$.
+We define a relation~$≻$ on~$K_{d}$ by: $u ≻ v$ if $B u = A v$.
 In particular, for all~$f, g ∈ H_{d-1}$ and~$φ, ψ ∈ \chk{H_d}$,
 \begin{equation}\label{eq:chain-Kd}
 f ≻ g \;\text{ iff }\; y f = x g; \quad
 φ ≻ ψ \;\text{ iff }\; \chk{y} φ = \chk{x} ψ.
 \end{equation}
+\begin{prop}\label{prop:end-Kd}
+For any integers~$d, d'$, the linear maps from~$K_d$ to~$K_{d'}$
+preserving the relation~$≻$ are the maps of the form
+\begin{equation*}
+\begin{array}{lclclcl}H_{d-1} &⊕& \chk{H_d} &→&H_{d'-1} &⊕& \chk{H_{d'}}\\
+(f,&& φ) & ↦ & (u f ,&& \chk{v} φ + \chk{f} w)
+\end{array},
+\end{equation*}
+where $u ∈ H_{d'-d}$, $v ∈ H_{d-d'}$, and~$w ∈ \chk{H_{d+d'-1}}$.
+\end{prop}
+\begin{proof}
+(This proof is independent of the characteristic.)
+Since we never have~$a ≻ b$ for~$a ∈ H_{d-1}$ and~$b ∈ \chk{H_{d}}$,
+a map~$F: K_d → K_{d'}$ is $≻$-preserving
+iff each of the four induced maps~$H_{d-1} → H_{d'-1}$, etc.
+is $≻$-preserving.
+
 Let~$(x^{i} y^{d-1-i})$ be a basis of~$H_{d-1}$
 and write~$ξ_{j,d-j}$ for the dual basis of~$\chk{H_d}$.
 We then have the relations
 \begin{equation}\label{eq:chain-Kd-zero}
-0 ≻ ξ_{0,d} ≻ ξ_{1,d-1} ≻ … ≻ ξ_{d,0} ≻ 0
+0 ≻ ξ_{0,d} ≻ ξ_{1,d-1} ≻ … ≻ ξ_{d,0} ≻ 0;
 \end{equation}
+on the other hand, by~\eqref{eq:chain-Kd},
+for any chain~$0 ≻ f_0 ≻ … ≻ f_{n} ≻ 0$ in~$H_d$,
+we have~$f_0 = … = f_n = 0$.
+This proves that there is no non-zero $≻$-preserving map
+$g: \chk{H_d} → H_{d'-1}$.
 
-Let~$F: K_{d} → K_{d'}$ be a $≻$-homomorphism.
-For~$j = 0, …, d$, let~$g_j$ be
-the projection to~$H_{d'-1}$ of~$F(ξ_{j, d-j})$.
-Applying~$F$ to the relation~\eqref{eq:chain-Kd-zero}, we see that
-\begin{equation}
-0 ≻ g_0 ≻ g_1 ≻ … ≻ g_d ≻ 0.
-\end{equation}
-This and~\eqref{eq:chain-Kd} imply that~$g_j = 0$ for all~$j$.
-From this we deduce that $F(\chk{H_d}) ⊂ \chk{H_{d'}}$.
-In the same way, we see that~$F(H_{d-1}) ⊂ H_{d'-1}$.% à vérifier
-
-Let~$v_j = \chev{F(ξ_{j,d-j}), y^{d'}}$ and~$v = ∑ v_j x^j y^{d-d'-j}$.
-By~\eqref{eq:chain-Kd-zero},
-we see that $v_j = \chev{F(ξ_{0,d}), x^{j} y^{d'-j}}$,
-so that~$F(ξ_{0,d}) = ∑ v_j ξ_{j,d'-j} = \chk{v} ξ_{0,d}$.
-Applying~\eqref{eq:chain-Kd-zero} once more,
-we deduce from this that $F(ξ_{j,d-j}) = \chk{v} ξ_{j,d-j}$ for all~$j$,
-and therefore~$F(φ) = \chk{v} φ$ for all~$φ ∈ \chk{H_{d'}}$.
-\todo{preuve pas finie}
+Finally, by observation~\eqref{eq:chain-Kd},
+each of the remaining three maps has the required form.
+% 
+% We first prove that any $≻$-map~$g: \chk{H_{d}} → H_{d'-1}$ is zero.
+% By relation~\eqref{eq:chain-Kd-zero}, we have
+% \begin{equation}
+% 0 ≻ g(ξ_{
+% \end{equation}
+% Let~$F: K_{d} → K_{d'}$ be a $≻$-homomorphism.
+% For~$j = 0, …, d$, let~$g_j$ be
+% the projection to~$H_{d'-1}$ of~$F(ξ_{j, d-j})$.
+% Applying~$F$ to the relation~\eqref{eq:chain-Kd-zero}, we see that
+% \begin{equation}
+% 0 ≻ g_0 ≻ g_1 ≻ … ≻ g_d ≻ 0.
+% \end{equation}
+% This and~\eqref{eq:chain-Kd} imply that~$g_j = 0$ for all~$j$.
+% From this we deduce that $F(\chk{H_d}) ⊂ \chk{H_{d'}}$.
+% Let~$v_j = \chev{F(ξ_{j,d-j}), y^{d'}}$ and~$v = ∑ v_j x^j y^{d-d'-j}$.
+% By~\eqref{eq:chain-Kd-zero},
+% we see that $v_j = \chev{F(ξ_{0,d}), x^{j} y^{d'-j}}$,
+% so that~$F(ξ_{0,d}) = ∑ v_j ξ_{j,d'-j} = \chk{v} ξ_{0,d}$.
+% Applying~\eqref{eq:chain-Kd-zero} once more,
+% we deduce from this that $F(ξ_{j,d-j}) = \chk{v} ξ_{j,d-j}$ for all~$j$,
+% and therefore~$F(φ) = \chk{v} φ$ for all~$φ ∈ \chk{H_{d'}}$.
 \end{proof}
 \subsection{Kronecker modules with coefficients}
 
@@ -890,50 +863,15 @@ defined for~$a ∈ E, h ∈ H_m$ and~$f ∈ H_d$, $φ ∈ \chk{H_d}$ by
 (a ⊗ h) f = a ⊗ (h f) \;∈ E ⊗ H_{d+m} \quad\text{and}\quad
 (a ⊗ h) φ = a ⊗ (\chk{h} φ) \;∈ E ⊗ \chk{H_{d-m}}.
 \end{equation}
-Likewise, the space~$\Hom (E, E') ⊗ H_m$ acts
-on~$E ⊗ H_d$ and~$\chk{E ⊗ H_d}$ by
+Likewise, for~$u ∈ \Hom(E, E')$, $f ∈ H_d$, $φ ∈ \chk{H_d}$,
+and $h ∈ H_m$, $ψ ∈ \chk{H_m}$, we define
 \begin{equation}
-(u ⊗ h) (a ⊗ f) = u(a) ⊗ (hf) \;∈ E' ⊗ H_{d+m},\quad
-(u ⊗ h) (a ⊗ φ) = u(a) ⊗ (\chk{h} φ) \;∈ E' ⊗ \chk{H_{d-m}}.
+\begin{array}{rcll}
+(u ⊗ h) (a ⊗ f) &=& u(a) ⊗ (hf) &∈ E' ⊗ H_{d+m},\\\
+\chk{(u ⊗ h)} (a ⊗ φ) &=& u(a) ⊗ (\chk{h} φ) &∈ E' ⊗ \chk{H_{d-m}},\\
+(u ⊗ ψ) \chk{(a ⊗ f)} &=& u(a) ⊗ (\chk{f} ψ) &∈ E' ⊗ \chk{H_{m-d}}.
+\end{array}
 \end{equation}
-
-% a natural bilinear action of~$E_d ⊗ H_m$ on~$H_d$ and~$\chk{H_d}$:
-% namely
-% way a bilinear action of~$E ⊗ H_m$ on~$H_d$ and~$\chk{H_d}$: namely, for
-% any~$u ∈ E ⊗ H_m$ written as~$u = ∑ u_i ⊗ x^i$ with~$u_i ∈ k^n$ and~$x^i
-% ∈ H_m$ and~$f ∈ H_d$ and~$φ ∈ \chk{H_d}$, we define
-% \begin{equation}
-% u f \;=\; ∑ u_i ⊗ (x^i f) \;∈ E ⊗ H_{d+m} \quad\text{and}\quad
-% \chk{u} φ \;=\; ∑ u_i ⊗ (\chk{(x^i)} φ) \;∈ E ⊗ \chk{H_{d-m}}.
-% \end{equation}
-% Likewise, let~$h ∈ \Hom(E, E') ⊗ H_m$ be written as~$h = ∑ h_i ⊗ x^i$
-% with~$h_i ∈ \Hom (E, E')$. For any~$u ⊗ f ∈ E ⊗ H_d$, we define~$h(u ⊗
-% f) ∈ E' ⊗ H_{d+m}$ by~$h(u ⊗ f) = ∑ h_i(u) ⊗ (x^i f)$.
-% An element
-% of~$\Hom (E ⊗ H_d, E' ⊗ H_{d+m})$ defined in this way is called
-% \emph{principal}. In the same way, we define principal elements of~$\Hom
-% (E ⊗ \chk{H_{d+m}}, E' ⊗ \chk{H_{d}})$.
-% 
-% Let~$r ≤ s$ be two integers and~$E, E'$ be two coefficient spaces. We say
-% that a bilinear form~$B$ on~$(E ⊗ H_r) × (E' ⊗ \chk{H_s})$ is
-% \emph{principal} if it is of the form~$B(f, φ) = \chev {φ, hf} = \chev
-% {\chk{h} φ, f}$ for some~$h ∈ \Hom (E, E') ⊗ H_{s-r}$.
-
-% \begin{lem}\label{lem:principal}
-% Let~$r ≤ s$ be two integers and~$E, E'$ be two coefficient spaces.
-% \begin{enumerate}
-% \item A bilinear form~$B$ on~$(E ⊗ H_r) × (E' ⊗ \chk{H_s})$ is principal
-% if, and only if, for any polynomial~$z$, $B(zf, φ) = B(f, \chk{z} φ)$.
-% \item Let~$α: E ⊗ H_r → E' ⊗ H_s$ and~$β: E' ⊗ \chk{H_s} → E ⊗ \chk{H_r}$ be
-% two linear maps. If $1 · α + β · 1$~is principal, then both~$α$ and~$β$
-% are principal.
-% \end{enumerate}
-% \end{lem}
-% 
-% \begin{proof}
-% By taking coordinates on~$E$ and~$E'$, we reduce the proof to the case
-% where~$E = E' = k$.
-% \end{proof}
 % \subsection{Automorphisms of a direct sum of Kronecker modules}%<<<2
 
 We now consider a totally irregular pencil of bilinear forms,
@@ -941,18 +879,14 @@ isomorphic to the orthogonal sum~$⨁ K_d^{n_d} = ⨁ E_d ⊗ K_d$
 for a unique finite sequence of integers~$(n_d)$,
 where we write~$E_d = k^{n_d}$.
 
-We give without a proof the following generalization
-of Proposition~\ref{prop:end-Kd} to $⨁ E_d ⊗ K_d$.
-\todo{xxx par contre améliorer la preuve de 2.2...}
-
 \begin{prop}\label{prop:aut-Ed-Kd}
 The automorphisms of~$⨁ E_d ⊗ K_d$ are exactly the maps of the form
 \begin{equation}\label{eq:aut-Ed-Kd}
-a ⊗ f ↦ ∑_{d' ≥ d} u_{d',d} (a) f + ∑_{d'} \chk{f} w_{d',d} (a), \quad
-a ⊗ φ ↦  ∑_{d' ≤ d} \chk{v_{d',d} (a)} φ,
+a ⊗ f ↦ ∑_{d' ≥ d} u_{d',d} (a ⊗ f) + ∑_{d'} w_{d',d} \chk{(a ⊗ f)},
+\quad a ⊗ φ ↦  ∑_{d' ≤ d} \chk{v_{d',d}} (a ⊗ φ),
 \end{equation}
 where~$u_{d',d} ∈ \Hom (E_d, E_{d'}) ⊗ H_{d'-d}$, $v_{d',d} ∈ \Hom (E_d,
-E_{d'} ⊗ H_{d-d'})$ and~$w_{d',d} ∈ \Hom (E_{d}, E_{d'}) ⊗
+E_{d'}) ⊗ H_{d-d'}$ and~$w_{d',d} ∈ \Hom (E_{d}, E_{d'}) ⊗
 \chk{H_{d+d'-1}}$ satisfy the following relations: let~$U, V, W$ be the
 matrices~$(u_{d',d})$, $(v_{d',d})$, and~$(w_{d',d})$; then
 \begin{equation}\label{eq:aut-Ed-Kd-ABC}
@@ -961,22 +895,20 @@ matrices~$(u_{d',d})$, $(v_{d',d})$, and~$(w_{d',d})$; then
 \end{equation}
 \end{prop}
 
-In the above proposition, we understand the elements~$u ⊗ f$ and~$u ⊗ φ$ to
+In the above proposition, we understand the elements~$a ⊗ f$ and~$a ⊗ φ$ to
 belong to the spaces~$E_d ⊗ H_{d-1}$ and~$E_d ⊗ \chk{H_d}$.
 For~$d > d'$, the space~$H_{d' - d}$ is zero,
-and therefore~$α_{d,d'} = β_{d',d} = 0$.
-
-The relation~$\transpose{A} · B = 1$ means that, for all~$d, d'$,
-$∑_i \transpose{α_{i,d}} · β_{i,d'} ∈ \chk{E_d} ⊗ \chk{E_{d'}} ⊗ H_{d'-d}$
-is the standard scalar product of~$E_d$ if $d = d'$ and~$0$ else;
-this product is to be interpreted as
-the collection of the corresponding terms of all degrees in~$(x:y)$,
-and the scalar product is taken in~$E_i$.
-Therefore, the elements~$α_{i,j}$ uniquely determine all of the~$β_{i,j}$.
-Likewise, the relation~$\transpose{A} · C + \transpose{C} · A = 0$
-means that $∑_i \transpose{α_{i,d}} · γ_{i,d'} +
-\transpose{γ_{i,d}} · α_{i,d'} = 0 ∈ E_d ⊗ E_{d'} ⊗ H_{d+d'-1}$,
-where scalar products are taken in~$E_i$.
+and therefore~$u_{d,d'} = v_{d',d} = 0$.
+The relation~$\transpose{U} · V = 1$ means that, for all~$d, d'$,
+$∑_i \transpose{u_{i,d}} · v_{i,d'} ∈ \Hom (E_{d'}, E_d) ⊗ H_{d'-d}$
+is the identity of~$E_d$ if $d = d'$ and~$0$ else.
+% this product is to be interpreted as
+% the collection of the corresponding terms of all degrees in~$(x:y)$,
+% and the scalar product is taken in~$E_i$.
+Therefore, the elements~$u_{i,j}$ uniquely determine all of the~$v_{i,j}$.
+Likewise, the relation~$\transpose{U} · W + \transpose{W} · V = 0$
+means that $∑_i \transpose{u_{i,d}} · w_{i,d'} +
+\transpose{w_{i,d}} · u_{i,d'} = 0 ∈ \Hom (E_{d'}, E_d) ⊗ \chk{H_{d+d'-1}}$.
 
 
 \begin{proof}[of Prop.~\ref{prop:aut-Ed-Kd}]
@@ -984,82 +916,87 @@ Let~$F$ be an orthogonal automorphism of~$V = ⨁ E_d ⊗ K_d$.
 For any basis of the coefficient spaces~$E_d$,
 the restrictions of~$F$ to maps~$K_d → K_{d'}$
 are $≻$-preserving in the sense of~\ref{prop:end-Kd}.
-Applying Prop.~\ref{prop:end-Kd}, we see that
-$F$~is of the form given in~\eqref{eq:aut-Ed-Kd}.
+This shows that $F$~is of the form given in~\eqref{eq:aut-Ed-Kd}.
 
 Let now $F$~be any linear map defined as in~\eqref{eq:aut-Ed-Kd}.
-Writing down the expansion of~$b_{λ} (F(u ⊗ f), F(v ⊗ φ))$,
-we see that $F$~is orthogonal if, and only if,
-its coefficients~$α_{d',d}$, $β_{d',d}$ and~$γ_{d',d}$
+Writing down the expansion of~$(A - λ B) (F(a ⊗ f), F(b ⊗ φ))$,
+straightforward linear algebra shows that $F$~is orthogonal if, and only if,
+its coefficients~$u_{d',d}$, $v_{d',d}$ and~$w_{d',d}$
 satisfy the relations~\eqref{eq:aut-Ed-Kd-ABC}.
 \end{proof}
 
 \subsection{Action on the diagonal coefficients}
-Let~$(q_{λ})$ be a quadratic pencil with polar pencil~$(b_{λ})$
-isomorphic to~$⨁ E_d ⊗ K_d$ for some coefficient spaces~$E_d$.
-
-Let~$F$ be an automorphism of~$(b_{λ})$ as in Prop.~\ref{prop:aut-Ed-Kd},
-and write~$q' = q ∘ F$.
-We then have, for all~$u ∈ E_d, f ∈ H_{d-1}, φ ∈ \chk{H_d}$:
-\begin{equation}\begin{split}
-q_{λ} (F (u ⊗ f))
-  &= ∑_{i ≥ d} q(α_{i,d} (u) f) + ∑_{i} q(γ_{i,d} (f u))
-  + ∑_{i} b(γ_{i,d} (u), α_{i,d} (u) f^2);\\
-q_{λ} (F (u ⊗ φ))
-  &= ∑_{i ≤ d} q(β_{i,d} (u) φ),
+We now assume that the characteristic of the base field is~two,
+and write~$σ: x ↦ x^2$ for the Frobenius automorphism.
+We now consider a pencil of quadratic forms~$q = (q_{λ})$
+whose polar~$b = (b_{λ})$ is the totally irregular pencil~$⨁ E_d ⊗ K_d$;
+let~$F$ be an automorphism of this polar form and~$q' = q ∘ F$.
+Keeping the notations of Proposition~\ref{prop:aut-Ed-Kd},
+we then have, for all~$a ∈ E_d, f ∈ H_{d-1}, φ ∈ \chk{H_d}$:
+\begin{equation}\begin{split}\label{eq:act-on-diag}
+q_{λ} (F (a ⊗ f))
+  &= ∑_{i ≥ d} q(u_{i,d} (a) f) + ∑_{i} q(w_{i,d} (f a))
+  + ∑_{i} b(w_{i,d} (a), u_{i,d} (a) f^2);\\
+q_{λ} (F (a ⊗ φ))
+  &= ∑_{i ≤ d} q(v_{i,d} (a) φ).
 \end{split}\end{equation}
-Solving the IP1S problem means computing the values~$α_{d,d'}$,
-$β_{d,d'}$ and~$γ_{d,d'}$ as defined in Prop.~\ref{prop:aut-Ed-Kd}.
+Solving the IP1S problem means computing the values~$u_{d,d'}$,
+$v_{d,d'}$ and~$w_{d,d'}$ as defined in Prop.~\ref{prop:aut-Ed-Kd}.
 In view of the relation~$\transpose{C} · A + \transpose{A} · C = 0$
 of this proposition,
-we replace the unknowns~$γ_{d,d'}$
-by~$γ'_{d,d'} = ∑_i \transpose{α_{i,d}} γ_{i,d'}$;
-then $γ_{d,d'}  ∈ \Hom (E_d, E_{d'}) ⊗ \chk{H_{d+d'-1}}$
-and the anti-symmetry condition is $\transpose{γ'_{d,d'}} = γ_{d',d}$.
+we replace the unknowns~$w_{d',d}$
+by~$z_{d',d} = ∑_i \transpose{u_{i,d}} w_{i,d'}$;
+then $z_{d',d}  ∈ \Hom (E_d, E_{d'}) ⊗ \chk{H_{d+d'-1}}$
+and the anti-symmetry condition is $\transpose{z_{d,d'}} = z_{d',d}$.
+We note that the transformation~$F$ is fully determined
+by the coefficients~$u$ and~$z$, which we choose as our unknowns.
+% We decompose $w_{d',d} ∈ \Hom(E_d, E_{d'}) ⊗ \chk{H_{d+d'-1}}$
+% as~$w_{d', d} = ∑ w_{d',d,j}\, ξ_{j,d+d'-1-j}$
+% for~$w_{d',d,j} ∈ \Hom (E_d, E_{d'})$.
+% The coefficients~$w'_{d',d}$ are then given by
+% $w'_{d',d,j} = ∑_{i,r} \transpose{u_{i,d,r}} · w_{i,d',r+j}$.
 
 With its polar form known,
 the quadratic pencil is determined by its diagonal coefficients.
-Write~$ψ_{d}$ for the restriction of~$σ^{-1} ∘ q$ to~$E_d ⊗ H_{d-1}$
-and $ω_d$ for its restriction to~$E_d ⊗ \chk{H_d}$;
-then $ψ_d$ and~$ω_d$ are pencils of $k$-linear forms and they determine~$q$.
-We likewise define~$ψ'_d, ω'_d$ as the diagonal coefficients of~$q'$.
-
-Let~$(ξ_{i,d-i})$ be the basis of~$\chk{H_d}$ dual to
-the basis~$(x^i y^{n-i})$ of~$H_D$,
-and decompose~$γ_{d,d'}$ in this basis as~$∑_{i,j} γ_{d,d',j} ξ_{j,d+d'-1-j}$,
-where~$γ_{d,d',j} ∈ \Hom (E_d, E_{d'})$.
-The coefficients of~$γ'_{d,d'}$ are then given by
-$γ'_{d,d',j} = ∑_{i,r} \transpose{α_{i,d,r}} · γ_{i,d',r+j}$.
-
-From this we deduce the formula
-for the diagonal coefficients~$ψ'_d, ω'_d$ of~$q'$:
+Let~$ψ_{d}, ω_d$ be the restrictions of~$σ^{-1} ∘ q$
+to~$E_d ⊗ H_{d-1}$ and~$E_d ⊗ \chk{H_d}$.
+these are pencils of $k$-linear forms and they determine~$q$.
+% We likewise define~$ψ'_d, ω'_d$ as the diagonal coefficients of~$q'$.
+% 
+% Let~$(ξ_{i,d-i})$ be the basis of~$\chk{H_d}$ dual to
+% the basis~$(x^i y^{n-i})$ of~$H_D$,
+% and decompose~$w_{d,d'}$ in this basis as~$∑_{i,j} w_{d,d',j} ξ_{j,d+d'-1-j}$,
+% where~$w_{d,d',j} ∈ \Hom (E_d, E_{d'})$.
+By~\eqref{eq:act-on-diag},
+the diagonal coefficients~$ψ'_d, ω'_d$ of~$q'$ are:
 \begin{equation}\begin{split}
-ψ'_d &= ∑_i ψ_i ∘ α_{i,d} + ∑_i ω_i ∘ γ_{i,d}
-  + ∑_{i,j} σ^{-1} (γ'_{d,d,2j+1} - λ γ'_{d,d,2j}) ξ_{j,d-j},\\
-ω'_d &= ∑_i ω_i ∘ β_{i,d}.
+ψ'_d &= ∑_i ψ_i ∘ u_{i,d} + ∑_i ω_i ∘ w_{i,d}
+  + ∑_{i,j} σ^{-1} (z_{d,d,2j+1} - λ z_{d,d,2j}) ξ_{j,d-j},\\
+ω'_d &= ∑_i ω_i ∘ v_{i,d}.
 \end{split}\end{equation}
 
-Up to a replacement of~$σ$ by its inverse~$σ^{-1}$, we obtain the
-following proposition.
+Since there are~$O(n^2)$ unknowns in total,
+by performing linear algebra of dimension~$O(n^2)$
+we obtain the following result.
 
 \begin{prop}\label{prop:ip1s-semilinear}
-The $n$-dimensional IP1S problem for totally irregular pencils over a
-field of characteristic two is equivalent to a set of~$O(n^2)$ linear
-equations and one semi-linear equation of the form
-\begin{equation*}
+The $n$-dimensional IP1S problem for totally irregular pencils
+over a field of characteristic two is equivalent to
+a semi-linear equation of the form
+\begin{equation}\label{eq:semilinear}
 X = A σ(X) + B,
-\end{equation*}
+\end{equation}
 where $A$~is a square matrix and $X, B$~are column matrices of
 dimension~$O(n^2)$.
 \end{prop}
 
-\subsection{Solving Frobenius equations}
+\subsection{Solving semi-linear equations}
 
 As the matrix~$A$ of Proposition~\ref{prop:ip1s-semilinear}
 empirically seems to be of general type,
-we give a generic method for this family of \emph{Frobenius equations}.
+we solve equation~\eqref{eq:semilinear} by a generic method.
 In the IP1S problem, the base field~$k$ has characteristic~two; we
-present here the general case for any (finite) base field.
+present here the general case for any (perfect) base field.
 
 Let~$k[φ]$ be the non-commutative ring of polynomials in~$φ$,
 with the relations~$φ c = σ(c) φ$ for all~$c ∈ k$. This ring is Euclidean.
@@ -1068,18 +1005,16 @@ given two elements~$a, b ∈ k[φ]$, there exist elements~$u, v$
 such that~$u a + v b = d$ where $d$~is the gcd of~$a$ and~$b$.
 Moreover, the only two-sided ideals of~$k[φ]$
 are those generated by the powers of~$φ$.
-
 From these two remarks and \cite[Ch.~3, Th.~19]{jacobson1943rings} we get
-the following.
-\begin{thm}
+the following\footnote{%
+This proposition is also the reduction modulo~$p$ of
+the Dieudonné-Manin reduction given by the Newton polygon
+over the ring of Witt vectors~$W(k)$.}.
+\begin{prop}
 Let~$φ: k^n → k^n$ be a semi-linear endomorphism. There exists a basis
 of~$k^n$ in which the matrix of~$φ$ is the direct sum of cyclic matrices.
 % at most one of which is not nilpotent.
-\end{thm}
-We note that this reduction is also a degenerate case of
-the Dieudonné-Manin reduction given by the Newton polygon
-for semi-linear endomorphism over the ring of Witt vectors~$W(k)$.
-
+\end{prop}
 
 Assume now that $A$~is cyclic and let~$R = k[a]/f(a)$ be the $k$-algebra
 generated by~$a$; the equation of Prop.~\eqref{prop:ip1s-semilinear} may
@@ -1094,9 +1029,9 @@ a local algebra. Using Chinese remainders, we may therefore assume that
 $R$~is a local algebra and~$f = f_0^d$, where $f_0$~is irreducible.
 
 We first see to the case where~$d = 1$, \emph{i.e.} $R$~is an extension
-of the field~$k$. Write~$k_0 = \F_p$ be the field fixed by the
-Frobenius~$σ$ and let~$N_0 = N_{R/k_0}$ and~$\Tr_0 = \Tr_{R/k_0}$ be the
-norm and trace operators. The equation~\eqref{eq:semi-linear-pol} implies
+of the field~$k$. Let~$k_0 = \F_p$ be the field fixed by the
+Frobenius~$σ$ and $N_0 = N_{R/k_0}$ and~$\Tr_0 = \Tr_{R/k_0}$ be the
+norm and trace operators. Equation~\eqref{eq:semi-linear-pol} implies
 that
 \begin{equation}
 x = b' + N_0(a) x, \quad\text{where $b' = b + a σ(b) + … + a σ(a) …
@@ -1104,11 +1039,13 @@ x = b' + N_0(a) x, \quad\text{where $b' = b + a σ(b) + … + a σ(a) …
 \end{equation}
 If $N_0(a) ≠ 1$, then this gives as a unique solution~$x =
 b'/(1-N_0(a))$. If, on the contrary, $N_0(a) = 1$, then by
-Hilbert's theorem~90~[Lang, VI.6.1], there exists~$u ∈ R^{×}$ such
-that~$a = σ(u)/u$; then~$x' = ux$ satisfies the equation~$x' = σ(x') +
-ub$. This last equation, using the additive form of Hilbert's theorem~90
-[Lang, VI.6.3], has a solution if, and only if, $\Tr_0 (ub) = 0$. We
-note that both forms of Hilbert's theorem are algorithmic.
+Hilbert's theorem~90~\cite[VI.6.1]{lang-algebra3},
+there exists~$u ∈ R^{×}$ such that~$a = σ(u)/u$;
+then~$x' = ux$ satisfies the equation~$x' = σ(x') + ub$.
+By the additive form of Hilbert's theorem~90 \cite[VI.6.3]{lang-algebra3},
+this last equation, has a solution if, and only if, $\Tr_0 (ub) = 0$.
+We note that both forms of Hilbert's theorem are algorithmic,
+with a complexity dominated by linear algebra.
 
 In the general case where~$d ≥ 1$, let~$\fr m$ be the maximal ideal
 of~$R$. We may use the preceding paragraph to compute a solution~$x_0$ of
@@ -1116,6 +1053,11 @@ the equation modulo~$\fr m$. Moreover, we notice that~$f(x) = x -  a σ(x)
 - b$ is a polynomial and that~$f'(x) = 1$; therefore, this polynomial is
 separated, and we may use Hensel's lemma to lift the approximate
 solution~$x_0$ to a full solution.
+
+\medskip
+Since equation~\eqref{eq:semilinear} has dimension~$O(n^2)$,
+the linear algebra involved in solving this by this method
+has a time complexity bounded by~$O(n^6)$.
 
 %>>>1
 \section{Regular quadratic pencils in characteristic two}
@@ -1897,7 +1839,7 @@ where $d$~is the degree of~$p$ and $m$~is the $R$-rank of~$V$.
 
 We conclude the proof by reducing the $R$-bilinear form~$B_R$
 to a canonical form.
-This result is already known over
+This result is well-known over
 a finite field of odd characteristic~\cite[IV(1.5)]{milnorhusemoller},
 and lifts via Hensel's lemma to the ring~$R$.
 By the Gram orthogonalization algorithm~\cite[I(3.4)]{milnorhusemoller},
@@ -2160,7 +2102,7 @@ $X = Y · W^{-1}$~is not a solution of the IP1S problem.
 
 \paragraph{Decisional IP1S and extensions of scalars.}
 
-When replacing the field~$k$ by a suitable extension,
+Over a tower of real quadratic extensions of~$k$,
 a version of both claims above becomes true,
 as was noticed in~\cite[6.1]{2013bfp}.
 This raises the following question: given a field~$k$,
@@ -2174,8 +2116,10 @@ Namely, since the Kronecker degrees are invariant by extension of scalars,
 any totally singular pencils which are $k'$-equivalent are $k$-equivalent.
 On the other hand, two regular pencils are $k$-equivalent
 if and only if, for all primary factors~$R =k[λ]/p(λ)^e$,
-the corresponding bilinear forms on~$k[λ]/p(λ)$ are equivalent.
-This means that the answer is positive exactly when
+the corresponding bilinear forms on~$k[λ]/p(λ)$ are equivalent,
+which means that all squares in~$k'[λ]/p(λ)$
+are squares in~$k[λ]/p(λ)$.
+Therefore the answer is positive exactly when
 the extension degree~$[k':k]$ is odd.
 This excludes the case where $k'$~is a
 real quadratic extension of~$k$.
