@@ -272,8 +272,8 @@ singular & Kronecker 1890\cite{1890kronecker}
 % which is classified by invariant factors;
 % and of a \emph{singular} part, which is classified by dimensions.
 % 
-Since if $2 ≠ 0$, quadratic and bilinear forms coincide,
-the odd-characteristic case of the problem
+If $2 ≠ 0$, then quadratic and bilinear forms coincide,
+thus the odd-characteristic case of the problem
 was solved before it was even proposed.
 After the proposal of using pairs of quadratic forms by Patarin,
 there were also some advances by cryptographers,
@@ -322,10 +322,10 @@ for $m=2$ over finite fields of any characteristic.
 
 Finally, Berthomieu, Faugère and Perret
 proposed in 2014~\cite{DBLP:journals/corr/BerthomieuFP13}
-a polynomial algorithm for the regular instances of IP1S
-with any number of equations when~$2 ≠ 0$,
+a polynomial algorithm for the regular, odd-characteristic instances of IP1S
+with any number of equations,
 inspired by the characteristic-zero methods.
-We evaluate their algorithm in Appendix~\ref{ap:polar}.
+We compare our method to theirs in Appendix~\ref{ap:polar}.
 
 % Given two families of polynomials over a field~$k$,
 % they give a solution to the IP1S problem
@@ -392,14 +392,15 @@ in the two-secret IP2S problem.
 \subsection*{Mathematical background and notations}
 Throughout this document, $k$~is a finite field
 and $V$~is a $n$-dimensional vector space over~$k$.
-We study the IP1S and IP2S problems for \emph{quadratic forms} on~$V$,
-which are homogeneous polynomials of degree~$2$ in coordinates on~$V$.
+We study the IP1S and IP2S problems for \emph{$k$-quadratic forms} on~$V$,
+which are homogeneous polynomials of degree~$2$ in coordinates on~$V$
+and with coefficients in~$k$.
 To a quadratic form~$q$,
 one may associate its \emph{polar form}~$b$ defined by
 \begin{equation*}\label{eq:polar}
 b(x,y) = q(x+y) - q(x) - q(y);
 \end{equation*}
-this is a symmetric bilinear form,
+this is a symmetric $k$-bilinear form,
 and it satisfies the \emph{polarity identity}
 \begin{equation*}\label{eq:polarity}
 b(x,x) = 2q(x).
@@ -520,7 +521,7 @@ and polynomial multiplication has a cost of~$O(n^2)$.
 %>>>1
 \section{A review of results on bilinear pencils}
 \label{s:bilinear}
-\subsection{The Kronecker decomposition}
+\subsection{Kronecker decomposition}
 
 
 For any integer~$h ≥ 0$, we define the \emph{Kronecker module}
@@ -652,10 +653,10 @@ an average-case complexity of~$O(n^3)$.
 % this basis on the quotient~$V/K$ to directly obtain a (sorted) basis of
 % the isotropic vectors of~$V/K$.
 %%>>>
-\subsection{The primary decomposition of regular bilinear pencils}
-\label{S:bil-regular}
+\subsection{Primary decomposition of regular bilinear pencils}
+\label{ss:bil-regular}
 
-Any regular bilinear pencil~$A - λ B$ is canonically isomorphic to
+Any regular bilinear pencil~$b_0 - λ b_∞$ is canonically isomorphic to
 an orthogonal direct sum~\cite[Theorem 4.2]{inventiones1976waterhouse},
 indexed over powers~$p(λ)^e$ of irreducible polynomials in~$k[λ]$,
 of regular polar pencils over the local rings~$k[λ]/p(λ)^e$.
@@ -673,15 +674,20 @@ to be valid for alternating pencils when~$2 = 0$;
 and in the reduction of quadratic forms over
 local rings~\cite[Proposition~1.2]{inventiones1976waterhouse}.
 % Therefore, the result~\cite[Theorem 4.2]{inventiones1976waterhouse},
-
-
-\bigbreak
-
 For clarity, we state here a result covering all cases.
-\begin{prop}\label{prop:primary-decomposition}
-Let~$A - λ B$ be a regular symmetric bilinear pencil on~$k^n$.
+If $b = b_0 - λ b_∞$ is a regular bilinear pencil on~$V$,
+its \emph{characteristic endomorphism} is~$c = b_∞^{-1} b_0$.
+For any polynomial~$f ∈ k[λ]$,
+we say that $b$~is \emph{free} over~$R = k[λ]/f(λ)$
+if~$f(c) = 0$ and the action of~$R$ on~$V$,
+with multiplication by~$λ$ given by~$c$,
+makes~$V$ into a free $R$-module;
+we then define the \emph{rank} of~$b$ as the rank of~$V$ over~$R$.
+
+\begin{prop}\label{prop:primary}
+Let~$b_0 - λ b_∞$ be a regular symmetric bilinear pencil on~$V = k^n$.
 \begin{enumerate}
-\item There exists a unique decomposition of~$k^n$ as
+\item There exists a unique decomposition of~$V$ as
 an orthogonal sum~$⨁ V_{p^e}$,
 running over all powers~$p^e$ of (finite or infinite) places of~$k[λ]$,
 such that $V_{p^e}$ is a free module over~$k[λ]/p(λ)^e$.
@@ -707,25 +713,142 @@ Proposition~\ref{prop:kronecker-decomposition}.
 \end{enumerate}
 \end{prop}
 
-By ``a free module over $k[λ]/p^e$'' in point~(i) above,
-we mean the following.
-If $p$~is a finite place, \emph{i.e.} an irreducible polynomial, then
-after restriction to~$V_{p^e}$: $B$~is a regular bilinear form;
-the endomorphism~$H = B^{-1} A$ satisfies the relation $p(H)^e = 0$;
-and $V_{p^e}$, seen as a $k[λ]/p(λ)^e$-module with
-multiplication by~$λ$ given by~$H$, is free.
-On the other hand, following~\cite[§~4]{inventiones1976waterhouse},
+% By ``a free module over $k[λ]/p^e$'' in point~(i) above,
+% we mean the following.
+% If $p$~is a finite place, \emph{i.e.} an irreducible polynomial, then
+% after restriction to~$V_{p^e}$: $B$~is a regular bilinear form;
+% the endomorphism~$H = B^{-1} A$ satisfies the relation $p(H)^e = 0$;
+% and $V_{p^e}$, seen as a $k[λ]/p(λ)^e$-module with
+% multiplication by~$λ$ given by~$H$, is free.
+In point~(i), following~\cite[§~4]{inventiones1976waterhouse},
 we define the summand corresponding to the place at infinity%
 \footnote{This could also be done in a way consistent with the finite places,
 by considering the \emph{homogeneous} characteristic polynomial
-$f(λ: μ) = \det (μ A - λ B)$.
+$f(λ: μ) = \det (μ b_0 - λ b_∞)$.
 However, using the inhomogeneous polynomial yields a simpler proof,
 at the cost of this \emph{ad hoc} definition for the place at infinity.}
-of~$k[λ]$ as the summand corresponding to
-the place zero for the pencil~$B - λ A$.
+of~$k[λ]$ for the pencil~$b_0 - λ b_∞$ as the summand corresponding to
+the place zero for the pencil~$b_∞ - λ b_0$.
 
 An algorithm computing this decomposition
 is given in Appendix~\ref{ap:primary}.
+
+\subsection{Bilinear and quadratic forms commuting with an algebra}
+\label{ss:commute}
+We state here some propositions about bilinear and quadratic forms
+that are used in this work.
+Let~$A → B$ be a ring morphism and $M$~be a $B$-module.
+Then $M$~is also a $A$-module.
+We say that a $A$-bilinear form~$b: M ⊗ M → A$ \emph{commutes with~$B$}
+if, for any~$c ∈ B$, we have~$b(α x, y) = b(x, α y)$;
+we say that a $A$-quadratic form commutes with~$B$ if its polar does.
+
+Let~$b_0 - λ b_∞$ be a regular symmetric bilinear pencil,
+and let~$c = b_∞^{-1} b_0$ be its characteristic endomorphism.
+Since both $b_∞$ and~$b_0=b_∞ c$~are symmetric, for any~$x, y ∈ V$ we have
+\begin{equation}
+b_∞(x, c y) = b_0(x, y) = b_0(y, x) = b_∞(y, c x) = b_∞(c x, y).
+\end{equation}
+This implies that, for all~$α ∈ k[c]$, $b_∞(α x, y) = b_∞(x, α y)$.
+Therefore, $b_∞$~commutes with~$k[c]$ in the previous sense.
+
+\begin{prop}\label{prop:trace-ext}
+Let~$K/k$ be a separable field extension,
+and~$V$ be a finite-dimensional vector space over~$K$.
+
+For any $k$-bilinear form~$b: V ⊗ V → k$ commuting with~$K$, there
+exists a unique $K$-bilinear form~$b_K: V ⊗ V → K$ such that~$b =
+\Tr_{K/k} \,∘ \,b_K$.
+\end{prop}
+\begin{proof}
+By choosing a $K$-basis of~$V$ and noticing that
+all coordinates of a bilinear form are themselves bilinear forms,
+we may assume that~$V = K$.
+
+In that case, the result is classical. We recall the proof here.
+Let~$z$ be a primitive element of~$K$ and write $d = [K:k]$.
+Since~$K/k$ is separable, the trace form is
+non-degenerate~\cite[VI~5.2]{lang-algebra}
+and there exists a unique element~$a ∈ K$ such that
+$\Tr (a z^i) = b(1, z^i)$ for all~$i=0, …, d-1$.
+We immadiately see that, for all~$x, y ∈ k$, $\Tr (a x y) = b(x, y)$.
+
+\end{proof}
+
+Let~$k$ be a field and $R$~be the local ring~$R = k[π]/π^e$.
+Define the $k$-linear map~$τ: R → k$ by~$τ(∑ x_i π^i) = x_{e-1}$.
+Then $(x, y) ↦ τ(xy)$ is a $k$-bilinear map on~$R$,
+non-degenerate and commuting with~$R$.
+(It is also a natural choice of an isomorphism
+between $R$ and its dual $k$-vector space).
+
+\begin{prop}\label{prop:trace-local}
+Let~$M, N$ be $R$-modules of finite length.
+For any $k$-bilinear form~$b: M ⊗ N → k$ commuting with~$R$,
+there exists a unique $R$-bilinear form~$b_R: M ⊗ N → R$
+such that~$b = τ ∘ b_R$.
+\end{prop}
+
+\begin{proof}[{of Proposition~\ref{prop:trace-local}}]
+(Note that we do not demand that $M$, $N$ be \emph{free} as
+$R$-modules.))
+By the structure theorem of modules over a principal ring,
+we have~$M = ⊕ R_{m_i}$ for some finite sequence of integers~$m_i$.
+If the result holds for modules~$(M', N)$ and~$(M'', N)$ then
+it also holds for~$(M' ⊕ M'', N)$.
+Therefore, using induction on the length of both modules,
+we only need to prove the case where~$M = R_m$ and~$N = R_n$ where~$m ≥ n$.
+In this case, since $b$~commutes with~$k[π]$,
+we see that for~$x = ∑ x_i π^i$, $y = ∑ y_i π^i$:
+\begin{equation}
+b(x,y) \;=\; ∑_{i,j} x_i y_j\: b(1, π^{i+j})
+  \;=\; ∑_{i+j+r = m-1} x_i y_j\: b(1, π^{m-1-r}).
+\end{equation}
+Let~$a = ∑ b(1, π^{i}) π^{m-1-i}$. Since $b(1, π^{r}) = 0$ for all~$r ≥
+n$, $a$~belongs to the ideal~$π^{m-n} R_m = \Hom_R (R_n, R_m)$, so that
+the product~$a\,y$ is well-defined in~$R_m$. The bilinear form~$b_R$ is
+finally the form defined by~$b_R(x,y) = a\:x y$.
+\end{proof}
+
+The unicity of~$b_R$ shows that both forms~$b$ and~$b_R$ are
+simultaneously symmetric or antisymmetric.
+However, when $k$~is a field of characteristic two
+and $b$~is alternating, in general $b_R$~is not
+(its diagonal coefficients~$a$ only verify~$τ(a x^2) = 0$,
+which is equivalent to~$a_{e-2i-1} = 0$ for all~$i$).
+On the other hand, if both $b(x,y)$ and~$b(π x, y)$ are alternating
+then $b_R$~is also alternating.
+
+\medskip
+For quadratic forms in characteristic two,
+the analog to~\ref{prop:trace-ext},
+which generalizes a result already known
+for cyclic pencils~\cite[Prop.~5]{MPG2013}, holds:
+\begin{prop} \label{prop:trace-quad}
+Let~$K$ be a finite separable extension of~$k$ and~$V$ be a $K$-vector
+space. For any $k$-quadratic form~$q: V ⊗ V → k$ commuting with~$K$,
+there exists a unique $K$-quadratic form~$q_K: V ⊗ V → K$ such that~$q =
+\Tr_{K/k} \, ∘ \, q_K$.
+\end{prop}
+\begin{proof}
+This needs proof only in characteristic two.
+First assume that~$V = K$.
+Let~$b$ be the polar form of~$q$.
+By Proposition~\ref{prop:trace-ext},
+there exists~$b_K ∈ K$ such that~$b(x,y) = \Tr_{K/k} (b_K xy)$;
+in particular, since $b$~is alternating,
+for all~$x$ we have~$\Tr_{K/k} (b_K x^2) = 0$ and therefore~$b_K = 0$.
+Since the polar of~$q$ is zero, $q$~is additive
+and, since $q(a x) = a^2 q(x)$, it is a semi-linear form.
+Since the trace map is non-degenerate,
+there exists~$q_K$ such that~$q(x) = \Tr_{K/k} (q_K x^2)$.
+
+As for Prop.~\ref{prop:trace-ext}, the $n$-dimensional case directly follows by
+taking coordinates. Here all diagonal entries correspond to quadratic
+forms, and all others to bilinear forms; all of these commute with~$K$.
+\end{proof}
+
+
 
 \section{Fully singular quadratic pencils in characteristic two}
 \label{S:quad-sing}
@@ -919,7 +1042,7 @@ are $≻$-preserving in the sense of~\ref{prop:end-Kd}.
 This shows that $F$~is of the form given in~\eqref{eq:aut-Ed-Kd}.
 
 Let now $F$~be any linear map defined as in~\eqref{eq:aut-Ed-Kd}.
-Writing down the expansion of~$(A - λ B) (F(a ⊗ f), F(b ⊗ φ))$,
+Writing down the expansion of~$(b_0 - λ b_∞) (F(a ⊗ f), F(b ⊗ φ))$,
 straightforward linear algebra shows that $F$~is orthogonal if, and only if,
 its coefficients~$u_{d',d}$, $v_{d',d}$ and~$w_{d',d}$
 satisfy the relations~\eqref{eq:aut-Ed-Kd-ABC}.
@@ -1062,80 +1185,70 @@ has a time complexity bounded by~$O(n^6)$.
 %>>>1
 \section{Regular quadratic pencils in characteristic two}
 \label{S:quad-reg}
-\subsection{Quadratic pencils and extensions of scalars}
-Let~$k$ be a finite field of characteristic two and $q$~be a regular
-quadratic pencil on a $k$-vector space~$V$;
-let~$b$ be the polar pencil of~$q$ and~$c$ be its characteristic endomorphism.
-We say that a quadratic form \emph{commutes} with a $k$-algebra~$R$ if
-its polar form commutes with~$R$ in the sense of
-Appendix~\ref{ap:commute}.
-In this way, the pencil~$q$ determines a quadratic form~$q_{∞}$
-commuting with the local algebra~$R = k[c]$.
-In particular, the polar form~$b_{∞}$ is an alternating bilinear form
-commuting with~$R$.
 
-The following proposition is an intrinsic, and more general, form
-of the result already known for cyclic pencils~\cite[Prop.~5]{MPG2013}.
 
-\begin{prop} \label{prop:trace-quad}
-Let~$K$ be a finite separable extension of~$k$ and~$V$ be a $K$-vector
-space. For any $k$-quadratic form~$q: V ⊗ V → k$ commuting with~$K$,
-there exists a unique $K$-quadratic form~$q_K: V ⊗ V → K$ such that~$q =
-\Tr_{K/k} \, ∘ \, q_K$.
+
+\begin{prop}
+Let~$k$ be a finite field with characteristic two
+and let~$q, q'$ be two equivalent
+regular pencils of $k$-quadratic forms on~$k^n$.
+Computing an isomorphism between $q$ and~$q'$
+is equivalent to computing isomorphisms
+between regular pencils~$(q_i), (q'_i)$
+where each pencil~$q_i, q'_i$ is defined on a finite extension~$K_i$ of~$k$,
+has dimension~$n_i$ and characteristic polynomial~$λ^{n_i}$,
+and~$∑ [K_i:k] n_i = n$.
 \end{prop}
 
-\begin{proof}
-First assume that~$V = K$.
-Let~$b$ be the polar form of~$q$. By Proposition~\ref{prop:trace-ext},
-there exists~$b_K ∈ K$
-such that~$b(x,y) = \Tr_{K/k} (b_K xy)$; in particular, since $b$~is
-alternating, for all~$x$ we have~$\Tr_{K/k} (b_K x^2) = 0$ and
-therefore~$b_K = 0$. Therefore, $q$~is a semi-linear form; since the
-trace map is non-degenerate, there exists~$q_K$ such that~$q(x) =
-\Tr_{K/k} (q_K x^2)$.
 
-As for Prop.~\ref{prop:trace-ext}, the $n$-dimensional case directly follows by
-taking coordinates. Here all diagonal entries correspond to quadratic
-forms, and all others to bilinear forms; all of these commute with~$K$.
+\begin{proof}
+By Proposition~\ref{prop:primary}~(i),
+the pencils~$q, q'$ both split as an orthogonal sum
+of primary components with characteristic polynomial~$p^e$,
+where $p$~is irreducible over~$k$.
 \end{proof}
 
-\subsection{Alternating forms commuting with a local algebra}
-\label{SS:alt-pencil}
 
-Using Prop.~\ref{prop:trace-quad},
-we assume that~$K = k$ and write~$R = k[π] / π^ℓ$.
-We equip this algebra with the Frobenius and Verschiebung automorphisms
-defined for~$x ∈ k$ by~$σ(x) = x^2$ and~$V(x) = x$,
-and by~$σ(π) = π$ and~$V(π) = π^2$.
-We note that, for all~$x ∈ R$, we have~$V σ(x) = σ V(x) = x^2$;
-moreover, $R$~decomposes as~$R = V(R) ⊕ π V(R)$.
+Let~$k$~be a finite field with characteristic two.
+In this whole section we consider a regular pencil~$q = q_0 - λ q_{∞}$
+of $k$-quadratic forms over~$V = k^n$.
+Let~$b_0 - λ b_∞$ be the polar pencil of~$q$
+and~$c = b_∞^{-1} b_0^{}$ be its characteristic endomorphism.
+By Proposition~\ref{prop:primary}~(i),
+we may assume that the minimal polynomial of~$c$ is~$p^e$,
+where $p$~is irreducible over~$k$.
+Since $p$~is separable, by Hensel's lemma,
+$k(c)$~contains a solution~$\tilde c$
+of the equation~$p(\tilde c) = 0$.
+Let~$K = k(\tilde c)$ and~$π = p(c)$.
+Then the local algebra~$R = k[c]$ is isomorphic to~$K[π]/π^e$.
+By Proposition~\ref{prop:trace-quad},
+there exists a unique $K$-quadratic pencil~$q_K$ on~$V$
+such that~$q = \Tr_{K/k} ∘ q_K$.
+This enables us to assume, for IP1S purposes, that $K=k$.
 
-We recall that the map~$τ: R → k$ given by the coefficient of~$π^{ℓ-1}$
-produces the regular $k$-bilinear form~$τ(x y)$ on~$R$.
-We call a $R$-bilinear form~$b$ \emph{$τ$-alternating} if $τ ∘ b$~is
-alternating, and say that an element~$a$ of~$R$ is $τ$-alternating if the
-bilinear form~$a x y$ is.
-The space~$R^{τ}$ of $τ$-alternating elements of~$R$ is linearly spanned
-by the~$π^{ℓ-2i}$ for~$0 ≤ i ≤ ℓ/2$.
-A $R$-bilinear form~$b$ with matrix~$B$ is $τ$-alternating if, and only if,
-$B$~is anti-symmetric and all its diagonal coefficients are $τ$-alternating.
+By Proposition~\ref{prop:trace-local}, since $b_{∞,K}$ commutes with~$π$,
+there exists a unique $R$-bilinear form~$b_{∞, R}$
+such that~$b_{∞,K} = τ ∘ b_{∞, R}$;
+moreover, since $b_{∞,K}$ and~$π b_{∞, K}$ are both alternating,
+$b_{∞, R}$~is again alternating.
 
-Let~$(b_0, b_{∞})$ be a pencil of alternating $k$-bilinear forms on~$V$,
-with characteristic endomorphism~$π$. The $R$-bilinear form~$b_R = b_{∞,
-R}$ associated to~$b_{∞}$ by~\ref{prop:trace-local} is then
-$τ$-alternating. Moreover, the $R$-bilinear form associated to~$b_{0}$
-is~$b_{0, R} = π b_R$; since $b_{0}$~is alternating, $π b_R$ is again
-alternating. Therefore, since $b_R$~and~$π b_R$ are $τ$-alternating,
-$b_R$~is an alternating form.
-
-Prop.~\ref{prop:diag-bigblock} applies to $τ$-alternating forms and shows
-that they are an orthogonal sum of regular $τ$-alternating forms on free
-modules over quotient rings of~$R$. We therefore assume that $V$~is free
-as a $R$-module.
+The $k$-automorphisms of the polar pencil~$b_0 - λ b_{∞}$
+are exactly the $R$-automorphisms of the alternating form~$b_{∞,R}$.
+In the next subsection,
+we compute the action of these automorphisms
+on the diagonal coefficients on the pencil.
+We equip the ring~$R$ with the Frobenius and Verschiebung endomorphisms,
+defined by~$σ(∑ x_i π^i) = ∑ x_i^2 π^i$ and~$V(∑ x_i π^i) = ∑ x_i π^{2i}$.
+This implies that, for all~$y ∈ R$, $V σ(y) = σ V(y) = y^2$;
+moreover, we have~$R = V(R) ⊕ π V(R)$,
+and $V(R)$~is also the subset of squares in~$R$.
+We say that an element~$c ∈ R$
+is \emph{$τ$-alternating} if $τ(c x^2) = 0$ for any~$x ∈ R$.
 
 \subsection{Reduction of local quadratic pencils}
 
-We first give an explicit description of quadratic forms commuting
+We first give an explicit description of $k$-quadratic forms commuting
 with~$R$.
 
 \begin{lem}\label{lem:gamma-polar}
@@ -1148,7 +1261,6 @@ by~$γ(x) = π V(yz)$. Then, for all~$u, x ∈ R$, we have
 with polar~$τ(c x y)$.
 \end{enumerate}
 \end{lem}
-
 
 \begin{proof}
 (i)~Write~$x = V(y) + π V(z)$ and~$u = V(v) + π V(w)$. Noticing
@@ -1211,8 +1323,9 @@ a'_i \;=\; ∑_r a_r σ(u_{r,i})
 The \emph{hyperbolic plane} is the module $R^2$, equipped with the
 $k$-quadratic form~$q(x) = τ(x_1 x_2)$; this form commutes with~$R$. The
 corresponding $τ$-alternating bilinear form~$b_R$ has the
-matrix~$\mat{0&1\\1&0}$. A quadratic form is \emph{hyperbolic} if it is
-isomorphic to the orthogonal sum of copies of the hyperbolic plane.
+matrix~$\smat{0&1\\1&0}$. A quadratic form is \emph{hyperbolic} if it is
+isomorphic to the orthogonal sum of a number of copies of the hyperbolic
+plane.
 We say that a quadratic form~$q$ \emph{reduces} to a form~$q'$ if $q$~is
 isomorphic to the direct sum of~$q'$ and a hyperbolic space.
 
@@ -1348,7 +1461,6 @@ number of computations in the base field~$k$.
 \end{proof}
 
 % \subsection{Solving the equations}%<<<2
-
 % We now describe a method for computing a linear isomorphism~$X$ between
 % two quadratic pencils on a free $R$-module~$M$.
 % The coefficients~$x_{i,j}$ of~$X$ must satisfy the equations given by
@@ -1726,14 +1838,14 @@ than~$O(n^3)$ operations in~$k$.
 \label{ap:kronecker}
 
 \begin{prop}
-Let~$A - λ B$ be a pencil of bilinear forms.
-There exists an algorithm computing the Kronecker decomposition of~$A-λB$
+There exists an algorithm computing the Kronecker decomposition
+of a bilinear pencil~$b_0 -λ b_∞$
 with time complexity~$O(h\, n^3)$ field operations,
-where $n$~is the dimension of the matrices~$A, B$,
+where $n$~is the dimension of the pencil,
 and $h$~is the maximal degree of a Kronecker module factor.
 \end{prop}
 \begin{proof}
-The kernel of~$A - λ B$, as a $k[λ]$-module,
+The kernel of~$b_0 - λ b_∞$, as a $k[λ]$-module,
 is equipped by an increasing filtration by polynomial degrees,
 and in its decomposition as a sum of Kronecker modules~$⨁ K_h^{e_h}$,
 this filtration corresponds to the filtration by the increasing
@@ -1744,37 +1856,37 @@ indexes~$h$.
 \medbreak
 
 We consider the lower echelon form
-of the concatenated $n × (2n)$-matrix $(B A)$, written as
+of the concatenated $n × (2n)$-matrix $(b_0 b_∞)$, written as
 \begin{equation}
-(B \; A) \;=\; U · \mat{C & 0 \\ M & A'},
+(b_0 \; b_∞) \;=\; U · \mat{C & 0 \\ M & A},
 % (B_{∞} \; B_0) \;=\; (⋆) · \mat{A_{∞} & 0\\ C & A_0},
 \end{equation}
 where $U$~is an invertible matrix of size~$n$
 and $0$~is a $r × n$-block, with $r$~being the largest possible value.
-This implies that $A'$~has rank~$n-r$ and hence that
-there exists~$F$ such that~$M = A' F$.
-Moreover, since $\smat{0\\A'} = U A$, we have~$\Ker A' = \Ker A$.
+This implies that $A$~has rank~$n-r$ and hence that
+there exists~$F$ such that~$M = A F$.
+Moreover, since $\smat{0\\A} = U b_0$, we have~$\Ker A = \Ker b_0$.
 From this we deduce that
 \begin{equation}
-B x - A y \;=\; 0 \quad ⇔ \quad
-  \begin{cases} C x = 0 \\ A (y - F x) = 0.\end{cases}
+b_∞ x - b_0 y \;=\; 0 \quad ⇔ \quad
+  \begin{cases} C x = 0 \\ b_0 (y - F x) = 0.\end{cases}
 \end{equation}
-Likewise, the upper echelon form of $(A\;B)$
+Likewise, the upper echelon form of $(b_0\;b_∞)$
 gives matrices $D$ and~$G$ such that
-$B x - A y = 0 ⇔ (D y = 0, B (x - G y) = 0)$.
+$b_∞ x - b_0 y = 0 ⇔ (D y = 0, b_∞ (x - G y) = 0)$.
 We also define an increasing sequence~$(E_h)$ of subspaces of~$V$
-by~$E_0 = \Ker B$, $E_{h+1} = (\Ker B) + G(E_h)$.
+by~$E_0 = \Ker b_∞$, $E_{h+1} = (\Ker b_∞) + G(E_h)$.
 Then $E_h$ is exactly the set of elements~$x ∈ V$ such that there exists
-a sequence~$x_0 = x, …, x_h$ satisfying $B x_i = A x_{i+1}$ for all~$i$
-and~$B x_h = 0$.
+a sequence~$x_0 = x, …, x_h$ satisfying $b_∞ x_i = b_0 x_{i+1}$ for all~$i$
+and~$b_∞ x_h = 0$.
 Moreover, such a sequence is determined by the choices
-of~$x_0 ∈ E_h$ and~$x_{i} ∈ F(x_{i-1}) + (\Ker B)$ for all~$i ≥ 1$.
+of~$x_0 ∈ E_h$ and~$x_{i} ∈ F(x_{i-1}) + (\Ker b_∞)$ for all~$i ≥ 1$.
 
 We now see that the elements~$x_0 + x_1 λ + … + x_h λ^h$
-of degree~$h$ of~$\Ker(A - λ B)$
-are determined by the relations~$x_0 ∈ E_{h} ∩ (\Ker A)$
-and~$x_{i+1} - F (x_i) ∈ (\Ker B)$.
-Since the filtration of~$(\Ker A)$ by~$E_{h} ∩ (\Ker A)$
+of degree~$h$ of~$\Ker(b_0 - λ b_∞)$
+are determined by the relations~$x_0 ∈ E_{h} ∩ (\Ker b_0)$
+and~$x_{i+1} - F (x_i) ∈ (\Ker b_∞)$.
+Since the filtration of~$(\Ker b_0)$ by~$E_{h} ∩ (\Ker b_0)$
 has at most $n$~steps, we can compute it with at most~$O(n^4)$ operations.
 
 Once this filtration is computed,
@@ -1795,22 +1907,23 @@ for the Kronecker decomposition over finite fields.
 \label{ap:primary}
 
 We give an algorithm that proves
-Proposition~\ref{prop:primary-decomposition}.
+Proposition~\ref{prop:primary}.
 
-% \begin{proof}[of Proposition~\ref{prop:primary-decomposition}]%<<<
+% \begin{proof}[of Proposition~\ref{prop:primary}]%<<<
 Following~\cite[Lemma 4.1]{inventiones1976waterhouse},
-we first decompose the pencil~$A - λ B$ as the orthogonal sum of
-a pencil $A' - λ B'$ such that $B'$~is regular,
+we first decompose the pencil~$b_0 - λ b_∞$ as the orthogonal sum of
+a pencil $b_0' - λ b_∞'$ such that $b_∞'$~is regular,
 and of the summand corresponding to the place at infinity.
 The latter summand is exactly
 the limit~$E_{∞}$ of the increasing sequence of spaces~$(E_{h})$
 already computed by the algorithm of Prop.~\ref{prop:kronecker-decomposition}.
 
-We now assume that $B$~is regular and define the endomorphism~$H = B^{-1} A$.
+We now assume that $b_0$~is regular
+and define the endomorphism~$c = b_∞^{-1} b_0$.
 Then the primary decomposition in~(i) is given by
-the Frobenius rational normal form of~$H$.
+the Frobenius rational normal form of~$c$.
 We may compute this normal form, and in particular
-the prime factorization of the characteristic polynomial $\det (A - λ B)$,
+the prime factorization of the characteristic polynomial $\det (b_0 - λ b_∞)$,
 with at most~$\Ot(n^3)$ field operations~\cite{kaltoffen11compute}.
 
 \medbreak
@@ -1818,18 +1931,19 @@ with at most~$\Ot(n^3)$ field operations~\cite{kaltoffen11compute}.
 % We now prove point~(ii) of the Proposition.
 Without loss of generality, we replace the space~$V$
 by the summand~$V_{p^e}$ associated to~$p(λ)^e$.
-The action of~$H = B^{-1} A$ makes $V$ into a free module over~$R = k[λ]$.
-Since both $B$ and~$A=BC$~are symmetric, for any~$x, y ∈ V$ we have
+The action of~$c = b_∞^{-1} b_0$ makes $V$ into a free module over~$R = k[λ]$.
+Since both $b_∞$ and~$b_0=b_∞ c$~are symmetric, for any~$x, y ∈ V$ we have
 \begin{equation}
-B(x, H y) = A(x, y) = A(y, x) = B(y, H x) = B(H x, y).
+b_∞(x, c y) = b_0(x, y) = b_0(y, x) = b_∞(y, c x) = b_∞(c x, y).
 \end{equation}
-This implies that, for all~$α ∈ R$, $B(α x, y) = B(x, α y)$.
+This implies that, for all~$α ∈ R$, $b_∞(α x, y) = b_∞(x, α y)$.
 Therefore, by Propositions~\ref{prop:trace-ext} and~\ref{prop:trace-local},
-we can compute the unique $R$-bilinear form~$B_R$ over~$V$ whose trace is~$B$.
+we can compute the unique $R$-bilinear form~$b_R$ over~$V$
+whose trace is~$b_∞$.
 \todo{coût...}
 
 Moreover, we see in the proof of these lemmas
-that computing each coefficient of the matrix of~$B_R$
+that computing each coefficient of the matrix of~$b_R$
 requires computing $e$~coefficients in~$K$,
 each of which needs linear algebra in the $k$-vector space~$K$;
 therefore, the total computational cost of this step
@@ -1838,14 +1952,14 @@ where $d$~is the degree of~$p$ and $m$~is the $R$-rank of~$V$.
 
 \medbreak
 
-We conclude the proof by reducing the $R$-bilinear form~$B_R$
+We conclude the proof by reducing the $R$-bilinear form~$b_R$
 to a canonical form.
 This result is well-known over
 a finite field of odd characteristic~\cite[IV(1.5)]{milnorhusemoller},
 and lifts via Hensel's lemma to the ring~$R$.
 By the Gram orthogonalization algorithm~\cite[I(3.4)]{milnorhusemoller},
-$B_R$~is congruent to a bilinear form with diagonal
-matrix~$B_R = \mathrm{diag} (b_1, …, b_n)$.
+$b_R$~is congruent to a bilinear form with diagonal
+matrix~$b_R = \mathrm{diag} (b_1, …, b_n)$.
 Since the field~$k$ has odd characteristic,
 $x^2$~is a separable polynomial over~$R$,
 and two applications of Hensel's lemma in the complete ring~$R$ allow
@@ -1862,88 +1976,13 @@ From~(b), we deduce the matrix relation
 \mat{δ&0\\0&δ}.
 \end{equation}
 This allows canceling all pairs of~$δ$ appearing in the diagonalization
-of~$A$.
+of~$b_R$.
 
 The computations needed in this part of the algorithm are
 a Gram orthogonalization of dimension~$m$
 and at most~$O(m)$ Hensel lifts to a ring of length~$e$.
 Therefore, the computational cost is again at most~$O(n^3)$ operations.
 % \end{proof}%>>>
-
-\subsection{Bilinear forms commuting with an algebra}
-\label{ap:commute}
-We now state the two propositions used in
-the algorithm of Appendix~\ref{ap:primary}.
-Let~$A → B$ be a ring morphism and $M$~be a $B$-module.
-Then $M$~is also a $A$-module.
-We say that a $A$-bilinear form~$b: M ⊗ M → A$ \emph{commutes with~$B$}
-if, for any~$c ∈ B$, we have~$b(cx, y) = b(x, cy)$.
-
-\begin{prop}\label{prop:trace-ext}
-Let~$K/k$ be a separable field extension,
-and~$V$ be a finite-dimensional vector space over~$K$.
-
-For any $k$-bilinear form~$b: V ⊗ V → k$ commuting with~$K$, there
-exists a unique $K$-bilinear form~$b_K: V ⊗ V → K$ such that~$b =
-\Tr_{K/k} \,∘ \,b_K$.
-\end{prop}
-
-\begin{proof}
-By choosing a $K$-basis of~$V$ and noticing that
-all coordinates of a bilinear form are themselves bilinear forms,
-we may assume that~$V = K$.
-
-In that case, the result is classical. We recall the proof here.
-Let~$z$ be a primitive element of~$K$ and write $d = [K:k]$.
-Since~$K/k$ is separable, the trace form is
-non-degenerate~\cite[VI~5.2]{lang-algebra}
-and there exists a unique element~$a ∈ K$ such that
-$\Tr (a z^i) = b(1, z^i)$ for all~$i=0, …, d-1$.
-We immadiately see that, for all~$x, y ∈ k$, $\Tr (a x y) = b(x, y)$.
-
-\end{proof}
-
-
-Let~$K$ be a field and $R$~be the local ring~$R = k[π]/π^e$.
-Define the $K$-linear map~$τ: R → K$ by~$τ(∑ x_i π^i) = x_{e-1}$.
-Then $(x, y) ↦ τ(xy)$ is a $K$-bilinear map on~$R$,
-non-degenerate and commuting with~$R$.
-(It is also a natural choice of an isomorphism
-between $R$ and its dual $k$-vector space).
-
-\begin{prop}\label{prop:trace-local}
-Let~$M, N$ be $R$-modules of finite length.
-For any $k$-bilinear form~$b: M ⊗ N → k$ commuting with~$R$,
-there exists a unique $R$-bilinear form~$b_R: M ⊗ N → R$
-such that~$b = τ ∘ b_R$.
-\end{prop}
-
-Note that we do not demand that $M$, $N$ be \emph{free} as $R$-modules.
-Moreover, the unicity of~$b_R$ shows that both forms~$b$ and~$b_R$ are
-simultaneously symmetric or antisymmetric.
-However, when $k$~is a field of characteristic two, it may happen (as we
-shall see in Section~\ref{S:quad-reg}) that $b$~is alternating whereas
-$b_R$~is not.
-
-\begin{proof}[{of Proposition~\ref{prop:trace-local}}]
-By the structure theorem of modules over a principal ring,
-we have~$M = ⊕ R_{m_i}$ for some finite sequence of integers~$m_i$.
-If the result holds for modules~$(M', N)$ and~$(M'', N)$ then
-it also holds for~$(M' ⊕ M'', N)$.
-Therefore, using induction on the length of both modules,
-we only need to prove the case where~$M = R_m$ and~$N = R_n$ where~$m ≥ n$.
-In this case, since $b$~commutes with~$k[π]$,
-we see that for~$x = ∑ x_i π^i$, $y = ∑ y_i π^i$:
-\begin{equation}
-b(x,y) \;=\; ∑_{i,j} x_i y_j\: b(1, π^{i+j})
-  \;=\; ∑_{i+j+r = m-1} x_i y_j\: b(1, π^{m-1-r}).
-\end{equation}
-Let~$a = ∑ b(1, π^{i}) π^{m-1-i}$. Since $b(1, π^{r}) = 0$ for all~$r ≥
-n$, $a$~belongs to the ideal~$π^{m-n} R_m = \Hom_R (R_n, R_m)$, so that
-the product~$a\,y$ is well-defined in~$R_m$. The bilinear form~$b_R$ is
-finally the form defined by~$b_R(x,y) = a\:x y$.
-\end{proof}
-
 
 \section{Classification of $τ$-alternating forms.}
 
@@ -2115,7 +2154,7 @@ any two pencils that are IP1S-equivalent over~$k'$
 are always equivalent over~$k$?
 
 The structure given by Propositions~\ref{prop:kronecker-decomposition}
-and~\ref{prop:primary-decomposition} gives a simple answer.
+and~\ref{prop:primary} gives a simple answer.
 Namely, since the Kronecker degrees are invariant by extension of scalars,
 any totally singular pencils which are $k'$-equivalent are $k$-equivalent.
 On the other hand, two regular pencils are $k$-equivalent
