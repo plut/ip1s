@@ -31,7 +31,7 @@
 \definecolor{lightgreen}{rgb}{.53,.99,.01}
 \definecolor{magenta}{rgb}{.76,0,.47}
 %>>>
-\def\todo#1{{\color{orange}TODO: #1}}
+\usepackage{soulutf8}\sethlcolor{pink} \def\todo#1{\hl{#1}}
 % Theorems, equations, counters%<<<
 \def\linkcounter#1#2{\edef\magic{\noexpand\let
   \expandafter\noexpand\csname c@#1\endcsname
@@ -45,6 +45,9 @@
 \def\labelenumi{(\roman{enumi})}
 \def\itemref#1{\expandafter\ifx\csname r@#1\endcsname\relax
   {\bfseries ??}\else{\setcounter{enumi}{\ref{#1}}\labelenumi}\fi}
+\def\proofof{Proof of }
+\let\realpar\paragraph
+\def\paragraph#1{\realpar{\textbf{#1}}}
 % Bib aliases
 \makeatletter%<<<
 \def\@citex[#1]#2{\leavevmode
@@ -88,6 +91,7 @@
 \DeclareMathOperator\Tr{Tr}
 \def\F{\mathbb{F}}
 \def\Id{\mathrm{Id}}
+\def\M{\mathsf{M}}
 \def\Ot{\widetilde{O}}
 \def\plusort{\stackrel{⟂}{⊕}}
 \def\gitkw$#1:#2${{\small \textbf{#1: }\texttt{#2}}}
@@ -106,7 +110,6 @@
 \def\siddots{\stretchdots{0pt}{4pt}{8pt}}
 \def\sddots{\stretchdots{8pt}{4pt}{0pt}}
 \makeatother%>>>
-
 %>>>1
 
 % $Date:$
@@ -151,9 +154,10 @@ of quadratic forms on $n$~variables,
 we compute two bijective linear maps $(s,t)$ such that
 $\bm{b}=t\circ \bm{a}\circ s$.
 We give an algorithm computing~$s$ and~$t$
-in worst-case time complexity~$O(n^4)$ in odd characteristic
-and~$O(n^6)$ in characteristic two,
-and~$\Ot(n^3)$ on average in all characteristics.
+in worst-case time complexity~$O(n^{ω+1})$ in odd characteristic
+and~$O(n^{2ω})$ in characteristic two,
+and~$O(n^3)$ on average in all characteristics,
+where $ω$~is a linear algebra exponent.
 % 
 % The IP2S problem was introduced in cryptography by Patarin back in 1996.
 % The special case of this problem when $t$ is the identity is called
@@ -250,7 +254,7 @@ The following table gives a summary of proofs of the various cases
 of reduction of a pair of symmetric bilinear forms.
 Another report is given in~\cite{olomouc2004fv}.
 
-\setlength\tabcolsep{.5em}\smallbreak
+\setlength\tabcolsep{.2em}\smallbreak
 \begin{center}\begin{tabular}{llll}
 Characteristic & zero & odd & two \\
 \toprule
@@ -368,6 +372,7 @@ and some quadratic invariants.
 
 In characteristic different from two,
 this theory gives a full classification of quadratic forms.
+We use this to give a solution to the IP1S problem.
 % In that case, the mathematics of bilinear pairs
 % directly translate to a polynomial algorithm for solving the IP1S problem.
 In this first part, we follow the previous treatment of
@@ -512,14 +517,17 @@ such that~$b ≡ a \pmod{m}$.
 
 All complexities will be given as a number of operations
 in the base field~$k$.
-For example,
-since Hensel lifts are computed via Newton's approximation method,
-lifting a root of a degree~$d$ polynomial to a ring of length~$n$
-requires $O(d \log n)$ operations.
-For simplicity, we will assume that the ``schoolbook'' methods are used
-for matrix and polynomial algebra;
-thus, matrix inversion has a cost of~$O(n^3)$,
-and polynomial multiplication has a cost of~$O(n^2)$.
+We write~$\M(n)$ for the cost of multiplication of polynomials of degree~$n$,
+and~$ω$ for an exponent such that linear algebra of dimension~$n$
+has cost~$n^{ω}$.
+% For example,
+% since Hensel lifts are computed via Newton's approximation method,
+% lifting a root of a degree~$d$ polynomial to a ring of length~$n$
+% requires $O(d \log n)$ operations.
+% For simplicity, we will assume that the ``schoolbook'' methods are used
+% for matrix and polynomial algebra;
+% thus, matrix inversion has a cost of~$O(n^3)$,
+% and polynomial multiplication has a cost of~$O(n^2)$.
 
 %>>>1
 \section{A review of results on bilinear pencils}
@@ -538,21 +546,26 @@ K'_h = \mat{-λ&&0\\1&\sddots{-λ}&\\&\sddots{-λ}&-λ\\0&&1}}.
 \end{equation}
 This is a singular symmetric bilinear pencil.
 
-We know~\cite[§3]{inventiones1976waterhouse}
-that any pencil has a unique \emph{Kronecker decomposition},
-that is, as an orthogonal sum of a regular pencil and of Kronecker modules.
+% We know~\cite[§3]{inventiones1976waterhouse}
+% that any pencil has a unique \emph{Kronecker decomposition},
+% that is, as an orthogonal sum of a regular pencil and of Kronecker modules.
 % Moreover, the multiplicity of each Kronecker module~$K_h$ in this
 % decomposition are also unique.
 
-\begin{prop}\label{prop:kronecker-decomposition}
+\begin{prop}[Kronecker decomposition]\label{prop:kronecker-decomposition}
 Let~$(b_{λ}) = b_0 - λ b_∞$ be a symmetric bilinear pencil on~$k^n$.
 Further assume that either~$2 ≠ 0$ in~$k$,
 or that both $b_0$~and~$b_∞$ are alternating.
-There exists a polynomial algorithm computing the Kronecker decomposition
-of the pencil~$(b_λ)$.
+\begin{enumerate}
+\item There exists a unique decomposition of the pencil~$(b_λ)$
+as an orthogonal sum of a regular pencil
+and of Kronecker modules.
+\item There exists an algorithm computing this decomposition
+in a time polynomial in~$n$.
+\end{enumerate}
 \end{prop}
-\begin{proof}[of Proposition~\ref{prop:kronecker-decomposition}]
-The proof of the Kronecker decomposition published
+\begin{proof}[\proofof Proposition~\ref{prop:kronecker-decomposition}]
+The proof of the Kronecker decomposition~(i) published
 by Waterhouse in 1976~\cite[Theorem 3.1]{inventiones1976waterhouse}
 gives an algorithm for computing it.
 That proof was written under the assumption that~$2 ≠ 0$ in~$k$;
@@ -566,15 +579,17 @@ the kernel of the matrix~$q_0 - λ q_∞$,
 with coefficients in the polynomial ring~$k[λ]$.
 Since the maximum degree appearing in the coefficients is~$n$,
 and assuming that school-book multiplication is used in~$k[λ]$,
-this requires at most~$O(n^5)$~operations in the field~$k$.
+this requires at most~$O(n^ω\, \M(n))$~operations in the field~$k$.
 \end{proof}
 
 We give in Appendix~\ref{ap:kronecker} an algorithm
-with complexity~$O((h+1)\,n^3)$,
-where $h$~is the maximal degree of a Kronecker module factor of the pencil.
-Since~$2h+1 ≤ n$, this algorithm has a worst-case complexity of~$O(n^4)$,
+with complexity~$O((h_{\max}+1)\,n^ω)$,
+where $h_{\max}$~is the maximal degree of
+a Kronecker module factor of the pencil.
+Since~$2h_{\max}+1 ≤ n$,
+this algorithm has a worst-case complexity of~$O(n^{ω+1})$,
 and, given that a generic bilinear pencil is regular,
-an average-case complexity of~$O(n^3)$.
+an average-case complexity of~$O(n^ω)$.
 
 % Let~$h$ be the smallest degree such that $E_{h} ∩ (\Ker A)$ is not zero.%<<<
 % By \cite[Lemma 3.2]{inventiones1976waterhouse}, we know that
@@ -712,7 +727,7 @@ where $u$~is either the identity matrix,
 or a prescribed non-square element of the field~$k[M_p]$,
 with the extra condition that $u = 1$ for all but at most one summand.
 \item There exists algorithms computing these decompositions
-with at most~$\Ot(n^3)$ operations in addition to those performed in
+with at most~$O(n^3)$ operations in addition to those performed in
 Proposition~\ref{prop:kronecker-decomposition}.
 \end{enumerate}
 \end{prop}
@@ -734,7 +749,7 @@ at the cost of this \emph{ad hoc} definition for the place at infinity.}
 of~$k[λ]$ for the pencil~$b_0 - λ b_∞$ as the summand corresponding to
 the place zero for the pencil~$b_∞ - λ b_0$.
 
-An algorithm computing this decomposition
+An algorithm proving point~(iii)
 is given in Appendix~\ref{ap:primary}.
 
 \subsection{Bilinear and quadratic forms commuting with an algebra}
@@ -787,26 +802,26 @@ non-degenerate and commuting with~$R$.
 between $R$ and its dual $k$-vector space).
 
 \begin{prop}\label{prop:trace-local}
-Let~$M, N$ be $R$-modules of finite length.
-For any $k$-bilinear form~$b: M ⊗ N → k$ commuting with~$R$,
-there exists a unique $R$-bilinear form~$b_R: M ⊗ N → R$
+For any $k$-bilinear form~$b$ on~$R^m × R^n$ commuting with~$R$,
+there exists a unique $R$-bilinear form~$b_R: R^m × R^n → R$
 such that~$b = τ ∘ b_R$.
 \end{prop}
-
-\begin{proof}[{of Proposition~\ref{prop:trace-local}}]
-(Note that we do not demand that $M$, $N$ be \emph{free} as
-$R$-modules.))
-By the structure theorem of modules over a principal ring,
-we have~$M = ⊕ R_{m_i}$ for some finite sequence of integers~$m_i$.
-If the result holds for modules~$(M', N)$ and~$(M'', N)$ then
-it also holds for~$(M' ⊕ M'', N)$.
-Therefore, using induction on the length of both modules,
-we only need to prove the case where~$M = R_m$ and~$N = R_n$ where~$m ≥ n$.
-In this case, since $b$~commutes with~$k[π]$,
-we see that for~$x = ∑ x_i π^i$, $y = ∑ y_i π^i$:
+\begin{proof}
+% (Note that we do not demand that $M$, $N$ be \emph{free} as
+% $R$-modules.))
+% By the structure theorem of modules over a principal ring,
+% we have~$M = ⊕ R_{m_i}$ for some finite sequence of integers~$m_i$.
+% If the result holds for modules~$(M', N)$ and~$(M'', N)$ then
+% it also holds for~$(M' ⊕ M'', N)$.
+% Therefore, using induction on the length of both modules,
+% we only need to prove the case where~$M = R_m$ and~$N = R_n$ where~$m ≥ n$.
+% In this case, since $b$~commutes with~$k[π]$,
+% we see that for~$x = ∑ x_i π^i$, $y = ∑ y_i π^i$:
+By taking coordinates we may assume~$m=n=1$.
+For any~$x = ∑ x_i π^i$ and $y = ∑ y_i π^i$:
 \begin{equation}
 b(x,y) \;=\; ∑_{i,j} x_i y_j\: b(1, π^{i+j})
-  \;=\; ∑_{i+j+r = m-1} x_i y_j\: b(1, π^{m-1-r}).
+  \;=\; ∑_{i+j+r = m-1} x_i y_j\: b(1, π^{m-1-r}) π^r.
 \end{equation}
 Let~$a = ∑ b(1, π^{i}) π^{m-1-i}$. Since $b(1, π^{r}) = 0$ for all~$r ≥
 n$, $a$~belongs to the ideal~$π^{m-n} R_m = \Hom_R (R_n, R_m)$, so that
@@ -1038,7 +1053,7 @@ means that $∑_i \transpose{u_{i,d}} · w_{i,d'} +
 \transpose{w_{i,d}} · u_{i,d'} = 0 ∈ \Hom (E_{d'}, E_d) ⊗ \chk{H_{d+d'-1}}$.
 
 
-\begin{proof}[of Prop.~\ref{prop:aut-Ed-Kd}]
+\begin{proof}[\proofof Prop.~\ref{prop:aut-Ed-Kd}]
 Let~$F$ be an orthogonal automorphism of~$V = ⨁ E_d ⊗ K_d$.
 For any basis of the coefficient spaces~$E_d$,
 the restrictions of~$F$ to maps~$K_d → K_{d'}$
@@ -1184,7 +1199,7 @@ solution~$x_0$ to a full solution.
 \medskip
 Since equation~\eqref{eq:semilinear} has dimension~$O(n^2)$,
 the linear algebra involved in solving this by this method
-has a time complexity bounded by~$O(n^6)$.
+has a time complexity bounded by~$O(n^{2ω})$.
 
 %>>>1
 \section{Regular quadratic pencils in characteristic two}
@@ -1276,7 +1291,7 @@ a'_i \;=\; ∑_r a_r σ(u_{r,i})
 \end{prop}
 
 The \emph{hyperbolic plane} is the module $R^2$, equipped with the
-$k$-quadratic form~$q(x_1, x_2) = τ(x_1 x_2)$; this form commutes with~$R$.
+$k$-quadratic form $q(x_1, x_2) = τ(x_1 x_2)$; this form commutes with~$R$.
 The corresponding $τ$-alternating bilinear form~$b_R$
 has the matrix~$\smat{0&1\\1&0}$.
 A quadratic form is \emph{hyperbolic} if it is isomorphic to
@@ -1343,7 +1358,6 @@ Let~$k$ be a finite field of characteristic two.
 There exists a polynomial algorithm computing a linear isomorphism between
 two equivalent regular quadratic pencils over~$k$.
 \end{prop}
-
 \begin{proof}
 By Propositions~\ref{prop:primary}~(i) and~\ref{prop:trace-quad},
 any regular quadratic pencil~$q$ over~$k^n$
@@ -1360,119 +1374,82 @@ regular pencils, defined over~$K$, and free of rank~$m$ over~$R=K[π]/π^e$.
 
 Let~$b = b_0 - λ b_∞$ be the polar pencil of~$q$.
 Since both $b_{∞}$ and~$b_{0} = π b_{∞}$ are alternating,
-$b_{∞,R}$ is alternating. Since it is also regular,
-it is hyperbolic. \todo{pourquoi}
-
-\end{proof}
-
-
-% By Proposition~\ref{prop:primary}~(i),
-% we may assume that the minimal polynomial of~$c$ is~$p^e$,
-% where $p$~is irreducible over~$k$.
-% Since $p$~is separable, by Hensel's lemma,
-% $k(c)$~contains a solution~$\tilde c$
-% of the equation~$p(\tilde c) = 0$.
-% Let~$K = k(\tilde c)$ and~$π = p(c)$.
-% Then the local algebra~$R = k[c]$ is isomorphic to~$K[π]/π^e$.
-% By Proposition~\ref{prop:trace-quad},
-% there exists a unique $K$-quadratic pencil~$q_K$ on~$V$
-% such that~$q = \Tr_{K/k} ∘ q_K$.
-% This enables us to assume, for IP1S purposes, that $K=k$.
-
-In this section we assume that $q$~is a regular quadratic pencil
-defined over~$K$, free of rank~$m$ over~$R = K[π]/π^e$.
-By Proposition~\ref{prop:trace-local}, since $b_{∞}$ commutes with~$π$,
-there exists a unique $R$-bilinear form~$b_{∞, R}$
-such that~$b_{∞} = τ ∘ b_{∞, R}$;
-moreover, since $b_{∞}$ and~$π b_{∞}$ are both alternating,
-$b_{∞, R}$~is again alternating.
-Therefore, $b_{∞, R}$ is \emph{hyperbolic}~\cite[I.(3.5)]{milnorhusemoller}:
-namely, its rank over~$R$ is even, and there exists
-a basis in which
-\begin{equation}
-b_{∞,R} ((x_1, …, x_r, x'_1, …, x'_r), (y_1, …, y'_r))
-  \;=\; ∑_{i=1}^r x_i y'_i - x'_i y_i.
-\end{equation}
+$b_{∞,R}$ is again alternating.
+Therefore, $b_{∞, R}$ is hyperbolic~\cite[I.(3.5)]{milnorhusemoller}.
 The $k$-automorphisms of the polar pencil~$b_0 - λ b_{∞}$
 are exactly the $R$-automorphisms of the alternating form~$b_{∞,R}$,
-\emph{i.e.} the \emph{symplectic} automorphism of~$R^{2m}$.
+\emph{i.e.} the elements of~$\mathrm{Sp}_{m} (R)$.
 
-Using Prop.~\ref{prop:witt-four} on both quadratic forms of a quadratic
-pencil, we see that any quadratic pencil reduces to a pencil of dimension
-at most four.
-Therefore, to compute a linear equivalence between any two quadratic
-pencils, we may assume that the dimension of the ambient $R$-module is at
-most four.
-
-\begin{proof}
-Let~$(q_{λ})$, $(q'_{λ})$ be two equivalent quadratic pencils.
-By subsection~\ref{SS:alt-pencil}, we may assume that
-the associated polar pencils~$(b_{λ})$, $(b'_{λ})$
-define an hyperbolic alternating form on~$R^{2n}$.
-
-Using Prop.~\ref{prop:witt-four} for the form~$q_{∞}$,
-we may assume that $q_{∞}$~is of the form~$[a, 0, …, 0; a', 0, …, 0]$.
-Using Prop.~\ref{prop:witt-four} again for the restriction of~$q_{0}$
-to the coordinates with index~$(2, …,  n; n+2, …, 2n)$ of~$R^{2n}$,
-we may further assume that
+Using Proposition~\ref{prop:witt-four} for the form~$q_{∞}$,
+we may assume that $q_{∞}$~is of the form $[a, 0, …, 0; a', 0, …, 0]$,
+as defined in the proof of Proposition~\ref{prop:witt-four}.
+Using Proposition~\ref{prop:witt-four} again for the restriction of~$q_{0}$
+to $m-2$~coordinates, we may further assume that
 $q_{0}$~is of the form~$[b, c, 0, …, 0; b', c', 0, …, 0]$.
 This shows that the pencil~$(q_{λ})$ is isomorphic to
-the direct sum of a pencil of dimension at most~$4$
+the direct sum of a pencil of $R$-rank at most~$4$
 and a hyperbolic pencil.
 The same applies to~$(q'_{λ})$.
 Since both hyperbolic parts are isomorphic,
-we only need to compute the isomorphism for pencils of dimension~$≤ 4$.
+we only need to compute the isomorphism for pencils for which~$m ≤ 4$.
 
-Let~$q$ be the quadratic form defined by
-\begin{equation}
-q(x_1, …, x_4) = τ (∑_{i} a_i σ(x_i) + x_1 x_3 + x_2 x_4)
-\end{equation}
-and likewise, let~$q'$ be a quadratic form linearly equivalent to~$q$,
-with the same hyperbolic polar form~$b$,
-and with diagonal coefficients~$a'_i$.
+\bigskip
 
-An isomorphism~$u: q → q'$ is given by coefficients~$u_{i,j}$
-satisfying the equations of Prop.~\ref{prop:quad-changevar}.
-Writing~$u = V(v) + π V(w)$, and likewise for~$u'$ and~$u_{i,j}$, we have
+We conclude by proving the result for quadratic pencils for
+which~$m=4$: in this case, we may write the form~$q_∞$ as
 \begin{equation}
-σ (u) = v^2 + π w^2, \qquad
-θ(a u u') = (v v' + π w w') θ(a) + (v w' + w v') θ(π a),
-\quad\text{and}\quad
-θ(a γ (u)) = v\, w\, θ(a π),
+q_∞(x_1, …, x_4) = τ (∑_{i} a_i σ(x_i) + x_1 x_3 + x_2 x_4)
 \end{equation}
-so that the equations on the 16 variables~$u_{i,j}$ are equivalent to
+and likewise, let~$(a'_i)$ be the diagonal form of~$q'_∞$.
+An isomorphism~$u$ between~$q_∞$ and~$q'_∞$ preserving
+the hyperbolic bilinear forms~$b_R, b'_R$ is given by coefficients~$u_{i,j}$
+satisfying the equations of Proposition~\ref{prop:quad-changevar}.
+For any~$u = V(v) + π V(w)$, $u' = V(v') + π V(w') ∈ R$, we have
+\begin{equation}\begin{split}
+σ (u) &= v^2 + π w^2, \quad\qquad
+θ(a γ (u)) = v\, w\, θ(π a),
+\quad\text{and}\\
+θ(a u u') &= (v v' + π w w') θ(a) + (v w' + w v') θ(π a),
+\end{split}\end{equation}
+so that the equations from Proposition~\ref{prop:quad-changevar}
+in the 16 variables~$u_{i,j}$ are equivalent to
 the following polynomial equations
 in the 32 variables~$v_{i,j}$ and~$w_{i,j}$:
-\begin{align}\label{eq:ip1s-polynomial}
+\begin{equation}\begin{split}\label{eq:ip1s-polynomial}
 σ (b_{i,j}) &= ∑_{r,s} σ (b_{r,s})\: (v_{r,i}^2 + π w_{r,i}^2)\:
   (v_{s,j}^2 + π v_{s,j}^2),\\
 a'_{i} &= ∑_{r} a_{r} (v_{r,i}^2 + π w_{r,i}^2)
-  + ∑_{r < s} (v_{r,i} v_{s,i} + π w_{r,i} w_{s,i}) θ (b_{r,s})
-  + (v_{r,i} w_{s,i} + w_{r,i} v_{s,i}) θ (π b_{r,s}).
-\end{align}
+  + ∑_{r < s} (v_{r,i} v_{s,i} + π w_{r,i} w_{s,i}) θ (b_{r,s})\\
+  &\hphantom{=} + (v_{r,i} w_{s,i} + w_{r,i} v_{s,i}) θ (π b_{r,s}).
+\end{split}\end{equation}
+We obtain a similar set of equations for the forms~$q_0, q'_0$.
+
 This shows that the IP1S problem is equivalent to
 a bounded number of polynomial equations
-in a bounded number of variables in the ring~$R = R_{ℓ} = K[π] /π^{ℓ}$
+in a bounded number of variables in the ring~$R = K[π] /π^{e}$
 (more precisely, it is enough
-to determine~$v_{i,j}$ up to precision~$\floor{ℓ/2}$
-and~$w_{i,j}$ up to precision $\floor{(ℓ-1)/2}$).
+to determine~$v_{i,j}$ up to precision~$\floor{e/2}$
+and~$w_{i,j}$ up to precision $\floor{(e-1)/2}$).
 Since $R$~is a discrete valuation ring,
 linear equations are solvable in~$R$
 in the sense of~\cite[4.1.5]{adams1994grobner};
-therefore, it is possible to compute a Gröbner basis of
+solving such a linear equation requires only $K$-linear algebra in~$R$,
+with a cost of~$O((de)^ω)$ operations in~$k$.
+Therefore, it is possible to compute a Gröbner basis of
 the ideal generated by the equations~\ref{eq:ip1s-polynomial}
 in~$R[v_{i,j}, w_{i,j}]$.
 Computing this basis is possible with a number of ring operations
 polynomial in the degree of the equations
 and doubly exponential in the number of variables~\cite{dube1990grobner}.
-However, in our case there are only 32~variables
-and the equations are homogeneous of degree~two.
-Therefore, the computation of the Gröbner basis
-requires a bounded number of computations in the ring~$R$;
-each of these computations requires a polynomial in~$n$
-number of computations in the base field~$k$.
-\end{proof}
 
+In our case, since both the number of variables
+and the degree of the equations are constant,
+this number is constant (but huge: roughly $2^{2^{32}}$).
+The only dependency in~$n$ is in the cost of a ring operation,
+which is~$O((de)^ω)$ as noted above.
+Taking all the invariant factors of the pencil into account,
+the total complexity for this algorithm is~$O(n^ω)$.
+\end{proof}
 
 % \subsection{Solving the equations}%<<<2
 % We now describe a method for computing a linear isomorphism~$X$ between
@@ -1540,23 +1517,29 @@ secret~$t$ is a homography in two variables, which we write~$γ ∈
 \GL_2(k)$.
 
 \begin{prop}
-\def\reg{'}
-Let~$\bm{a}$, $\bm{b}$ be two pencils and $\bm{a}\reg$ and~$\bm{b}\reg$ be
-their regular parts. For any homography~$t$, $t ∘ \bm{a}$~is isomorphic
-(in the IP1S sense) to~$\bm{b}$ if, and only if, $t ∘ \bm{a}\reg$~is
-isomorphic to~$\bm{b}\reg$.
+Let~$(a_λ)$, $(b_λ)$ be two pencils
+and $(a'_λ)$ and~$(b'_λ)$ be their regular parts.
+For any homography~$t$,
+$t ∘ (a_λ)$~is isomorphic (in the IP1S sense) to~$(b_λ)$
+if, and only if, $t ∘ (a'_λ)$~is isomorphic to~$(b'_λ)$
+and $(a_λ)$ and~$(b_λ)$ have the same Kronecker multiplicities.
 \end{prop}
-
 \begin{proof}
-The minimal index of the pencil~$\bm{b}$ is the minimal degree of an
-isotropic vector~$e_0 + … +λ^h e_h$ for~$b_{λ}$; such a vector may be
-written in homogeneous form in~$(λ:μ)$ as~$e(λ:μ) = ∑ λ^i μ^{h-i} e_i$,
-which is isotropic for the quadratic form~$b(λ:μ) = μ b_0 + λ b_{∞}$. Now
-let~$γ = \smat{a&b\\c&d} ∈ \GL_2(k)$ be a homography. Then the
-vector~$e^{γ}$ defined by~$e^{γ}(λ:μ) = e(aλ+bμ:cλ+dμ)$~is isotropic
-for~$b_{γ(λ)}$ iff $e$~is isotropic for~$b$. This proves that the pencils
-$(b_{γ(λ)})$ and~$(b_{λ})$ have the same minimal index. Therefore, all
-their Kronecker blocks coincide.
+We only need to prove the forward implication;
+namely, that any pencil isomorphic to~$(b_λ)$
+has its regular part isomorphic to~$(b'_λ)$.
+
+The minimal index of the pencil~$(b_λ)$ is
+the minimal degree of a kernel  vector~$e_0 + … +λ^h e_h$ for~$b_{λ}$;
+such a vector may be written in homogeneous form in~$(λ:μ)$
+as~$e(λ:μ) = ∑ λ^i μ^{h-i} e_i$,
+which is in the kernel of the quadratic form~$b(λ:μ) = μ b_0 + λ b_{∞}$.
+Now let~$γ = \smat{a&b\\c&d} ∈ \GL_2(k)$ be a homography.
+Then the vector~$e^{γ}$ defined by~$e^{γ}(λ:μ) = e(aλ+bμ:cλ+dμ)$~is
+in the kernel of~$b_{γ(λ)}$ iff $e$~is in the kernel of~$b$.
+This proves that the pencils $(b_{γ(λ)})$ and~$(b_{λ})$
+have the same minimal index.
+By induction, all their Kronecker blocks have the same multiplicities.
 \end{proof}
 
 % \begin{prop}
@@ -1594,19 +1577,22 @@ forms such that $a_{γ(λ)}$~is isomorphic, in the IP1S sense, to~$b_{λ}$.
 Then the homography~$γ$ maps the characteristic polynomial~$f(λ:μ)
 = \det (a_{λ:μ})$ to~$g(λ:μ) = \det (b_{λ:μ})$. In particular, it maps the
 prime factors of~$f$ to those of~$g$, respecting both their degree and
-their exponent as a factor of the characteristic polynomial.
+their multiplicity as a factor of the characteristic polynomial.
 
 Let~$S_{d,e}$~and~$T_{d,e}$ be the set of factors of degree~$d$ and
-exponent~$e$ of the polynomials~$f$ and~$g$. Then any homography~$γ$
-mapping all the elements of~$S_{d,e}$ to~$T_{d,e}$ for each pair~$(d,e)$
-is a possible second secret in the IP2S problem. We compute the
-intersection for~$(d,e)$ of the set~$Γ_{d,e}$ of homographies mapping the
-prime polynomials of~$S_{d,e}$ to~$T_{d,e}$. In most cases, the first
-set~$Γ_{d,e}$ already contains only one candidate, which is therefore the
-second secret~$γ$. The discussion depends on the degree~$d$ of the
-polynomials. We note that the sum of the size of the sets~$S_{d,e}$ is
-the number of variables~$n$; therefore, we may use the worst-case
-estimate~$\card{S_{d,e}} = O(n)$ for each~$(d,e)$.
+multipplicity~$e$ of the polynomials~$f$ and~$g$.
+Then any homography~$γ$ mapping all the elements of~$S_{d,e}$ to~$T_{d,e}$
+for each pair~$(d,e)$ is a possible second secret in the IP2S problem.
+We compute the intersection for~$(d,e)$ of
+the set~$Γ_{d,e}$ of homographies mapping
+the elements of~$S_{d,e}$ to~$T_{d,e}$.
+In most cases, the first set~$Γ_{d,e}$ already contains only one candidate,
+which is therefore the second secret~$γ$.
+The discussion depends on the degree~$d$ of the polynomials.
+We note that the sum of the cardinals of the sets~$S_{d,e}$ is
+the number of variables~$n$;
+therefore, we may use the worst-case estimate~$\card{S_{d,e}} = O(n)$
+for each~$(d,e)$.
 
 We shall use the following classic results.
 \begin{prop}\label{prop:homography}
@@ -1616,7 +1602,7 @@ triples of distinct points of~$ℙ^1(k)$. There exists a unique
 homography~$γ ∈ \mathrm{PGL}_2(k)$ such that~$γ(x_i) = y_i$.
 \item Let~$(x_1, x_2, x_3, x_4)$ and~$(y_1, y_2, y_3, y_4)$ be two
 (ordered) quadruplets of distinct points. They are homographic iff they
-have the same cross-ratio~$B(x) = B(y)$, where
+have the same cross-ratio $B(x) = B(y)$, where
 \begin{equation}
 B(x) = \frac{(x_1-x_3)(x_2-x_4)}{(x_1-x_4)(x_2-x_3)}.
 \end{equation}
@@ -1687,19 +1673,19 @@ However, as this uses only the five leading coefficients, if the
 polynomials are specially chosen we may find too many homographies; for
 example, although the polynomials~$x^d-1$ and~$x^d$ are not homographic,
 all their derivatives are. Instead, we first compose all the elements
-of~$S_{d,e}$ and~$T_{d,e}$ by a known, randomly chosen homography~$r$. In
+of~$S_{d,e}$ and~$T_{d,e}$ by a known, randomly chosen homography~$ρ$. In
 general, for any two non-homographic elements~$u_1, u_2 ∈ S_{d,e}$, the
-derivatives~$(∂/∂x)^4\, (u_i ∘ r)$ are non-homographic. In the improbable
+derivatives~$(∂/∂x)^{d-4}\, (u_i ∘ ρ)$ are non-homographic. In the improbable
 case where they are homographic, we only need to change the random
-homography~$r$. In this way, we may compute the set~$Γ_{d,e}$ in at
+homography~$ρ$. In this way, we may compute the set~$Γ_{d,e}$ in at
 most~$O(n)$ field operations.
 
 \paragraph{Computing the hidden homography.}
 
 The hidden homography~$γ$ lies in the intersection of all sets~$Γ_{d,e}$.
 As each one of these sets is likely to be extremely small or even reduced
-to~$\acco{γ}$, we compute them in increasing order of assumed complexity.
-We use the above estimates: for each~$(d,e)$, we use the assumed complexity
+to~$\acco{γ}$, we compute them in increasing order of assumed size.
+We use the above estimates: for each~$(d,e)$, we use the assumed size
 \begin{equation}
 C_{d,e} = \begin{cases}
 \card{S_{d,e}}^3,& d = 1;\\
@@ -1854,9 +1840,9 @@ than~$O(n^3)$ operations in~$k$.
 \begin{prop}
 There exists an algorithm computing the Kronecker decomposition
 of a bilinear pencil~$b_0 -λ b_∞$
-with time complexity~$O(h\, n^3)$ field operations,
+with time complexity~$O((h_{\max} + 1)\, n^3)$ field operations,
 where $n$~is the dimension of the pencil,
-and $h$~is the maximal degree of a Kronecker module factor.
+and $h_{\max}$~is the maximal degree of a Kronecker module factor.
 \end{prop}
 \begin{proof}
 The kernel of~$b_0 - λ b_∞$, as a $k[λ]$-module,
@@ -1900,12 +1886,13 @@ We now see that the elements~$x_0 + x_1 λ + … + x_h λ^h$
 of degree~$h$ of~$\Ker(b_0 - λ b_∞)$
 are determined by the relations~$x_0 ∈ E_{h} ∩ (\Ker b_0)$
 and~$x_{i+1} - F (x_i) ∈ (\Ker b_∞)$.
-Since the filtration of~$(\Ker b_0)$ by~$E_{h} ∩ (\Ker b_0)$
-has at most $n$~steps, we can compute it with at most~$O(n^4)$ operations.
+Since the filtration of~$(\Ker b_0)$ by the spaces~$E_{h} ∩ (\Ker b_0)$
+has $(h_{\max} + 1)$~steps,
+we can compute it with at most~$O((h_{\max}+1) · n^{ω})$ operations.
 
 Once this filtration is computed,
 all remaining steps of the 1976 algorithm use only linear algebra in~$k^n$,
-with a total cost of at most~$O(n^3)$ operations.
+with a total cost of at most~$O(n^ω)$ operations.
 \end{proof}
 
 Over the real and complex numbers,
@@ -1923,7 +1910,7 @@ for the Kronecker decomposition over finite fields.
 We give an algorithm that proves
 Proposition~\ref{prop:primary}.
 
-% \begin{proof}[of Proposition~\ref{prop:primary}]%<<<
+% \begin{proof}[\proofof Proposition~\ref{prop:primary}]%<<<
 Following~\cite[Lemma 4.1]{inventiones1976waterhouse},
 we first decompose the pencil~$b_0 - λ b_∞$ as the orthogonal sum of
 a pencil $b_0' - λ b_∞'$ such that $b_∞'$~is regular,
@@ -1934,37 +1921,39 @@ already computed by the algorithm of Prop.~\ref{prop:kronecker-decomposition}.
 
 We now assume that $b_0$~is regular
 and define the endomorphism~$c = b_∞^{-1} b_0$.
-Then the primary decomposition in~(i) is given by
-the Frobenius rational normal form of~$c$.
+Then the orthogonal sum in~Proposition~\ref{prop:primary}~(i)
+is given by the Frobenius rational normal form of~$c$.
 We may compute this normal form, and in particular
 the prime factorization of the characteristic polynomial $\det (b_0 - λ b_∞)$,
-with at most~$\Ot(n^3)$ field operations~\cite{kaltoffen11compute}.
+with at most~$O(n^ω \log n)$ field operations~\cite{kaltoffen11compute}.
+
+The summand associated to the factor~$p(λ)^e$,
+where $p$~is an irreducible polynomial of degree~$d$ over~$k$,
+is a free $R$-module of rank~$m$,
+where $R = K[π]/π^e$ and~$K = k(α)/p(α)$.
+A basis over~$R$ of this module is given by
+the Frobenius rational normal form.
+We also compute an isomorphism between the rings $k[λ]/p(λ)^e$ and~$R$.
+Since $k[c]$ is a complete local $k$-algebra
+with maximal ideal generated by~$p(c)$, by Hensel's lemma
+the approximate root~$c$ of~$p$ lifts to an exact root~$α$.
+We may compute~$α$ using at most $O(\log e · \M(d) · \M(de))$
+operations in~$k$~\cite[Theorem 15.11]{vzgg}.
+The total cost for all invariant factors is~$O(\M(n)^2)$,
+and therefore~$O(n^ω)$.
 
 \medbreak
 
-% We now prove point~(ii) of the Proposition.
-Without loss of generality, we replace the space~$V$
-by the summand~$V_{p^e}$ associated to~$p(λ)^e$.
-The action of~$c = b_∞^{-1} b_0$ makes $V$ into a free module over~$R = k[λ]$.
-Since both $b_∞$ and~$b_0=b_∞ c$~are symmetric, for any~$x, y ∈ V$ we have
-\begin{equation}
-b_∞(x, c y) = b_0(x, y) = b_0(y, x) = b_∞(y, c x) = b_∞(c x, y).
-\end{equation}
-This implies that, for all~$α ∈ R$, $b_∞(α x, y) = b_∞(x, α y)$.
-Therefore, by Propositions~\ref{prop:trace-ext} and~\ref{prop:trace-local},
-we can compute the unique $R$-bilinear form~$b_R$ over~$V$
-whose trace is~$b_∞$.
-\todo{coût...}
-
-Moreover, we see in the proof of these lemmas
-that computing each coefficient of the matrix of~$b_R$
+We now prove point~(ii) of Proposition~\ref{prop:primary}.
+According to what precedes, we assume here that $V$~is given as
+a free $R$-module of rank~$m$.
+We compute the $R$-bilinear form~$b_R$ whose trace is~$b$,
+according to Propositions~\ref{prop:trace-ext} and~\ref{prop:trace-local}.
+Computing each coefficient of the matrix of~$b_R$
 requires computing $e$~coefficients in~$K$,
 each of which needs linear algebra in the $k$-vector space~$K$;
 therefore, the total computational cost of this step
-is at most~$O(d^3 · e · m^2) ≤ O(n^3)$,
-where $d$~is the degree of~$p$ and $m$~is the $R$-rank of~$V$.
-
-\medbreak
+is at most~$O(d^ω · e · m^2) ≤ O(n^ω)$.
 
 We conclude the proof by reducing the $R$-bilinear form~$b_R$
 to a canonical form.
@@ -1972,104 +1961,106 @@ This result is well-known over
 a finite field of odd characteristic~\cite[IV(1.5)]{milnorhusemoller},
 and lifts via Hensel's lemma to the ring~$R$.
 By the Gram orthogonalization algorithm~\cite[I(3.4)]{milnorhusemoller},
-$b_R$~is congruent to a bilinear form with diagonal
-matrix~$b_R = \mathrm{diag} (b_1, …, b_n)$.
+$b_R$~is congruent to a diagonal bilinear form,
+and computing the transformation has a cost of~$O(m^3)$
+operations in~$R$~\cite[16.2]{vzgg}.
+This is the dominant step of the algorithm.
+
 Since the field~$k$ has odd characteristic,
 $x^2$~is a separable polynomial over~$R$,
 and two applications of Hensel's lemma in the complete ring~$R$ allow
 the following lifts to~$R$ of results in the finite field~$k$:
 \begin{enumerate}
 \item[(a)] let~$δ$ be a non-square element of~$k[λ]/p(λ)$;
-then for all~$i$, either~$b_i$ or $b_i/δ$ is a square in~$R$;
+then for any invertible~$a ∈ R$,
+one of~$a$ or $a/δ$ is a square in~$R$;
 \item[(b)] the equation~$u^2 + v^2 = δ$ has a solution with~$u, v ∈ R$.
 \end{enumerate}
-By~(a), we may assume that~$b_i = 1$ or~$b_i = δ$.
+By~(a), we may assume that the diagonal coefficients of~$b$
+are either~$1$ or~$δ$.
 From~(b), we deduce the matrix relation
 \begin{equation}
 \transpose{\mat{u&-v\\v&u}}·\mat{1&0\\0&1}·\mat{u&-v\\v&u} =
 \mat{δ&0\\0&δ}.
 \end{equation}
-This allows canceling all pairs of~$δ$ appearing in the diagonalization
-of~$b_R$.
-
-The computations needed in this part of the algorithm are
-a Gram orthogonalization of dimension~$m$
-and at most~$O(m)$ Hensel lifts to a ring of length~$e$.
-Therefore, the computational cost is again at most~$O(n^3)$ operations.
+This allows canceling all pairs of~$δ$ in the diagonal.
+The cost for each coefficient is that of a square root in~$K$,
+which is subquadratic~\cite{sqrt},
+plus a Hensel lift from~$K$ to~$R$.
+The overall cost is therefore again~$O(n^3)$.
 % \end{proof}%>>>
 
-\section{Classification of $τ$-alternating forms.}
-
-\todo{XXX rappeler que caractéristique 2}
-% Classification by the norm
-Although this is not directly useful for the IP1S problem,
-$τ$-alternating forms have a nice classification up to congruence.
-For any bilinear form~$b$ on a free $R$-module~$M$, we define the
-\emph{norm} of~$b$ as the ideal~$\fr{n} b$ of~$R$
-generated by the elements~$b(x, x)$ for~$x ∈ M$.
-
-\begin{prop}\label{prop:eqv-norm}
-Two non-degenerate, $τ$-alternating forms are equivalent if and only
-if they have the same norm.
-\end{prop}
-\begin{proof}
-We show that the bilinear form~$b$ is equivalent to either the form with
-identity matrix, if $\fr n b = R$; or the orthogonal direct sum
-\[ N_a = \mat{a & 1\\1&0} ⟂ \mat{0 & 1\\1&0} ⟂ … ⟂ \mat {0 & 1\\ 1 & 0}, \]
-where $a$~is a generator of~$\fr n b$, if $\fr n b ⊂ π R$.
-We note that, when the dimension of~$V$ is odd, the identity form is
-congruent to the form~$N_1$, since the transformation~$\mat{1&1\\0&1}$
-maps the identity matrix to the form~$\mat{1&1\\1&0}$.
-
-We write~$[u]$ for the one-dimensional form with coefficient~$u$
-and~$H_{v, w}$ for the form with matrix~$\mat{v&1\\1&w}$.
-We also write~$H = H_{0,0}$.
-
-By~\cite[§2]{milnor2}, the $k$-bilinear form~$b_k = b ⊗_R k$ has a
-decomposition~$b_k ≃ [d_1] ⟂ … ⟂ [d_r] ⟂ H^s$, where all~$d_i$ are
-non-zero since $b$~is non-degenerate. We distinguish two cases.
-
-\subparagraph{Case 1: $\fr n b = R$.}
-We first show that the reduced form~$b_k$ is isomorphic, over~$k$, to the
-identity form. Since $\fr n b = R$, the list of~$d_i$ in the above
-decomposition is not empty. Moreover, since the field $k$~is perfect, all
-elements~$d_i$ are squares in~$k$, so that up to a coordinate change we
-may assume that~$d_i = 1$. Finally, we note that the
-matrix~$\mat{1&1&0\\1&0&-1\\1&1&-1}$ is an isomorphism between the
-forms~$[1] ⟂ [1] ⟂ [-1]$ and~$[1] ⟂ H$, so that if $r ≥ 1$ we may cancel
-all the direct factors~$H$ and in this case $b_k$~is isomorphic to the
-bilinear form with identity matrix.
-
-By~\cite[Corollary 3.4]{baeza1978quadratic},
-the diagonalization of~$b_k$ lifts to a diagonalization
-$b ≃ [a_1] ⟂ … ⟂ [a_r]$ over~$R$.
-Since $b$~is $τ$-alternating, all coefficients~$a_i$ are $τ$-alternating.
-If the length of~$R$ is odd, then the set of $τ$-alternating elements of~$R$
-is~$π V(R)$, which contradicts the regularity of~$b$.
-Therefore, the length of~$R$ is even, which means that $a_i ∈ V(R)$ and they are
-therefore squares in~$R$.
-From this we deduce that $b$~is isomorphic to the identity bilinear form.
-
-\subparagraph{Case 2: $\fr n b ⊂ π R$.}
-This means that the form~$b_k$ is alternating, so that~$b_k ≃ H^s$.
-By~\cite[Corollary 3.4]{baeza1978quadratic}, this decomposition again lifts to a
-decomposition $b ≃ H_{u_1, v_1} ⟂ … ⟂ H_{u_s, v_s}$, where all
-coefficients~$u_i, v_i$ are $τ$-alternating.
-
-Let $b = H_{u,v}$ be $τ$-alternating and regular; up to a swap of~$u, v$, we
-may write it as~$H_{u, u a^2}$ for some~$a ∈ R$. Since $b$~is
-regular, $1 + a u ∈ R^{×}$. Therefore, the coordinate
-change $P = \mat{1+a u & a/(1+a u) \\ u & 1/(1+a u)}$ transforms the
-bilinear form~$b$ to~$H_{u, 0}$.
-
-Finally, we note that the bilinear form~$b = H_{u, 0} ⟂ H_{u a^2 u, 0}$ is
-isomorphic to~$H_{v, 0} ⟂ H_{0,0}$ via the coordinate change
-% \begin{equation}
-$\mat{1 & 0 & a & 0\\0&1&0&0\\0&0&1&0\\au & a & 0 & 1}$.
-% \end{equation}
-\end{proof}
-
-
+% \section{Classification of $τ$-alternating forms.}%<<<1
+% 
+% % Classification by the norm
+% Although this is not directly useful for the IP1S problem,
+% $τ$-alternating forms have a nice classification up to congruence.
+% For any bilinear form~$b$ on a free $R$-module~$M$, we define the
+% \emph{norm} of~$b$ as the ideal~$\fr{n} b$ of~$R$
+% generated by the elements~$b(x, x)$ for~$x ∈ M$.
+% 
+% \begin{prop}\label{prop:eqv-norm}%<<<
+% Two non-degenerate, $τ$-alternating forms are equivalent if and only
+% if they have the same norm.
+% \end{prop}%>>>
+% \begin{proof}%<<<
+% We show that the bilinear form~$b$ is equivalent to either the form with
+% identity matrix, if $\fr n b = R$; or the orthogonal direct sum
+% \[ N_a = \mat{a & 1\\1&0} ⟂ \mat{0 & 1\\1&0} ⟂ … ⟂ \mat {0 & 1\\ 1 & 0}, \]
+% where $a$~is a generator of~$\fr n b$, if $\fr n b ⊂ π R$.
+% We note that, when the dimension of~$V$ is odd, the identity form is
+% congruent to the form~$N_1$, since the transformation~$\mat{1&1\\0&1}$
+% maps the identity matrix to the form~$\mat{1&1\\1&0}$.
+% 
+% We write~$[u]$ for the one-dimensional form with coefficient~$u$
+% and~$H_{v, w}$ for the form with matrix~$\mat{v&1\\1&w}$.
+% We also write~$H = H_{0,0}$.
+% 
+% By~\cite[§2]{milnor2}, the $k$-bilinear form~$b_k = b ⊗_R k$ has a
+% decomposition~$b_k ≃ [d_1] ⟂ … ⟂ [d_r] ⟂ H^s$, where all~$d_i$ are
+% non-zero since $b$~is non-degenerate. We distinguish two cases.
+% 
+% \subparagraph{Case 1: $\fr n b = R$.}
+% We first show that the reduced form~$b_k$ is isomorphic, over~$k$, to the
+% identity form. Since $\fr n b = R$, the list of~$d_i$ in the above
+% decomposition is not empty. Moreover, since the field $k$~is perfect, all
+% elements~$d_i$ are squares in~$k$, so that up to a coordinate change we
+% may assume that~$d_i = 1$. Finally, we note that the
+% matrix~$\mat{1&1&0\\1&0&-1\\1&1&-1}$ is an isomorphism between the
+% forms~$[1] ⟂ [1] ⟂ [-1]$ and~$[1] ⟂ H$, so that if $r ≥ 1$ we may cancel
+% all the direct factors~$H$ and in this case $b_k$~is isomorphic to the
+% bilinear form with identity matrix.
+% 
+% By~\cite[Corollary 3.4]{baeza1978quadratic},
+% the diagonalization of~$b_k$ lifts to a diagonalization
+% $b ≃ [a_1] ⟂ … ⟂ [a_r]$ over~$R$.
+% Since $b$~is $τ$-alternating, all coefficients~$a_i$ are $τ$-alternating.
+% If the length of~$R$ is odd, then the set of $τ$-alternating elements of~$R$
+% is~$π V(R)$, which contradicts the regularity of~$b$.
+% Therefore, the length of~$R$ is even, which means that $a_i ∈ V(R)$ and they are
+% therefore squares in~$R$.
+% From this we deduce that $b$~is isomorphic to the identity bilinear form.
+% 
+% \subparagraph{Case 2: $\fr n b ⊂ π R$.}
+% This means that the form~$b_k$ is alternating, so that~$b_k ≃ H^s$.
+% By~\cite[Corollary 3.4]{baeza1978quadratic}, this decomposition again lifts to a
+% decomposition $b ≃ H_{u_1, v_1} ⟂ … ⟂ H_{u_s, v_s}$, where all
+% coefficients~$u_i, v_i$ are $τ$-alternating.
+% 
+% Let $b = H_{u,v}$ be $τ$-alternating and regular; up to a swap of~$u, v$, we
+% may write it as~$H_{u, u a^2}$ for some~$a ∈ R$. Since $b$~is
+% regular, $1 + a u ∈ R^{×}$. Therefore, the coordinate
+% change $P = \mat{1+a u & a/(1+a u) \\ u & 1/(1+a u)}$ transforms the
+% bilinear form~$b$ to~$H_{u, 0}$.
+% 
+% Finally, we note that the bilinear form~$b = H_{u, 0} ⟂ H_{u a^2 u, 0}$ is
+% isomorphic to~$H_{v, 0} ⟂ H_{0,0}$ via the coordinate change
+% % \begin{equation}
+% $\mat{1 & 0 & a & 0\\0&1&0&0\\0&0&1&0\\au & a & 0 & 1}$.
+% % \end{equation}
+% \end{proof}%>>>
+% 
+% 
 \section{Comparison to the ``polar decomposition'' algorithm.}
 \label{ap:polar}
 
@@ -2110,8 +2101,8 @@ Then the matrix~$Z = B· Y · \transpose{Y} · B^{-1}$ has a square root~$W$.
 \item[(B)] Define $X = Y · W^{-1}$.
 Then $X$~is a solution to the IP1S problem : $H· X = X · H$ and~$X^{⋆} · X = 1$.
 \end{enumerate}
-In the IP1S case, $H$~is the matrix of the characteristic
-endomorphism~$B^{-1} A$.
+In the IP1S case for a bilinear pencil~$A - λ B$,
+$H$~is the matrix of the characteristic endomorphism~$B^{-1} A$.
 This provides us with the extra hypothesis that, since $A$~is symmetric,
 $H^{⋆} = H$; this hypothesis is not used in~\cite{2013bfp}.
 We give here counter-examples to both claims above,
