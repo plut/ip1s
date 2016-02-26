@@ -1,4 +1,4 @@
-\documentclass{lms}
+\documentclass{amsart}
 %\usepackage[margin=30mm]{geometry}
 \usepackage{unicode}
 \DeclareUnicodeCharacter{22F1}{\smash\ddots}
@@ -111,7 +111,7 @@
 
 % $Date:$
 \title[Pairs of quadratic forms]%<<<1
-{Computing Isomorphisms between Pairs of Quadratic Forms}
+{Computing Isomorphisms between Pairs of Quadratic Forms in Polynomial Time}
 % {Solving the ``Isomorphism of Polynomials with Two Secrets'' Problem
 % for All Pairs of Quadratic Forms}
 % \keywords{Quadratic forms, pencils of quadratic forms,
@@ -151,8 +151,8 @@ of quadratic forms on $n$~variables,
 we compute two bijective linear maps $(s,t)$ such that
 $\bm{b}=t\circ \bm{a}\circ s$.
 We give an algorithm computing~$s$ and~$t$
-in worst-case time complexity~$\Ot(n^4)$ in odd characteristic
-and~$\Ot(n^6)$ in characteristic two,
+in worst-case time complexity~$O(n^4)$ in odd characteristic
+and~$O(n^6)$ in characteristic two,
 and~$\Ot(n^3)$ on average in all characteristics.
 % 
 % The IP2S problem was introduced in cryptography by Patarin back in 1996.
@@ -251,7 +251,7 @@ of reduction of a pair of symmetric bilinear forms.
 Another report is given in~\cite{olomouc2004fv}.
 
 \setlength\tabcolsep{.5em}\smallbreak
-\begin{center}\begin{tabular}{l|lll}
+\begin{center}\begin{tabular}{llll}
 Characteristic & zero & odd & two \\
 \toprule
 regular & Weierstraß 1858\cite{1858weierstrass}
@@ -375,15 +375,17 @@ the bilinear case given by Waterhouse~\cite{inventiones1976waterhouse};
 our contributions consist in detailing some algorithms
 as well as clarifying the status of characteristic~two.
 
-We then cover the case of characteristic two.
-We use elementary transformations of the quadratic forms
-to bring the problem down to bounded dimension.
-This allows us to conclude by using generic methods
-for solving algebraic systems.
+We then cover the case of quadratic forms in characteristic two.
+In both the singular and the regular case,
+we give a description of the groups of automorphisms
+of the associated bilinear forms.
+We then show how to find, in these sets,
+a transformation with the required action on the diagonal coefficients.
 
 
 The last section explains how to recover the second (``outer'') secret
 in the two-secret IP2S problem.
+We determine this transformation by its action on the invariant factors.
 % Since applying an outer linear combination to a Kronecker module
 % leaves it unchanged (up to almost-unique isomorphism),
 % the regular part is enough to recover the outer secret.
@@ -421,13 +423,14 @@ and alternating bilinear forms if~$2 = 0$.
 
 \medbreak
 We define a \emph{pencil} of quadratic forms
-as a pair~$(A, B)$ of quadratic forms,
-or equivalently, as the affine line~$(A - λ B)$ with base points~$Α, B$.
+as a pair~$(q_0, q_∞)$ of quadratic forms,
+or equivalently, as the affine line~$(q_λ = q_0 - λ q_{∞})$
+with base points~$q_0, q_∞$.
 Likewise, we define bilinear and polar pencils.
 There are obvious notions of orthogonal sum and polarity for these pencils.
 
 We say that a bilinear pencil is \emph{regular}
-if its characteristic polynomial~$\det (A - λ B)$ is not zero,
+if its characteristic polynomial~$\det (q_λ)$ is not zero,
 and \emph{singular} otherwise.
 A quadratic pencil is regular if its polar pencil is regular.
 
@@ -529,7 +532,7 @@ of degree~$h$ as the vector space~$k^{2h+1}$
 equipped with the bilinear pencil with matrix
 \begin{equation}\label{eq:def-K}
 {\def\arraystretch{.8}
-A - λ B = K_{h} = \mat{0&K'_{h}\\\transpose{K'_{h}}&0},
+q_0 - λ q_∞ = K_{h} = \mat{0&K'_{h}\\\transpose{K'_{h}}&0},
 \quad \text{where}\quad
 K'_h = \mat{-λ&&0\\1&\sddots{-λ}&\\&\sddots{-λ}&-λ\\0&&1}}.
 \end{equation}
@@ -538,16 +541,15 @@ This is a singular symmetric bilinear pencil.
 We know~\cite[§3]{inventiones1976waterhouse}
 that any pencil has a unique \emph{Kronecker decomposition},
 that is, as an orthogonal sum of a regular pencil and of Kronecker modules.
-Moreover, the multiplicity of each Kronecker module~$K_h$ in this
-decomposition are also unique.
+% Moreover, the multiplicity of each Kronecker module~$K_h$ in this
+% decomposition are also unique.
 
 \begin{prop}\label{prop:kronecker-decomposition}
-Let~$(A, B)$ be a symmetric bilinear pencil on~$k^n$.
+Let~$(b_{λ}) = b_0 - λ b_∞$ be a symmetric bilinear pencil on~$k^n$.
 Further assume that either~$2 ≠ 0$ in~$k$,
-or that both $A$~and~$B$ are alternating.
+or that both $b_0$~and~$b_∞$ are alternating.
 There exists a polynomial algorithm computing the Kronecker decomposition
-of the pencil~$(A, B)$.
-where $h$~is the maximal degree of a Kronecker module factor of the pencil.
+of the pencil~$(b_λ)$.
 \end{prop}
 \begin{proof}[of Proposition~\ref{prop:kronecker-decomposition}]
 The proof of the Kronecker decomposition published
@@ -560,7 +562,7 @@ and it is therefore still valid in characteristic two
 if we assume that $A$~and~$B$ are alternating.
 
 The 1976 algorithm begins by computing (a Hermite normal form of)
-the kernel of the matrix~$A - λ B$,
+the kernel of the matrix~$q_0 - λ q_∞$,
 with coefficients in the polynomial ring~$k[λ]$.
 Since the maximum degree appearing in the coefficients is~$n$,
 and assuming that school-book multiplication is used in~$k[λ]$,
@@ -568,7 +570,8 @@ this requires at most~$O(n^5)$~operations in the field~$k$.
 \end{proof}
 
 We give in Appendix~\ref{ap:kronecker} an algorithm
-with complexity~$O((h+1)\,n^3)$.
+with complexity~$O((h+1)\,n^3)$,
+where $h$~is the maximal degree of a Kronecker module factor of the pencil.
 Since~$2h+1 ≤ n$, this algorithm has a worst-case complexity of~$O(n^4)$,
 and, given that a generic bilinear pencil is regular,
 an average-case complexity of~$O(n^3)$.
@@ -675,6 +678,7 @@ and in the reduction of quadratic forms over
 local rings~\cite[Proposition~1.2]{inventiones1976waterhouse}.
 % Therefore, the result~\cite[Theorem 4.2]{inventiones1976waterhouse},
 For clarity, we state here a result covering all cases.
+
 If $b = b_0 - λ b_∞$ is a regular bilinear pencil on~$V$,
 its \emph{characteristic endomorphism} is~$c = b_∞^{-1} b_0$.
 For any polynomial~$f ∈ k[λ]$,
@@ -899,11 +903,11 @@ All the maps~$h$ and~$\chk{h}$ commute with each other.
 
 The \emph{Kronecker module} of degree~$d$ is
 the $2d+1$-dimensional vector space~$K_d = H_{d-1} ⊕ \chk{H_{d}}$,
-equipped with the symmetric bilinear pencil~$A-λB$ such that,
+equipped with the symmetric bilinear pencil~$(q_λ)$ such that,
 for~$f, f' ∈ H_{d-1}$ and~$φ, φ' ∈ \chk{H_d}$:
 \begin{equation}\label{eq:kronecker-bilinear}
-(A-λB) (f, f') \;=\; (A-λ B) (φ, φ') \;=\; 0; \qquad
-(A-λB) (f, φ) \;=\; \chev {φ, (λ y - x) f}.
+q_λ (f, f') \;=\; q_λ (φ, φ') \;=\; 0; \qquad
+q_λ (f, φ) \;=\; \chev {φ, (λ y - x) f}.
 \end{equation}
 
 % The next proposition shows that multiplication by polynomials essentially
@@ -1185,116 +1189,69 @@ has a time complexity bounded by~$O(n^6)$.
 %>>>1
 \section{Regular quadratic pencils in characteristic two}
 \label{S:quad-reg}
+\subsection{The action of orthogonal maps on quadratic forms}
 
+In this subsection we compute the action of linear maps
+preserving the polar of a quadratic pencil~$q$
+on the diagonal coefficients of~$q$.
 
-
-\begin{prop}
-Let~$k$ be a finite field with characteristic two
-and let~$q, q'$ be two equivalent
-regular pencils of $k$-quadratic forms on~$k^n$.
-Computing an isomorphism between $q$ and~$q'$
-is equivalent to computing isomorphisms
-between regular pencils~$(q_i), (q'_i)$
-where each pencil~$q_i, q'_i$ is defined on a finite extension~$K_i$ of~$k$,
-has dimension~$n_i$ and characteristic polynomial~$λ^{n_i}$,
-and~$∑ [K_i:k] n_i = n$.
-\end{prop}
-
-
-\begin{proof}
-By Proposition~\ref{prop:primary}~(i),
-the pencils~$q, q'$ both split as an orthogonal sum
-of primary components with characteristic polynomial~$p^e$,
-where $p$~is irreducible over~$k$.
-\end{proof}
-
-
-Let~$k$~be a finite field with characteristic two.
-In this whole section we consider a regular pencil~$q = q_0 - λ q_{∞}$
-of $k$-quadratic forms over~$V = k^n$.
-Let~$b_0 - λ b_∞$ be the polar pencil of~$q$
-and~$c = b_∞^{-1} b_0^{}$ be its characteristic endomorphism.
-By Proposition~\ref{prop:primary}~(i),
-we may assume that the minimal polynomial of~$c$ is~$p^e$,
-where $p$~is irreducible over~$k$.
-Since $p$~is separable, by Hensel's lemma,
-$k(c)$~contains a solution~$\tilde c$
-of the equation~$p(\tilde c) = 0$.
-Let~$K = k(\tilde c)$ and~$π = p(c)$.
-Then the local algebra~$R = k[c]$ is isomorphic to~$K[π]/π^e$.
-By Proposition~\ref{prop:trace-quad},
-there exists a unique $K$-quadratic pencil~$q_K$ on~$V$
-such that~$q = \Tr_{K/k} ∘ q_K$.
-This enables us to assume, for IP1S purposes, that $K=k$.
-
-By Proposition~\ref{prop:trace-local}, since $b_{∞,K}$ commutes with~$π$,
-there exists a unique $R$-bilinear form~$b_{∞, R}$
-such that~$b_{∞,K} = τ ∘ b_{∞, R}$;
-moreover, since $b_{∞,K}$ and~$π b_{∞, K}$ are both alternating,
-$b_{∞, R}$~is again alternating.
-
-The $k$-automorphisms of the polar pencil~$b_0 - λ b_{∞}$
-are exactly the $R$-automorphisms of the alternating form~$b_{∞,R}$.
-In the next subsection,
-we compute the action of these automorphisms
-on the diagonal coefficients on the pencil.
+Here $k$~is a finite field of characteristic two
+and $R$~is the local ring~$R = k[π]/π^e$.
 We equip the ring~$R$ with the Frobenius and Verschiebung endomorphisms,
 defined by~$σ(∑ x_i π^i) = ∑ x_i^2 π^i$ and~$V(∑ x_i π^i) = ∑ x_i π^{2i}$.
 This implies that, for all~$y ∈ R$, $V σ(y) = σ V(y) = y^2$;
 moreover, we have~$R = V(R) ⊕ π V(R)$,
 and $V(R)$~is also the subset of squares in~$R$.
+
 We say that an element~$c ∈ R$
 is \emph{$τ$-alternating} if $τ(c x^2) = 0$ for any~$x ∈ R$.
 
-\subsection{Reduction of local quadratic pencils}
-
-We first give an explicit description of $k$-quadratic forms commuting
-with~$R$.
-
 \begin{lem}\label{lem:gamma-polar}
-Let~$γ: R → R$ be the application defined, for~$x = V(y) + π V(z)$,
-by~$γ(x) = π V(yz)$. Then, for all~$u, x ∈ R$, we have
+Let~$γ: R → R$ be the application defined, for~$x = V(u) + π V(v)$,
+by~$γ(x) = π V(u v)$. Then, for all~$x,y ∈ R$, we have
 \begin{enumerate}
-\item $γ(ux) = γ(u) x^2 + u^2 γ(x)$;
-\item $γ(u+x) = γ(u) + γ(x) + ux + V(α)$ for some~$α ∈ R$.
-\item For all~$c ∈ R$, $τ(c γ (x))$~is a $k$-quadratic form on~$R$
-with polar~$τ(c x y)$.
+\item $γ(x y) = γ(x) y^2 + x^2 γ(y)$;
+\item $γ(x+y) = γ(x) + γ(y) + x y + V(α)$ for some~$α ∈ R$;
+\item For any $τ$-alternating~$c ∈ R$,
+$τ(c γ (x))$~is a $k$-quadratic form on~$R$ with polar~$τ(c x y)$.
 \end{enumerate}
 \end{lem}
-
 \begin{proof}
-(i)~Write~$x = V(y) + π V(z)$ and~$u = V(v) + π V(w)$. Noticing
-that~$σ(x) = y^2 + π z^2$, we then have
+(i)~Write~$x = V(u) + π V(v)$ and~$y = V(w) + π V(z)$. Noticing
+that~$σ(x) = u^2 + π v^2$, we then have
 \begin{equation}\label{eq:gamma-prod}
 \begin{split}
-γ(ux) &= π V\pa{(vy + π wz)(wy+vz)}\\
- &= π V\pa{vw (y^2 + π z^2)} + π V \pa{(v^2+πw^2) yz}\\
- &= γ(u) V(σx) \;+\; V(σu) γ(x) \quad = γ(u) x^2 + u^2 γ(x).
+γ(x y) &= π V\pa{(uw + π vz)(vw+uz)}\\
+ &= π V\pa{u v (w^2 + π z^2)} + π V \pa{(u^2+π v^2) wz}\\
+ &= γ(x) V(σ y) \;+\; V( σx) γ(y) \quad = γ(x) y^2 + x^2 γ(y).
 \end{split}
 \end{equation}
 
 (ii) follows from
-$γ(u+x) - γ(u) - γ(x) = π V(vz + wy) = ux - V(vy+πwz)$.
+$γ(x+y) - γ(x) - γ(y) = π V(uz + vw) = xy - V(uw+πvz)$.
 
 (iii)~is a direct consequence of~(i) and~(ii).
 \end{proof}
 \begin{prop}\label{prop:quad-tau}
-Let~$M = ⨁ R_{m_i}$ be a $R_ℓ$-module of finite length.
-Let~$q$ be a $k$-quadratic form on~$M$ commuting with~$R$, $b$~its
-polar form, and $b_R$ be the unique $R$-quadratic form such that~$b = τ ∘
-b_R$; write~$b_{i,j}$ for the coefficients of~$b_R$.
-Then there exists a $σ$-linear form~$a: M → R$ such that, for all~$x =
-(x_i) ∈ M$,
+Let~$q$ be a $k$-quadratic form on~$R^m$ commuting with~$R$,
+$b$~its polar form, and $b_R$ be the unique $R$-quadratic form
+such that~$b = τ ∘ b_R$;
+write~$b_{i,j}$ for the coefficients of~$b_R$.
+Then there exists a unique $σ$-linear form~$a: R^m → R$ such that,
+for all~$x = (x_i) ∈ R^m$,
 \begin{equation}
 q(x) \;=\; τ\pa{a(x) + ∑_{i} b_{i,i} γ(x_i) + ∑_{i < j} b_{i,j} x_i x_j}.
 \end{equation}
 \end{prop}
-
+The $σ$-linear form~$a$ is called the \emph{diagonal form} of~$q$;
+if $a(x_1, …,x_m)=∑ a_i σ(x_i)$, then we write~$a=(a_i)$.
 \begin{proof}
-We see by Lemma~\ref{lem:gamma-polar} and by linearity that
+Since $b$~is the polar form of~$q$, it is alternating,
+and therefore the diagonal coefficients of~$b_R$ are $τ$-alternating.
+By Lemma~\ref{lem:gamma-polar},
 % $τ(c γ(x))$~is a quadratic form on~$R$ with polar~$τ(c\, xy)$.
 % It follows by linearity that
-$q' = τ(∑ b_{i,i} γ(x_i) + ∑ b_{i,j} x_i x_j)$~is a $k$-quadratic form on~$M$,
+$q' = τ(∑ b_{i,i} γ(x_i) + ∑ b_{i,j} x_i x_j)$~is a $k$-quadratic form
 which has the same polar as~$q$,
 so that the difference~$q - q'$ is a $σ$-linear form.
 \end{proof}
@@ -1307,12 +1264,10 @@ When computing the effect of a $R$-linear change of variable on a
 $k$-quadratic form commuting with~$R$, we obtain the following result.
 
 \begin{prop}\label{prop:quad-changevar}
-Let~$u: M' → M$ be a $R$-linear map between two $R$-modules of finite length.
-Let~$q$ be a $k$-quadratic form on~$M$, commuting with~$R$, and~$q' = q ∘ u$.
-Let~$b$ be the polar form of~$q$ and~$a = (a_i)$ be the $σ$-linear form defined
-as in Prop.~\ref{prop:quad-tau}; then the corresponding values~$b', a' =
-(a'_i)$
-for~$q'$ are
+Let~$q$ be a $k$-quadratic form on~$R^m$, commuting with~$R$;
+let~$b$ be the polar form of~$q$, and~$a = (a_i)$ be its diagonal form.
+For any $R$-linear map~$u: R^n → R^m$,
+the polar form~$b'$ and the diagonal form~$a' = (a'_i)$ of~$q' = q ∘ u$ are
 \begin{equation*}
 b' = b ∘ u, \quad
 a'_i \;=\; ∑_r a_r σ(u_{r,i})
@@ -1321,40 +1276,44 @@ a'_i \;=\; ∑_r a_r σ(u_{r,i})
 \end{prop}
 
 The \emph{hyperbolic plane} is the module $R^2$, equipped with the
-$k$-quadratic form~$q(x) = τ(x_1 x_2)$; this form commutes with~$R$. The
-corresponding $τ$-alternating bilinear form~$b_R$ has the
-matrix~$\smat{0&1\\1&0}$. A quadratic form is \emph{hyperbolic} if it is
-isomorphic to the orthogonal sum of a number of copies of the hyperbolic
-plane.
-We say that a quadratic form~$q$ \emph{reduces} to a form~$q'$ if $q$~is
-isomorphic to the direct sum of~$q'$ and a hyperbolic space.
+$k$-quadratic form~$q(x_1, x_2) = τ(x_1 x_2)$; this form commutes with~$R$.
+The corresponding $τ$-alternating bilinear form~$b_R$
+has the matrix~$\smat{0&1\\1&0}$.
+A quadratic form is \emph{hyperbolic} if it is isomorphic to
+the orthogonal sum of a number of copies of the hyperbolic plane.
+We say that a quadratic form~$q$ \emph{reduces} to a form~$q'$
+if $q$~is isomorphic to the direct sum of~$q'$ and a hyperbolic form.%
+\footnote{Witt's cancellation theorem,
+despite not being true in characteristic two for \emph{bilinear} forms,
+is valid for regular
+\emph{quadratic} forms~\cite[Appendix 1]{milnorhusemoller} over a field.
+The proof~\cite[I.4.1]{spinors} also applies to local rings.
+Therefore, our definition of reduction coincides with Witt equivalence.}%
 
 \begin{prop}\label{prop:witt-four}
-Let~$M$ be a free $R$-module and $q$~be a $k$-quadratic form on~$M$,
-commuting with~$R$.
-If the polar form of~$q$~is hyperbolic, then $q$~reduces to a quadratic
-form of dimension at most two.
+Let~$q$~be a $k$-quadratic form on~$R^m$, commuting with~$R$.
+If the polar form of~$q$~is hyperbolic,
+then $q$~reduces to a quadratic form of dimension at most two.
 \end{prop}
-
 \begin{proof}
-Since the polar form of~$q$ is hyperbolic,
-there exist some coefficients~$a_1, …, a_{m}; a'_1, …, a'_{m} ∈ R$
+Since the polar of~$q$ is hyperbolic, by Proposition~\ref{prop:quad-tau}
+there exist some coefficients~$a_1, …, a_{r}; a'_1, …, a'_{r} ∈ R$
 such that $q$~is isomorphic to the form
-$q' = [a_1, …, a'_m]$ defined on~$R^{2m}$ by
+$q' = [a_1, …, a'_r]$ defined on~$R^{2m}$ by
 \begin{equation}
-q' (x_1, …, x_m, x'_1, …, x'_{m}) \;=\;
-  τ\pa{∑_{i ≤ m} a_i σ(x_i) + a'_i σ(x'_i) + γ(x_i x'_i)}.
+q' (x_1, …, x_r, x'_1, …, x'_{r}) \;=\;
+  τ\pa{∑_{i ≤ r} a_i σ(x_i) + a'_i σ(x'_i) + x^{}_i x'_i}.
 %   τ(∑_{i ≤ 2m} a_i σ(x_i) + ∑_{i ≤ m} γ(x_{i} x_{i+m})).
 \end{equation}
 To prove the proposition, we show that
 any form~$q = [a_1, a_2; a'_1, a'_2]$ is isomorphic to
 a form~$[b, 0; b', 0]$ for some~$b, b' ∈ R$.
-The polar of~$q$ is the hyperbolic form on~$R^4$,
-and its automorphism group
+The polar of~$q$ is the standard hyperbolic form on~$R^4$,
 % \begin{equation}
 % H_4 = \mat{0&1&0&0\\-1&0&0&0\\0&0&0&1\\0&0&-1&0}.
 % \end{equation}
 % The automorphism group of~$H_4$
+and its automorphism group~$\mathrm{Sp}_4(R)$
 contains the following transformations,
 with the corresponding effect on the values~$(a_i)$:
 \begin{equation}\begin{array}{ll}
@@ -1377,6 +1336,66 @@ Using the second one, we may assume that $a_2 = 0$,
 so that $a_1$~divides $a'_1$ and~$a'_2$.
 Finally, using the last transformation, one may have~$a'_2 = 0$.
 \end{proof}
+\subsection{Reduction to the hyperbolic case}
+
+\begin{prop}\label{prop:ip1s-bin-polynomial}
+Let~$k$ be a finite field of characteristic two.
+There exists a polynomial algorithm computing a linear isomorphism between
+two equivalent regular quadratic pencils over~$k$.
+\end{prop}
+
+\begin{proof}
+By Propositions~\ref{prop:primary}~(i) and~\ref{prop:trace-quad},
+any regular quadratic pencil~$q$ over~$k^n$
+splits canonically as an orthogonal sum of primary components~$q_i$,
+where $q_i$~is defined on a finite extension~$K_i$ of~$k$
+and defines a free module of rank~$m_i$ over the ring~$R_i = K[π]/π^{e_i}$;
+moreover, $n = ∑ [K_i:k] · m_i · e_i$.
+
+Since this decomposition is unique,
+computing an isomorphism between two regular pencils is the same as
+computing isomorphisms between all of their primary components.
+Therefore we assume that $q$, $q'$ both are
+regular pencils, defined over~$K$, and free of rank~$m$ over~$R=K[π]/π^e$.
+
+Let~$b = b_0 - λ b_∞$ be the polar pencil of~$q$.
+Since both $b_{∞}$ and~$b_{0} = π b_{∞}$ are alternating,
+$b_{∞,R}$ is alternating. Since it is also regular,
+it is hyperbolic. \todo{pourquoi}
+
+\end{proof}
+
+
+% By Proposition~\ref{prop:primary}~(i),
+% we may assume that the minimal polynomial of~$c$ is~$p^e$,
+% where $p$~is irreducible over~$k$.
+% Since $p$~is separable, by Hensel's lemma,
+% $k(c)$~contains a solution~$\tilde c$
+% of the equation~$p(\tilde c) = 0$.
+% Let~$K = k(\tilde c)$ and~$π = p(c)$.
+% Then the local algebra~$R = k[c]$ is isomorphic to~$K[π]/π^e$.
+% By Proposition~\ref{prop:trace-quad},
+% there exists a unique $K$-quadratic pencil~$q_K$ on~$V$
+% such that~$q = \Tr_{K/k} ∘ q_K$.
+% This enables us to assume, for IP1S purposes, that $K=k$.
+
+In this section we assume that $q$~is a regular quadratic pencil
+defined over~$K$, free of rank~$m$ over~$R = K[π]/π^e$.
+By Proposition~\ref{prop:trace-local}, since $b_{∞}$ commutes with~$π$,
+there exists a unique $R$-bilinear form~$b_{∞, R}$
+such that~$b_{∞} = τ ∘ b_{∞, R}$;
+moreover, since $b_{∞}$ and~$π b_{∞}$ are both alternating,
+$b_{∞, R}$~is again alternating.
+Therefore, $b_{∞, R}$ is \emph{hyperbolic}~\cite[I.(3.5)]{milnorhusemoller}:
+namely, its rank over~$R$ is even, and there exists
+a basis in which
+\begin{equation}
+b_{∞,R} ((x_1, …, x_r, x'_1, …, x'_r), (y_1, …, y'_r))
+  \;=\; ∑_{i=1}^r x_i y'_i - x'_i y_i.
+\end{equation}
+The $k$-automorphisms of the polar pencil~$b_0 - λ b_{∞}$
+are exactly the $R$-automorphisms of the alternating form~$b_{∞,R}$,
+\emph{i.e.} the \emph{symplectic} automorphism of~$R^{2m}$.
 
 Using Prop.~\ref{prop:witt-four} on both quadratic forms of a quadratic
 pencil, we see that any quadratic pencil reduces to a pencil of dimension
@@ -1384,12 +1403,6 @@ at most four.
 Therefore, to compute a linear equivalence between any two quadratic
 pencils, we may assume that the dimension of the ambient $R$-module is at
 most four.
-
-\begin{prop}\label{prop:ip1s-bin-polynomial}
-Let~$k$ be a finite field of characteristic two.
-There exists a polynomial algorithm computing a linear isomorphism between
-two equivalent quadratic pencils over~$k$.
-\end{prop}
 
 \begin{proof}
 Let~$(q_{λ})$, $(q'_{λ})$ be two equivalent quadratic pencils.
@@ -1459,6 +1472,7 @@ requires a bounded number of computations in the ring~$R$;
 each of these computations requires a polynomial in~$n$
 number of computations in the base field~$k$.
 \end{proof}
+
 
 % \subsection{Solving the equations}%<<<2
 % We now describe a method for computing a linear isomorphism~$X$ between
