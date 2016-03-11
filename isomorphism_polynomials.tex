@@ -2061,6 +2061,61 @@ The overall cost is therefore again~$O(n^3)$.
 % \end{proof}%>>>
 % 
 % 
+
+
+\section{Comparison to the ``polar decomposition'' algorithm.}
+\label{ap:polar}
+
+The “polar decomposition” algorithm was proposed as a solution to
+the odd-characteristic IP1S problem by
+Berthomieu, Faugère and Perret~\cite{2013bfp}.
+Their method is valid for fields where every regular matrix~$M$
+has a square root polynomial in~$M$.
+This property holds only for algebraically closed field,
+as was noticed in~\cite[6.1]{2013bfp}.
+
+\paragraph{Decisional IP1S and extensions of scalars.}
+
+Considering a finite field~$k$, its algebraic closure is merely
+a tower of algebraic extensions.
+This raises the following question: given a finite field~$k$,
+for which extensions~$k'$ of~$k$ is it true that
+any two pencils that are IP1S-equivalent over~$k'$
+are always equivalent over~$k$?
+
+The structure given by Propositions~\ref{prop:kronecker-decomposition}
+and~\ref{prop:primary} gives a simple answer.
+Namely, since the Kronecker degrees are invariant by extension of scalars,
+any totally singular pencils which are $k'$-equivalent are $k$-equivalent.
+On the other hand, two regular pencils are $k$-equivalent
+if and only if, for all primary factors~$R =k[λ]/p(λ)^e$,
+the corresponding bilinear forms on~$k[λ]/p(λ)$ are equivalent,
+which means that all squares in~$k'[λ]/p(λ)$
+are squares in~$k[λ]/p(λ)$.
+Therefore the answer is positive exactly when
+the extension degree~$[k':k]$ is odd.
+
+We give first a simple example to illustrate possible situations in even extension degrees.
+Define the two-dimensional
+quadratic pencils~$(A,B) = (x^2 - y^2, x^2 + y^2)$
+and~$(A', B') = (x^2 - y^2, - x^2 - y^2)$. Both pencils have $\lambda-1$ and $\lambda+1$ for primary factors,
+with corresponding factors $u$ being respectively $(1,-1)$ and $(-1,1)$.
+Therefore, the two pencils are equivalent only over a field
+containing a square root of $-1$.
+
+More generally, let $k$ be finite field such that both polynomials $p=x^{2^n}-2$
+and $p'=x^{2^n}+2$ are irreducible over $k$. This is the case when the 
+order of $k$ is an odd power of a prime congruent to $1$ modulo $4$.
+Then consider the two pencils having both $p$ and $p'$ for primary factors,
+with corresponding factors $u$ being respectively $(M_p,1)$ and $(1,M_{p'})$.
+Over an extension of $k$ of degree $2^m$, the two pencils are nonequivalent if $m < n$ and 
+equivalent if $m \ge n$.
+
+
+\end{document}
+
+
+
 \section{Comparison to the ``polar decomposition'' algorithm.}
 \label{ap:polar}
 
@@ -2252,5 +2307,3 @@ but equivalent over an extension of degree~$4$ of~$k$.
 % may become isomorphic over an extension of degree~$1$, $2$ or~$4$ of~$k$.
 % 
 
-
-\end{document}
