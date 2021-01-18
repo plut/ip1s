@@ -64,13 +64,13 @@ end
 	Nemo.FractionField(Nemo.PolynomialRing(R, S)[1])
 
 # Iterators on matrices<<<2
-function Base.iterate(a::fq_nmod_mat, state=(1,1))
+function Base.iterate(a::MatElem, state=(1,1))
 	(state[2] > ncols(a)) && return nothing
 	newstate = (state[1] >= nrows(a)) ? (1, state[2]+1) : (state[1]+1, state[2])
 	return (a[state...], newstate)
 end
-@inline Base.IteratorSize(::Nemo.fq_nmod_mat) = Base.HasShape{2}()
-
+@inline Base.IteratorSize(::MatElem) = Base.HasShape{2}()
+# TODO: write a fq_nmod_mat constructor that takes a Generator input
 
 # Amalgamation <<<1
 # Infrastructure<<<2
@@ -157,7 +157,7 @@ end
 # 	return op(R(a), R(b))
 # end
 
-# Nemo.nmod +-* <<<3
+# Nemo.nmod ring operations <<<3
 @inline Base.:+(x::Nemo.nmod, y::Nemo.nmod) =
 	_op_nmod(+, Val(parent(x)==parent(y)), x, y)
 @inline Base.:-(x::Nemo.nmod, y::Nemo.nmod) =
@@ -194,8 +194,7 @@ function _op_nmod(::typeof(*), ::Val{true}, x::Nemo.nmod, y::Nemo.nmod)
 end
 
 # Matrices<<<3
-@inline (M::MatSpace)(a::MatElem) =
-	M([a[i,j] for i in 1:nrows(a), j in 1:ncols(a)])
+# @inline (M::MatSpace)(a::MatElem) = M([a...])
 
 function Base.:*(a::RingElem, b::ModuleElem)
 	new_base_ring = amalg_parent(*, parent(a), base_ring(parent(b)))
@@ -209,7 +208,7 @@ function op_mat(op::typeof(+), a::MatElem, b::MatElem)
 	new_mat_space = MatrixSpace(new_base_ring, nrows(a), ncols(a))
 	# FIXME: this is not broadcasted; it allocates an array and loops are
 	# *not* fused:
-	new_mat_space([op(a[i,j], b[i,j]) for i in 1:nrows(a), j in 1:ncols(a)])
+	new_mat_space([op(z...) for z in zip(a, b)])
 end
 @inline Base.:+(a::MatElem, b::MatElem) = op_mat(+, a, b)
 @inline Base.:-(a::MatElem, b::MatElem) = op_mat(-, a, b)
